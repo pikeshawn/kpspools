@@ -22,8 +22,8 @@ class CreateServiceStopsTable extends Migration
             $table->float('powder_chlorine');
             $table->float('tabs_whole_mine')->default(0);
             $table->float('tabs_crushed_mine')->default(0);
-            $table->float('tabs_whole_thiers')->default(0);
-            $table->float('tabs_crushed_thiers')->default(0);
+            $table->float('tabs_whole_theirs')->default(0);
+            $table->float('tabs_crushed_theirs')->default(0);
             $table->float('liquid_chlorine')->default(0);
             $table->float('liquid_acid')->default(0);
             $table->dateTime('time_in');
