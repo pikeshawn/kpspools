@@ -116,7 +116,17 @@ class ServiceStopController extends Controller
 //            ])
 //        );
 //
-        return Redirect::route('customers.index', $serviceStop)->with('success', 'Service Stop Created.');
+
+        $serviceStops = ServiceStop::where('customer_id', '=', $request->id)->get();
+
+
+        return Inertia::render('ServiceStops/Index', [
+//            'filters' => \Illuminate\Support\Facades\Request::all('search', 'role', 'trashed'),
+            'service_stops' => $serviceStops
+        ]);
+
+
+//        return Redirect::route('customers.index', $serviceStop)->with('success', 'Service Stop Created.');
 
     }
 
