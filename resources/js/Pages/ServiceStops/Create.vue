@@ -20,8 +20,7 @@
                                         <label for="timeIn">Time In</label>
                                         <input
                                             id="timeIn"
-                                            type="datetime-local" v-model="form.timeIn"
-                                        >
+                                            type="datetime-local" v-model="form.timeIn">
                                     </div>
 
                                     <div class="flex flex-col">
@@ -34,16 +33,14 @@
                                         drop-down-label="Chlorine"
                                         drop-down-id="Chlorine"
                                         :select-options="[ '0.0', '1.0', '2.0', '3.0', '4.0', '5.0', '5+' ]"
-                                        @phvalue="setChlorine"
-                                    >
+                                        @phvalue="setChlorine">
                                     </drop-down>
 
                                     <drop-down
                                         drop-down-label="pH"
                                         drop-down-id="pH"
                                         :select-options="[ '7.0', '7.2', '7.4', '7.6', '7.8', '8.0' ]"
-                                        @phvalue="setPh"
-                                    >
+                                        @phvalue="setPh">
                                     </drop-down>
 
                                     <drop-down
@@ -51,8 +48,7 @@
                                         drop-down-id="tabsWholeMine"
                                         :select-options="[ '0','1','2','3','4','5','6','7','8','9','10',
                                         '11','12','13','14','15','16','17','18','19','20']"
-                                        @phvalue="setTabsWholeMine"
-                                    >
+                                        @phvalue="setTabsWholeMine">
                                     </drop-down>
 
                                     <drop-down
@@ -60,20 +56,18 @@
                                         drop-down-id="tabsCrushedTheirs"
                                         :select-options="[ '0','1','2','3','4','5','6','7','8','9','10',
                                         '11','12','13','14','15','16','17','18','19','20']"
-                                        @phvalue="setTabsCrushedTheirs"
-                                    >
+                                        @phvalue="setTabsCrushedTheirs">
                                     </drop-down>
 
                                     <drop-down
                                         drop-down-label="Liquid Chlorine"
                                         drop-down-id="liquidChlorine"
-                                        :select-options="[ '0.0','0.5', '1.5', '2.0', '2.5', '3.0', '3.5',
+                                        :select-options="[ '0.0','0.5', '1.0', '1.5', '2.0', '2.5', '3.0', '3.5',
                                                            '4.0', '4.5', '5.0', '5.5', '6.0', '6.5',
                                                            '7.0', '7.5', '8.0', '8.5', '9.0', '9.5',
                                                            '10.0', '10.5', '11.0', '11.5', '12.0', '12.5'
                                                            ]"
-                                        @phvalue="setLiquidChlorine"
-                                    >
+                                        @phvalue="setLiquidChlorine">
                                     </drop-down>
 
                                     <drop-down
@@ -83,8 +77,7 @@
                                                            '0.0','0.25', '0.5', '0.75', '1.0', '1.25', '1.5',
                                                            '1.75', '2.0', '2.25', '2.5', '2.75', '3.0'
                                                            ]"
-                                        @phvalue="setAcid"
-                                    >
+                                        @phvalue="setAcid">
                                     </drop-down>
 
                                     <toggle
@@ -96,19 +89,19 @@
                                     <toggle
                                         toggle-label="Vacuum"
                                         @toggled="setVacuum"
-                                        :starting-position="true"
-                                    ></toggle>
+                                        :starting-position="true">
+                                    </toggle>
 
                                     <toggle
                                         toggle-label="Brush"
                                         @toggled="setBrush"
-                                        :starting-position="true"
-                                    ></toggle>
+                                        :starting-position="true">
+                                    </toggle>
 
                                     <toggle
                                         toggle-label="Backwash"
-                                        @toggled="setBackwash"
-                                    ></toggle>
+                                        @toggled="setBackwash">
+                                    </toggle>
 
                                     <div class="flex flex-col col-span-2">
                                         <label
@@ -117,19 +110,21 @@
                                         <textarea
                                             class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                                             name="notes" id="notes" cols="30" rows="10" v-model="form.notes">
-
                                     </textarea>
                                     </div>
 
                                     <drop-down
                                         drop-down-label="Powder Chlorine"
                                         drop-down-id="PowderChlorine"
-                                        :select-options="[ '0.0','0.5', '1.5', '2.0', '2.5', '3.0', '3.5',
-                                                           '4.0', '4.5', '5.0', '5.5', '6.0', '6.5'
+                                        :select-options="[
+                                            '0.0', '0.5',
+                                            '1.5', '2.0',
+                                            '2.5', '3.0',
+                                            '3.5', '4.0',
+                                            '4.5', '5.0',
+                                            '5.5', '6.0', '6.5'
                                          ]"
-                                        @phvalue="setPowderChlorine"
-                                    >
-                                    </drop-down>
+                                        @phvalue="setPowderChlorine"></drop-down>
 
                                     <drop-down
                                         drop-down-label="Tabs Crushed Mine"
@@ -197,16 +192,30 @@ export default {
             tabsCrushedTheirs: '0',
             tabsWholeMine: '0',
             tabsWholeTheirs: '0',
+            newTimeIn: null,
+            newTimeOut: null,
             timeIn: null,
             timeOut: null,
             vacuum: true
         })
 
+        function formatTime(time){
+            if (time) {
+                let split = time.split(":");
+                return split[0] + ":" + split[1]
+            }
+        }
+
         function store() {
+
+            form.newTimeIn = formatTime(form.timeIn);
+            form.newTimeOut = formatTime(form.timeOut);
+
             Inertia.post('/service_stops/store', form)
         }
 
         return {form, store}
+
     },
     mounted() {
         this.form.id = this.$attrs.customerId

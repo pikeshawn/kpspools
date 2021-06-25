@@ -16,6 +16,7 @@ mix.js('resources/js/app.js', 'public/js').vue()
         require('postcss-import'),
         require('tailwindcss'),
     ])
+    .browserSync('localhost:9500')
     .webpackConfig(require('./webpack.config'));
 
 if (mix.inProduction()) {

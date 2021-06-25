@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Customer;
+use App\Models\Address;
 use App\Models\ServiceStop;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -77,9 +78,11 @@ class ServiceStopController extends Controller
 
 //        dd($request);
 
+        $address = Address::select(['id'])->where('customer_id', '=', $request->id)->get()->first();
+
         $serviceStop = ServiceStop::firstOrCreate([
                 'customer_id' => $request->id,
-                'address_id' => 2,
+                'address_id' => $address['id'],
                 'ph_level' => $request->ph_level,
                 'chlorine_level' => $request->chlorine_level,
                 'tabs_whole_mine' => $request->tabsWholeMine,
