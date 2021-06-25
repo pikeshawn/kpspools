@@ -117,12 +117,10 @@
                                         drop-down-label="Powder Chlorine"
                                         drop-down-id="PowderChlorine"
                                         :select-options="[
-                                            '0.0', '0.5',
-                                            '1.5', '2.0',
-                                            '2.5', '3.0',
-                                            '3.5', '4.0',
-                                            '4.5', '5.0',
-                                            '5.5', '6.0', '6.5'
+                                            '100', '200',
+                                            '300', '400',
+                                            '500', '600',
+                                            '700', '800'
                                          ]"
                                         @phvalue="setPowderChlorine"></drop-down>
 
