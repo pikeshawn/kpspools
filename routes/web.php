@@ -34,6 +34,10 @@ Route::middleware(['auth:sanctum', 'verified'])->get('/customers',
     [CustomerController::class, 'index'])
     ->name('customers');
 
+Route::middleware(['auth:sanctum', 'verified'])->get('/customers/add',
+    [CustomerController::class, 'create'])
+    ->name('customers.create');
+
 Route::middleware(['auth:sanctum', 'verified'])->get('/service_stops/{customer}',
     [ServiceStopController::class, 'index'])
     ->name('service_stops');

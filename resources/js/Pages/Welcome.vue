@@ -71,16 +71,8 @@
 <!--                            Company-->
 <!--                        </a>-->
 <!--                    </PopoverGroup>-->
-                    <div class="hidden md:flex items-center justify-end md:flex-1 lg:w-0">
-                        <inertia-link v-if="$page.props.user" href="/dashboard" class="text-sm text-gray-700 underline">
-                            Dashboard
-                        </inertia-link>
+<!--                    <div class="hidden md:flex items-center justify-end md:flex-1 lg:w-0">-->
 
-                        <template v-else>
-                            <inertia-link :href="route('login')" class="text-sm text-gray-700 underline">
-                                Log in
-                            </inertia-link>
-                        </template>
 
 <!--                        <a href="#" class="whitespace-nowrap text-base font-medium text-gray-500 hover:text-gray-900">-->
 <!--                            Sign in-->
@@ -88,7 +80,22 @@
 <!--                        <a href="#" class="ml-8 whitespace-nowrap inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700">-->
 <!--                            Sign up-->
 <!--                        </a>-->
-                    </div>
+<!--                    </div>-->
+                    <br>
+
+
+                </div>
+
+                <div class="ml-5">
+                    <inertia-link v-if="$page.props.user" href="/dashboard" class="text-sm text-gray-700 underline">
+                        Dashboard
+                    </inertia-link>
+
+                    <template v-else>
+                        <inertia-link :href="route('login')" class="text-sm text-gray-700 underline">
+                            Log in
+                        </inertia-link>
+                    </template>
                 </div>
 
 <!--                <transition enter-active-class="duration-200 ease-out" enter-from-class="opacity-0 scale-95" enter-to-class="opacity-100 scale-100" leave-active-class="duration-100 ease-in" leave-from-class="opacity-100 scale-100" leave-to-class="opacity-0 scale-95">-->

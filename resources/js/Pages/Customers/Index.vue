@@ -2,6 +2,12 @@
     <layout
         title="Customers"
     >
+        <inertia-link
+            class="mb-2.5 inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+            :href="route('customers.create')">
+            Add New
+        </inertia-link>
+
         <div class="flex flex-col">
             <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
                 <div class="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
@@ -76,24 +82,8 @@ export default {
                     key: 'id',
                 },
                 {
-                    name: 'first name',
+                    name: 'Name',
                     key: 'first_name',
-                },
-                {
-                    name: 'last name',
-                    key: 'last_name',
-                },
-                {
-                    name: 'type',
-                    key: 'type',
-                },
-                {
-                    name: 'plan',
-                    key: 'plan',
-                },
-                {
-                    name: 'service day',
-                    key: 'service_day',
                 }
             ],
             valueObjectArray: []

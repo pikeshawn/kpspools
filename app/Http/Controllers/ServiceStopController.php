@@ -46,10 +46,10 @@ class ServiceStopController extends Controller
 
         $serviceStops = ServiceStop::where('customer_id', '=', $customer->id)->get();
 
-
         return Inertia::render('ServiceStops/Index', [
 //            'filters' => \Illuminate\Support\Facades\Request::all('search', 'role', 'trashed'),
-            'service_stops' => $serviceStops
+            'service_stops' => $serviceStops,
+            'customer_name' => $customer->last_name
         ]);
     }
 
@@ -60,9 +60,9 @@ class ServiceStopController extends Controller
      */
     public function create(Customer $customer)
     {
-        //
         return Inertia::render('ServiceStops/Create', [
-            'customerId' => $customer->id
+            'customerId' => $customer->id,
+            'customerName' => $customer->last_name
         ]);
     }
 
