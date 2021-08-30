@@ -8,7 +8,7 @@
             Add New
         </inertia-link>
 
-        <div class="flex flex-col">
+        <div class="flex flex-col mb-60">
             <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
                 <div class="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
                     <div class="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
@@ -26,7 +26,8 @@
                             <!--                            {{ valueObjectArray }}-->
                             <!--                        </tr>-->
                             <tr v-for="(row) in valueObjectArray">
-                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"
+                                <td class="px-6 whitespace-nowrap text-sm font-medium text-gray-900"
+                                    style="margin-top: .25rem !important; margin-bottom: .25rem !important; "
                                     v-for="(value) in row">
                                     <div
                                         v-if="Number(value) / Number(value) === 1"
@@ -34,15 +35,15 @@
                                     <div v-else>{{ value }}</div>
                                 </td>
 
-                                <td
+<!--                                <td-->
 
-                                    class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                                    <inertia-link
-                                        class="px-6 py-4 flex items-center focus:text-indigo-500"
-                                        :href="route('customers', row[0])">
-                                        View
-                                    </inertia-link>
-                                </td>
+<!--                                    class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">-->
+<!--                                    <inertia-link-->
+<!--                                        class="px-6 py-4 flex items-center focus:text-indigo-500"-->
+<!--                                        :href="route('customers', row[0])">-->
+<!--                                        View-->
+<!--                                    </inertia-link>-->
+<!--                                </td>-->
                                 <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                                     <inertia-link
                                         class="px-6 py-4 flex items-center focus:text-indigo-500"
@@ -83,7 +84,11 @@ export default {
                 },
                 {
                     name: 'Name',
-                    key: 'first_name',
+                    key: 'last_name',
+                },
+                {
+                    name: 'Service Day',
+                    key: 'service_day',
                 }
             ],
             valueObjectArray: []
