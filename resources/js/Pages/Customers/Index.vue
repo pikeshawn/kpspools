@@ -15,6 +15,7 @@
                         <table class="min-w-full divide-y divide-gray-200">
                             <thead class="bg-gray-50">
                             <tr>
+                                <th></th>
                                 <th v-for="header in customer_headers"
                                     scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                     <div v-show="header.name !== 'id'">{{ header.name }}</div>
@@ -26,16 +27,25 @@
                             <!--                            {{ valueObjectArray }}-->
                             <!--                        </tr>-->
                             <tr v-for="(row) in valueObjectArray">
+
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                                    <inertia-link
+                                        class="px-6 py-4 flex items-center focus:text-indigo-500"
+                                        :href="route('service_stops', row[0])">
+                                        Service Stop
+                                    </inertia-link>
+                                </td>
+
                                 <td class="px-6 whitespace-nowrap text-sm font-medium text-gray-900"
                                     style="margin-top: .25rem !important; margin-bottom: .25rem !important; "
                                     v-for="(value) in row">
                                     <div
                                         v-if="Number(value) / Number(value) === 1"
                                     ></div>
-                                    <div v-else>{{ value }}</div>
+                                    <div v-else class="uppercase">{{ value }}</div>
                                 </td>
 
-<!--                                <td-->
+                                <!--                                <td-->
 
 <!--                                    class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">-->
 <!--                                    <inertia-link-->
@@ -44,13 +54,6 @@
 <!--                                        View-->
 <!--                                    </inertia-link>-->
 <!--                                </td>-->
-                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                                    <inertia-link
-                                        class="px-6 py-4 flex items-center focus:text-indigo-500"
-                                        :href="route('service_stops', row[0])">
-                                        Service Stop
-                                    </inertia-link>
-                                </td>
 
                             </tr>
                             </tbody>
@@ -89,6 +92,10 @@ export default {
                 {
                     name: 'Service Day',
                     key: 'service_day',
+                },
+                {
+                    name: 'Address',
+                    key: 'address',
                 }
             ],
             valueObjectArray: []
@@ -103,7 +110,19 @@ export default {
             for (let i = 0; i < this.customers.length; i++) {
                 let nArray = []
                 for (let j = 0; j < this.customer_headers.length; j++) {
-                    nArray.push(this.customers[i][this.customer_headers[j].key])
+                    if (this.customer_headers[j].key === "last_name") {
+                        let customerName = this.customers[i]['first_name'] + " " + this.customers[i][this.customer_headers[j].key]
+                        nArray.push(customerName)
+                    } else if (this.customer_headers[j].key === "address") {
+                        let address =
+                            this.customers[i]['address_line_1'] + " " +
+                            this.customers[i]['city'] + " " +
+                            'AZ' + " " +
+                            this.customers[i]['zip'];
+                        nArray.push(address)
+                    } else {
+                        nArray.push(this.customers[i][this.customer_headers[j].key])
+                    }
                 }
                 mArray.push(nArray)
             }
