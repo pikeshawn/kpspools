@@ -38137,6 +38137,9 @@ __webpack_require__.r(__webpack_exports__);
       }, {
         name: 'Address',
         key: 'address'
+      }, {
+        name: 'Community Gate Code',
+        key: 'gate_code'
       }],
       valueObjectArray: []
     };
@@ -38158,6 +38161,8 @@ __webpack_require__.r(__webpack_exports__);
           } else if (this.customer_headers[j].key === "address") {
             var address = this.customers[i]['address_line_1'] + " " + this.customers[i]['city'] + " " + 'AZ' + " " + this.customers[i]['zip'];
             nArray.push(address);
+          } else if (this.customer_headers[j].key === "gate_code" && this.customers[i]['community_gate_code']) {
+            nArray.push(this.customers[i]['community_gate_code']);
           } else {
             nArray.push(this.customers[i][this.customer_headers[j].key]);
           }
