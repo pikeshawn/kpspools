@@ -8,60 +8,25 @@
             Add New
         </inertia-link>
 
-        <div class="flex flex-col mb-60">
-            <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
-                <div class="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
-                    <div class="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
-                        <table class="min-w-full divide-y divide-gray-200">
-                            <thead class="bg-gray-50">
-                            <tr>
-                                <th></th>
-                                <th v-for="header in customer_headers"
-                                    scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                    <div v-show="header.name !== 'id'">{{ header.name }}</div>
-                                </th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <!--                        <tr>-->
-                            <!--                            {{ valueObjectArray }}-->
-                            <!--                        </tr>-->
-                            <tr v-for="(row) in valueObjectArray">
 
-                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                                    <inertia-link
-                                        class="px-6 py-4 flex items-center focus:text-indigo-500"
-                                        :href="route('service_stops', row[0])">
-                                        Service Stop
-                                    </inertia-link>
-                                </td>
-
-                                <td class="px-6 whitespace-nowrap text-sm font-medium text-gray-900"
-                                    style="margin-top: .25rem !important; margin-bottom: .25rem !important; "
-                                    v-for="(value) in row">
-                                    <div
-                                        v-if="Number(value) / Number(value) === 1"
-                                    ></div>
-                                    <div v-else class="uppercase">{{ value }}</div>
-                                </td>
-
-                                <!--                                <td-->
-
-<!--                                    class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">-->
-<!--                                    <inertia-link-->
-<!--                                        class="px-6 py-4 flex items-center focus:text-indigo-500"-->
-<!--                                        :href="route('customers', row[0])">-->
-<!--                                        View-->
-<!--                                    </inertia-link>-->
-<!--                                </td>-->
-
-                            </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
+        <div v-for="day in ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']">
+            <h2 class="uppercase">{{ day }}</h2>
+            <!-- This example requires Tailwind CSS v2.0+ -->
+            <ul role="list" class="divide-y divide-gray-200" v-for="(row) in valueObjectArray">
+                <li class="py-4 flex" v-if="row[2] == day">
+                    <inertia-link
+                        class="px-6 py-4 flex items-center focus:text-indigo-500"
+                        :href="route('service_stops', row[0])">
+                        <div class="ml-3">
+                            <p class="text-sm font-medium text-gray-900">{{ row[1] }}</p>
+                            <p class="text-sm text-gray-500">{{ row[3] }}</p>
+                            <p class="text-sm text-gray-500">{{ row[4] }}</p>
+                        </div>
+                    </inertia-link>
+                </li>
+            </ul>
         </div>
+
     </layout>
 </template>
 
@@ -105,7 +70,7 @@ export default {
             valueObjectArray: []
         }
     },
-    mounted () {
+    mounted() {
         this.valueObjectArray = this.tableValues();
     },
     methods: {
@@ -138,7 +103,7 @@ export default {
         }
     },
     props: {
-      customers: Array
+        customers: Array
     }
 }
 </script>
