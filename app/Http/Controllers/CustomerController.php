@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Customer;
+use Carbon\Carbon;
+use Carbon\CarbonInterface;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\URL;
@@ -18,16 +20,37 @@ class CustomerController extends Controller
      */
     public function index()
     {
-        //
 
         $customers = DB::select('select c.first_name, c.last_name, c.id, c.service_day,
        a.community_gate_code, a.address_line_1, a.city, a.zip
 from customers c
          join addresses a on c.id = a.customer_id
-where c.order is not NULL order By c.order asc');
+where c.order is not NULL order By c.order DESC');
+
+        $now = Carbon::now();
+        $startOfWeek = $now->startOfWeek(CarbonInterface::MONDAY)->format('Y-m-d H:i');
+        $endOfWeek = $now->endOfWeek(CarbonInterface::SUNDAY)->format('Y-m-d H:i');
+
+        $startOfWeek = new Carbon($startOfWeek);
+        $endOfWeek = new Carbon($endOfWeek);
+
+        foreach ($customers as $customer) {
+
+            $lastServiceStop = DB::select('select ss.time_in
+from service_stops ss
+where ss.customer_id = ' . $customer->id . ' order by ss.time_in DESC Limit 1')[0]->time_in;
+
+
+            $lastServiceStop = new Carbon($lastServiceStop);
+
+            if ($lastServiceStop > $startOfWeek && $lastServiceStop < $endOfWeek) {
+                $customer->completed = true;
+            } else {
+                $customer->completed = false;
+            }
+        }
 
         return Inertia::render('Customers/Index', [
-//            'filters' => \Illuminate\Support\Facades\Request::all('search', 'role', 'trashed'),
             'customers' => $customers
         ]);
 
