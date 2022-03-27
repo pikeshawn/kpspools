@@ -36,18 +36,26 @@ where c.order is not NULL order By c.order DESC');
 
         foreach ($customers as $customer) {
 
-            $lastServiceStop = DB::select('select ss.time_in
+            $stops = DB::select('select count(ss.time_in) as stops
+from service_stops ss
+where ss.customer_id = ' . $customer->id . ' order by ss.time_in DESC Limit 1');
+
+            if ($stops[0]->stops > 0) {
+
+                $lastServiceStop = DB::select('select ss.time_in
 from service_stops ss
 where ss.customer_id = ' . $customer->id . ' order by ss.time_in DESC Limit 1')[0]->time_in;
 
 
-            $lastServiceStop = new Carbon($lastServiceStop);
+                $lastServiceStop = new Carbon($lastServiceStop);
 
-            if ($lastServiceStop > $startOfWeek && $lastServiceStop < $endOfWeek) {
-                $customer->completed = true;
-            } else {
-                $customer->completed = false;
+                if ($lastServiceStop > $startOfWeek && $lastServiceStop < $endOfWeek) {
+                    $customer->completed = true;
+                } else {
+                    $customer->completed = false;
+                }
             }
+
         }
 
         return Inertia::render('Customers/Index', [

@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Validation\Rule;
 use Inertia\Inertia;
+use Carbon\Carbon;
 
 class ServiceStopController extends Controller
 {
@@ -49,7 +50,8 @@ class ServiceStopController extends Controller
         return Inertia::render('ServiceStops/Index', [
 //            'filters' => \Illuminate\Support\Facades\Request::all('search', 'role', 'trashed'),
             'service_stops' => $serviceStops,
-            'customer_name' => $customer->last_name
+            'customer_name' => $customer->last_name,
+            'customer_id' => $customer->id,
         ]);
     }
 
@@ -79,6 +81,19 @@ class ServiceStopController extends Controller
 //        dd($request);
 
         $address = Address::select(['id'])->where('customer_id', '=', $request->id)->get()->first();
+
+        $customer = Customer::select()->where('id', '=', $request->id)->get()->first();
+
+//        dd($address);
+//        dd($customer);
+
+//        $timeIn = new Carbon($request->timeIn);
+//        $timeOut = new Carbon($request->timeOut);
+//
+//        $timeSpent = $timeOut->diffInMinutes($timeIn);
+//
+//        dd("Time In: " . $request->timeIn . " Time Out " . $request->timeOut . " Time Spent "
+//            . gettype($timeSpent) . " " . $timeSpent);
 
         $serviceStop = ServiceStop::firstOrCreate([
                 'customer_id' => $request->id,
@@ -125,7 +140,9 @@ class ServiceStopController extends Controller
 
         return Inertia::render('ServiceStops/Index', [
 //            'filters' => \Illuminate\Support\Facades\Request::all('search', 'role', 'trashed'),
-            'service_stops' => $serviceStops
+            'service_stops' => $serviceStops,
+            'customer_name' => $customer->last_name,
+            'customer_id' => $customer->id
         ]);
 
 
