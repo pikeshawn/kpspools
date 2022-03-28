@@ -21,7 +21,7 @@ class CustomerController extends Controller
     public function index()
     {
 
-        $customers = DB::select('select c.first_name, c.last_name, c.id, c.service_day,
+        $customers = DB::select('select c.first_name, c.last_name, c.id, c.service_day, c.assigned_serviceman,
        a.community_gate_code, a.address_line_1, a.city, a.zip
 from customers c
          join addresses a on c.id = a.customer_id

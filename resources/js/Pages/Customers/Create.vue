@@ -42,10 +42,16 @@
                                 </div>
 
                                 <div class="col-span-6 sm:col-span-4">
-                                    <label for="email-address" class="block text-sm font-medium text-gray-700">Email
-                                        address</label>
+                                    <label for="email-address" class="block text-sm font-medium text-gray-700">Plan Price</label>
                                     <input type="text" name="email-address" id="email-address" autocomplete="email"
-                                           v-model="form.personal_information.email"
+                                           v-model="form.personal_information.plan_price"
+                                           class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"/>
+                                </div>
+
+                                <div class="col-span-6 sm:col-span-4">
+                                    <label for="email-address" class="block text-sm font-medium text-gray-700">Plan Duration</label>
+                                    <input type="text" name="email-address" id="email-address" autocomplete="email"
+                                           v-model="form.personal_information.plan_duration"
                                            class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"/>
                                 </div>
 
@@ -57,6 +63,17 @@
                                     </div>
                                     <div class="ml-3 text-sm">
                                         <label for="type" class="font-medium text-gray-700">Service Customer</label>
+                                    </div>
+                                </div>
+
+                                <div class="relative flex items-start">
+                                    <div class="flex items-center h-5">
+                                        <input id="type" name="type" type="checkbox"
+                                               v-model="form.personal_information.chems_included"
+                                               class="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded"/>
+                                    </div>
+                                    <div class="ml-3 text-sm">
+                                        <label for="type" class="font-medium text-gray-700">Chems Included</label>
                                     </div>
                                 </div>
 
@@ -77,74 +94,76 @@
             </div>
         </div>
 
-        <div class="mt-10 sm:mt-0">
-            <div class="md:grid md:grid-cols-3 md:gap-6">
-                <div class="md:col-span-1">
-                    <div class="px-4 sm:px-0">
-                        <h3 class="text-lg font-medium leading-6 text-gray-900">Address</h3>
-                        <p class="mt-1 text-sm text-gray-600">
-                            Add An Address For the Customer
-                        </p>
-                    </div>
-                </div>
-                <div class="mt-5 md:mt-0 md:col-span-2">
-                    <div class="shadow overflow-hidden sm:rounded-md">
-                        <div class="px-4 py-5 bg-white sm:p-6">
-                            <div class="grid grid-cols-6 gap-6">
-                                <div class="col-span-6 sm:col-span-3">
-                                    <label for="country" class="block text-sm font-medium text-gray-700">Country /
-                                        Region</label>
-                                    <select id="country" name="country" autocomplete="country"
-                                            class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-                                        <option>United States</option>
-                                        <option>Canada</option>
-                                        <option>Mexico</option>
-                                    </select>
-                                </div>
+       <div class="mt-10">
+           <div class="mt-10 sm:mt-0">
+               <div class="md:grid md:grid-cols-3 md:gap-6">
+                   <div class="md:col-span-1">
+                       <div class="px-4 sm:px-0">
+                           <h3 class="text-lg font-medium leading-6 text-gray-900">Address</h3>
+                           <p class="mt-1 text-sm text-gray-600">
+                               Add An Address For the Customer
+                           </p>
+                       </div>
+                   </div>
+                   <div class="mt-5 md:mt-0 md:col-span-2">
+                       <div class="shadow overflow-hidden sm:rounded-md">
+                           <div class="px-4 py-5 bg-white sm:p-6">
+                               <div class="grid grid-cols-6 gap-6">
+                                   <div class="col-span-6 sm:col-span-3">
+                                       <label for="country" class="block text-sm font-medium text-gray-700">Country /
+                                           Region</label>
+                                       <select id="country" name="country" autocomplete="country"
+                                               class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                                           <option>United States</option>
+                                           <option>Canada</option>
+                                           <option>Mexico</option>
+                                       </select>
+                                   </div>
 
-                                <div class="col-span-6">
-                                    <label for="street-address" class="block text-sm font-medium text-gray-700">Street
-                                        address</label>
-                                    <input type="text" name="street-address" id="street-address"
-                                           autocomplete="street-address"
-                                           class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"/>
-                                </div>
+                                   <div class="col-span-6">
+                                       <label for="street-address" class="block text-sm font-medium text-gray-700">Street
+                                           address</label>
+                                       <input type="text" name="street-address" id="street-address"
+                                              autocomplete="street-address"
+                                              class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"/>
+                                   </div>
 
-                                <div class="col-span-6 sm:col-span-6 lg:col-span-2">
-                                    <label for="city" class="block text-sm font-medium text-gray-700">City</label>
-                                    <input type="text" name="city" id="city"
-                                           class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"/>
-                                </div>
+                                   <div class="col-span-6 sm:col-span-6 lg:col-span-2">
+                                       <label for="city" class="block text-sm font-medium text-gray-700">City</label>
+                                       <input type="text" name="city" id="city"
+                                              class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"/>
+                                   </div>
 
-                                <div class="col-span-6 sm:col-span-3 lg:col-span-2">
-                                    <label for="state" class="block text-sm font-medium text-gray-700">State /
-                                        Province</label>
-                                    <input type="text" name="state" id="state"
-                                           class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"/>
-                                </div>
+                                   <div class="col-span-6 sm:col-span-3 lg:col-span-2">
+                                       <label for="state" class="block text-sm font-medium text-gray-700">State /
+                                           Province</label>
+                                       <input type="text" name="state" id="state"
+                                              class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"/>
+                                   </div>
 
-                                <div class="col-span-6 sm:col-span-3 lg:col-span-2">
-                                    <label for="postal-code" class="block text-sm font-medium text-gray-700">ZIP /
-                                        Postal</label>
-                                    <input type="text" name="postal-code" id="postal-code"
-                                           autocomplete="postal-code"
-                                           class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"/>
-                                </div>
-                                <div class="px-4 py-3 bg-gray-50 text-right sm:px-6">
-                                    <button type="submit"
-                                            @click="addAddressFields()"
-                                            class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                                        Add An Address
-                                    </button>
-                                </div>
-                                <div id="additionalAddress"></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+                                   <div class="col-span-6 sm:col-span-3 lg:col-span-2">
+                                       <label for="postal-code" class="block text-sm font-medium text-gray-700">ZIP /
+                                           Postal</label>
+                                       <input type="text" name="postal-code" id="postal-code"
+                                              autocomplete="postal-code"
+                                              class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"/>
+                                   </div>
+                                   <div class="px-4 py-3 bg-gray-50 text-right sm:px-6">
+                                       <button type="submit"
+                                               @click="addAddressFields()"
+                                               class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                           Add An Address
+                                       </button>
+                                   </div>
+                                   <div id="additionalAddress"></div>
+                               </div>
+                           </div>
+                       </div>
+                   </div>
+               </div>
+           </div>
 
+       </div>
 
         <!--        <div>-->
         <!--            <div class="md:grid md:grid-cols-3 md:gap-6">-->
@@ -375,8 +394,10 @@ export default {
                     first_name: null,
                     middle_name: null,
                     last_name: null,
-                    email: null,
+                    plan_price: 115,
+                    plan_duration: "weekly",
                     type: true,
+                    chems_included: true,
                     plan: "Monthly 100 Includes Chems",
                     service_day: null,
                 },
