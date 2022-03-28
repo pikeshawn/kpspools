@@ -1,5 +1,6 @@
 <!-- This example requires Tailwind CSS v2.0+ -->
 <template>
+<div class="flex flex-col">
     <div class="h-screen flex overflow-hidden bg-gray-100">
         <TransitionRoot as="template" :show="sidebarOpen">
             <Dialog as="div" static class="fixed inset-0 flex z-40 md:hidden" @close="sidebarOpen = false" :open="sidebarOpen">
@@ -19,7 +20,7 @@
                         <div class="flex-1 h-0 pt-5 pb-4 overflow-y-auto">
                             <div class="flex-shrink-0 flex items-center px-4">
                                 <img class="w-auto" src="/img/Original.png" alt="Workflow" style="margin-top: -5rem;" />
-<!--                                <img class="h-8 w-auto" src="https://tailwindui.com/img/logos/workflow-logo-indigo-500-mark-white-text.svg" alt="Workflow" />-->
+                                <!--                                <img class="h-8 w-auto" src="https://tailwindui.com/img/logos/workflow-logo-indigo-500-mark-white-text.svg" alt="Workflow" />-->
                             </div>
                             <nav class="mt-5 px-2 space-y-1">
 
@@ -30,10 +31,10 @@
                                     Customers
                                 </inertia-link>
 
-<!--                                <a v-for="item in navigation" :key="item.name" :href="item.href" :class="[item.current ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white', 'group flex items-center px-2 py-2 text-base font-medium rounded-md']">-->
-<!--                                    <component :is="item.icon" :class="[item.current ? 'text-gray-300' : 'text-gray-400 group-hover:text-gray-300', 'mr-4 flex-shrink-0 h-6 w-6']" aria-hidden="true" />-->
-<!--                                    {{ item.name }}-->
-<!--                                </a>-->
+                                <!--                                <a v-for="item in navigation" :key="item.name" :href="item.href" :class="[item.current ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white', 'group flex items-center px-2 py-2 text-base font-medium rounded-md']">-->
+                                <!--                                    <component :is="item.icon" :class="[item.current ? 'text-gray-300' : 'text-gray-400 group-hover:text-gray-300', 'mr-4 flex-shrink-0 h-6 w-6']" aria-hidden="true" />-->
+                                <!--                                    {{ item.name }}-->
+                                <!--                                </a>-->
                             </nav>
                         </div>
                         <div class="flex-shrink-0 flex bg-gray-700 p-4">
@@ -69,7 +70,7 @@
                     <div class="flex-1 flex flex-col pt-5 pb-4 overflow-y-auto">
                         <div class="flex items-center flex-shrink-0 px-4">
                             <img class="w-auto" src="/img/Original.png" alt="Workflow" style="margin-top: -5rem;" />
-<!--                            <img class="h-8 w-auto" src="https://tailwindui.com/img/logos/workflow-logo-indigo-500-mark-white-text.svg" alt="Workflow" />-->
+                            <!--                            <img class="h-8 w-auto" src="https://tailwindui.com/img/logos/workflow-logo-indigo-500-mark-white-text.svg" alt="Workflow" />-->
                         </div>
                         <nav class="mt-5 flex-1 px-2 bg-gray-800 space-y-1" style="margin-top: -4rem;">
 
@@ -80,10 +81,10 @@
                                 Customers
                             </inertia-link>
 
-<!--                            <a v-for="item in navigation" :key="item.name" :href="item.href" :class="[item.current ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white', 'group flex items-center px-2 py-2 text-sm font-medium rounded-md']">-->
-<!--                                <component :is="item.icon" :class="[item.current ? 'text-gray-300' : 'text-gray-400 group-hover:text-gray-300', 'mr-3 flex-shrink-0 h-6 w-6']" aria-hidden="true" />-->
-<!--                                {{ item.name }}-->
-<!--                            </a>-->
+                            <!--                            <a v-for="item in navigation" :key="item.name" :href="item.href" :class="[item.current ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white', 'group flex items-center px-2 py-2 text-sm font-medium rounded-md']">-->
+                            <!--                                <component :is="item.icon" :class="[item.current ? 'text-gray-300' : 'text-gray-400 group-hover:text-gray-300', 'mr-3 flex-shrink-0 h-6 w-6']" aria-hidden="true" />-->
+                            <!--                                {{ item.name }}-->
+                            <!--                            </a>-->
                         </nav>
                     </div>
                     <div class="flex-shrink-0 flex bg-gray-700 p-4">
@@ -124,10 +125,11 @@
                 </div>
             </main>
         </div>
-        <footer class="mt-24">
-
-        </footer>
     </div>
+    <footer class="mt-24">
+        <h1 class="text-center">KPS Pools</h1>
+    </footer>
+</div>
 </template>
 
 <script>
