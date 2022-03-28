@@ -65,8 +65,6 @@
             </ul>
         </div>
 
-        <pre>{{ valueObjectArray }}</pre>
-
     </layout>
 </template>
 
