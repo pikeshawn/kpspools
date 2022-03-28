@@ -14,6 +14,7 @@
                 :headers="service_stop_headers"
                 :objectArray="service_stops"
             ></simple-table>
+
     </layout>
 </template>
 

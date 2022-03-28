@@ -124,6 +124,9 @@
                 </div>
             </main>
         </div>
+        <footer class="mt-24">
+
+        </footer>
     </div>
 </template>
 
