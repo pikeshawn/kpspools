@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Customer;
+use App\Models\User;
 use Carbon\Carbon;
 use Carbon\CarbonInterface;
 use Illuminate\Http\Request;
@@ -21,41 +22,23 @@ class CustomerController extends Controller
     public function index()
     {
 
-        $customers = DB::select('select c.first_name, c.last_name, c.id, c.service_day, c.assigned_serviceman,
-       a.community_gate_code, a.address_line_1, a.city, a.zip
-from customers c
-         join addresses a on c.id = a.customer_id
-where c.order is not NULL order By c.order DESC');
+        $customers = '';
 
-        $now = Carbon::now();
-        $startOfWeek = $now->startOfWeek(CarbonInterface::MONDAY)->format('Y-m-d H:i');
-        $endOfWeek = $now->endOfWeek(CarbonInterface::SUNDAY)->format('Y-m-d H:i');
+        if (User::isAdmin()) {
 
-        $startOfWeek = new Carbon($startOfWeek);
-        $endOfWeek = new Carbon($endOfWeek);
+//            dd("ALL");
 
-        foreach ($customers as $customer) {
+            $customers = Customer::allCustomers();
 
-            $stops = DB::select('select count(ss.time_in) as stops
-from service_stops ss
-where ss.customer_id = ' . $customer->id . ' order by ss.time_in DESC Limit 1');
+//            dd($customers);
 
-            if ($stops[0]->stops > 0) {
+        } else {
 
-                $lastServiceStop = DB::select('select ss.time_in
-from service_stops ss
-where ss.customer_id = ' . $customer->id . ' order by ss.time_in DESC Limit 1')[0]->time_in;
+//            dd("Pool Guy");
 
+            $customers = Customer::allCustomersTiedToUser();
 
-                $lastServiceStop = new Carbon($lastServiceStop);
-
-                if ($lastServiceStop > $startOfWeek && $lastServiceStop < $endOfWeek) {
-                    $customer->completed = true;
-                } else {
-                    $customer->completed = false;
-                }
-            }
-
+//            dd($customers);
         }
 
         return Inertia::render('Customers/Index', [

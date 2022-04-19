@@ -9,42 +9,11 @@
         </inertia-link>
 
 
-        <br>
-        <h1 class="text-6xl">Staphon</h1>
-        <br>
-
         <div v-for="day in ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']">
             <h2 class="uppercase">{{ day }}</h2>
             <!-- This example requires Tailwind CSS v2.0+ -->
             <ul role="list" class="divide-y divide-gray-200" v-for="(row) in valueObjectArray">
-                <li class="py-4 flex" v-if="row[2] == day && row[6] == 'Staphon'">
-                    <svg
-                        :class="row[5] ? 'completed' : 'notCompleted'"
-                        xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
-                        stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                              d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                    </svg>
-                    <inertia-link
-                        class="px-6 py-4 flex items-center focus:text-indigo-500"
-                        :href="route('service_stops', row[0])">
-                        <div class="ml-3">
-                            <p class="text-sm font-medium text-gray-900">{{ row[1] }}</p>
-                            <p class="text-sm text-gray-500">{{ row[3] }}</p>
-                            <p class="text-sm text-gray-500">{{ row[4] }}</p>
-                        </div>
-                    </inertia-link>
-                </li>
-            </ul>
-        </div>
-        <br>
-        <h1 class="text-6xl">Shawn</h1>
-        <br>
-        <div v-for="day in ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']">
-            <h2 class="uppercase">{{ day }}</h2>
-            <!-- This example requires Tailwind CSS v2.0+ -->
-            <ul role="list" class="divide-y divide-gray-200" v-for="(row) in valueObjectArray">
-                <li class="py-4 flex" v-if="row[2] == day && row[6] == 'Shawn'">
+                <li class="py-4 flex" v-if="row[2] == day">
                     <svg
                         :class="row[5] ? 'completed' : 'notCompleted'"
                         xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
@@ -65,6 +34,7 @@
             </ul>
         </div>
 
+        <br>
     </layout>
 </template>
 
@@ -120,6 +90,14 @@ export default {
         this.valueObjectArray = this.tableValues();
     },
     methods: {
+
+        getName(){
+          const firstEntry = this.valueObjectArray[1];
+
+          return typeof firstEntry;
+
+        },
+
         tableValues() {
             let mArray = []
             for (let i = 0; i < this.customers.length; i++) {
