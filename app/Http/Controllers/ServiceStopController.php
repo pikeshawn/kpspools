@@ -114,8 +114,9 @@ class ServiceStopController extends Controller
                 'empty_baskets' => $request->emptyBaskets,
                 'backwash' => $request->backwash,
                 'powder_chlorine' => $request->powder_chlorine,
-                'notes' => $request->notes
-            ]);
+                'notes' => $request->notes,
+                'serviceman_id' => Auth::user()->id
+        ]);
 
 //        Auth::user()->service_stops()->create(
 //            \Illuminate\Support\Facades\Request::validate([
