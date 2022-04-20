@@ -5,10 +5,13 @@ namespace App\Http\Controllers;
 use App\Models\Customer;
 use App\Models\Address;
 use App\Models\ServiceStop;
+use App\Notifications\ServiceStopCompleted;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Notification;
 use Inertia\Inertia;
 use Carbon\Carbon;
 
@@ -136,8 +139,19 @@ class ServiceStopController extends Controller
 //        );
 //
 
+
         $serviceStops = ServiceStop::where('customer_id', '=', $request->id)->get();
 
+        $cust = Customer::find($request->id);
+
+        $address = DB::select('select * from addresses a where a.customer_id =' . $cust->id);
+
+        if ($cust->phone_number) {
+            $cust->notify(new ServiceStopCompleted($serviceStop, $cust, $address));
+        }
+
+        Notification::route('nexmo', '14806226441')
+            ->notify(new ServiceStopCompleted($serviceStop, $cust, $address, true));
 
         return Inertia::render('ServiceStops/Index', [
 //            'filters' => \Illuminate\Support\Facades\Request::all('search', 'role', 'trashed'),

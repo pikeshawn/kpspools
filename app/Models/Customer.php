@@ -9,14 +9,24 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Address;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Notifications\Notifiable;
 
 class Customer extends Model
 {
     use HasFactory;
+    use Notifiable;
 
     public function addresses()
     {
         return $this->hasMany('App\Models\Address');
+    }
+
+    public function routeNotificationForNexmo($notification)
+    {
+
+//        dd($this->phone_number);
+
+        return $this->phone_number;
     }
 
     public static function allCustomers()
