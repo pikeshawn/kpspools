@@ -38760,7 +38760,7 @@ __webpack_require__.r(__webpack_exports__);
       newTimeOut: null,
       timeIn: null,
       timeOut: null,
-      vacuum: true
+      vacuum: null
     });
     var errors = (0,vue__WEBPACK_IMPORTED_MODULE_5__.reactive)({
       id: null,
@@ -38781,7 +38781,7 @@ __webpack_require__.r(__webpack_exports__);
       newTimeOut: null,
       timeIn: null,
       timeOut: null,
-      vacuum: true
+      vacuum: null
     });
 
     function formatTime(time) {
@@ -38816,7 +38816,12 @@ __webpack_require__.r(__webpack_exports__);
         errors.chlorine_level = true;
       } else {
         errors.chlorine_level = false;
-      }
+      } // if (form.vacuum === null) {
+      //     errors.vacuum = true
+      // } else {
+      //     errors.vacuum = false
+      // }
+
 
       if (form.timeIn && form.timeOut && form.ph_level && form.chlorine_level) {
         _inertiajs_inertia__WEBPACK_IMPORTED_MODULE_4__.Inertia.post('/service_stops/store', form);

@@ -98,6 +98,20 @@ class ServiceStopController extends Controller
 //        dd("Time In: " . $request->timeIn . " Time Out " . $request->timeOut . " Time Spent "
 //            . gettype($timeSpent) . " " . $timeSpent);
 
+//        $totalDuration = $finishTime->diffInSeconds($startTime);
+// 21
+
+//        Then used gmdate:
+
+//gmdate('H:i:s', $totalDuration);
+// 00:00:21
+
+//        $start  = new Carbon('2018-10-04 15:00:03');
+//        $end    = new Carbon('2018-10-05 17:00:09');
+
+        $start = new Carbon($request->timeIn);
+        $end = new Carbon($request->timeOut);
+
         $serviceStop = ServiceStop::firstOrCreate([
                 'customer_id' => $request->id,
                 'address_id' => $address['id'],
@@ -111,7 +125,7 @@ class ServiceStopController extends Controller
                 'liquid_acid' => $request->acid,
                 'time_in' => $request->timeIn,
                 'time_out' => $request->timeOut,
-                'service_time' => "00:00:00",
+                'service_time' => $start->diff($end)->format('%H:%I:%S'),
                 'vacuum' => true,
                 'brush' => $request->brush,
                 'empty_baskets' => $request->emptyBaskets,

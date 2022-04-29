@@ -234,7 +234,7 @@ export default {
             newTimeOut: null,
             timeIn: null,
             timeOut: null,
-            vacuum: true
+            vacuum: null
         })
 
         const errors = reactive({
@@ -256,7 +256,7 @@ export default {
             newTimeOut: null,
             timeIn: null,
             timeOut: null,
-            vacuum: true
+            vacuum: null
         })
 
         function formatTime(time){
@@ -293,6 +293,12 @@ export default {
             } else {
                 errors.chlorine_level = false
             }
+
+            // if (form.vacuum === null) {
+            //     errors.vacuum = true
+            // } else {
+            //     errors.vacuum = false
+            // }
 
             if (
                 form.timeIn
