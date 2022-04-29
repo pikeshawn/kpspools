@@ -79,12 +79,7 @@ class ServiceStopCompleted extends Notification
         $empty_baskets = $this->correctValue($this->service_stop->empty_baskets);
         $backwash = $this->correctValue($this->service_stop->backwash);
 
-        $text =
-            "Hello " . $this->customer->first_name . " " .
-    $this->customer->last_name .
-            "- KPS pools is offering a new notification system to keep you up to date! When your service is completed you will receive a text with a summary of that visit. The text will not receive responses, so please contact me at 480-703-4902 with questions.  I welcome your feedback. Thank you for being a valued customer and have a great day!\n\n\n" .
-
-            $this->customer->first_name . " " .
+        $text = $this->customer->first_name . " " .
             $this->customer->last_name . " your pool has been completed by "
             . $this->customer->assigned_serviceman . "\n" .
             "address:    " . $this->address[0]->address_line_1 . "\n" .
