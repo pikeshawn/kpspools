@@ -38816,12 +38816,11 @@ __webpack_require__.r(__webpack_exports__);
         errors.chlorine_level = true;
       } else {
         errors.chlorine_level = false;
-      } // if (form.vacuum === null) {
-      //     errors.vacuum = true
-      // } else {
-      //     errors.vacuum = false
-      // }
+      }
 
+      if (form.vacuum === null) {
+        form.vacuum = false;
+      }
 
       if (form.timeIn && form.timeOut && form.ph_level && form.chlorine_level) {
         _inertiajs_inertia__WEBPACK_IMPORTED_MODULE_4__.Inertia.post('/service_stops/store', form);

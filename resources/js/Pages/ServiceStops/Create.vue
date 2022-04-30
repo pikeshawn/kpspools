@@ -294,11 +294,9 @@ export default {
                 errors.chlorine_level = false
             }
 
-            // if (form.vacuum === null) {
-            //     errors.vacuum = true
-            // } else {
-            //     errors.vacuum = false
-            // }
+            if (form.vacuum === null) {
+                form.vacuum = false
+            }
 
             if (
                 form.timeIn
