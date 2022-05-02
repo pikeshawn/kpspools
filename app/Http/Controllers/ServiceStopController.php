@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Customer;
 use App\Models\Address;
 use App\Models\ServiceStop;
+use App\Models\User;
 use App\Notifications\ServiceStopCompleted;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -167,12 +168,38 @@ class ServiceStopController extends Controller
         Notification::route('nexmo', '14806226441')
             ->notify(new ServiceStopCompleted($serviceStop, $cust, $address, true));
 
-        return Inertia::render('ServiceStops/Index', [
-//            'filters' => \Illuminate\Support\Facades\Request::all('search', 'role', 'trashed'),
-            'service_stops' => $serviceStops,
-            'customer_name' => $customer->last_name,
-            'customer_id' => $customer->id
+//        $cc = new CustomerController();
+//        $cc->index();
+
+        $customers = '';
+
+        if (User::isAdmin()) {
+
+//            dd("ALL");
+
+            $customers = Customer::allCustomers();
+
+//            dd($customers);
+
+        } else {
+
+//            dd("Pool Guy");
+
+            $customers = Customer::allCustomersTiedToUser();
+
+//            dd($customers);
+        }
+
+        return Inertia::render('Customers/Index', [
+            'customers' => $customers
         ]);
+
+//        return Inertia::render('Customers/Index', [
+//            // 'filters' => \Illuminate\Support\Facades\Request::all('search', 'role', 'trashed'),
+//            'service_stops' => $serviceStops,
+//            'customer_name' => $customer->last_name,
+//            'customer_id' => $customer->id
+//        ]);
 
 
 //        return Redirect::route('customers.index', $serviceStop)->with('success', 'Service Stop Created.');

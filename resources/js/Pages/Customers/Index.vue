@@ -2,12 +2,6 @@
     <layout
         title="Customers"
     >
-        <inertia-link
-            class="mb-2.5 inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-            :href="route('customers.create')">
-            Add New
-        </inertia-link>
-
         <div v-for="day in ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']">
             <h2 class="uppercase">{{ day }}</h2>
             <!-- This example requires Tailwind CSS v2.0+ -->
@@ -22,13 +16,18 @@
                     </svg>
                     <inertia-link
                         class="px-6 py-4 flex items-center focus:text-indigo-500"
-                        :href="route('service_stops', row[0])">
+                        :href="route('service_stops.create', row[0])">
                         <div class="ml-3">
                             <p class="text-sm font-medium text-gray-900">{{ row[1] }}</p>
                             <p class="text-sm text-gray-500">{{ row[3] }}</p>
                             <p class="text-sm text-gray-500">{{ row[4] }}</p>
                             <p class="text-sm text-gray-500" v-if="user.id === 2">{{ row[6] }}</p>
                         </div>
+                    </inertia-link>
+                    <inertia-link
+                        class="mb-2.5 inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                        :href="route('service_stops', row[0])">
+                    History
                     </inertia-link>
                 </li>
             </ul>
