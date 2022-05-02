@@ -46,9 +46,9 @@ class ServiceStopController extends Controller
                 'backwash',
                 'powder_chlorine',
                 'notes'
-            ])->get();
+            ])->orderBy('time_in', 'desc')->get();
 
-        $serviceStops = ServiceStop::where('customer_id', '=', $customer->id)->get();
+        $serviceStops = ServiceStop::where('customer_id', '=', $customer->id)->orderBy('created_at', 'desc')->get();
 
         return Inertia::render('ServiceStops/Index', [
 //            'filters' => \Illuminate\Support\Facades\Request::all('search', 'role', 'trashed'),

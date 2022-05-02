@@ -48,18 +48,6 @@ export default {
                     key: 'tabs_whole_mine'
                 },
                 {
-                    name: 'tabs crushed mine',
-                    key: 'tabs_crushed_mine'
-                },
-                {
-                    name: 'tabs whole theirs',
-                    key: 'tabs_whole_theirs'
-                },
-                {
-                    name: 'tabs crushed theirs',
-                    key: 'tabs_crushed_theirs'
-                },
-                {
                     name: 'liquid chlorine',
                     key: 'liquid_chlorine'
                 },
@@ -80,21 +68,13 @@ export default {
                     key: 'service_time'
                 },
                 {
-                    name: 'brush',
-                    key: 'brush'
-                },
-                {
                     name: 'backwash',
                     key: 'backwash'
                 },
                 {
                     name: 'notes',
                     key: 'notes'
-                },
-                {
-                    name: 'empty baskets',
-                    key: 'empty_baskets'
-                },
+                }
             ],
             service_stop_keys: [
                 'id',

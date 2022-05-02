@@ -38882,15 +38882,6 @@ __webpack_require__.r(__webpack_exports__);
         name: 'tabs whole mine',
         key: 'tabs_whole_mine'
       }, {
-        name: 'tabs crushed mine',
-        key: 'tabs_crushed_mine'
-      }, {
-        name: 'tabs whole theirs',
-        key: 'tabs_whole_theirs'
-      }, {
-        name: 'tabs crushed theirs',
-        key: 'tabs_crushed_theirs'
-      }, {
         name: 'liquid chlorine',
         key: 'liquid_chlorine'
       }, {
@@ -38906,17 +38897,11 @@ __webpack_require__.r(__webpack_exports__);
         name: 'service time',
         key: 'service_time'
       }, {
-        name: 'brush',
-        key: 'brush'
-      }, {
         name: 'backwash',
         key: 'backwash'
       }, {
         name: 'notes',
         key: 'notes'
-      }, {
-        name: 'empty baskets',
-        key: 'empty_baskets'
       }],
       service_stop_keys: ['id', 'ph_level', 'chlorine_level', 'tabs_whole_mine', 'tabs_crushed_mine', 'tabs_whole_theirs', 'tabs_crushed_theirs', 'liquid_chlorine', 'liquid_acid', 'time_in', 'time_out', 'service_time', 'vacuum', 'brush', 'empty_baskets', 'backwash', 'powder_chlorine', 'notes']
     };
