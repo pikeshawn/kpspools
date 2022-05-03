@@ -80,40 +80,13 @@ class ServiceStopController extends Controller
      */
     public function store(Request $request)
     {
-        //
-
-//        dd($request);
 
         $address = Address::select(['id'])->where('customer_id', '=', $request->id)->get()->first();
-
-        $customer = Customer::select()->where('id', '=', $request->id)->get()->first();
-
-//        dd($address);
-//        dd($customer);
-
-//        $timeIn = new Carbon($request->timeIn);
-//        $timeOut = new Carbon($request->timeOut);
-//
-//        $timeSpent = $timeOut->diffInMinutes($timeIn);
-//
-//        dd("Time In: " . $request->timeIn . " Time Out " . $request->timeOut . " Time Spent "
-//            . gettype($timeSpent) . " " . $timeSpent);
-
-//        $totalDuration = $finishTime->diffInSeconds($startTime);
-// 21
-
-//        Then used gmdate:
-
-//gmdate('H:i:s', $totalDuration);
-// 00:00:21
-
-//        $start  = new Carbon('2018-10-04 15:00:03');
-//        $end    = new Carbon('2018-10-05 17:00:09');
 
         $start = new Carbon($request->timeIn);
         $end = new Carbon($request->timeOut);
 
-        $serviceStop = ServiceStop::firstOrCreate([
+            $serviceStop = ServiceStop::firstOrCreate([
                 'customer_id' => $request->id,
                 'address_id' => $address['id'],
                 'ph_level' => $request->ph_level,
@@ -127,67 +100,35 @@ class ServiceStopController extends Controller
                 'time_in' => $request->timeIn,
                 'time_out' => $request->timeOut,
                 'service_time' => $start->diff($end)->format('%H:%I:%S'),
-                'vacuum' => true,
+                'vacuum' => $request->vacuum,
                 'brush' => $request->brush,
                 'empty_baskets' => $request->emptyBaskets,
                 'backwash' => $request->backwash,
                 'powder_chlorine' => $request->powder_chlorine,
                 'notes' => $request->notes,
+                'service_type' => $request->service_type,
                 'serviceman_id' => Auth::user()->id
         ]);
-
-//        Auth::user()->service_stops()->create(
-//            \Illuminate\Support\Facades\Request::validate([
-//                'ph_level' => $request->php_level,
-//                'chlorine_level' => $request->php_level,
-//                'organization_id' => ['nullable', Rule::exists('organizations', 'id')->where(function ($query) {
-//                    $query->where('account_id', Auth::user()->account_id);
-//                })],
-//                'email' => ['nullable', 'max:50', 'email'],
-//                'phone' => ['nullable', 'max:50'],
-//                'address' => ['nullable', 'max:150'],
-//                'city' => ['nullable', 'max:50'],
-//                'region' => ['nullable', 'max:50'],
-//                'country' => ['nullable', 'max:2'],
-//                'postal_code' => ['nullable', 'max:25'],
-//            ])
-//        );
-//
-
-
-        $serviceStops = ServiceStop::where('customer_id', '=', $request->id)->get();
 
         $cust = Customer::find($request->id);
 
         $address = DB::select('select * from addresses a where a.customer_id =' . $cust->id);
 
-        if ($cust->phone_number) {
-            $cust->notify(new ServiceStopCompleted($serviceStop, $cust, $address));
-        }
-
-        Notification::route('nexmo', '14806226441')
-            ->notify(new ServiceStopCompleted($serviceStop, $cust, $address, true));
-
-//        $cc = new CustomerController();
-//        $cc->index();
-
-        $customers = '';
+//        if ($cust->phone_number) {
+//            $cust->notify(new ServiceStopCompleted($serviceStop, $cust, $address));
+//        }
+//
+//        Notification::route('nexmo', '14806226441')
+//            ->notify(new ServiceStopCompleted($serviceStop, $cust, $address, true));
 
         if (User::isAdmin()) {
 
-//            dd("ALL");
-
             $customers = Customer::allCustomers();
-
-//            dd($customers);
 
         } else {
 
-//            dd("Pool Guy");
-
             $customers = Customer::allCustomersTiedToUser();
 
-//            dd($customers);
         }
 
         return Inertia::render('Customers/Index', [
@@ -200,9 +141,6 @@ class ServiceStopController extends Controller
 //            'customer_name' => $customer->last_name,
 //            'customer_id' => $customer->id
 //        ]);
-
-
-//        return Redirect::route('customers.index', $serviceStop)->with('success', 'Service Stop Created.');
 
     }
 

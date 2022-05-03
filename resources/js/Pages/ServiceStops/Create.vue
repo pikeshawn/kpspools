@@ -5,7 +5,18 @@
                 <div class="md:col-span-1">
                     <div class="px-4 sm:px-0 mb-3">
                         <h1 class="text-lg font-medium leading-6 text-gray-900 mb-4 capitalize font-bold text-4xl">{{ customerName }}</h1>
-                        <h3 class="text-lg font-medium leading-6 text-gray-900">SERVICE STOP</h3>
+                        <div>
+                            <div class="col-span-1">
+                                <label for="service_type" class="block text-sm font-medium text-gray-700">Service Type</label>
+                                <select id="service_type" name="service_type"
+                                        v-model="form.service_type"
+                                        class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                                    <option v-for="option in [
+                                                           'Service Stop','Repair', 'Clear Green Pool'
+                                                           ]">{{ option }}</option>
+                                </select>
+                            </div>
+                        </div>
                         <p class="mt-1 text-sm text-gray-600">
                             Please input the service information below
                         </p>
@@ -40,7 +51,7 @@
                                             <select id="chlorine" name="chlorine"
                                                     v-model="form.chlorine_level"
                                                     class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-                                                <option v-for="option in [ '0.0', '1.0', '2.0', '3.0', '4.0', '5.0' ]">{{ option }}</option>
+                                                <option v-for="option in [ '0.0', '1.0', '2.0', '3.0', '4.0', '5.0', '6.0', '7.0', '8.0', '9.0', '10.0', '10+']">{{ option }}</option>
                                             </select>
                                             <div class="mt-2" v-if="form.chlorine_level">{{ form.chlorine_level }}</div>
                                         </div>
@@ -52,7 +63,7 @@
                                             <select id="pH" name="pH"
                                                     v-model="form.ph_level"
                                                     class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-                                                <option v-for="option in [ '7.0', '7.2', '7.4', '7.6', '7.8', '8.0' ]">{{ option }}</option>
+                                                <option v-for="option in [ '7.0', '7.2', '7.4', '7.6', '7.8', '8.0' , '8+' ]">{{ option }}</option>
                                             </select>
                                             <div class="mt-2" v-if="form.ph_level">{{ form.ph_level }}</div>
                                         </div>
@@ -93,7 +104,10 @@
                                                 <option v-for="option in [ '0.0','0.5', '1.0', '1.5', '2.0', '2.5', '3.0', '3.5',
                                                            '4.0', '4.5', '5.0', '5.5', '6.0', '6.5',
                                                            '7.0', '7.5', '8.0', '8.5', '9.0', '9.5',
-                                                           '10.0', '10.5', '11.0', '11.5', '12.0', '12.5'
+                                                           '10.0', '10.5', '11.0', '11.5', '12.0', '12.5',
+                                                           '13.0', '13.5', '14.0', '14.5', '15.0', '15.5',
+                                                           '16.0', '16.5', '17.0', '17.5', '18.0', '18.5',
+                                                           '19.0', '19.5', '20.0', '20.5', '21.0', '21.5'
                                                            ]">{{ option }}</option>
                                             </select>
                                             <div class="mt-2" v-if="form.liquidChlorine">{{ form.liquidChlorine }}</div>
@@ -234,7 +248,8 @@ export default {
             newTimeOut: null,
             timeIn: null,
             timeOut: null,
-            vacuum: null
+            vacuum: null,
+            service_type: 'Service Stop'
         })
 
         const errors = reactive({

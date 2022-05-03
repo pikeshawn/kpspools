@@ -40,10 +40,6 @@ export default {
                     key: 'chlorine_level'
                 },
                 {
-                    name: 'powder chlorine',
-                    key: 'powder_chlorine'
-                },
-                {
                     name: 'tabs whole mine',
                     key: 'tabs_whole_mine'
                 },
