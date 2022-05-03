@@ -46,8 +46,7 @@ where c.order is not NULL order By c.order DESC');
     {
 
 
-
-       $customers = DB::select('select c.first_name,
+        $customers = DB::select('select c.first_name,
        c.last_name,
        u.name,
        c.id,
@@ -63,7 +62,7 @@ from customers c
 where c.order is not NULL AND u.id = ' . Auth::user()->id . '
 order By c.order DESC');
 
-       return self::completedCustomers($customers);
+        return self::completedCustomers($customers);
 
     }
 
@@ -78,25 +77,21 @@ order By c.order DESC');
 
         foreach ($customers as $customer) {
 
-            $stops = DB::select('select count(ss.time_in) as stops
+            $dayBeforeStartOfWeek = $startOfWeek->subDays(1)->toDate()->format('Y-m-d H:i');
+
+            $query = 'select count(ss.time_in) as stops
 from service_stops ss
-where ss.customer_id = ' . $customer->id . ' order by ss.time_in DESC Limit 1');
+where ss.customer_id = ' . $customer->id . ' and ss.created_at > "' . $dayBeforeStartOfWeek . '" and ss.service_type = "Service Stop" order by ss.time_in DESC Limit 1';
+
+            $stops = DB::select($query);
 
             if ($stops[0]->stops > 0) {
-
-                $lastServiceStop = DB::select('select ss.time_in
-from service_stops ss
-where ss.customer_id = ' . $customer->id . ' order by ss.time_in DESC Limit 1')[0]->time_in;
-
-
-                $lastServiceStop = new Carbon($lastServiceStop);
-
-                if ($lastServiceStop > $startOfWeek && $lastServiceStop < $endOfWeek) {
-                    $customer->completed = true;
-                } else {
-                    $customer->completed = false;
-                }
+                $customer->completed = true;
+            } else {
+                $customer->completed = false;
             }
+
+
         }
 
         return $customers;
