@@ -75,13 +75,14 @@ order By c.order DESC');
         $startOfWeek = new Carbon($startOfWeek);
         $endOfWeek = new Carbon($endOfWeek);
 
-        foreach ($customers as $customer) {
+        $dayBeforeStartOfWeek = $startOfWeek->subDays(1)->toDate()->format('Y-m-d H:i');
 
-            $dayBeforeStartOfWeek = $startOfWeek->subDays(1)->toDate()->format('Y-m-d H:i');
+        foreach ($customers as $customer) {
 
             $query = 'select count(ss.time_in) as stops
 from service_stops ss
-where ss.customer_id = ' . $customer->id . ' and ss.created_at > "' . $dayBeforeStartOfWeek . '" and ss.service_type = "Service Stop" order by ss.time_in DESC Limit 1';
+where ss.customer_id = ' . $customer->id . ' and ss.created_at > "' .
+                $dayBeforeStartOfWeek . '" and ss.service_type = "Service Stop" order by ss.time_in DESC Limit 1';
 
             $stops = DB::select($query);
 

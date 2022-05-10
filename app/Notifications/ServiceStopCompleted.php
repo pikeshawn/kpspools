@@ -88,8 +88,8 @@ class ServiceStopCompleted extends Notification
             "pH:                " . $this->service_stop->ph_level . "\n" .
             "chlorine:        " . $this->service_stop->chlorine_level . "\n" .
             "tabs:              " . $this->service_stop->tabs_whole_mine . "\n" .
-            "liquid chlorine:   " . $this->service_stop->liquid_chlorine . "\n" .
-            "acid:              " . $this->service_stop->liquid_acid . "\n" .
+            "liquid chlorine:   " . $this->service_stop->liquid_chlorine . " gallon(s)\n" .
+            "acid:              " . $this->service_stop->liquid_acid . " gallon(s)\n" .
             "vacuum:         " . $vacuum . "\n" .
             "brush:            " . $brush . "\n" .
             "emptied baskets:   " . $empty_baskets . "\n" .

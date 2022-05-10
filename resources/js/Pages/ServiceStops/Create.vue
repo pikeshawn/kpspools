@@ -63,7 +63,7 @@
                                             <select id="pH" name="pH"
                                                     v-model="form.ph_level"
                                                     class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-                                                <option v-for="option in [ '7.0', '7.2', '7.4', '7.6', '7.8', '8.0' , '8+' ]">{{ option }}</option>
+                                                <option v-for="option in [ '7.0', '7.2', '7.4', '7.6', '7.8', '8.0' ]">{{ option }}</option>
                                             </select>
                                             <div class="mt-2" v-if="form.ph_level">{{ form.ph_level }}</div>
                                         </div>
@@ -97,7 +97,7 @@
 
                                     <div>
                                         <div class="col-span-1">
-                                            <label for="liquidChlorine" class="block text-sm font-medium text-gray-700">Liquid Chlorine</label>
+                                            <label for="liquidChlorine" class="block text-sm font-medium text-gray-700">Liquid Chlorine - gallon(s)</label>
                                             <select id="liquidChlorine" name="liquidChlorine"
                                                     v-model="form.liquidChlorine"
                                                     class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
@@ -116,7 +116,7 @@
 
                                     <div>
                                         <div class="col-span-1">
-                                            <label for="acid" class="block text-sm font-medium text-gray-700">Acid</label>
+                                            <label for="acid" class="block text-sm font-medium text-gray-700">Acid - gallon(s)</label>
                                             <select id="acid" name="acid"
                                                     v-model="form.acid"
                                                     class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
