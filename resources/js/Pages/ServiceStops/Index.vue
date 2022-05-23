@@ -32,6 +32,10 @@ export default {
         return {
             service_stop_headers: [
                 {
+                    name: 'id',
+                    key: 'id'
+                },
+                {
                     name: 'ph level',
                     key: 'ph_level'
                 },

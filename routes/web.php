@@ -50,6 +50,10 @@ Route::middleware(['auth:sanctum', 'verified'])->post('/service_stops/store',
     [ServiceStopController::class, 'store'])
     ->name('service_stops.store');
 
+Route::middleware(['auth:sanctum', 'verified'])->delete('/service_stops/{serviceStop}',
+    [ServiceStopController::class, 'destroy'])
+    ->name('service_stops.destroy');
+
 Route::middleware(['auth:sanctum', 'verified'])
     ->get('customers/{customer}/edit',
     [CustomerController::class, 'edit'])
