@@ -4,12 +4,23 @@
     >
         <h1 class="text-lg font-medium leading-6 text-gray-900 mb-4 capitalize font-bold text-4xl">{{ customer_name }}</h1>
 
+
+        <h4 class="text-sm font-medium leading-6 text-gray-900 mb-4 capitalize font-bold text-2xl">Average Time Per Stop</h4>
+        <h4 class="text-sm font-medium leading-6 text-gray-900 mb-4 capitalize font-bold">All Time : {{ totalAverageTime }} minutes</h4>
+        <h4 v-if="totalAverageServiceTime" class="text-sm font-medium leading-6 text-gray-900 mb-4 capitalize font-bold">All Time - Service Stop : {{ totalAverageServiceTime }} minutes</h4>
+        <h4 v-if="totalAverageRepairTime" class="text-sm font-medium leading-6 text-gray-900 mb-4 capitalize font-bold">All Time - Repair: {{ totalAverageRepairTime }} minutes</h4>
+        <h4 v-if="totalAverageClearGreenPoolTime"  class="text-sm font-medium leading-6 text-gray-900 mb-4 capitalize font-bold">All Time - Clear Green Pool: {{ totalAverageClearGreenPoolTime }} minutes</h4>
+
+
         <inertia-link
                 :href="route('service_stops.create', customer_id)"
                 class="mb-2.5 inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
             >
                 Add Stop
             </inertia-link>
+
+
+
             <simple-table
                 :headers="service_stop_headers"
                 :objectArray="service_stops"
@@ -100,6 +111,10 @@ export default {
     },
     props: {
         service_stops: Array,
+        totalAverageTime: String,
+        totalAverageServiceTime: String,
+        totalAverageRepairTime: String,
+        totalAverageClearGreenPoolTime: String,
         customer_name: String,
         customer_id: Number,
     }

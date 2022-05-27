@@ -50,9 +50,42 @@ class ServiceStopController extends Controller
             ])->orderBy('time_in', 'desc')->get();
 
         $serviceStops = ServiceStop::where('customer_id', '=', $customer->id)->orderBy('created_at', 'desc')->get();
+        $totalAverageTime = DB::select(
+            'select ceiling(AVG(TIME_TO_SEC(TIMEDIFF(time_out,time_in))) / 60) as totalAveragePerStop from service_stops where customer_id = '
+            . $customer->id
+        );
+
+        $totalAverageServiceTime = DB::select(
+            'select ceiling(AVG(TIME_TO_SEC(TIMEDIFF(ss.time_out, ss.time_in))) / 60)
+           as totalAverageServiceTime
+from service_stops ss
+         where customer_id = ' . $customer->id . '
+  and ss.service_type = "Service Stop"'
+        );
+
+        $totalAverageRepairTime = DB::select(
+            'select ceiling(AVG(TIME_TO_SEC(TIMEDIFF(ss.time_out, ss.time_in))) / 60)
+           as totalAverageRepairTime
+from service_stops ss
+         where customer_id = ' . $customer->id . '
+  and ss.service_type = "Repair"'
+        );
+
+        $totalAverageClearGreenPoolTime = DB::select(
+            'select ceiling(AVG(TIME_TO_SEC(TIMEDIFF(ss.time_out, ss.time_in))) / 60)
+           as totalAverageClearGreenPoolTime
+from service_stops ss
+         where customer_id = ' . $customer->id . '
+  and ss.service_type = "Clear Green Pool"'
+        );
+
 
         return Inertia::render('ServiceStops/Index', [
 //            'filters' => \Illuminate\Support\Facades\Request::all('search', 'role', 'trashed'),
+            'totalAverageTime' => $totalAverageTime[0]->totalAveragePerStop,
+            'totalAverageClearGreenPoolTime' => $totalAverageClearGreenPoolTime[0]->totalAverageClearGreenPoolTime,
+            'totalAverageServiceTime' => $totalAverageServiceTime[0]->totalAverageServiceTime,
+            'totalAverageRepairTime' => $totalAverageRepairTime[0]->totalAverageRepairTime,
             'service_stops' => $serviceStops,
             'customer_name' => $customer->last_name,
             'customer_id' => $customer->id,
@@ -86,28 +119,28 @@ class ServiceStopController extends Controller
         $start = new Carbon($request->timeIn);
         $end = new Carbon($request->timeOut);
 
-            $serviceStop = ServiceStop::firstOrCreate([
-                'customer_id' => $request->id,
-                'address_id' => $address['id'],
-                'ph_level' => $request->ph_level,
-                'chlorine_level' => $request->chlorine_level,
-                'tabs_whole_mine' => $request->tabsWholeMine,
-                'tabs_crushed_mine' => $request->tabsCrushedMine,
-                'tabs_whole_theirs' => $request->tabsWholeTheirs,
-                'tabs_crushed_theirs' => $request->tabsCrushedTheirs,
-                'liquid_chlorine' => $request->liquidChlorine,
-                'liquid_acid' => $request->acid,
-                'time_in' => $request->timeIn,
-                'time_out' => $request->timeOut,
-                'service_time' => $start->diff($end)->format('%H:%I:%S'),
-                'vacuum' => $request->vacuum,
-                'brush' => $request->brush,
-                'empty_baskets' => $request->emptyBaskets,
-                'backwash' => $request->backwash,
-                'powder_chlorine' => $request->powder_chlorine,
-                'notes' => $request->notes,
-                'service_type' => $request->service_type,
-                'serviceman_id' => Auth::user()->id
+        $serviceStop = ServiceStop::firstOrCreate([
+            'customer_id' => $request->id,
+            'address_id' => $address['id'],
+            'ph_level' => $request->ph_level,
+            'chlorine_level' => $request->chlorine_level,
+            'tabs_whole_mine' => $request->tabsWholeMine,
+            'tabs_crushed_mine' => $request->tabsCrushedMine,
+            'tabs_whole_theirs' => $request->tabsWholeTheirs,
+            'tabs_crushed_theirs' => $request->tabsCrushedTheirs,
+            'liquid_chlorine' => $request->liquidChlorine,
+            'liquid_acid' => $request->acid,
+            'time_in' => $request->timeIn,
+            'time_out' => $request->timeOut,
+            'service_time' => $start->diff($end)->format('%H:%I:%S'),
+            'vacuum' => $request->vacuum,
+            'brush' => $request->brush,
+            'empty_baskets' => $request->emptyBaskets,
+            'backwash' => $request->backwash,
+            'powder_chlorine' => $request->powder_chlorine,
+            'notes' => $request->notes,
+            'service_type' => $request->service_type,
+            'serviceman_id' => Auth::user()->id
         ]);
 
         $cust = Customer::find($request->id);
