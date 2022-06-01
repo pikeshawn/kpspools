@@ -2,11 +2,53 @@
     <layout
         title="Customers"
     >
-        <div v-for="day in ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']">
-            <h2 class="uppercase">{{ day }}</h2>
+
+        <h2
+            class="mb-2.5 inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 uppercase"
+            @click="showRoute('monday')"
+        >monday</h2>
+
+
+        <h2
+            class="mb-2.5 inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 uppercase"
+            @click="showRoute('tuesday')"
+        >tuesday</h2>
+
+        <h2
+            class="mb-2.5 inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 uppercase"
+            @click="showRoute('wednesday')"
+        >wednesday</h2>
+
+        <h2
+            class="mb-2.5 inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 uppercase"
+            @click="showRoute('thursday')"
+        >thursday</h2>
+
+        <h2
+            class="mb-2.5 inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 uppercase"
+            @click="showRoute('friday')"
+        >friday</h2>
+
+        <h2
+            class="mb-2.5 inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 uppercase"
+            @click="showRoute('all')"
+        >all</h2>
+
+        <h2
+            class="mb-2.5 inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 uppercase"
+            @click="showRoute('none')"
+        >none</h2>
+
+
+        <div v-show="monday">
+
+            <h2
+                class="uppercase"
+            >monday</h2>
+
             <!-- This example requires Tailwind CSS v2.0+ -->
             <ul role="list" class="divide-y divide-gray-200" v-for="(row) in valueObjectArray">
-                <li class="py-4 flex" v-if="row[2] == day">
+                <li class="py-4 flex" v-if="row[2] == 'Monday'">
                     <svg
                         :class="row[5] ? 'completed' : 'notCompleted'"
                         xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
@@ -27,11 +69,209 @@
                     <inertia-link
                         class="mb-2.5 inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                         :href="route('service_stops', row[0])">
-                    History
+                        History
+                    </inertia-link>
+                    <inertia-link
+                        class="mb-2.5 inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                        :href="route('summary', row[0])">
+                        Summary
+                    </inertia-link>
+
+                    <inertia-link
+                        class="mb-2.5 inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                        :href="route('service_stops.notes', row[0])">
+                        Notes
                     </inertia-link>
                 </li>
             </ul>
         </div>
+
+
+        <div v-show="tuesday">
+
+            <h2
+                class="uppercase"
+            >tuesday</h2>
+
+            <!-- This example requires Tailwind CSS v2.0+ -->
+            <ul role="list" class="divide-y divide-gray-200" v-for="(row) in valueObjectArray">
+                <li class="py-4 flex" v-if="row[2] == 'Tuesday'">
+                    <svg
+                        :class="row[5] ? 'completed' : 'notCompleted'"
+                        xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                              d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                    </svg>
+                    <inertia-link
+                        class="px-6 py-4 flex items-center focus:text-indigo-500"
+                        :href="route('service_stops.create', row[0])">
+                        <div class="ml-3">
+                            <p class="text-sm font-medium text-gray-900">{{ row[1] }}</p>
+                            <p class="text-sm text-gray-500">{{ row[3] }}</p>
+                            <p class="text-sm text-gray-500">{{ row[4] }}</p>
+                            <p class="text-sm text-gray-500" v-if="user.id === 2">{{ row[6] }}</p>
+                        </div>
+                    </inertia-link>
+                    <inertia-link
+                        class="mb-2.5 inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                        :href="route('service_stops', row[0])">
+                        History
+                    </inertia-link>
+                    <inertia-link
+                        class="mb-2.5 inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                        :href="route('summary', row[0])">
+                        Summary
+                    </inertia-link>
+
+                    <inertia-link
+                        class="mb-2.5 inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                        :href="route('service_stops.notes', row[0])">
+                        Notes
+                    </inertia-link>
+                </li>
+            </ul>
+        </div>
+
+        <div v-show="wednesday">
+
+            <h2
+                class="uppercase"
+            >wednesday</h2>
+
+            <!-- This example requires Tailwind CSS v2.0+ -->
+            <ul role="list" class="divide-y divide-gray-200" v-for="(row) in valueObjectArray">
+                <li class="py-4 flex" v-if="row[2] == 'Wednesday'">
+                    <svg
+                        :class="row[5] ? 'completed' : 'notCompleted'"
+                        xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                              d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                    </svg>
+                    <inertia-link
+                        class="px-6 py-4 flex items-center focus:text-indigo-500"
+                        :href="route('service_stops.create', row[0])">
+                        <div class="ml-3">
+                            <p class="text-sm font-medium text-gray-900">{{ row[1] }}</p>
+                            <p class="text-sm text-gray-500">{{ row[3] }}</p>
+                            <p class="text-sm text-gray-500">{{ row[4] }}</p>
+                            <p class="text-sm text-gray-500" v-if="user.id === 2">{{ row[6] }}</p>
+                        </div>
+                    </inertia-link>
+                    <inertia-link
+                        class="mb-2.5 inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                        :href="route('service_stops', row[0])">
+                        History
+                    </inertia-link>
+                    <inertia-link
+                        class="mb-2.5 inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                        :href="route('summary', row[0])">
+                        Summary
+                    </inertia-link>
+
+                    <inertia-link
+                        class="mb-2.5 inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                        :href="route('service_stops.notes', row[0])">
+                        Notes
+                    </inertia-link>
+                </li>
+            </ul>
+        </div>
+
+        <div v-show="thursday">
+
+            <h2
+                class="uppercase"
+            >thursday</h2>
+
+            <!-- This example requires Tailwind CSS v2.0+ -->
+            <ul role="list" class="divide-y divide-gray-200" v-for="(row) in valueObjectArray">
+                <li class="py-4 flex" v-if="row[2] == 'Thursday'">
+                    <svg
+                        :class="row[5] ? 'completed' : 'notCompleted'"
+                        xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                              d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                    </svg>
+                    <inertia-link
+                        class="px-6 py-4 flex items-center focus:text-indigo-500"
+                        :href="route('service_stops.create', row[0])">
+                        <div class="ml-3">
+                            <p class="text-sm font-medium text-gray-900">{{ row[1] }}</p>
+                            <p class="text-sm text-gray-500">{{ row[3] }}</p>
+                            <p class="text-sm text-gray-500">{{ row[4] }}</p>
+                            <p class="text-sm text-gray-500" v-if="user.id === 2">{{ row[6] }}</p>
+                        </div>
+                    </inertia-link>
+                    <inertia-link
+                        class="mb-2.5 inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                        :href="route('service_stops', row[0])">
+                        History
+                    </inertia-link>
+                    <inertia-link
+                        class="mb-2.5 inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                        :href="route('summary', row[0])">
+                        Summary
+                    </inertia-link>
+
+                    <inertia-link
+                        class="mb-2.5 inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                        :href="route('service_stops.notes', row[0])">
+                        Notes
+                    </inertia-link>
+                </li>
+            </ul>
+        </div>
+
+
+        <div v-show="friday">
+
+            <h2
+                class="uppercase"
+            >friday</h2>
+
+            <!-- This example requires Tailwind CSS v2.0+ -->
+            <ul role="list" class="divide-y divide-gray-200" v-for="(row) in valueObjectArray">
+                <li class="py-4 flex" v-if="row[2] == 'Friday'">
+                    <svg
+                        :class="row[5] ? 'completed' : 'notCompleted'"
+                        xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                              d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                    </svg>
+                    <inertia-link
+                        class="px-6 py-4 flex items-center focus:text-indigo-500"
+                        :href="route('service_stops.create', row[0])">
+                        <div class="ml-3">
+                            <p class="text-sm font-medium text-gray-900">{{ row[1] }}</p>
+                            <p class="text-sm text-gray-500">{{ row[3] }}</p>
+                            <p class="text-sm text-gray-500">{{ row[4] }}</p>
+                            <p class="text-sm text-gray-500" v-if="user.id === 2">{{ row[6] }}</p>
+                        </div>
+                    </inertia-link>
+                    <inertia-link
+                        class="mb-2.5 inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                        :href="route('service_stops', row[0])">
+                        History
+                    </inertia-link>
+                    <inertia-link
+                        class="mb-2.5 inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                        :href="route('summary', row[0])">
+                        Summary
+                    </inertia-link>
+
+                    <inertia-link
+                        class="mb-2.5 inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                        :href="route('service_stops.notes', row[0])">
+                        Notes
+                    </inertia-link>
+                </li>
+            </ul>
+        </div>
+
 
         <br>
     </layout>
@@ -52,6 +292,11 @@ export default {
     data() {
         return {
             liquidChlorine: null,
+            monday: false,
+            tuesday: false,
+            wednesday: false,
+            thursday: false,
+            friday: false,
             customer_headers: [
                 {
                     name: 'id',
@@ -90,10 +335,43 @@ export default {
     },
     methods: {
 
-        getName(){
-          const firstEntry = this.valueObjectArray[1];
+        showRoute(day) {
+            if (day === 'all') {
+                this.monday = true;
+                this.tuesday = true;
+                this.wednesday = true;
+                this.thursday = true;
+                this.friday = true;
+            } else if (day === 'none') {
+                this.hideDays();
+            } else {
+                this.hideDays();
+                if (day === 'monday') {
+                    this.monday = true
+                } else if (day === 'tuesday') {
+                    this.tuesday = true
+                } else if (day === 'wednesday') {
+                    this.wednesday = true
+                } else if (day === 'thursday') {
+                    this.thursday = true
+                } else if (day === 'friday') {
+                    this.friday = true
+                }
+            }
+        },
 
-          return typeof firstEntry;
+        hideDays() {
+            this.monday = false;
+            this.tuesday = false;
+            this.wednesday = false;
+            this.thursday = false;
+            this.friday = false;
+        },
+
+        getName() {
+            const firstEntry = this.valueObjectArray[1];
+
+            return typeof firstEntry;
 
         },
 

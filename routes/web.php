@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\ServiceStopController;
+use App\Http\Controllers\SummaryController;
 
 /*
 |--------------------------------------------------------------------------
@@ -42,9 +43,17 @@ Route::middleware(['auth:sanctum', 'verified'])->get('/service_stops/{customer}'
     [ServiceStopController::class, 'index'])
     ->name('service_stops');
 
+Route::middleware(['auth:sanctum', 'verified'])->get('/summary/{customer}',
+    [SummaryController::class, 'customerSummary'])
+    ->name('summary');
+
 Route::middleware(['auth:sanctum', 'verified'])->get('/service_stops/create/{customer}',
     [ServiceStopController::class, 'create'])
     ->name('service_stops.create');
+
+Route::middleware(['auth:sanctum', 'verified'])->get('/service_stops/notes/{customer}',
+    [ServiceStopController::class, 'notes'])
+    ->name('service_stops.notes');
 
 Route::middleware(['auth:sanctum', 'verified'])->post('/service_stops/store',
     [ServiceStopController::class, 'store'])

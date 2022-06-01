@@ -16,46 +16,34 @@ use Illuminate\Support\Facades\Notification;
 use Inertia\Inertia;
 use Carbon\Carbon;
 
-class ServiceStopController extends Controller
+class SummaryController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Customer $customer)
+    public function customerSummary(Customer $customer)
     {
         //
 
-        $serviceStops = ServiceStop::where('customer_id', '=', $customer->id)
-            ->select([
-                'id',
-                'ph_level',
-                'chlorine_level',
-                'tabs_whole_mine',
-                'tabs_crushed_mine',
-                'tabs_whole_theirs',
-                'tabs_crushed_theirs',
-                'liquid_chlorine',
-                'liquid_acid',
-                'time_in',
-                'time_out',
-                'service_time',
-                'service_type',
-                'vacuum',
-                'brush',
-                'empty_baskets',
-                'backwash',
-                'powder_chlorine',
-                'notes'
-            ])->orderBy('time_in', 'desc')->get();
+        return Inertia::render('Summary/customer', [
+//            'filters' => \Illuminate\Support\Facades\Request::all('search', 'role', 'trashed'),
+            'customer_name' => $customer->first_name . " " . $customer->last_name,
+            'totalStopTime' => self::totalTime($customer->id),
+            'totalServiceTime' => self::totalTimeByType($customer->id, "Service Stops"),
+            'totalRepairTime' => self::totalTimeByType($customer->id, "Repair"),
+            'totalGreenPoolTime' => self::totalTimeByType($customer->id, "Clear Green Pool"),
 
-        $serviceStops = ServiceStop::where('customer_id', '=', $customer->id)->orderBy('created_at', 'desc')->get();
+            'totalStops' => self::totalStops($customer->id),
+            'totalServiceStops' => self::totalStopsByType($customer->id, "Service Stops"),
+            'totalRepairStops' => self::totalStopsByType($customer->id, "Repair"),
+            'totalGreenPoolStops' => self::totalStopsByType($customer->id, "Clear Green Pool"),
 
-        return Inertia::render('ServiceStops/Index', [
-            'service_stops' => $serviceStops,
-            'customer_name' => $customer->last_name,
-            'customer_id' => $customer->id,
+            'totalAverageTime' => self::totalAverageTime($customer->id),
+            'totalAverageClearGreenPoolTime' => self::totalAverageTimeByType($customer->id, "Clear Green Pool"),
+            'totalAverageServiceTime' => self::totalAverageTimeByType($customer->id, "Service Stop"),
+            'totalAverageRepairTime' => self::totalAverageTimeByType($customer->id, "Repair"),
         ]);
     }
 
@@ -135,24 +123,6 @@ class ServiceStopController extends Controller
         return Inertia::render('ServiceStops/Create', [
             'customerId' => $customer->id,
             'customerName' => $customer->last_name
-        ]);
-    }
-
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function notes(Customer $customer)
-    {
-
-        $notes = DB::select("select updated_at,
-            notes, service_type from service_stops where customer_id = " . $customer->id . " order by updated_at DESC");
-
-        return Inertia::render('ServiceStops/Notes', [
-            'customer_name' => $customer->first_name . " " . $customer->last_name,
-            'notes' => $notes
         ]);
     }
 
