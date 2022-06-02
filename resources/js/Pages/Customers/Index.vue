@@ -2,42 +2,38 @@
     <layout
         title="Customers"
     >
-
-        <h2
-            class="mb-2.5 inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 uppercase"
+        <span class="relative z-0 inline-flex shadow-sm rounded-md" style="margin-bottom: 1rem">
+    <button type="button"
+            class="relative inline-flex items-center px-4 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:z-10 focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500"
             @click="showRoute('monday')"
-        >monday</h2>
-
-
-        <h2
-            class="mb-2.5 inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 uppercase"
+        >Monday</button>
+    <button type="button"
+            class="-ml-px relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:z-10 focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500"
             @click="showRoute('tuesday')"
-        >tuesday</h2>
-
-        <h2
-            class="mb-2.5 inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 uppercase"
+        >Tuesday</button>
+    <button type="button"
+            class="-ml-px relative inline-flex items-center px-4 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:z-10 focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500"
             @click="showRoute('wednesday')"
-        >wednesday</h2>
+    >Wednesday</button>
+            <button type="button"
+                    class="-ml-px relative inline-flex items-center px-4 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:z-10 focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500"
+                    @click="showRoute('thursday')"
+            >Thursday</button>
+            <button type="button"
+                    class="-ml-px relative inline-flex items-center px-4 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:z-10 focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500"
+                    @click="showRoute('friday')"
+            >Friday</button>
+            <button type="button"
+                    class="-ml-px relative inline-flex items-center px-4 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:z-10 focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500"
+                    @click="showRoute('all')"
+            >all</button>
+            <button type="button"
+                    class="-ml-px relative inline-flex items-center px-4 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:z-10 focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500"
+                    @click="showRoute('none')"
+            >none</button>
+  </span>
 
-        <h2
-            class="mb-2.5 inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 uppercase"
-            @click="showRoute('thursday')"
-        >thursday</h2>
-
-        <h2
-            class="mb-2.5 inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 uppercase"
-            @click="showRoute('friday')"
-        >friday</h2>
-
-        <h2
-            class="mb-2.5 inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 uppercase"
-            @click="showRoute('all')"
-        >all</h2>
-
-        <h2
-            class="mb-2.5 inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 uppercase"
-            @click="showRoute('none')"
-        >none</h2>
+        <br>
 
 
         <div v-show="monday">
@@ -47,43 +43,60 @@
             >monday</h2>
 
             <!-- This example requires Tailwind CSS v2.0+ -->
-            <ul role="list" class="divide-y divide-gray-200" v-for="(row) in valueObjectArray">
-                <li class="py-4 flex" v-if="row[2] == 'Monday'">
-                    <svg
-                        :class="row[5] ? 'completed' : 'notCompleted'"
-                        xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
-                        stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                              d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                    </svg>
-                    <inertia-link
-                        class="px-6 py-4 flex items-center focus:text-indigo-500"
-                        :href="route('service_stops.create', row[0])">
-                        <div class="ml-3">
-                            <p class="text-sm font-medium text-gray-900">{{ row[1] }}</p>
-                            <p class="text-sm text-gray-500">{{ row[3] }}</p>
-                            <p class="text-sm text-gray-500">{{ row[4] }}</p>
-                            <p class="text-sm text-gray-500" v-if="user.id === 2">{{ row[6] }}</p>
-                        </div>
-                    </inertia-link>
-                    <inertia-link
-                        class="mb-2.5 inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                        :href="route('service_stops', row[0])">
+            <div v-for="(row) in valueObjectArray">
+                <div v-if="row[2] == 'Monday'">
+                    <ul role="list" class="divide-y divide-gray-200" >
+                        <li class="py-4 flex">
+                            <svg
+                                :class="row[5] ? 'completed' : 'notCompleted'"
+                                xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                                stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                      d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                            </svg>
+                            <inertia-link
+                                class="px-6 py-4 flex items-center focus:text-indigo-500"
+                                :href="route('service_stops.create', row[0])">
+                                <div class="ml-3">
+                                    <p class="text-sm font-medium text-gray-900">{{ row[1] }}</p>
+                                    <p class="text-sm text-gray-500">{{ row[3] }}</p>
+                                    <p class="text-sm text-gray-500">{{ row[4] }}</p>
+                                    <p class="text-sm text-gray-500" v-if="user.id === 2">{{ row[6] }}</p>
+                                </div>
+                            </inertia-link>
+
+
+
+
+
+
+
+                        </li>
+                    </ul>
+                    <span class="relative z-0 inline-flex shadow-sm rounded-md">
+
+                        <inertia-link
+                            class="relative inline-flex items-center px-4 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:z-10 focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500"
+                            :href="route('service_stops', row[0])">
                         History
                     </inertia-link>
                     <inertia-link
-                        class="mb-2.5 inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                        class="relative inline-flex items-center px-4 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:z-10 focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500"
                         :href="route('summary', row[0])">
                         Summary
                     </inertia-link>
 
                     <inertia-link
-                        class="mb-2.5 inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                        class="relative inline-flex items-center px-4 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:z-10 focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500"
                         :href="route('service_stops.notes', row[0])">
                         Notes
                     </inertia-link>
-                </li>
-            </ul>
+
+
+                    </span>
+                    <hr style="margin: 2rem 0 2rem 0">
+                </div>
+            </div>
         </div>
 
 
@@ -94,43 +107,60 @@
             >tuesday</h2>
 
             <!-- This example requires Tailwind CSS v2.0+ -->
-            <ul role="list" class="divide-y divide-gray-200" v-for="(row) in valueObjectArray">
-                <li class="py-4 flex" v-if="row[2] == 'Tuesday'">
-                    <svg
-                        :class="row[5] ? 'completed' : 'notCompleted'"
-                        xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
-                        stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                              d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                    </svg>
-                    <inertia-link
-                        class="px-6 py-4 flex items-center focus:text-indigo-500"
-                        :href="route('service_stops.create', row[0])">
-                        <div class="ml-3">
-                            <p class="text-sm font-medium text-gray-900">{{ row[1] }}</p>
-                            <p class="text-sm text-gray-500">{{ row[3] }}</p>
-                            <p class="text-sm text-gray-500">{{ row[4] }}</p>
-                            <p class="text-sm text-gray-500" v-if="user.id === 2">{{ row[6] }}</p>
-                        </div>
-                    </inertia-link>
-                    <inertia-link
-                        class="mb-2.5 inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                        :href="route('service_stops', row[0])">
+            <div v-for="(row) in valueObjectArray">
+                <div v-if="row[2] == 'Tuesday'">
+                    <ul role="list" class="divide-y divide-gray-200" >
+                        <li class="py-4 flex">
+                            <svg
+                                :class="row[5] ? 'completed' : 'notCompleted'"
+                                xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                                stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                      d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                            </svg>
+                            <inertia-link
+                                class="px-6 py-4 flex items-center focus:text-indigo-500"
+                                :href="route('service_stops.create', row[0])">
+                                <div class="ml-3">
+                                    <p class="text-sm font-medium text-gray-900">{{ row[1] }}</p>
+                                    <p class="text-sm text-gray-500">{{ row[3] }}</p>
+                                    <p class="text-sm text-gray-500">{{ row[4] }}</p>
+                                    <p class="text-sm text-gray-500" v-if="user.id === 2">{{ row[6] }}</p>
+                                </div>
+                            </inertia-link>
+
+
+
+
+
+
+
+                        </li>
+                    </ul>
+                    <span class="relative z-0 inline-flex shadow-sm rounded-md">
+
+                        <inertia-link
+                            class="relative inline-flex items-center px-4 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:z-10 focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500"
+                            :href="route('service_stops', row[0])">
                         History
                     </inertia-link>
                     <inertia-link
-                        class="mb-2.5 inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                        class="relative inline-flex items-center px-4 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:z-10 focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500"
                         :href="route('summary', row[0])">
                         Summary
                     </inertia-link>
 
                     <inertia-link
-                        class="mb-2.5 inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                        class="relative inline-flex items-center px-4 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:z-10 focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500"
                         :href="route('service_stops.notes', row[0])">
                         Notes
                     </inertia-link>
-                </li>
-            </ul>
+
+
+                    </span>
+                    <hr style="margin: 2rem 0 2rem 0">
+                </div>
+            </div>
         </div>
 
         <div v-show="wednesday">
@@ -140,43 +170,60 @@
             >wednesday</h2>
 
             <!-- This example requires Tailwind CSS v2.0+ -->
-            <ul role="list" class="divide-y divide-gray-200" v-for="(row) in valueObjectArray">
-                <li class="py-4 flex" v-if="row[2] == 'Wednesday'">
-                    <svg
-                        :class="row[5] ? 'completed' : 'notCompleted'"
-                        xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
-                        stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                              d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                    </svg>
-                    <inertia-link
-                        class="px-6 py-4 flex items-center focus:text-indigo-500"
-                        :href="route('service_stops.create', row[0])">
-                        <div class="ml-3">
-                            <p class="text-sm font-medium text-gray-900">{{ row[1] }}</p>
-                            <p class="text-sm text-gray-500">{{ row[3] }}</p>
-                            <p class="text-sm text-gray-500">{{ row[4] }}</p>
-                            <p class="text-sm text-gray-500" v-if="user.id === 2">{{ row[6] }}</p>
-                        </div>
-                    </inertia-link>
-                    <inertia-link
-                        class="mb-2.5 inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                        :href="route('service_stops', row[0])">
+            <div v-for="(row) in valueObjectArray">
+                <div v-if="row[2] == 'Wednesday'">
+                    <ul role="list" class="divide-y divide-gray-200" >
+                        <li class="py-4 flex">
+                            <svg
+                                :class="row[5] ? 'completed' : 'notCompleted'"
+                                xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                                stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                      d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                            </svg>
+                            <inertia-link
+                                class="px-6 py-4 flex items-center focus:text-indigo-500"
+                                :href="route('service_stops.create', row[0])">
+                                <div class="ml-3">
+                                    <p class="text-sm font-medium text-gray-900">{{ row[1] }}</p>
+                                    <p class="text-sm text-gray-500">{{ row[3] }}</p>
+                                    <p class="text-sm text-gray-500">{{ row[4] }}</p>
+                                    <p class="text-sm text-gray-500" v-if="user.id === 2">{{ row[6] }}</p>
+                                </div>
+                            </inertia-link>
+
+
+
+
+
+
+
+                        </li>
+                    </ul>
+                    <span class="relative z-0 inline-flex shadow-sm rounded-md">
+
+                        <inertia-link
+                            class="relative inline-flex items-center px-4 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:z-10 focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500"
+                            :href="route('service_stops', row[0])">
                         History
                     </inertia-link>
                     <inertia-link
-                        class="mb-2.5 inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                        class="relative inline-flex items-center px-4 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:z-10 focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500"
                         :href="route('summary', row[0])">
                         Summary
                     </inertia-link>
 
                     <inertia-link
-                        class="mb-2.5 inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                        class="relative inline-flex items-center px-4 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:z-10 focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500"
                         :href="route('service_stops.notes', row[0])">
                         Notes
                     </inertia-link>
-                </li>
-            </ul>
+
+
+                    </span>
+                    <hr style="margin: 2rem 0 2rem 0">
+                </div>
+            </div>
         </div>
 
         <div v-show="thursday">
@@ -186,43 +233,60 @@
             >thursday</h2>
 
             <!-- This example requires Tailwind CSS v2.0+ -->
-            <ul role="list" class="divide-y divide-gray-200" v-for="(row) in valueObjectArray">
-                <li class="py-4 flex" v-if="row[2] == 'Thursday'">
-                    <svg
-                        :class="row[5] ? 'completed' : 'notCompleted'"
-                        xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
-                        stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                              d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                    </svg>
-                    <inertia-link
-                        class="px-6 py-4 flex items-center focus:text-indigo-500"
-                        :href="route('service_stops.create', row[0])">
-                        <div class="ml-3">
-                            <p class="text-sm font-medium text-gray-900">{{ row[1] }}</p>
-                            <p class="text-sm text-gray-500">{{ row[3] }}</p>
-                            <p class="text-sm text-gray-500">{{ row[4] }}</p>
-                            <p class="text-sm text-gray-500" v-if="user.id === 2">{{ row[6] }}</p>
-                        </div>
-                    </inertia-link>
-                    <inertia-link
-                        class="mb-2.5 inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                        :href="route('service_stops', row[0])">
+            <div v-for="(row) in valueObjectArray">
+                <div v-if="row[2] == 'Thursday'">
+                    <ul role="list" class="divide-y divide-gray-200" >
+                        <li class="py-4 flex">
+                            <svg
+                                :class="row[5] ? 'completed' : 'notCompleted'"
+                                xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                                stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                      d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                            </svg>
+                            <inertia-link
+                                class="px-6 py-4 flex items-center focus:text-indigo-500"
+                                :href="route('service_stops.create', row[0])">
+                                <div class="ml-3">
+                                    <p class="text-sm font-medium text-gray-900">{{ row[1] }}</p>
+                                    <p class="text-sm text-gray-500">{{ row[3] }}</p>
+                                    <p class="text-sm text-gray-500">{{ row[4] }}</p>
+                                    <p class="text-sm text-gray-500" v-if="user.id === 2">{{ row[6] }}</p>
+                                </div>
+                            </inertia-link>
+
+
+
+
+
+
+
+                        </li>
+                    </ul>
+                    <span class="relative z-0 inline-flex shadow-sm rounded-md">
+
+                        <inertia-link
+                            class="relative inline-flex items-center px-4 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:z-10 focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500"
+                            :href="route('service_stops', row[0])">
                         History
                     </inertia-link>
                     <inertia-link
-                        class="mb-2.5 inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                        class="relative inline-flex items-center px-4 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:z-10 focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500"
                         :href="route('summary', row[0])">
                         Summary
                     </inertia-link>
 
                     <inertia-link
-                        class="mb-2.5 inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                        class="relative inline-flex items-center px-4 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:z-10 focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500"
                         :href="route('service_stops.notes', row[0])">
                         Notes
                     </inertia-link>
-                </li>
-            </ul>
+
+
+                    </span>
+                    <hr style="margin: 2rem 0 2rem 0">
+                </div>
+            </div>
         </div>
 
 
@@ -233,43 +297,60 @@
             >friday</h2>
 
             <!-- This example requires Tailwind CSS v2.0+ -->
-            <ul role="list" class="divide-y divide-gray-200" v-for="(row) in valueObjectArray">
-                <li class="py-4 flex" v-if="row[2] == 'Friday'">
-                    <svg
-                        :class="row[5] ? 'completed' : 'notCompleted'"
-                        xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
-                        stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                              d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                    </svg>
-                    <inertia-link
-                        class="px-6 py-4 flex items-center focus:text-indigo-500"
-                        :href="route('service_stops.create', row[0])">
-                        <div class="ml-3">
-                            <p class="text-sm font-medium text-gray-900">{{ row[1] }}</p>
-                            <p class="text-sm text-gray-500">{{ row[3] }}</p>
-                            <p class="text-sm text-gray-500">{{ row[4] }}</p>
-                            <p class="text-sm text-gray-500" v-if="user.id === 2">{{ row[6] }}</p>
-                        </div>
-                    </inertia-link>
-                    <inertia-link
-                        class="mb-2.5 inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                        :href="route('service_stops', row[0])">
+            <div v-for="(row) in valueObjectArray">
+                <div v-if="row[2] == 'Friday'">
+                    <ul role="list" class="divide-y divide-gray-200" >
+                        <li class="py-4 flex">
+                            <svg
+                                :class="row[5] ? 'completed' : 'notCompleted'"
+                                xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                                stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                      d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                            </svg>
+                            <inertia-link
+                                class="px-6 py-4 flex items-center focus:text-indigo-500"
+                                :href="route('service_stops.create', row[0])">
+                                <div class="ml-3">
+                                    <p class="text-sm font-medium text-gray-900">{{ row[1] }}</p>
+                                    <p class="text-sm text-gray-500">{{ row[3] }}</p>
+                                    <p class="text-sm text-gray-500">{{ row[4] }}</p>
+                                    <p class="text-sm text-gray-500" v-if="user.id === 2">{{ row[6] }}</p>
+                                </div>
+                            </inertia-link>
+
+
+
+
+
+
+
+                        </li>
+                    </ul>
+                    <span class="relative z-0 inline-flex shadow-sm rounded-md">
+
+                        <inertia-link
+                            class="relative inline-flex items-center px-4 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:z-10 focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500"
+                            :href="route('service_stops', row[0])">
                         History
                     </inertia-link>
                     <inertia-link
-                        class="mb-2.5 inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                        class="relative inline-flex items-center px-4 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:z-10 focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500"
                         :href="route('summary', row[0])">
                         Summary
                     </inertia-link>
 
                     <inertia-link
-                        class="mb-2.5 inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                        class="relative inline-flex items-center px-4 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:z-10 focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500"
                         :href="route('service_stops.notes', row[0])">
                         Notes
                     </inertia-link>
-                </li>
-            </ul>
+
+
+                    </span>
+                    <hr style="margin: 2rem 0 2rem 0">
+                </div>
+            </div>
         </div>
 
 
