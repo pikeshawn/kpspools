@@ -7,28 +7,26 @@
 
         <br>
 
-        <table style="width:100%">
-            <thead>
-            <tr>
-            <th>Date</th>
-            <th>Note</th>
-            <th>Service Type</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr v-for="n in notes" class="border-8">
-                <td v-if="n.notes">{{ n.updated_at }}</td>
-                <td v-if="n.notes" style="width:60%">{{ n.notes }}</td>
-                <td v-if="n.notes" style="width:15%">{{ n.service_type }}</td>
-            </tr>
-            </tbody>
-        </table>
 
-        <div >
-            <div class="flex justify-between">
-
-            </div>
-        </div>
+        <ul role="list" class="divide-y divide-gray-200">
+            <li v-for="note in notes" :key="note.id" class="relative bg-white py-5 px-4 hover:bg-gray-50 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600">
+                <div class="flex justify-between space-x-3">
+                    <div class="min-w-0 flex-1">
+                        <a href="#" class="block focus:outline-none">
+                            <span class="absolute inset-0" aria-hidden="true" />
+                            <p class="text-sm font-medium text-gray-900 truncate">{{ note.service_type }}</p>
+<!--                            <p class="text-sm text-gray-500 truncate">{{ note.notes }}</p>-->
+                        </a>
+                    </div>
+                    <time :datetime="note.updated_at" class="flex-shrink-0 whitespace-nowrap text-sm text-gray-500">{{ note.updated_at }}</time>
+                </div>
+                <div class="mt-1">
+                    <p class="line-clamp-2 text-sm text-gray-600">
+                        {{ note.notes }}
+                    </p>
+                </div>
+            </li>
+        </ul>
 
     </layout>
 </template>

@@ -147,7 +147,7 @@ class ServiceStopController extends Controller
     public function notes(Customer $customer)
     {
 
-        $notes = DB::select("select updated_at,
+        $notes = DB::select("select id, updated_at,
             notes, service_type from service_stops where customer_id = " . $customer->id . " order by updated_at DESC");
 
         return Inertia::render('ServiceStops/Notes', [
