@@ -6,15 +6,18 @@
     <button type="button"
             class="relative inline-flex items-center px-4 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:z-10 focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500"
             @click="showRoute('monday')"
-        >Monday</button>
+    >Monday</button>
     <button type="button"
             class="-ml-px relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:z-10 focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500"
             @click="showRoute('tuesday')"
-        >Tuesday</button>
+    >Tuesday</button>
     <button type="button"
             class="-ml-px relative inline-flex items-center px-4 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:z-10 focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500"
             @click="showRoute('wednesday')"
     >Wednesday</button>
+  </span>
+        <br>
+        <span class="relative z-0 inline-flex shadow-sm rounded-md" style="margin-bottom: 1rem">
             <button type="button"
                     class="-ml-px relative inline-flex items-center px-4 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:z-10 focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500"
                     @click="showRoute('thursday')"
@@ -45,7 +48,7 @@
             <!-- This example requires Tailwind CSS v2.0+ -->
             <div v-for="(row) in valueObjectArray">
                 <div v-if="row[2] == 'Monday'">
-                    <ul role="list" class="divide-y divide-gray-200" >
+                    <ul role="list" class="divide-y divide-gray-200">
                         <li class="py-4 flex">
                             <svg
                                 :class="row[5] ? 'completed' : 'notCompleted'"
@@ -64,11 +67,6 @@
                                     <p class="text-sm text-gray-500" v-if="user.id === 2">{{ row[6] }}</p>
                                 </div>
                             </inertia-link>
-
-
-
-
-
 
 
                         </li>
@@ -109,7 +107,7 @@
             <!-- This example requires Tailwind CSS v2.0+ -->
             <div v-for="(row) in valueObjectArray">
                 <div v-if="row[2] == 'Tuesday'">
-                    <ul role="list" class="divide-y divide-gray-200" >
+                    <ul role="list" class="divide-y divide-gray-200">
                         <li class="py-4 flex">
                             <svg
                                 :class="row[5] ? 'completed' : 'notCompleted'"
@@ -128,11 +126,6 @@
                                     <p class="text-sm text-gray-500" v-if="user.id === 2">{{ row[6] }}</p>
                                 </div>
                             </inertia-link>
-
-
-
-
-
 
 
                         </li>
@@ -172,7 +165,7 @@
             <!-- This example requires Tailwind CSS v2.0+ -->
             <div v-for="(row) in valueObjectArray">
                 <div v-if="row[2] == 'Wednesday'">
-                    <ul role="list" class="divide-y divide-gray-200" >
+                    <ul role="list" class="divide-y divide-gray-200">
                         <li class="py-4 flex">
                             <svg
                                 :class="row[5] ? 'completed' : 'notCompleted'"
@@ -191,11 +184,6 @@
                                     <p class="text-sm text-gray-500" v-if="user.id === 2">{{ row[6] }}</p>
                                 </div>
                             </inertia-link>
-
-
-
-
-
 
 
                         </li>
@@ -235,7 +223,7 @@
             <!-- This example requires Tailwind CSS v2.0+ -->
             <div v-for="(row) in valueObjectArray">
                 <div v-if="row[2] == 'Thursday'">
-                    <ul role="list" class="divide-y divide-gray-200" >
+                    <ul role="list" class="divide-y divide-gray-200">
                         <li class="py-4 flex">
                             <svg
                                 :class="row[5] ? 'completed' : 'notCompleted'"
@@ -254,11 +242,6 @@
                                     <p class="text-sm text-gray-500" v-if="user.id === 2">{{ row[6] }}</p>
                                 </div>
                             </inertia-link>
-
-
-
-
-
 
 
                         </li>
@@ -299,7 +282,7 @@
             <!-- This example requires Tailwind CSS v2.0+ -->
             <div v-for="(row) in valueObjectArray">
                 <div v-if="row[2] == 'Friday'">
-                    <ul role="list" class="divide-y divide-gray-200" >
+                    <ul role="list" class="divide-y divide-gray-200">
                         <li class="py-4 flex">
                             <svg
                                 :class="row[5] ? 'completed' : 'notCompleted'"
@@ -318,11 +301,6 @@
                                     <p class="text-sm text-gray-500" v-if="user.id === 2">{{ row[6] }}</p>
                                 </div>
                             </inertia-link>
-
-
-
-
-
 
 
                         </li>
@@ -413,6 +391,25 @@ export default {
     },
     mounted() {
         this.valueObjectArray = this.tableValues();
+        let date = new Date()
+        let d = date.toDateString();
+        let theDay = d.split(" ")[0]
+
+        this.hideDays();
+
+        if (theDay === 'Mon') {
+            this.monday = true;
+        } else if (theDay === 'Tue') {
+            this.tuesday = true;
+        } else if (theDay === 'Wed') {
+            this.wednesday = true;
+        } else if (theDay === 'Thu') {
+            this.thursday = true;
+        } else if (theDay === 'Fri') {
+            this.friday = true;
+        }
+
+
     },
     methods: {
 
