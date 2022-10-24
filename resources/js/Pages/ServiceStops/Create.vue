@@ -12,7 +12,7 @@
                                         v-model="form.service_type"
                                         class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
                                     <option v-for="option in [
-                                                           'Service Stop','Repair', 'Clear Green Pool'
+                                                           'Service Stop','Repair', 'Clear Green Pool', 'Chemical Stop', 'Intro'
                                                            ]">{{ option }}</option>
                                 </select>
                             </div>
