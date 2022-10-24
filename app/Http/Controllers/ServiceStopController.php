@@ -221,13 +221,6 @@ class ServiceStopController extends Controller
             'customers' => $customers
         ]);
 
-//        return Inertia::render('Customers/Index', [
-//            // 'filters' => \Illuminate\Support\Facades\Request::all('search', 'role', 'trashed'),
-//            'service_stops' => $serviceStops,
-//            'customer_name' => $customer->last_name,
-//            'customer_id' => $customer->id
-//        ]);
-
     }
 
     /**
