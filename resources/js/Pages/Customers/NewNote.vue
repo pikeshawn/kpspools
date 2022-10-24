@@ -27,9 +27,6 @@
             save
         </div>
 
-        <pre>{{  }}</pre>
-
-
     </layout>
 </template>
 
@@ -51,9 +48,7 @@ export default {
         customer_name: String,
         customer_id: Number
     },
-    computed: {
-
-    },
+    computed: {},
     methods: {
         storeNote() {
             let note = {

@@ -6,6 +6,7 @@ use App\Models\Customer;
 use App\Models\User;
 use Carbon\Carbon;
 use Carbon\CarbonInterface;
+use Cassandra\Keyspace;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\URL;
@@ -49,23 +50,6 @@ class CustomerController extends Controller
 
     }
 
-
-    public function store_note(Request $request)
-    {
-        $note = GeneralNote::firstOrCreate([
-            'customer_id' => $request->customer_id,
-            'note' => $request->note
-        ]);
-
-        $notes = DB::select('Select * from general_notes where customer_id = '
-            . $request->customer_id . ' Order By updated_at DESC');
-
-        $customer = Customer::find($request->customer_id);
-
-        return Redirect::route('general.notes', $customer->id);
-
-    }
-
     public function notes(Customer $customer)
     {
         $notes = DB::select('Select * from general_notes where customer_id = '
@@ -86,6 +70,19 @@ class CustomerController extends Controller
             'customer_id' => $customer->id,
             'customer_name' => $customer->first_name . " " . $customer->last_name
         ]);
+    }
+
+    public function store_note(Request $request)
+    {
+        $note = GeneralNote::firstOrCreate([
+            'customer_id' => $request->customer_id,
+            'note' => $request->note
+        ]);
+
+        $customer = Customer::find($request->customer_id);
+
+        return Redirect::route('general.notes', $customer->id);
+
     }
 
 
