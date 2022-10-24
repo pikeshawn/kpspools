@@ -63,6 +63,19 @@ Route::middleware(['auth:sanctum', 'verified'])->delete('/service_stops/{service
     [ServiceStopController::class, 'destroy'])
     ->name('service_stops.destroy');
 
+
+Route::middleware(['auth:sanctum', 'verified'])->get('/general/notes/{customer}',
+    [CustomerController::class, 'notes'])
+    ->name('general.notes');
+
+Route::middleware(['auth:sanctum', 'verified'])->get('/general/new_note/{customer}',
+    [CustomerController::class, 'new_note'])
+    ->name('general.new_note');
+
+Route::middleware(['auth:sanctum', 'verified'])->post('/general/store',
+    [CustomerController::class, 'store_note'])
+    ->name('general.store');
+
 Route::middleware(['auth:sanctum', 'verified'])
     ->get('customers/{customer}/edit',
     [CustomerController::class, 'edit'])
