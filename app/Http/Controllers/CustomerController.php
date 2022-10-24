@@ -11,6 +11,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\URL;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\DB;
+use App\Models\GeneralNote;
+use Illuminate\Support\Facades\Redirect;
 
 class CustomerController extends Controller
 {
@@ -45,8 +47,47 @@ class CustomerController extends Controller
             'customers' => $customers
         ]);
 
+    }
+
+
+    public function store_note(Request $request)
+    {
+        $note = GeneralNote::firstOrCreate([
+            'customer_id' => $request->customer_id,
+            'note' => $request->note
+        ]);
+
+        $notes = DB::select('Select * from general_notes where customer_id = '
+            . $request->customer_id . ' Order By updated_at DESC');
+
+        $customer = Customer::find($request->customer_id);
+
+        return Redirect::route('general.notes', $customer->id);
 
     }
+
+    public function notes(Customer $customer)
+    {
+        $notes = DB::select('Select * from general_notes where customer_id = '
+            . $customer->id . ' Order By updated_at DESC');
+
+        return Inertia::render('Customers/Notes', [
+            'customer_name' => $customer->first_name . " " . $customer->last_name,
+            'customer_id' => $customer->id,
+            'notes' => $notes
+        ]);
+
+    }
+
+    public function new_note(Customer $customer)
+    {
+
+        return Inertia::render('Customers/NewNote', [
+            'customer_id' => $customer->id,
+            'customer_name' => $customer->first_name . " " . $customer->last_name
+        ]);
+    }
+
 
     /**
      * Show the form for creating a new resource.
