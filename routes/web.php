@@ -68,6 +68,10 @@ Route::middleware(['auth:sanctum', 'verified'])->get('/general/notes/{customer}'
     [CustomerController::class, 'notes'])
     ->name('general.notes');
 
+
+
+
+
 Route::middleware(['auth:sanctum', 'verified'])->get('/general/new_note/{customer}',
     [CustomerController::class, 'new_note'])
     ->name('general.new_note');
@@ -75,6 +79,21 @@ Route::middleware(['auth:sanctum', 'verified'])->get('/general/new_note/{custome
 Route::middleware(['auth:sanctum', 'verified'])->post('/general/store',
     [CustomerController::class, 'store_note'])
     ->name('general.store');
+
+Route::middleware(['auth:sanctum', 'verified'])->delete('/general/{generalNote}',
+    [CustomerController::class, 'destroy'])
+    ->name('general.destroy');
+
+Route::middleware(['auth:sanctum', 'verified'])->get('/general/{generalNote}',
+    [CustomerController::class, 'showNote'])
+    ->name('general.showNote');
+
+Route::middleware(['auth:sanctum', 'verified'])->patch('/general/',
+    [CustomerController::class, 'update'])
+    ->name('general.update');
+
+
+
 
 Route::middleware(['auth:sanctum', 'verified'])
     ->get('customers/{customer}/edit',

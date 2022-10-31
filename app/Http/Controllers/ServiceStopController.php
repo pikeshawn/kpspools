@@ -265,17 +265,7 @@ class ServiceStopController extends Controller
      */
     public function destroy(ServiceStop $serviceStop)
     {
-        //
-
-//        dd($serviceStop->customer_id);
-
-//        $customer = Customer::find($serviceStop->customer_id);
-
         $serviceStop->delete();
-
-//        return Redirect::route('service_stops', [$serviceStop->customer_id], 303);
-
-//        return \redirect()->route('service_stops', [$serviceStop->customer_id], );
         return \redirect()->route('customers');
 
     }

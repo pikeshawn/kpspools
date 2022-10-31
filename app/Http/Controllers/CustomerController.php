@@ -147,9 +147,30 @@ class CustomerController extends Controller
      * @param \App\Models\Customer $customer
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Customer $customer)
+    public function update(Request $request)
     {
         //
+
+        $note = GeneralNote::find($request->note['id']);
+        $note->note = $request->note['note'];
+        $note->save();
+
+        $customer = Customer::find($request->note['customer_id']);
+
+//        dd($customer->id);
+
+        return Redirect::route('general.notes', $customer->id);
+
+    }
+
+
+    public function showNote(GeneralNote $generalNote)
+    {
+        //
+
+        return Inertia::render('Customers/EditNote', [
+            'note' => $generalNote
+        ]);
     }
 
     /**
@@ -158,8 +179,14 @@ class CustomerController extends Controller
      * @param \App\Models\Customer $customer
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Customer $customer)
+    public function destroy(GeneralNote $generalNote)
     {
-        //
+
+        $customer = Customer::find($generalNote->customer_id);
+
+        $generalNote->delete();
+
+        return Redirect::route('general.notes', $customer->id);
+
     }
 }
