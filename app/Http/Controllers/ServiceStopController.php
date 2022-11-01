@@ -194,18 +194,18 @@ class ServiceStopController extends Controller
             'serviceman_id' => Auth::user()->id
         ]);
 
-        $cust = Customer::find($request->id);
+//        $cust = Customer::find($request->id);
 
-        $address = DB::select('select * from addresses a where a.customer_id =' . $cust->id);
+//        $address = DB::select('select * from addresses a where a.customer_id =' . $cust->id);
 
-        if ($request->service_type == "Service Stop") {
-            if ($cust->phone_number) {
-                $cust->notify(new ServiceStopCompleted($serviceStop, $cust, $address));
-            }
-
-            Notification::route('nexmo', '14806226441')
-                ->notify(new ServiceStopCompleted($serviceStop, $cust, $address, true));
-        }
+//        if ($request->service_type == "Service Stop") {
+//            if ($cust->phone_number) {
+//                $cust->notify(new ServiceStopCompleted($serviceStop, $cust, $address));
+//            }
+//
+//            Notification::route('nexmo', '14806226441')
+//                ->notify(new ServiceStopCompleted($serviceStop, $cust, $address, true));
+//        }
 
         if (User::isAdmin()) {
 
@@ -243,6 +243,14 @@ class ServiceStopController extends Controller
     public function edit(ServiceStop $serviceStop)
     {
         //
+
+        $customer = Customer::find($serviceStop->customer_id);
+
+        return Inertia::render('ServiceStops/Edit', [
+            'serviceStop' => $serviceStop,
+            'customer' => $customer
+        ]);
+
     }
 
     /**
@@ -252,9 +260,38 @@ class ServiceStopController extends Controller
      * @param \App\Models\ServiceStop $serviceStop
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, ServiceStop $serviceStop)
+    public function update(Request $request)
     {
         //
+
+        $ss = ServiceStop::find($request->id);
+        $ss->powder_chlorine = $request->powder_chlorine;
+        $ss->backwash = $request->backwash;
+        $ss->vacuum = $request->vacuum;
+        $ss->service_time = $request->serviceTime;
+        $ss->time_out = $request->timeOut;
+        $ss->liquid_acid = $request->acid;
+        $ss->tabs_crushed_theirs = $request->tabsCrushedTheirs;
+        $ss->tabs_whole_theirs = $request->tabsWholeTheirs;
+        $ss->tabs_crushed_mine = $request->tabsCrushedMine;
+        $ss->chlorine_level = $request->chlorine_level;
+        $ss->address_id = $request->addressId;
+        $ss->id = $request->id;
+        $ss->empty_baskets = $request->emptyBaskets;
+        $ss->ph_level = $request->ph_level;
+        $ss->tabs_whole_mine = $request->tabsWholeMine;
+        $ss->liquid_chlorine = $request->liquidChlorine;
+        $ss->time_in = $request->timeIn;
+        $ss->brush = $request->brush;
+        $ss->notes = $request->notes;
+        $ss->serviceman_id = $request->servicemanId;
+        $ss->service_type = $request->service_type;
+        $ss->save();
+
+        $customer = Customer::find($request->customer_id);
+
+        return Redirect::route('service_stops', $customer->id);
+
     }
 
     /**

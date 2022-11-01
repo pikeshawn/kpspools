@@ -59,6 +59,17 @@ Route::middleware(['auth:sanctum', 'verified'])->post('/service_stops/store',
     [ServiceStopController::class, 'store'])
     ->name('service_stops.store');
 
+
+Route::middleware(['auth:sanctum', 'verified'])->get('/ss/{serviceStop}',
+    [ServiceStopController::class, 'edit'])
+    ->name('service_stops.edit');
+
+Route::middleware(['auth:sanctum', 'verified'])->patch('/service_stops/',
+    [ServiceStopController::class, 'update'])
+    ->name('service_stops.update');
+
+
+
 Route::middleware(['auth:sanctum', 'verified'])->delete('/service_stops/{serviceStop}',
     [ServiceStopController::class, 'destroy'])
     ->name('service_stops.destroy');

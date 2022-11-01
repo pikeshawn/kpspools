@@ -6,6 +6,7 @@
                     <table class="min-w-full divide-y divide-gray-200">
                         <thead class="bg-gray-50">
                         <tr>
+                            <th>Update</th>
                             <th>Delete</th>
                             <th v-for="header in headers"
                                 scope="col"
@@ -17,6 +18,11 @@
                         <tbody>
                         <tr v-for="(row) in valueObjectArray">
 
+                            <td>
+                                <svg @click="edit(row)" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+                                </svg>
+                            </td>
                             <td>
                                 <svg @click="confirmDelete(row)" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 m-3"
                                      fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
@@ -85,6 +91,13 @@ export default {
                     Inertia.reload()
                 },
             })
+        },
+
+        edit(row) {
+
+            console.log('row id', row[0])
+
+            Inertia.get(`/ss/` + row[0])
         },
 
         doThing() {
