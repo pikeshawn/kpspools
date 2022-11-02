@@ -24,7 +24,6 @@
                     </div>
                 </div>
                 <div class="mt-5 md:mt-0 md:col-span-2">
-                    <pre>{{ form }}</pre>
                     <form @submit.prevent="update">
                         <div class="shadow overflow-hidden sm:rounded-md">
                             <div class="px-4 py-5 bg-white sm:p-6">
@@ -206,10 +205,6 @@
                 </div>
             </div>
         </div>
-
-        <pre>{{ serviceStop }}</pre>
-        <pre>{{ customer }}</pre>
-
     </layout>
 </template>
 
