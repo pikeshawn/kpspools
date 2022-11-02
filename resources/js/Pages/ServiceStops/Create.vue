@@ -35,14 +35,14 @@
                                         <input
                                             id="timeIn"
                                             type="datetime-local" v-model="form.timeIn">
-                                        <div class="mt-2" v-if="form.timeIn">{{ form.timeIn }}</div>
+                                        <div class="mt-2" v-if="form.timeIn">{{ saveTimeIn }}</div>
                                     </div>
 
                                     <div class="flex flex-col">
                                         <label for="timeOut">Time Out</label>
                                         <input
                                             type="datetime-local" v-model="form.timeOut">
-                                        <div class="mt-2" v-if="form.timeOut">{{ form.timeOut }}</div>
+                                        <div class="mt-2" v-if="form.timeOut">{{ saveTimeOut }}</div>
                                     </div>
 
                                     <div>
@@ -322,16 +322,22 @@ export default {
                 Inertia.post('/service_stops/store', form)
             }
 
-
-
+            localStorage.removeItem("timeIn");
+            localStorage.removeItem("timeOut");
 
         }
 
-        return {form, errors, store}
+        return {form, errors, store, formatTime}
 
     },
     mounted() {
         this.form.id = this.$attrs.customerId
+        if (localStorage.getItem('timeIn')) {
+            this.form.timeIn = localStorage.getItem('timeIn')
+        }
+        if (localStorage.getItem('timeOut')) {
+            this.form.timeIn = localStorage.getItem('timeOut')
+        }
     },
     methods: {
 
@@ -339,6 +345,18 @@ export default {
     computed: {
         errorClass(){
             return this.errors.timeIn ? 'text-red-600' : ''
+        },
+        saveTimeIn(){
+            if (this.form.timeIn) {
+                localStorage.setItem('timeIn', this.form.timeIn)
+            }
+            return this.formatTime(this.form.timeIn)
+        },
+        saveTimeOut(){
+            if (this.form.timeOut) {
+                localStorage.setItem('timeOut', this.form.timeOut)
+            }
+            return this.formatTime(this.form.timeOut)
         }
     }
 }
