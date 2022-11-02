@@ -126,9 +126,6 @@
             </main>
         </div>
     </div>
-    <footer class="mt-24">
-        <h1 class="text-center">KPS Pools</h1>
-    </footer>
 </div>
 </template>
 

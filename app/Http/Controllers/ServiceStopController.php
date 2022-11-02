@@ -194,18 +194,23 @@ class ServiceStopController extends Controller
             'serviceman_id' => Auth::user()->id
         ]);
 
-//        $cust = Customer::find($request->id);
+        $cust = Customer::find($request->id);
 
-//        $address = DB::select('select * from addresses a where a.customer_id =' . $cust->id);
+        $address = DB::select('select * from addresses a where a.customer_id =' . $cust->id);
 
-//        if ($request->service_type == "Service Stop") {
-//            if ($cust->phone_number) {
-//                $cust->notify(new ServiceStopCompleted($serviceStop, $cust, $address));
-//            }
-//
-//            Notification::route('nexmo', '14806226441')
-//                ->notify(new ServiceStopCompleted($serviceStop, $cust, $address, true));
-//        }
+        if ($request->service_type == "Service Stop") {
+            if ($cust->phone_number) {
+                $cust->notify(new ServiceStopCompleted($serviceStop, $cust, $address));
+            }
+
+            if ($cust->phone_number == '14802966330') {
+                Notification::route('nexmo', '14802966333')
+                    ->notify(new ServiceStopCompleted($serviceStop, $cust, $address, true));
+            }
+
+            Notification::route('nexmo', '14806226441')
+                ->notify(new ServiceStopCompleted($serviceStop, $cust, $address, true));
+        }
 
         if (User::isAdmin()) {
 
