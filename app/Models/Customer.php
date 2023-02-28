@@ -23,9 +23,6 @@ class Customer extends Model
 
     public function routeNotificationForNexmo($notification)
     {
-
-//        dd($this->phone_number);
-
         return $this->phone_number;
     }
 
@@ -81,7 +78,7 @@ order By c.order DESC');
 
             $query = 'select count(ss.time_in) as stops
 from service_stops ss
-where ss.customer_id = ' . $customer->id . ' and ss.created_at > "' .
+where ss.customer_id = ' . $customer->id . ' and ss.time_in > "' .
                 $dayBeforeStartOfWeek . '" and ss.service_type = "Service Stop" order by ss.time_in DESC Limit 1';
 
             $stops = DB::select($query);
