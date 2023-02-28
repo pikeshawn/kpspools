@@ -103,9 +103,6 @@ Route::middleware(['auth:sanctum', 'verified'])->patch('/general/',
     [CustomerController::class, 'update'])
     ->name('general.update');
 
-
-
-
 Route::middleware(['auth:sanctum', 'verified'])
     ->get('customers/{customer}/edit',
     [CustomerController::class, 'edit'])

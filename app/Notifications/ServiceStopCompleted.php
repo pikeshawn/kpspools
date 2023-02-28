@@ -8,7 +8,7 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
-use Illuminate\Notifications\Messages\NexmoMessage;
+use Illuminate\Notifications\Messages\VonageMessage;
 
 class ServiceStopCompleted extends Notification
 {
@@ -35,7 +35,7 @@ class ServiceStopCompleted extends Notification
      */
     public function via($notifiable)
     {
-        return ['nexmo'];
+        return ['vonage'];
     }
 
     /**
@@ -71,7 +71,7 @@ class ServiceStopCompleted extends Notification
      * @param  mixed  $notifiable
      * @return NexmoMessage
      */
-    public function toNexmo($notifiable)
+    public function toVonage($notifiable)
     {
 
         $vacuum = $this->correctValue($this->service_stop->vacuum);
@@ -100,7 +100,8 @@ class ServiceStopCompleted extends Notification
         }
 
 
-        return (new NexmoMessage)
+        return (new VonageMessage)
+            ->clientReference((string) $notifiable->id)
             ->content($text);
     }
 
