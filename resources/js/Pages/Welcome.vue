@@ -128,9 +128,8 @@
         <main>
             <!-- Hero section -->
             <div class="relative">
-                <div class="absolute inset-x-0 bottom-0 h-1/2 bg-gray-100" />
                 <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                    <div class="relative shadow-xl sm:rounded-2xl sm:overflow-hidden">
+                    <div class="relative shadow-xl sm:rounded-2xl sm:overflow-hidden" style="height: 60rem; width: 83rem;">
                         <div class="absolute inset-0">
 <!--                            src="https://images.unsplash.com/photo-1521737852567-6949f3f9f2b5?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=2830&q=80&sat=-100"-->
                             <img class="h-full w-full object-cover"
@@ -138,7 +137,7 @@
                                  alt="Current Flyer" />
                             <div class="absolute inset-0 bg-gradient-to-r mix-blend-multiply" />
                         </div>
-                        <div class="relative px-4 py-16 sm:px-6 sm:py-24 lg:py-32 lg:px-8" style="height: 40rem;">
+                        <div class="relative px-4 py-16 sm:px-6 sm:py-24 lg:py-32 lg:px-8">
                         </div>
                     </div>
                 </div>
