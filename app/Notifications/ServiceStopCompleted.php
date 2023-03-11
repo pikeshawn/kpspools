@@ -79,9 +79,9 @@ class ServiceStopCompleted extends Notification
         $empty_baskets = $this->correctValue($this->service_stop->empty_baskets);
         $backwash = $this->correctValue($this->service_stop->backwash);
 
-        $text = $this->customer->first_name . " " .
+        $text = "Jemmson:\n" . $this->customer->first_name . " " .
             $this->customer->last_name . " your pool has been completed by "
-            . $this->customer->assigned_serviceman . "\n" .
+            . $this->customer->assigned_serviceman . " from KPS Pools\n" .
             "address:    " . $this->address[0]->address_line_1 . "\n" .
             "time in:     " . $this->service_stop->time_in . "\n" .
             "time out:   " . $this->service_stop->time_out . "\n" .
