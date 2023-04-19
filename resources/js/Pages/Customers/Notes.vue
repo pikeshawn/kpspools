@@ -30,7 +30,7 @@
                     </div>
 
                     <div class="mt-1">
-                        <p class="line-clamp-2 text-sm text-gray-600">
+                        <p style="white-space: pre;" class="line-clamp-2 text-sm text-gray-600">
                             {{ note.note }}
                         </p>
                     </div>
