@@ -4,16 +4,19 @@
             <div class="flex flex-col">
                 <div class="md:col-span-1">
                     <div class="px-4 sm:px-0 mb-3">
-                        <h1 class="text-lg font-medium leading-6 text-gray-900 mb-4 capitalize font-bold text-4xl">{{ customerName }}</h1>
+                        <h1 class="text-lg font-medium leading-6 text-gray-900 mb-4 capitalize font-bold text-4xl">
+                            {{ customerName }}</h1>
                         <div>
                             <div class="col-span-1">
-                                <label for="service_type" class="block text-sm font-medium text-gray-700">Service Type</label>
+                                <label for="service_type" class="block text-sm font-medium text-gray-700">Service
+                                    Type</label>
                                 <select id="service_type" name="service_type"
                                         v-model="form.service_type"
                                         class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
                                     <option v-for="option in [
                                                            'Service Stop','Repair', 'Clear Green Pool', 'Chemical Stop', 'Intro'
-                                                           ]">{{ option }}</option>
+                                                           ]">{{ option }}
+                                    </option>
                                 </select>
                             </div>
                         </div>
@@ -29,7 +32,7 @@
                                 <div class="grid grid-cols-2 gap-6">
 
                                     <div class="flex flex-col"
-                                        :class="errorClass"
+                                         :class="errorClass"
                                     >
                                         <label :class="errorClass" for="timeIn">Time In <span v-if="errorClass">- This is Required</span></label>
                                         <input
@@ -51,7 +54,10 @@
                                             <select id="chlorine" name="chlorine"
                                                     v-model="form.chlorine_level"
                                                     class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-                                                <option v-for="option in [ '0.0', '1.0', '2.0', '3.0', '4.0', '5.0', '6.0', '7.0', '8.0', '9.0', '10.0', '10+']">{{ option }}</option>
+                                                <option
+                                                    v-for="option in [ '0.0', '1.0', '2.0', '3.0', '4.0', '5.0', '6.0', '7.0', '8.0', '9.0', '10.0', '10+']">
+                                                    {{ option }}
+                                                </option>
                                             </select>
                                             <div class="mt-2" v-if="form.chlorine_level">{{ form.chlorine_level }}</div>
                                         </div>
@@ -63,7 +69,9 @@
                                             <select id="pH" name="pH"
                                                     v-model="form.ph_level"
                                                     class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-                                                <option v-for="option in [ '7.0', '7.2', '7.4', '7.6', '7.8', '8.0' ]">{{ option }}</option>
+                                                <option v-for="option in [ '7.0', '7.2', '7.4', '7.6', '7.8', '8.0' ]">
+                                                    {{ option }}
+                                                </option>
                                             </select>
                                             <div class="mt-2" v-if="form.ph_level">{{ form.ph_level }}</div>
                                         </div>
@@ -71,12 +79,14 @@
 
                                     <div>
                                         <div class="col-span-1">
-                                            <label for="tabsWholeMine" class="block text-sm font-medium text-gray-700">My Tabs</label>
+                                            <label for="tabsWholeMine" class="block text-sm font-medium text-gray-700">My
+                                                Tabs</label>
                                             <select id="tabsWholeMine" name="tabsWholeMine"
                                                     v-model="form.tabsWholeMine"
                                                     class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
                                                 <option v-for="option in [ '0','1','2','3','4','5','6','7','8','9','10',
-                                        '11','12','13','14','15','16','17','18','19','20']">{{ option }}</option>
+                                        '11','12','13','14','15','16','17','18','19','20']">{{ option }}
+                                                </option>
                                             </select>
                                             <div class="mt-2" v-if="form.tabsWholeMine">{{ form.tabsWholeMine }}</div>
                                         </div>
@@ -84,20 +94,26 @@
 
                                     <div>
                                         <div class="col-span-1">
-                                            <label for="tabsWholeTheirs" class="block text-sm font-medium text-gray-700">Their Tabs</label>
+                                            <label for="tabsWholeTheirs"
+                                                   class="block text-sm font-medium text-gray-700">Their Tabs</label>
                                             <select id="tabsWholeTheirs" name="tabsWholeTheirs"
                                                     v-model="form.tabsWholeTheirs"
                                                     class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
                                                 <option v-for="option in [ '0','1','2','3','4','5','6','7','8','9','10',
-                                        '11','12','13','14','15','16','17','18','19','20']">{{ option }}</option>
+                                        '11','12','13','14','15','16','17','18','19','20']">{{ option }}
+                                                </option>
                                             </select>
-                                            <div class="mt-2" v-if="form.tabsWholeTheirs">{{ form.tabsWholeTheirs }}</div>
+                                            <div class="mt-2" v-if="form.tabsWholeTheirs">{{
+                                                    form.tabsWholeTheirs
+                                                }}
+                                            </div>
                                         </div>
                                     </div>
 
                                     <div>
                                         <div class="col-span-1">
-                                            <label for="liquidChlorine" class="block text-sm font-medium text-gray-700">Liquid Chlorine - gallon(s)</label>
+                                            <label for="liquidChlorine" class="block text-sm font-medium text-gray-700">Liquid
+                                                Chlorine - gallon(s)</label>
                                             <select id="liquidChlorine" name="liquidChlorine"
                                                     v-model="form.liquidChlorine"
                                                     class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
@@ -108,7 +124,8 @@
                                                            '13.0', '13.5', '14.0', '14.5', '15.0', '15.5',
                                                            '16.0', '16.5', '17.0', '17.5', '18.0', '18.5',
                                                            '19.0', '19.5', '20.0', '20.5', '21.0', '21.5'
-                                                           ]">{{ option }}</option>
+                                                           ]">{{ option }}
+                                                </option>
                                             </select>
                                             <div class="mt-2" v-if="form.liquidChlorine">{{ form.liquidChlorine }}</div>
                                         </div>
@@ -116,16 +133,31 @@
 
                                     <div>
                                         <div class="col-span-1">
-                                            <label for="acid" class="block text-sm font-medium text-gray-700">Acid - gallon(s)</label>
+                                            <label for="acid" class="block text-sm font-medium text-gray-700">Acid -
+                                                gallon(s)</label>
                                             <select id="acid" name="acid"
                                                     v-model="form.acid"
                                                     class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
                                                 <option v-for="option in [
                                                            '0.0','0.25', '0.5', '0.75', '1.0', '1.25', '1.5',
                                                            '1.75', '2.0', '2.25', '2.5', '2.75', '3.0'
-                                                           ]">{{ option }}</option>
+                                                           ]">{{ option }}
+                                                </option>
                                             </select>
                                             <div class="mt-2" v-if="form.acid">{{ form.acid }}</div>
+                                        </div>
+                                    </div>
+
+                                    <div>
+                                        <div class="col-span-1">
+                                            <label for="salt_level" class="block text-sm font-medium text-gray-700">Salt
+                                                Level</label>
+                                            <select id="salt_level" name="salt_level"
+                                                    v-model="form.salt_level"
+                                                    class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                                                <option v-for="option in saltRange">{{ option }}</option>
+                                            </select>
+                                            <div class="mt-2" v-if="form.salt_level">{{ form.salt_level }}</div>
                                         </div>
                                     </div>
 
@@ -229,6 +261,58 @@ export default {
     props: {
         customerName: String
     },
+    data() {
+        return {
+            saltRange: [
+                'not checked',
+                'low',
+                '400',
+                '500',
+                '600',
+                '700',
+                '800',
+                '900',
+                '1000',
+                '1100',
+                '1200',
+                '1300',
+                '1400',
+                '1500',
+                '1600',
+                '1700',
+                '1800',
+                '1900',
+                '2000',
+                '2100',
+                '2200',
+                '2300',
+                '2400',
+                '2500',
+                '2600',
+                '2700',
+                '2800',
+                '2900',
+                '3000',
+                '3100',
+                '3200',
+                '3300',
+                '3400',
+                '3500',
+                '3600',
+                '3700',
+                '3800',
+                '3900',
+                '4000',
+                '4100',
+                '4200',
+                '4300',
+                '4400',
+                '4500',
+                '4600',
+                'high'
+            ]
+        }
+    },
     remember: 'form',
     setup() {
         const form = reactive({
@@ -241,6 +325,7 @@ export default {
             liquidChlorine: '0.0',
             notes: null,
             ph_level: null,
+            salt_level: 'not checked',
             powder_chlorine: '0',
             tabsCrushedMine: '0',
             tabsCrushedTheirs: '0',
@@ -276,7 +361,7 @@ export default {
             vacuum: null
         })
 
-        function formatTime(time){
+        function formatTime(time) {
             if (time) {
                 let split = time.split(":");
                 return split[0] + ":" + split[1]
@@ -341,20 +426,18 @@ export default {
             this.form.timeIn = localStorage.getItem('timeOut')
         }
     },
-    methods: {
-
-    },
+    methods: {},
     computed: {
-        errorClass(){
+        errorClass() {
             return this.errors.timeIn ? 'text-red-600' : ''
         },
-        saveTimeIn(){
+        saveTimeIn() {
             if (this.form.timeIn) {
                 localStorage.setItem('timeIn', this.form.timeIn)
             }
             return this.formatTime(this.form.timeIn)
         },
-        saveTimeOut(){
+        saveTimeOut() {
             if (this.form.timeOut) {
                 localStorage.setItem('timeOut', this.form.timeOut)
             }

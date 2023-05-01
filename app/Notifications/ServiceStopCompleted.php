@@ -95,6 +95,10 @@ class ServiceStopCompleted extends Notification
             "emptied baskets:   " . $empty_baskets . "\n" .
             "backwash:      " . $backwash;
 
+        if ($this->service_stop->salt_level !== 'not checked') {
+            $text = $text . "\nsalt level: " . $this->service_stop->salt_level . "\n";
+        }
+
         if ($this->isAdmin) {
             $text = $text . "\nnotes: " . $this->service_stop->notes . "\n";
         }

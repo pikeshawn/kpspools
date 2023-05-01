@@ -165,6 +165,8 @@ class ServiceStopController extends Controller
     public function store(Request $request)
     {
 
+//        dd($request->salt_level);
+
         $address = Address::select(['id'])->where('customer_id', '=', $request->id)->get()->first();
 
         $start = new Carbon($request->timeIn);
@@ -190,6 +192,7 @@ class ServiceStopController extends Controller
             'backwash' => $request->backwash,
             'powder_chlorine' => $request->powder_chlorine,
             'notes' => $request->notes,
+            'salt_level' => $request->salt_level,
             'service_type' => $request->service_type,
             'serviceman_id' => Auth::user()->id
         ]);
