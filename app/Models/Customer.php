@@ -17,7 +17,7 @@ class Customer extends Model
 
     public function addresses()
     {
-        return $this->hasMany('App\Models\Address');
+        return $this->hasMany(\App\Models\Address::class);
     }
 
     public function routeNotificationForNexmo($notification)
