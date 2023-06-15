@@ -16,8 +16,6 @@ class CustomerController extends Controller
 {
     /**
      * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
      */
     public function index(): Response
     {
@@ -76,8 +74,6 @@ class CustomerController extends Controller
 
     /**
      * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
      */
     public function create(): Response
     {
@@ -107,8 +103,6 @@ class CustomerController extends Controller
 
     /**
      * Show the form for editing the specified resource.
-     *
-     * @return \Illuminate\Http\Response
      */
     public function edit(Customer $customer): Response
     {
@@ -129,7 +123,6 @@ class CustomerController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \App\Models\Customer  $customer
-     * @return \Illuminate\Http\Response
      */
     public function update(Request $request): RedirectResponse
     {
@@ -159,7 +152,6 @@ class CustomerController extends Controller
      * Remove the specified resource from storage.
      *
      * @param  \App\Models\Customer  $customer
-     * @return \Illuminate\Http\Response
      */
     public function destroy(GeneralNote $generalNote): RedirectResponse
     {
