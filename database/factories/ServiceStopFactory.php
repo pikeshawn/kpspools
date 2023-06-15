@@ -2,7 +2,6 @@
 
 namespace Database\Factories;
 
-use App\Models\ServiceStop;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class ServiceStopFactory extends Factory

@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use Inertia\Response;
 use App\Models\Address;
 use App\Models\Customer;
 use App\Models\ServiceStop;
@@ -15,6 +14,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
+use Inertia\Response;
 
 class SummaryController extends Controller
 {
