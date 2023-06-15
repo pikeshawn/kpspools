@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Inertia\Response;
 use App\Models\Address;
 use App\Models\Customer;
 use App\Models\ServiceStop;
@@ -22,7 +23,7 @@ class SummaryController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function customerSummary(Customer $customer)
+    public function customerSummary(Customer $customer): Response
     {
         //
 
@@ -116,7 +117,7 @@ class SummaryController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create(Customer $customer)
+    public function create(Customer $customer): Response
     {
         return Inertia::render('ServiceStops/Create', [
             'customerId' => $customer->id,
@@ -129,7 +130,7 @@ class SummaryController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request): Response
     {
         $address = Address::select(['id'])->where('customer_id', '=', $request->id)->get()->first();
 

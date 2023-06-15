@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use Inertia\Response;
+use Illuminate\Http\RedirectResponse;
 use App\Models\Address;
 use App\Models\Customer;
 use App\Models\ServiceStop;
@@ -22,7 +24,7 @@ class ServiceStopController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Customer $customer)
+    public function index(Customer $customer): Response
     {
         //
 
@@ -128,7 +130,7 @@ class ServiceStopController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create(Customer $customer)
+    public function create(Customer $customer): Response
     {
         return Inertia::render('ServiceStops/Create', [
             'customerId' => $customer->id,
@@ -141,7 +143,7 @@ class ServiceStopController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function notes(Customer $customer)
+    public function notes(Customer $customer): Response
     {
         $notes = DB::select('select id, updated_at,
             notes, service_type from service_stops where customer_id = '.$customer->id.' order by updated_at DESC');
@@ -157,7 +159,7 @@ class ServiceStopController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request): Response
     {
 //        dd($request->salt_level);
 
@@ -249,7 +251,7 @@ class ServiceStopController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function edit(ServiceStop $serviceStop)
+    public function edit(ServiceStop $serviceStop): Response
     {
         //
 
@@ -267,7 +269,7 @@ class ServiceStopController extends Controller
      * @param  \App\Models\ServiceStop  $serviceStop
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request)
+    public function update(Request $request): RedirectResponse
     {
         //
 

@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use Inertia\Response;
+use Illuminate\Http\RedirectResponse;
 use App\Models\Customer;
 use App\Models\GeneralNote;
 use App\Models\User;
@@ -17,7 +19,7 @@ class CustomerController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(): Response
     {
         $customers = '';
 
@@ -40,7 +42,7 @@ class CustomerController extends Controller
         ]);
     }
 
-    public function notes(Customer $customer)
+    public function notes(Customer $customer): Response
     {
         $notes = DB::select('Select * from general_notes where customer_id = '
             .$customer->id.' Order By updated_at DESC');
@@ -52,7 +54,7 @@ class CustomerController extends Controller
         ]);
     }
 
-    public function new_note(Customer $customer)
+    public function new_note(Customer $customer): Response
     {
         return Inertia::render('Customers/NewNote', [
             'customer_id' => $customer->id,
@@ -60,7 +62,7 @@ class CustomerController extends Controller
         ]);
     }
 
-    public function store_note(Request $request)
+    public function store_note(Request $request): RedirectResponse
     {
         $note = GeneralNote::firstOrCreate([
             'customer_id' => $request->customer_id,
@@ -77,7 +79,7 @@ class CustomerController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(): Response
     {
         //
         return Inertia::render('Customers/Create');
@@ -108,7 +110,7 @@ class CustomerController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function edit(Customer $customer)
+    public function edit(Customer $customer): Response
     {
         return Inertia::render('Customers/Edit', [
             'customer' => [
@@ -129,7 +131,7 @@ class CustomerController extends Controller
      * @param  \App\Models\Customer  $customer
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request)
+    public function update(Request $request): RedirectResponse
     {
         //
 
@@ -144,7 +146,7 @@ class CustomerController extends Controller
         return Redirect::route('general.notes', $customer->id);
     }
 
-    public function showNote(GeneralNote $generalNote)
+    public function showNote(GeneralNote $generalNote): Response
     {
         //
 
@@ -159,7 +161,7 @@ class CustomerController extends Controller
      * @param  \App\Models\Customer  $customer
      * @return \Illuminate\Http\Response
      */
-    public function destroy(GeneralNote $generalNote)
+    public function destroy(GeneralNote $generalNote): RedirectResponse
     {
         $customer = Customer::find($generalNote->customer_id);
 

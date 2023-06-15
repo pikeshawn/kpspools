@@ -78,7 +78,7 @@ class ServiceStopCompleted extends Notification
      * @param  mixed  $notifiable
      * @return NexmoMessage
      */
-    public function toVonage($notifiable)
+    public function toVonage($notifiable): NexmoMessage
     {
         $vacuum = $this->correctValue($this->service_stop->vacuum);
         $brush = $this->correctValue($this->service_stop->brush);
