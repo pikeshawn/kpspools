@@ -1,11 +1,11 @@
 <?php
 
-use Illuminate\Foundation\Application;
-use Illuminate\Support\Facades\Route;
-use Inertia\Inertia;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\ServiceStopController;
 use App\Http\Controllers\SummaryController;
+use Illuminate\Foundation\Application;
+use Illuminate\Support\Facades\Route;
+use Inertia\Inertia;
 
 /*
 |--------------------------------------------------------------------------
@@ -59,7 +59,6 @@ Route::middleware(['auth:sanctum', 'verified'])->post('/service_stops/store',
     [ServiceStopController::class, 'store'])
     ->name('service_stops.store');
 
-
 Route::middleware(['auth:sanctum', 'verified'])->get('/ss/{serviceStop}',
     [ServiceStopController::class, 'edit'])
     ->name('service_stops.edit');
@@ -68,20 +67,13 @@ Route::middleware(['auth:sanctum', 'verified'])->patch('/service_stops/',
     [ServiceStopController::class, 'update'])
     ->name('service_stops.update');
 
-
-
 Route::middleware(['auth:sanctum', 'verified'])->delete('/service_stops/{serviceStop}',
     [ServiceStopController::class, 'destroy'])
     ->name('service_stops.destroy');
 
-
 Route::middleware(['auth:sanctum', 'verified'])->get('/general/notes/{customer}',
     [CustomerController::class, 'notes'])
     ->name('general.notes');
-
-
-
-
 
 Route::middleware(['auth:sanctum', 'verified'])->get('/general/new_note/{customer}',
     [CustomerController::class, 'new_note'])
@@ -105,7 +97,5 @@ Route::middleware(['auth:sanctum', 'verified'])->patch('/general/',
 
 Route::middleware(['auth:sanctum', 'verified'])
     ->get('customers/{customer}/edit',
-    [CustomerController::class, 'edit'])
+        [CustomerController::class, 'edit'])
     ->name('customers.edit');
-
-

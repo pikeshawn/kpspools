@@ -2,19 +2,18 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Customer;
 use App\Models\Address;
+use App\Models\Customer;
 use App\Models\ServiceStop;
 use App\Models\User;
 use App\Notifications\ServiceStopCompleted;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Redirect;
-use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Notification;
+use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
-use Carbon\Carbon;
 
 class SummaryController extends Controller
 {
@@ -28,22 +27,22 @@ class SummaryController extends Controller
         //
 
         return Inertia::render('Summary/customer', [
-//            'filters' => \Illuminate\Support\Facades\Request::all('search', 'role', 'trashed'),
-            'customer_name' => $customer->first_name . " " . $customer->last_name,
+            //            'filters' => \Illuminate\Support\Facades\Request::all('search', 'role', 'trashed'),
+            'customer_name' => $customer->first_name.' '.$customer->last_name,
             'totalStopTime' => self::totalTime($customer->id),
-            'totalServiceTime' => self::totalTimeByType($customer->id, "Service Stops"),
-            'totalRepairTime' => self::totalTimeByType($customer->id, "Repair"),
-            'totalGreenPoolTime' => self::totalTimeByType($customer->id, "Clear Green Pool"),
+            'totalServiceTime' => self::totalTimeByType($customer->id, 'Service Stops'),
+            'totalRepairTime' => self::totalTimeByType($customer->id, 'Repair'),
+            'totalGreenPoolTime' => self::totalTimeByType($customer->id, 'Clear Green Pool'),
 
             'totalStops' => self::totalStops($customer->id),
-            'totalServiceStops' => self::totalStopsByType($customer->id, "Service Stops"),
-            'totalRepairStops' => self::totalStopsByType($customer->id, "Repair"),
-            'totalGreenPoolStops' => self::totalStopsByType($customer->id, "Clear Green Pool"),
+            'totalServiceStops' => self::totalStopsByType($customer->id, 'Service Stops'),
+            'totalRepairStops' => self::totalStopsByType($customer->id, 'Repair'),
+            'totalGreenPoolStops' => self::totalStopsByType($customer->id, 'Clear Green Pool'),
 
             'totalAverageTime' => self::totalAverageTime($customer->id),
-            'totalAverageClearGreenPoolTime' => self::totalAverageTimeByType($customer->id, "Clear Green Pool"),
-            'totalAverageServiceTime' => self::totalAverageTimeByType($customer->id, "Service Stop"),
-            'totalAverageRepairTime' => self::totalAverageTimeByType($customer->id, "Repair"),
+            'totalAverageClearGreenPoolTime' => self::totalAverageTimeByType($customer->id, 'Clear Green Pool'),
+            'totalAverageServiceTime' => self::totalAverageTimeByType($customer->id, 'Service Stop'),
+            'totalAverageRepairTime' => self::totalAverageTimeByType($customer->id, 'Repair'),
         ]);
     }
 
@@ -53,8 +52,8 @@ class SummaryController extends Controller
             'select ceiling(AVG(TIME_TO_SEC(TIMEDIFF(ss.time_out, ss.time_in))) / 60)
                             as averageTime
                     from service_stops ss
-                            where customer_id = ' . $customerId . '
-                    and ss.service_type = "' . $type . '"'
+                            where customer_id = '.$customerId.'
+                    and ss.service_type = "'.$type.'"'
         );
 
         return $query[0]->averageTime;
@@ -64,7 +63,7 @@ class SummaryController extends Controller
     {
         $query = DB::select(
             'select ceiling(AVG(TIME_TO_SEC(TIMEDIFF(time_out,time_in))) / 60) as averageTime from service_stops where customer_id = '
-            . $customerId
+            .$customerId
         );
 
         return $query[0]->averageTime;
@@ -74,7 +73,7 @@ class SummaryController extends Controller
     {
         $query = DB::select(
             'select count(*) as total from service_stops where customer_id = '
-            . $customerId
+            .$customerId
         );
 
         return $query[0]->total;
@@ -84,8 +83,8 @@ class SummaryController extends Controller
     {
         $query = DB::select(
             'select count(*) as total from service_stops ss
-                        where customer_id = ' . $customerId . '
-                        and ss.service_type = "' . $type . '"'
+                        where customer_id = '.$customerId.'
+                        and ss.service_type = "'.$type.'"'
         );
 
         return $query[0]->total;
@@ -95,7 +94,7 @@ class SummaryController extends Controller
     {
         $query = DB::select(
             'select ceiling(SUM(TIME_TO_SEC(TIMEDIFF(time_out,time_in))) / 60) as total from service_stops ss where customer_id = '
-            . $customerId
+            .$customerId
         );
 
         return $query[0]->total;
@@ -105,13 +104,12 @@ class SummaryController extends Controller
     {
         $query = DB::select(
             'select ceiling(SUM(TIME_TO_SEC(TIMEDIFF(time_out,time_in))) / 60) as total from service_stops ss
-                        where customer_id = ' . $customerId . '
-                        and ss.service_type = "' . $type . '"'
+                        where customer_id = '.$customerId.'
+                        and ss.service_type = "'.$type.'"'
         );
 
         return $query[0]->total;
     }
-
 
     /**
      * Show the form for creating a new resource.
@@ -122,19 +120,17 @@ class SummaryController extends Controller
     {
         return Inertia::render('ServiceStops/Create', [
             'customerId' => $customer->id,
-            'customerName' => $customer->last_name
+            'customerName' => $customer->last_name,
         ]);
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
     {
-
         $address = Address::select(['id'])->where('customer_id', '=', $request->id)->get()->first();
 
         $start = new Carbon($request->timeIn);
@@ -161,14 +157,14 @@ class SummaryController extends Controller
             'powder_chlorine' => $request->powder_chlorine,
             'notes' => $request->notes,
             'service_type' => $request->service_type,
-            'serviceman_id' => Auth::user()->id
+            'serviceman_id' => Auth::user()->id,
         ]);
 
         $cust = Customer::find($request->id);
 
-        $address = DB::select('select * from addresses a where a.customer_id =' . $cust->id);
+        $address = DB::select('select * from addresses a where a.customer_id ='.$cust->id);
 
-        if ($request->service_type == "Service Stop") {
+        if ($request->service_type == 'Service Stop') {
             if ($cust->phone_number) {
                 $cust->notify(new ServiceStopCompleted($serviceStop, $cust, $address));
             }
@@ -178,17 +174,13 @@ class SummaryController extends Controller
         }
 
         if (User::isAdmin()) {
-
             $customers = Customer::allCustomers();
-
         } else {
-
             $customers = Customer::allCustomersTiedToUser();
-
         }
 
         return Inertia::render('Customers/Index', [
-            'customers' => $customers
+            'customers' => $customers,
         ]);
 
 //        return Inertia::render('Customers/Index', [
@@ -197,13 +189,11 @@ class SummaryController extends Controller
 //            'customer_name' => $customer->last_name,
 //            'customer_id' => $customer->id
 //        ]);
-
     }
 
     /**
      * Display the specified resource.
      *
-     * @param \App\Models\ServiceStop $serviceStop
      * @return \Illuminate\Http\Response
      */
     public function show(ServiceStop $serviceStop)
@@ -214,7 +204,6 @@ class SummaryController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param \App\Models\ServiceStop $serviceStop
      * @return \Illuminate\Http\Response
      */
     public function edit(ServiceStop $serviceStop)
@@ -225,8 +214,6 @@ class SummaryController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param \Illuminate\Http\Request $request
-     * @param \App\Models\ServiceStop $serviceStop
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, ServiceStop $serviceStop)
@@ -237,7 +224,6 @@ class SummaryController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param \App\Models\ServiceStop $serviceStop
      * @return \Illuminate\Http\Response
      */
     public function destroy(ServiceStop $serviceStop)
@@ -254,6 +240,5 @@ class SummaryController extends Controller
 
 //        return \redirect()->route('service_stops', [$serviceStop->customer_id], );
         return \redirect()->route('customers');
-
     }
 }

@@ -2,19 +2,18 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Customer;
 use App\Models\Address;
+use App\Models\Customer;
 use App\Models\ServiceStop;
 use App\Models\User;
 use App\Notifications\ServiceStopCompleted;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Redirect;
-use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Notification;
+use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
-use Carbon\Carbon;
 
 class ServiceStopController extends Controller
 {
@@ -47,7 +46,7 @@ class ServiceStopController extends Controller
                 'empty_baskets',
                 'backwash',
                 'powder_chlorine',
-                'notes'
+                'notes',
             ])->orderBy('time_in', 'desc')->get();
 
         $serviceStops = ServiceStop::where('customer_id', '=', $customer->id)->orderBy('created_at', 'desc')->get();
@@ -65,8 +64,8 @@ class ServiceStopController extends Controller
             'select ceiling(AVG(TIME_TO_SEC(TIMEDIFF(ss.time_out, ss.time_in))) / 60)
                             as averageTime
                     from service_stops ss
-                            where customer_id = ' . $customerId . '
-                    and ss.service_type = "' . $type . '"'
+                            where customer_id = '.$customerId.'
+                    and ss.service_type = "'.$type.'"'
         );
 
         return $query[0]->averageTime;
@@ -76,7 +75,7 @@ class ServiceStopController extends Controller
     {
         $query = DB::select(
             'select ceiling(AVG(TIME_TO_SEC(TIMEDIFF(time_out,time_in))) / 60) as averageTime from service_stops where customer_id = '
-            . $customerId
+            .$customerId
         );
 
         return $query[0]->averageTime;
@@ -86,7 +85,7 @@ class ServiceStopController extends Controller
     {
         $query = DB::select(
             'select count(*) as total from service_stops where customer_id = '
-            . $customerId
+            .$customerId
         );
 
         return $query[0]->total;
@@ -96,8 +95,8 @@ class ServiceStopController extends Controller
     {
         $query = DB::select(
             'select count(*) as total from service_stops ss
-                        where customer_id = ' . $customerId . '
-                        and ss.service_type = "' . $type . '"'
+                        where customer_id = '.$customerId.'
+                        and ss.service_type = "'.$type.'"'
         );
 
         return $query[0]->total;
@@ -107,7 +106,7 @@ class ServiceStopController extends Controller
     {
         $query = DB::select(
             'select ceiling(SUM(TIME_TO_SEC(TIMEDIFF(time_out,time_in))) / 60) as total from service_stops ss where customer_id = '
-            . $customerId
+            .$customerId
         );
 
         return $query[0]->total;
@@ -117,13 +116,12 @@ class ServiceStopController extends Controller
     {
         $query = DB::select(
             'select ceiling(SUM(TIME_TO_SEC(TIMEDIFF(time_out,time_in))) / 60) as total from service_stops ss
-                        where customer_id = ' . $customerId . '
-                        and ss.service_type = "' . $type . '"'
+                        where customer_id = '.$customerId.'
+                        and ss.service_type = "'.$type.'"'
         );
 
         return $query[0]->total;
     }
-
 
     /**
      * Show the form for creating a new resource.
@@ -134,10 +132,9 @@ class ServiceStopController extends Controller
     {
         return Inertia::render('ServiceStops/Create', [
             'customerId' => $customer->id,
-            'customerName' => $customer->last_name
+            'customerName' => $customer->last_name,
         ]);
     }
-
 
     /**
      * Show the form for creating a new resource.
@@ -146,25 +143,22 @@ class ServiceStopController extends Controller
      */
     public function notes(Customer $customer)
     {
-
-        $notes = DB::select("select id, updated_at,
-            notes, service_type from service_stops where customer_id = " . $customer->id . " order by updated_at DESC");
+        $notes = DB::select('select id, updated_at,
+            notes, service_type from service_stops where customer_id = '.$customer->id.' order by updated_at DESC');
 
         return Inertia::render('ServiceStops/Notes', [
-            'customer_name' => $customer->first_name . " " . $customer->last_name,
-            'notes' => $notes
+            'customer_name' => $customer->first_name.' '.$customer->last_name,
+            'notes' => $notes,
         ]);
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
     {
-
 //        dd($request->salt_level);
 
         $address = Address::select(['id'])->where('customer_id', '=', $request->id)->get()->first();
@@ -194,14 +188,14 @@ class ServiceStopController extends Controller
             'notes' => $request->notes,
             'salt_level' => $request->salt_level,
             'service_type' => $request->service_type,
-            'serviceman_id' => Auth::user()->id
+            'serviceman_id' => Auth::user()->id,
         ]);
 
         $cust = Customer::find($request->id);
 
-        $address = DB::select('select * from addresses a where a.customer_id =' . $cust->id);
+        $address = DB::select('select * from addresses a where a.customer_id ='.$cust->id);
 
-        if ($request->service_type == "Service Stop") {
+        if ($request->service_type == 'Service Stop') {
             if ($cust->phone_number) {
 //                $cust->notify(new ServiceStopCompleted($serviceStop, $cust, $address));
                 Notification::route('vonage', $cust->phone_number)
@@ -211,16 +205,16 @@ class ServiceStopController extends Controller
             if ($cust->phone_number == '14802966330') {
                 Notification::route('vonage', '14802966333')
                     ->notify(new ServiceStopCompleted($serviceStop, $cust, $address, true));
-            } else if ($cust->phone_number == '14807038320') {
+            } elseif ($cust->phone_number == '14807038320') {
                 Notification::route('vonage', '14807038340')
                     ->notify(new ServiceStopCompleted($serviceStop, $cust, $address, true));
-            } else if ($cust->phone_number == '17607748119') {
+            } elseif ($cust->phone_number == '17607748119') {
                 Notification::route('vonage', '17608318534')
                     ->notify(new ServiceStopCompleted($serviceStop, $cust, $address, true));
-            } else if ($cust->phone_number == '14802136170') {
+            } elseif ($cust->phone_number == '14802136170') {
                 Notification::route('vonage', '16196513385')
                     ->notify(new ServiceStopCompleted($serviceStop, $cust, $address, true));
-            } else if ($cust->phone_number == '14808265558') {
+            } elseif ($cust->phone_number == '14808265558') {
                 Notification::route('vonage', '14805500232')
                     ->notify(new ServiceStopCompleted($serviceStop, $cust, $address, true));
             }
@@ -230,25 +224,19 @@ class ServiceStopController extends Controller
         }
 
         if (User::isAdmin()) {
-
             $customers = Customer::allCustomers();
-
         } else {
-
             $customers = Customer::allCustomersTiedToUser();
-
         }
 
         return Inertia::render('Customers/Index', [
-            'customers' => $customers
+            'customers' => $customers,
         ]);
-
     }
 
     /**
      * Display the specified resource.
      *
-     * @param \App\Models\ServiceStop $serviceStop
      * @return \Illuminate\Http\Response
      */
     public function show(ServiceStop $serviceStop)
@@ -259,7 +247,6 @@ class ServiceStopController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param \App\Models\ServiceStop $serviceStop
      * @return \Illuminate\Http\Response
      */
     public function edit(ServiceStop $serviceStop)
@@ -270,16 +257,14 @@ class ServiceStopController extends Controller
 
         return Inertia::render('ServiceStops/Edit', [
             'serviceStop' => $serviceStop,
-            'customer' => $customer
+            'customer' => $customer,
         ]);
-
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param \Illuminate\Http\Request $request
-     * @param \App\Models\ServiceStop $serviceStop
+     * @param  \App\Models\ServiceStop  $serviceStop
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request)
@@ -313,19 +298,17 @@ class ServiceStopController extends Controller
         $customer = Customer::find($request->customer_id);
 
         return Redirect::route('service_stops', $customer->id);
-
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param \App\Models\ServiceStop $serviceStop
      * @return \Illuminate\Http\Response
      */
     public function destroy(ServiceStop $serviceStop)
     {
         $serviceStop->delete();
-        return \redirect()->route('customers');
 
+        return \redirect()->route('customers');
     }
 }

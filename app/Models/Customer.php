@@ -6,10 +6,9 @@ use Carbon\Carbon;
 use Carbon\CarbonInterface;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Auth;
-use App\Models\Address;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class Customer extends Model
 {
@@ -28,7 +27,6 @@ class Customer extends Model
 
     public static function allCustomers()
     {
-
         $customers = DB::select('select c.first_name, c.last_name, c.id, c.service_day, c.assigned_serviceman,
        a.community_gate_code, a.address_line_1, a.city, a.zip
 from customers c
@@ -36,13 +34,10 @@ from customers c
 where c.order is not NULL order By c.order DESC');
 
         return self::completedCustomers($customers);
-
     }
 
     public static function allCustomersTiedToUser()
     {
-
-
         $customers = DB::select('select c.first_name,
        c.last_name,
        u.name,
@@ -56,11 +51,10 @@ where c.order is not NULL order By c.order DESC');
 from customers c
          join addresses a on c.id = a.customer_id
          join users u on u.id = c.user_id
-where c.order is not NULL AND u.id = ' . Auth::user()->id . '
+where c.order is not NULL AND u.id = '.Auth::user()->id.'
 order By c.order DESC');
 
         return self::completedCustomers($customers);
-
     }
 
     public static function completedCustomers($customers)
@@ -75,11 +69,10 @@ order By c.order DESC');
         $dayBeforeStartOfWeek = $startOfWeek->subDays(1)->toDate()->format('Y-m-d H:i');
 
         foreach ($customers as $customer) {
-
             $query = 'select count(ss.time_in) as stops
 from service_stops ss
-where ss.customer_id = ' . $customer->id . ' and ss.time_in > "' .
-                $dayBeforeStartOfWeek . '" and ss.service_type = "Service Stop" order by ss.time_in DESC Limit 1';
+where ss.customer_id = '.$customer->id.' and ss.time_in > "'.
+                $dayBeforeStartOfWeek.'" and ss.service_type = "Service Stop" order by ss.time_in DESC Limit 1';
 
             $stops = DB::select($query);
 
@@ -88,12 +81,8 @@ where ss.customer_id = ' . $customer->id . ' and ss.time_in > "' .
             } else {
                 $customer->completed = false;
             }
-
-
         }
 
         return $customers;
-
     }
-
 }
