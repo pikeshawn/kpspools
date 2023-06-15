@@ -17,7 +17,6 @@ return new class extends Migration
             $table->integer('address_id');
             $table->float('ph_level');
             $table->float('chlorine_level');
-            $table->float('powder_chlorine');
             $table->float('tabs_whole_mine')->default(0);
             $table->float('tabs_crushed_mine')->default(0);
             $table->float('tabs_whole_theirs')->default(0);
@@ -29,10 +28,14 @@ return new class extends Migration
             $table->time('service_time')->default('00:00:00');
             $table->boolean('vacuum')->default(false);
             $table->boolean('brush')->default(true);
-            $table->boolean('backwash')->default(true);
-            $table->longText('notes')->nullable();
             $table->boolean('empty_baskets')->default(true);
             $table->timestamps();
+            $table->boolean('backwash')->default(true);
+            $table->float('powder_chlorine');
+            $table->longText('notes')->nullable();
+            $table->integer('serviceman_id');
+            $table->string('service_type');
+            $table->string('salt_level');
         });
     }
 

@@ -19,10 +19,9 @@ return new class extends Migration
             $table->string('city');
             $table->string('state')->default('AZ');
             $table->string('zip');
+            $table->timestamps();
             $table->string('community_gate_code')->nullable();
             $table->string('house_gate_has_lock')->nullable();
-            $table->boolean('zip');
-            $table->timestamps();
         });
     }
 

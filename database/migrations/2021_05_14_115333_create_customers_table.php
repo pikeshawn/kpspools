@@ -17,10 +17,16 @@ return new class extends Migration
             $table->string('first_name');
             $table->string('middle_name')->nullable();
             $table->string('last_name')->nullable();
+            $table->timestamps();
             $table->string('type')->nullable();
             $table->string('plan')->nullable();
             $table->string('service_day')->nullable();
-            $table->timestamps();
+            $table->integer('order')->nullable();
+            $table->string('plan_duration')->nullable();
+            $table->float('plan_price')->nullable();
+            $table->tinyInteger('chemicals_included')->nullable();
+            $table->string('assigned_serviceman')->nullable();
+            $table->string('phone_number')->nullable();
         });
     }
 
