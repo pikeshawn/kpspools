@@ -161,6 +161,18 @@
                                         </div>
                                     </div>
 
+                                    <div>
+                                        <div class="col-span-1">
+                                            <label for="powder_chlorine" class="block text-sm font-medium text-gray-700">Powder Chlorine</label>
+                                            <select id="powder_chlorine" name="powder_chlorine"
+                                                    v-model="form.powder_chlorine"
+                                                    class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                                                <option v-for="option in powderChlorineRange">{{ option }}</option>
+                                            </select>
+                                            <div class="mt-2" v-if="form.powder_chlorine">{{ form.powder_chlorine }}</div>
+                                        </div>
+                                    </div>
+
                                     <div class="flex flex-col">
                                         <label for="toggle">Empty Baskets</label>
                                         <Switch
@@ -310,6 +322,39 @@ export default {
                 '4500',
                 '4600',
                 'high'
+            ],
+            powderChlorineRange: [
+                '0',
+                '1',
+                '2',
+                '3',
+                '4',
+                '5',
+                '6',
+                '7',
+                '8',
+                '9',
+                '10',
+                '11',
+                '12',
+                '13',
+                '14',
+                '15',
+                '16',
+                '17',
+                '18',
+                '19',
+                '20',
+                '21',
+                '22',
+                '23',
+                '24',
+                '25',
+                '26',
+                '27',
+                '28',
+                '29',
+                '30',
             ]
         }
     },
