@@ -2,13 +2,19 @@
     <layout
         title="Summary"
     >
+<!--        <h1 class="text-lg font-medium leading-6 text-gray-900 mb-4 capitalize font-bold text-4xl">{{ totalTabPrice }}</h1>-->
+
         <h1 class="text-lg font-medium leading-6 text-gray-900 mb-4 capitalize font-bold text-4xl">{{ customer_name }}</h1>
 
         <h4 class="text-sm font-medium leading-6 text-gray-900 mb-4 capitalize font-bold text-2xl">Total Time</h4>
-        <h4 v-if="totalAverageServiceTime" class="text-sm font-medium leading-6 text-gray-900 mb-4 capitalize font-bold">All Time: {{ totalStopTime }}</h4>
-        <h4 v-if="totalAverageServiceTime" class="text-sm font-medium leading-6 text-gray-900 mb-4 capitalize font-bold">Service Stops: {{ totalServiceTime }}</h4>
-        <h4 v-if="totalAverageServiceTime" class="text-sm font-medium leading-6 text-gray-900 mb-4 capitalize font-bold">Repair: {{ totalRepairTime }}</h4>
-        <h4 v-if="totalAverageServiceTime" class="text-sm font-medium leading-6 text-gray-900 mb-4 capitalize font-bold">Clear Green Pool: {{ totalGreenPoolTime }}</h4>
+        <h4 v-if="totalAverageServiceTime" class="text-sm font-medium leading-6 text-gray-900 mb-4 capitalize font-bold">All Time: {{ totalStopTime }} minutes</h4>
+        <h4 v-if="totalAverageServiceTime" class="text-sm font-medium leading-6 text-gray-900 mb-4 capitalize font-bold">Service Stops: {{ totalServiceTime }} minutes</h4>
+        <h4 v-if="totalAverageServiceTime" class="text-sm font-medium leading-6 text-gray-900 mb-4 capitalize font-bold">Repair: {{ totalRepairTime }} minutes</h4>
+        <h4 v-if="totalAverageServiceTime" class="text-sm font-medium leading-6 text-gray-900 mb-4 capitalize font-bold">Clear Green Pool: {{ totalGreenPoolTime }} minutes</h4>
+
+        <h4 v-if="totalTabs"  class="text-sm font-medium leading-6 text-gray-900 mb-4 capitalize font-bold">Tabs: {{ totalTabs }} </h4>
+        <h4 v-if="totalLiquidChlorine"  class="text-sm font-medium leading-6 text-gray-900 mb-4 capitalize font-bold">Liquid Chlorine: {{ totalLiquidChlorine }} </h4>
+        <h4 v-if="totalMuriaticAcid"  class="text-sm font-medium leading-6 text-gray-900 mb-4 capitalize font-bold">Muriatic Acid: {{ totalMuriaticAcid }} </h4>
 
 
         <h4 class="text-sm font-medium leading-6 text-gray-900 mb-4 capitalize font-bold text-2xl">Total Stops</h4>
@@ -44,6 +50,7 @@ export default {
 
     },
     props: {
+        totalTabPrice: String,
         customer_name: String,
         totalStopTime: String,
         totalServiceTime: String,
@@ -59,6 +66,9 @@ export default {
         totalAverageServiceTime: String,
         totalAverageRepairTime: String,
         totalAverageClearGreenPoolTime: String,
+        totalTabs: String,
+        totalLiquidChlorine: String,
+        totalMuriaticAcid: String,
     }
 }
 </script>

@@ -22576,6 +22576,7 @@ __webpack_require__.r(__webpack_exports__);
   },
   methods: {},
   props: {
+    totalTabPrice: String,
     customer_name: String,
     totalStopTime: String,
     totalServiceTime: String,
@@ -22588,7 +22589,10 @@ __webpack_require__.r(__webpack_exports__);
     totalAverageTime: String,
     totalAverageServiceTime: String,
     totalAverageRepairTime: String,
-    totalAverageClearGreenPoolTime: String
+    totalAverageClearGreenPoolTime: String,
+    totalTabs: String,
+    totalLiquidChlorine: String,
+    totalMuriaticAcid: String
   }
 });
 
@@ -29236,45 +29240,57 @@ var _hoisted_6 = {
   key: 3,
   "class": "text-sm font-medium leading-6 text-gray-900 mb-4 capitalize font-bold"
 };
-var _hoisted_7 = /*#__PURE__*/_withScopeId(function () {
+var _hoisted_7 = {
+  key: 4,
+  "class": "text-sm font-medium leading-6 text-gray-900 mb-4 capitalize font-bold"
+};
+var _hoisted_8 = {
+  key: 5,
+  "class": "text-sm font-medium leading-6 text-gray-900 mb-4 capitalize font-bold"
+};
+var _hoisted_9 = {
+  key: 6,
+  "class": "text-sm font-medium leading-6 text-gray-900 mb-4 capitalize font-bold"
+};
+var _hoisted_10 = /*#__PURE__*/_withScopeId(function () {
   return /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h4", {
     "class": "text-sm font-medium leading-6 text-gray-900 mb-4 capitalize font-bold text-2xl"
   }, "Total Stops", -1 /* HOISTED */);
 });
-var _hoisted_8 = {
-  key: 4,
-  "class": "text-sm font-medium leading-6 text-gray-900 mb-4 capitalize font-bold"
-};
-var _hoisted_9 = {
-  key: 5,
-  "class": "text-sm font-medium leading-6 text-gray-900 mb-4 capitalize font-bold"
-};
-var _hoisted_10 = {
-  key: 6,
-  "class": "text-sm font-medium leading-6 text-gray-900 mb-4 capitalize font-bold"
-};
 var _hoisted_11 = {
   key: 7,
   "class": "text-sm font-medium leading-6 text-gray-900 mb-4 capitalize font-bold"
 };
-var _hoisted_12 = /*#__PURE__*/_withScopeId(function () {
+var _hoisted_12 = {
+  key: 8,
+  "class": "text-sm font-medium leading-6 text-gray-900 mb-4 capitalize font-bold"
+};
+var _hoisted_13 = {
+  key: 9,
+  "class": "text-sm font-medium leading-6 text-gray-900 mb-4 capitalize font-bold"
+};
+var _hoisted_14 = {
+  key: 10,
+  "class": "text-sm font-medium leading-6 text-gray-900 mb-4 capitalize font-bold"
+};
+var _hoisted_15 = /*#__PURE__*/_withScopeId(function () {
   return /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h4", {
     "class": "text-sm font-medium leading-6 text-gray-900 mb-4 capitalize font-bold text-2xl"
   }, "Average Time Per Stop", -1 /* HOISTED */);
 });
-var _hoisted_13 = {
-  "class": "text-sm font-medium leading-6 text-gray-900 mb-4 capitalize font-bold"
-};
-var _hoisted_14 = {
-  key: 8,
-  "class": "text-sm font-medium leading-6 text-gray-900 mb-4 capitalize font-bold"
-};
-var _hoisted_15 = {
-  key: 9,
-  "class": "text-sm font-medium leading-6 text-gray-900 mb-4 capitalize font-bold"
-};
 var _hoisted_16 = {
-  key: 10,
+  "class": "text-sm font-medium leading-6 text-gray-900 mb-4 capitalize font-bold"
+};
+var _hoisted_17 = {
+  key: 11,
+  "class": "text-sm font-medium leading-6 text-gray-900 mb-4 capitalize font-bold"
+};
+var _hoisted_18 = {
+  key: 12,
+  "class": "text-sm font-medium leading-6 text-gray-900 mb-4 capitalize font-bold"
+};
+var _hoisted_19 = {
+  key: 13,
   "class": "text-sm font-medium leading-6 text-gray-900 mb-4 capitalize font-bold"
 };
 function render(_ctx, _cache, $props, $setup, $data, $options) {
@@ -29283,7 +29299,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     title: "Summary"
   }, {
     "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
-      return [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h1", _hoisted_1, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($props.customer_name), 1 /* TEXT */), _hoisted_2, $props.totalAverageServiceTime ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("h4", _hoisted_3, "All Time: " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($props.totalStopTime), 1 /* TEXT */)) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), $props.totalAverageServiceTime ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("h4", _hoisted_4, "Service Stops: " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($props.totalServiceTime), 1 /* TEXT */)) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), $props.totalAverageServiceTime ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("h4", _hoisted_5, "Repair: " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($props.totalRepairTime), 1 /* TEXT */)) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), $props.totalAverageServiceTime ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("h4", _hoisted_6, "Clear Green Pool: " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($props.totalGreenPoolTime), 1 /* TEXT */)) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), _hoisted_7, $props.totalAverageServiceTime ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("h4", _hoisted_8, "All Time: " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($props.totalStops), 1 /* TEXT */)) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), $props.totalAverageServiceTime ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("h4", _hoisted_9, "Service Stops: " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($props.totalServiceStops), 1 /* TEXT */)) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), $props.totalAverageServiceTime ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("h4", _hoisted_10, "Repair: " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($props.totalRepairStops), 1 /* TEXT */)) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), $props.totalAverageServiceTime ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("h4", _hoisted_11, "Clear Green Pool: " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($props.totalGreenPoolStops), 1 /* TEXT */)) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), _hoisted_12, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h4", _hoisted_13, "All Time : " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($props.totalAverageTime) + " minutes", 1 /* TEXT */), $props.totalAverageServiceTime ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("h4", _hoisted_14, "All Time - Service Stop : " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($props.totalAverageServiceTime) + " minutes", 1 /* TEXT */)) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), $props.totalAverageRepairTime ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("h4", _hoisted_15, "All Time - Repair: " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($props.totalAverageRepairTime) + " minutes", 1 /* TEXT */)) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), $props.totalAverageClearGreenPoolTime ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("h4", _hoisted_16, "All Time - Clear Green Pool: " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($props.totalAverageClearGreenPoolTime) + " minutes", 1 /* TEXT */)) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)];
+      return [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("        <h1 class=\"text-lg font-medium leading-6 text-gray-900 mb-4 capitalize font-bold text-4xl\">{{ totalTabPrice }}</h1>"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h1", _hoisted_1, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($props.customer_name), 1 /* TEXT */), _hoisted_2, $props.totalAverageServiceTime ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("h4", _hoisted_3, "All Time: " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($props.totalStopTime) + " minutes", 1 /* TEXT */)) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), $props.totalAverageServiceTime ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("h4", _hoisted_4, "Service Stops: " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($props.totalServiceTime) + " minutes", 1 /* TEXT */)) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), $props.totalAverageServiceTime ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("h4", _hoisted_5, "Repair: " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($props.totalRepairTime) + " minutes", 1 /* TEXT */)) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), $props.totalAverageServiceTime ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("h4", _hoisted_6, "Clear Green Pool: " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($props.totalGreenPoolTime) + " minutes", 1 /* TEXT */)) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), $props.totalTabs ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("h4", _hoisted_7, "Tabs: " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($props.totalTabs), 1 /* TEXT */)) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), $props.totalLiquidChlorine ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("h4", _hoisted_8, "Liquid Chlorine: " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($props.totalLiquidChlorine), 1 /* TEXT */)) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), $props.totalMuriaticAcid ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("h4", _hoisted_9, "Muriatic Acid: " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($props.totalMuriaticAcid), 1 /* TEXT */)) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), _hoisted_10, $props.totalAverageServiceTime ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("h4", _hoisted_11, "All Time: " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($props.totalStops), 1 /* TEXT */)) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), $props.totalAverageServiceTime ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("h4", _hoisted_12, "Service Stops: " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($props.totalServiceStops), 1 /* TEXT */)) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), $props.totalAverageServiceTime ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("h4", _hoisted_13, "Repair: " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($props.totalRepairStops), 1 /* TEXT */)) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), $props.totalAverageServiceTime ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("h4", _hoisted_14, "Clear Green Pool: " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($props.totalGreenPoolStops), 1 /* TEXT */)) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), _hoisted_15, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h4", _hoisted_16, "All Time : " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($props.totalAverageTime) + " minutes", 1 /* TEXT */), $props.totalAverageServiceTime ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("h4", _hoisted_17, "All Time - Service Stop : " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($props.totalAverageServiceTime) + " minutes", 1 /* TEXT */)) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), $props.totalAverageRepairTime ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("h4", _hoisted_18, "All Time - Repair: " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($props.totalAverageRepairTime) + " minutes", 1 /* TEXT */)) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), $props.totalAverageClearGreenPoolTime ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("h4", _hoisted_19, "All Time - Clear Green Pool: " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($props.totalAverageClearGreenPoolTime) + " minutes", 1 /* TEXT */)) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)];
     }),
     _: 1 /* STABLE */
   });

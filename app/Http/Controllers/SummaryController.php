@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
 use Inertia\Response;
 
+
 class SummaryController extends Controller
 {
     /**
@@ -26,15 +27,14 @@ class SummaryController extends Controller
         //
 
         return Inertia::render('Summary/customer', [
-            //            'filters' => \Illuminate\Support\Facades\Request::all('search', 'role', 'trashed'),
             'customer_name' => $customer->first_name.' '.$customer->last_name,
             'totalStopTime' => self::totalTime($customer->id),
-            'totalServiceTime' => self::totalTimeByType($customer->id, 'Service Stops'),
-            'totalRepairTime' => self::totalTimeByType($customer->id, 'Repair'),
+            'totalServiceTime' => self::totalTimeByType($customer->id, 'Service Stop'),
+            'totalRepairTime' => self::totalTimeByType($customer->id, 'Repairs'),
             'totalGreenPoolTime' => self::totalTimeByType($customer->id, 'Clear Green Pool'),
 
             'totalStops' => self::totalStops($customer->id),
-            'totalServiceStops' => self::totalStopsByType($customer->id, 'Service Stops'),
+            'totalServiceStops' => self::totalStopsByType($customer->id, 'Service Stop'),
             'totalRepairStops' => self::totalStopsByType($customer->id, 'Repair'),
             'totalGreenPoolStops' => self::totalStopsByType($customer->id, 'Clear Green Pool'),
 
@@ -42,7 +42,49 @@ class SummaryController extends Controller
             'totalAverageClearGreenPoolTime' => self::totalAverageTimeByType($customer->id, 'Clear Green Pool'),
             'totalAverageServiceTime' => self::totalAverageTimeByType($customer->id, 'Service Stop'),
             'totalAverageRepairTime' => self::totalAverageTimeByType($customer->id, 'Repair'),
+
+            'totalTabs' => self::totalTabs($customer->id),
+            'totalLiquidChlorine' => self::totalLiquidChlorine($customer->id),
+            'totalMuriaticAcid' => self::totalMuriaticAcid($customer->id),
+
+            'totalTabPrice' => self::totalTabPrice($customer->id),
         ]);
+    }
+
+    private function totalTabPrice($customerId)
+    {
+        $c = Customer::find($customerId);
+        return $c->getTabs()[0]->tabs * 2.25;
+    }
+
+    private function totalTabs($customerId)
+    {
+        $query = DB::select(
+            'select sum(tabs_whole_mine) as tabs from service_stops where customer_id = ' . $customerId
+
+        );
+
+        return $query[0]->tabs;
+    }
+
+    private function totalLiquidChlorine($customerId)
+    {
+        $query = DB::select(
+            'select sum(liquid_chlorine) as lq from service_stops where customer_id = ' . $customerId
+
+        );
+
+        return $query[0]->lq;
+    }
+
+    private function totalMuriaticAcid($customerId)
+    {
+        $query = DB::select(
+            'select sum(liquid_acid) as la from service_stops where customer_id = ' . $customerId
+
+        );
+
+        return $query[0]->la;
     }
 
     private function totalAverageTimeByType($customerId, $type)

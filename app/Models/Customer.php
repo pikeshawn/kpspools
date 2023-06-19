@@ -25,6 +25,11 @@ class Customer extends Model
         return $this->phone_number;
     }
 
+    public function getTabs()
+    {
+        return DB::select('select sum(tabs_whole_mine) as tabs from service_stops where customer_id = ' . $this->id);
+    }
+
     public static function allCustomers()
     {
         $customers = DB::select('select c.first_name, c.last_name, c.id, c.service_day, c.assigned_serviceman,
