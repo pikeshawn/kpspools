@@ -6,6 +6,7 @@ use App\Models\Customer;
 use App\Models\ServiceStop;
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Messages\MailMessage;
+//use Illuminate\Notifications\Messages\NexmoMessage;
 use Illuminate\Notifications\Messages\VonageMessage;
 use Illuminate\Notifications\Notification;
 
@@ -74,7 +75,7 @@ class ServiceStopCompleted extends Notification
      *
      * @param  mixed  $notifiable
      */
-    public function toVonage($notifiable): NexmoMessage
+    public function toVonage($notifiable): VonageMessage
     {
         $vacuum = $this->correctValue($this->service_stop->vacuum);
         $brush = $this->correctValue($this->service_stop->brush);
@@ -106,7 +107,7 @@ class ServiceStopCompleted extends Notification
         }
 
         return (new VonageMessage)
-            ->clientReference((string) $notifiable->id)
+            ->clientReference((string) $notifiable->routes['vonage'])
             ->content($text);
     }
 
