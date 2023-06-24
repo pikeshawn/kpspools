@@ -15,7 +15,7 @@
                     {{ address[0].address_line_1 }}, {{ address[0].city }} {{ address[0].state }} {{ address[0].zip }}
                 </p>
                 <p v-show="address[0].community_gate_code" class="mt-6 text-lg leading-8 text-gray-300">
-                    Community Gate Code :: {{ address[0].community_gate_code }}
+                    {{ address[0].community_gate_code }}
                 </p>
             </div>
         </div>
