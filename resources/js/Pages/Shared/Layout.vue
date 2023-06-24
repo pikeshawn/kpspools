@@ -132,6 +132,7 @@
 <script>
 import { ref } from 'vue'
 import { Dialog, DialogOverlay, TransitionChild, TransitionRoot } from '@headlessui/vue'
+import { Link } from '@inertiajs/inertia-vue3'
 import {
     CalendarIcon,
     ChartBarIcon,
@@ -140,7 +141,7 @@ import {
     InboxIcon,
     MenuIcon,
     UsersIcon,
-    XIcon,
+    XIcon
 } from '@heroicons/vue/outline'
 
 const navigation = [
@@ -163,6 +164,7 @@ export default {
         TransitionRoot,
         MenuIcon,
         XIcon,
+        Link,
     },
     setup() {
         const sidebarOpen = ref(false)

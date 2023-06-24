@@ -1,11 +1,31 @@
 <template>
     <layout>
+
+        <Link
+            class="mb-2.5 inline-flex items-center px-6 py-3 border border-transparent
+            text-base font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700
+            focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+            :href="route('customers')">Customers
+        </Link>
+
+        <div class="bg-gray-900 px-6 py-24 sm:py-8 lg:px-8">
+            <div class="mx-auto max-w-2xl text-center">
+                <h2 class="text-4xl font-bold tracking-tight text-white sm:text-6xl">{{ customer.first_name }}
+                    {{ customer.last_name }}</h2>
+                <p class="mt-6 text-lg leading-8 text-gray-300">
+                    {{ address[0].address_line_1 }}, {{ address[0].city }} {{ address[0].state }} {{ address[0].zip }}
+                </p>
+                <p v-show="address[0].community_gate_code" class="mt-6 text-lg leading-8 text-gray-300">
+                    Community Gate Code :: {{ address[0].community_gate_code }}
+                </p>
+            </div>
+        </div>
+
+
         <div class="mt-10 sm:mt-0 mb-60">
             <div class="flex flex-col">
                 <div class="md:col-span-1">
                     <div class="px-4 sm:px-0 mb-3">
-                        <h1 class="text-lg font-medium leading-6 text-gray-900 mb-4 capitalize font-bold text-4xl">
-                            {{ customerName }}</h1>
                         <div>
                             <div class="col-span-1">
                                 <label for="service_type" class="block text-sm font-medium text-gray-700">Service
@@ -261,17 +281,22 @@ import Toggle from "../Shared/Toggle";
 import LoadingButton from "../Shared/LoadingButton";
 import {Inertia} from '@inertiajs/inertia'
 import {reactive} from 'vue'
+import {Link} from '@inertiajs/inertia-vue3'
 
 export default {
     name: "Create",
     components: {
         DropDown,
         LoadingButton,
+        Link,
         Layout,
         Toggle
     },
     props: {
-        customerName: String
+        customerId: String,
+        customer: String,
+        address: String,
+        customerName: String,
     },
     data() {
         return {

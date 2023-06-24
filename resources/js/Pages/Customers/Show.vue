@@ -1,5 +1,12 @@
 <template>
     <Layout>
+        <Link
+            class="mb-2.5 inline-flex items-center px-6 py-3 border border-transparent
+            text-base font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700
+            focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+            :href="route('customers')">Customers
+        </Link>
+
         <div class="bg-gray-900 px-6 py-24 sm:py-8 lg:px-8">
             <div class="mx-auto max-w-2xl text-center">
                 <h2 class="text-4xl font-bold tracking-tight text-white sm:text-6xl">{{ customer.first_name }}

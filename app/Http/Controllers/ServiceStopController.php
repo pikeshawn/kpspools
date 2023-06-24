@@ -128,8 +128,13 @@ class ServiceStopController extends Controller
      */
     public function create(Customer $customer): Response
     {
+        $address = DB::select('Select * from addresses where customer_id = '
+            . $customer->id);
+
         return Inertia::render('ServiceStops/Create', [
             'customerId' => $customer->id,
+            'customer' => $customer,
+            'address' => $address,
             'customerName' => $customer->last_name,
         ]);
     }

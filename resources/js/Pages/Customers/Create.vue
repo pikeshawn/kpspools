@@ -177,18 +177,18 @@ export default {
     data() {
         return {
             customer: {
-                firstName: "Jack",
-                lastName: "Mcrose",
-                address: "1234 gimp st",
-                city: "tempe",
-                zip: "85283",
+                firstName: "",
+                lastName: "",
+                address: "",
+                city: "",
+                zip: "",
                 serviceDay: "Friday",
                 planPrice: 100,
-                assignedServiceman: "shawn",
+                assignedServiceman: "Shawn",
                 chemsIncluded: 1,
-                gateCode: "1234",
-                phoneNumber: "12341234",
-                notes: "my notes"
+                gateCode: "",
+                phoneNumber: "",
+                notes: ""
             },
             chemsIncluded: [
                 { id: 'yes', title: 1 },
