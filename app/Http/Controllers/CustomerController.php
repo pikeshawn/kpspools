@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Address;
 use App\Models\Customer;
 use App\Models\GeneralNote;
 use App\Models\User;
@@ -43,10 +44,10 @@ class CustomerController extends Controller
     public function notes(Customer $customer): Response
     {
         $notes = DB::select('Select * from general_notes where customer_id = '
-            .$customer->id.' Order By updated_at DESC');
+            . $customer->id . ' Order By updated_at DESC');
 
         return Inertia::render('Customers/Notes', [
-            'customer_name' => $customer->first_name.' '.$customer->last_name,
+            'customer_name' => $customer->first_name . ' ' . $customer->last_name,
             'customer_id' => $customer->id,
             'notes' => $notes,
         ]);
@@ -56,7 +57,7 @@ class CustomerController extends Controller
     {
         return Inertia::render('Customers/NewNote', [
             'customer_id' => $customer->id,
-            'customer_name' => $customer->first_name.' '.$customer->last_name,
+            'customer_name' => $customer->first_name . ' ' . $customer->last_name,
         ]);
     }
 
@@ -88,7 +89,42 @@ class CustomerController extends Controller
      */
     public function store(Request $request)
     {
-        //
+
+        $c = Customer::firstOrCreate([
+            'phone_number' => $request->phoneNumber
+        ],
+            [
+                'user_id' => 2,
+                'last_name' => $request->lastName,
+                'first_name' => $request->firstName,
+                'type' => "Service",
+                'service_day' => $request->serviceDay,
+                'order' => 1000,
+                'plan_duration' => "Monthly",
+                'plan_price' => $request->planPrice,
+                'chemicals_included' => $request->chemsIncluded,
+                'assigned_serviceman' => $request->assignedServiceman,
+                'phone_number' => $request->phoneNumber
+            ]);
+
+        Address::firstOrCreate([
+            'customer_id' => $c->id
+        ],
+            [
+                'customer_id' => $c->id,
+                'address_line_1' => $request->address,
+                'address_line_2' => null,
+                'city' => $request->city,
+                'state' => "AZ",
+                'zip' => $request->zip,
+                'community_gate_code' => $request->gateCode,
+                'house_gate_has_lock' => 0,
+            ]);
+
+        // Redirect to a different page after the store operation
+        return Redirect::route('customers')
+            ->with('success', 'Data stored successfully');
+
     }
 
     /**
@@ -98,7 +134,19 @@ class CustomerController extends Controller
      */
     public function show(Customer $customer)
     {
-        //
+        $notes = DB::select('Select * from general_notes where customer_id = '
+            . $customer->id . ' Order By updated_at DESC');
+
+        $address = DB::select('Select * from addresses where customer_id = '
+            . $customer->id);
+
+
+
+        return Inertia::render('Customers/Show', [
+            'customer' => $customer,
+            'notes' => $notes,
+            'address' => $address
+        ]);
     }
 
     /**
@@ -122,7 +170,7 @@ class CustomerController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \App\Models\Customer  $customer
+     * @param \App\Models\Customer $customer
      */
     public function update(Request $request): RedirectResponse
     {
@@ -151,7 +199,7 @@ class CustomerController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Customer  $customer
+     * @param \App\Models\Customer $customer
      */
     public function destroy(GeneralNote $generalNote): RedirectResponse
     {

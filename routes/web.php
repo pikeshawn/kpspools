@@ -35,9 +35,17 @@ Route::middleware(['auth:sanctum', 'verified'])->get('/customers',
     [CustomerController::class, 'index'])
     ->name('customers');
 
-Route::middleware(['auth:sanctum', 'verified'])->get('/customers/add',
+Route::middleware(['auth:sanctum', 'verified'])->get('/customers/show/{customer}',
+    [CustomerController::class, 'show'])
+    ->name('customers.show');
+
+Route::middleware(['auth:sanctum', 'verified'])->get('/customers/create',
     [CustomerController::class, 'create'])
     ->name('customers.create');
+
+Route::middleware(['auth:sanctum', 'verified'])->post('/customers/store',
+    [CustomerController::class, 'store'])
+    ->name('customers.store');
 
 Route::middleware(['auth:sanctum', 'verified'])->get('/service_stops/{customer}',
     [ServiceStopController::class, 'index'])

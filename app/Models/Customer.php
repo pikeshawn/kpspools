@@ -15,6 +15,8 @@ class Customer extends Model
     use HasFactory;
     use Notifiable;
 
+    protected $guarded = [];
+
     public function addresses()
     {
         return $this->hasMany(\App\Models\Address::class);
