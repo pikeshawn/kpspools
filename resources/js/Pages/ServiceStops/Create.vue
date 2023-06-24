@@ -389,6 +389,7 @@ export default {
             id: null,
             acid: '0.0',
             backwash: false,
+            address: null,
             brush: true,
             chlorine_level: null,
             emptyBaskets: true,
@@ -488,7 +489,7 @@ export default {
 
     },
     mounted() {
-        this.form.id = this.$attrs.customerId
+        this.form.id = this.customerId
         if (localStorage.getItem('timeIn')) {
             this.form.timeIn = localStorage.getItem('timeIn')
         }

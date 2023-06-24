@@ -131,6 +131,8 @@ class ServiceStopController extends Controller
         $address = DB::select('Select * from addresses where customer_id = '
             . $customer->id);
 
+//        dd($customer->id);
+
         return Inertia::render('ServiceStops/Create', [
             'customerId' => $customer->id,
             'customer' => $customer,
@@ -158,7 +160,6 @@ class ServiceStopController extends Controller
      */
     public function store(Request $request): Response
     {
-//        dd($request->salt_level);
 
         $address = Address::select(['id'])->where('customer_id', '=', $request->id)->get()->first();
 
