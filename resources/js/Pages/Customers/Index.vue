@@ -41,7 +41,7 @@
             <button type="button"
                     class="-ml-px relative inline-flex items-center px-4 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:z-10 focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500"
                     @click="showRoute('saturday')"
-            >Satuday</button>
+            >Saturday</button>
             <button type="button"
                     class="-ml-px relative inline-flex items-center px-4 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:z-10 focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500"
                     @click="showRoute('all')"
@@ -100,6 +100,8 @@
                               method="get" as="button">
                             <h3 style="font-size: 1.4rem">{{ row[1] }}</h3>
                             <span v-if="user.id = 2">{{ row[6] }}</span>
+                            <br>
+                            <span v-if="user.id = 2">{{ row[7] }}</span>
                         </Link>
                     </div>
                 </div>
@@ -113,6 +115,8 @@
                               method="get" as="button">
                             <h3 style="font-size: 1.4rem">{{ row[1] }}</h3>
                             <span v-if="user.id = 2">{{ row[6] }}</span>
+                            <br>
+                            <span v-if="user.id = 2">{{ row[7] }}</span>
                         </Link>
                     </div>
                 </div>
@@ -126,6 +130,8 @@
                               method="get" as="button">
                             <h3 style="font-size: 1.4rem">{{ row[1] }}</h3>
                             <span v-if="user.id = 2">{{ row[6] }}</span>
+                            <br>
+                            <span v-if="user.id = 2">{{ row[7] }}</span>
                         </Link>
                     </div>
                 </div>
@@ -139,6 +145,8 @@
                               method="get" as="button">
                             <h3 style="font-size: 1.4rem">{{ row[1] }}</h3>
                             <span v-if="user.id = 2">{{ row[6] }}</span>
+                            <br>
+                            <span v-if="user.id = 2">{{ row[7] }}</span>
                         </Link>
                     </div>
                 </div>
@@ -152,6 +160,8 @@
                               method="get" as="button">
                             <h3 style="font-size: 1.4rem">{{ row[1] }}</h3>
                             <span v-if="user.id = 2">{{ row[6] }}</span>
+                            <br>
+                            <span v-if="user.id = 2">{{ row[7] }}</span>
                         </Link>
                     </div>
                 </div>
@@ -165,6 +175,8 @@
                               method="get" as="button">
                             <h3 style="font-size: 1.4rem">{{ row[1] }}</h3>
                             <span v-if="user.id = 2">{{ row[6] }}</span>
+                            <br>
+                            <span v-if="user.id = 2">{{ row[7] }}</span>
                         </Link>
                     </div>
                 </div>
@@ -225,6 +237,10 @@ export default {
                 {
                     name: 'Assigned Serviceman',
                     key: 'assigned_serviceman',
+                },
+                {
+                    name: 'Phone Number',
+                    key: 'phone_number',
                 }
             ],
             valueObjectArray: []
@@ -320,6 +336,8 @@ export default {
                         nArray.push(this.customers[i]['completed'])
                     } else if (this.customer_headers[j].key === "assigned_serviceman") {
                         nArray.push(this.customers[i]['assigned_serviceman'])
+                    } else if (this.customer_headers[j].key === "phone_number") {
+                        nArray.push(this.customers[i]['phone_number'])
                     } else {
                         nArray.push(this.customers[i][this.customer_headers[j].key])
                     }

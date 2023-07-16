@@ -23,17 +23,9 @@ class CustomerController extends Controller
         $customers = '';
 
         if (User::isAdmin()) {
-//            dd("ALL");
-
             $customers = Customer::allCustomers();
-
-//            dd($customers);
         } else {
-//            dd("Pool Guy");
-
             $customers = Customer::allCustomersTiedToUser();
-
-//            dd($customers);
         }
 
         return Inertia::render('Customers/Index', [
