@@ -17,6 +17,11 @@
                 <p v-show="address[0].community_gate_code" class="mt-6 text-lg leading-8 text-gray-300">
                     {{ address[0].community_gate_code }}
                 </p>
+                <div v-if="user.id = 2">
+                    <p class="mt-6 text-lg leading-8 text-gray-300">
+                        {{ customer.phone_number }}
+                    </p>
+                </div>
             </div>
         </div>
 
@@ -105,7 +110,8 @@ export default {
     props: {
         customer: String,
         notes: String,
-        address: String
+        address: String,
+        user: String
     }
 }
 
