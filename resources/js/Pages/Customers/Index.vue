@@ -99,6 +99,7 @@
                               style="border: solid thin black; width: -webkit-fill-available;"
                               method="get" as="button">
                             <h3 style="font-size: 1.4rem">{{ row[1] }}</h3>
+                            <span v-if="user.id = 2">{{ row[6] }}</span>
                         </Link>
                     </div>
                 </div>
@@ -111,6 +112,7 @@
                               style="border: solid thin black; width: -webkit-fill-available;"
                               method="get" as="button">
                             <h3 style="font-size: 1.4rem">{{ row[1] }}</h3>
+                            <span v-if="user.id = 2">{{ row[6] }}</span>
                         </Link>
                     </div>
                 </div>
@@ -123,6 +125,7 @@
                               style="border: solid thin black; width: -webkit-fill-available;"
                               method="get" as="button">
                             <h3 style="font-size: 1.4rem">{{ row[1] }}</h3>
+                            <span v-if="user.id = 2">{{ row[6] }}</span>
                         </Link>
                     </div>
                 </div>
@@ -135,6 +138,7 @@
                               style="border: solid thin black; width: -webkit-fill-available;"
                               method="get" as="button">
                             <h3 style="font-size: 1.4rem">{{ row[1] }}</h3>
+                            <span v-if="user.id = 2">{{ row[6] }}</span>
                         </Link>
                     </div>
                 </div>
@@ -147,6 +151,7 @@
                               style="border: solid thin black; width: -webkit-fill-available;"
                               method="get" as="button">
                             <h3 style="font-size: 1.4rem">{{ row[1] }}</h3>
+                            <span v-if="user.id = 2">{{ row[6] }}</span>
                         </Link>
                     </div>
                 </div>
@@ -159,6 +164,7 @@
                               style="border: solid thin black; width: -webkit-fill-available;"
                               method="get" as="button">
                             <h3 style="font-size: 1.4rem">{{ row[1] }}</h3>
+                            <span v-if="user.id = 2">{{ row[6] }}</span>
                         </Link>
                     </div>
                 </div>

@@ -17,7 +17,8 @@ mix.js('resources/js/app.js', 'public/js').vue()
         require('tailwindcss'),
     ])
     .browserSync('localhost:7000')
-    .webpackConfig(require('./webpack.config'));
+    .webpackConfig(require('./webpack.config'))
+    .disableNotifications();
 
 if (mix.inProduction()) {
     mix.version();
