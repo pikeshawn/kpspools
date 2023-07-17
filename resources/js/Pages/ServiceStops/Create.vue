@@ -69,11 +69,26 @@
                                     <div class="flex flex-col">
                                         <label for="timeOut">Time Out</label>
                                         <input
+                                            id="timeOut"
                                             type="datetime-local" v-model="form.timeOut">
                                         <div class="mt-2" v-if="form.timeOut">{{ saveTimeOut }}</div>
                                     </div>
 
-                                    <div>
+
+                                    <div class="flex flex-col">
+                                        <label for="checkedChems">Checked Chems</label>
+                                        <Switch
+                                            @click="form.checkedChems = !form.checkedChems"
+                                            id="checkedChems" v-model="form.checkedChems"
+                                            :class="[form.checkedChems ? 'bg-indigo-600' : 'bg-gray-200', 'relative inline-flex flex-shrink-0 h-6 w-11 border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500']">
+                                            <span class="sr-only">Use setting</span>
+                                            <span aria-hidden="true"
+                                                  :class="[form.checkedChems ? 'translate-x-5' : 'translate-x-0', 'pointer-events-none inline-block h-5 w-5 rounded-full bg-white shadow transform ring-0 transition ease-in-out duration-200']"/>
+                                        </Switch>
+                                        <div class="mt-2">{{ form.checkedChems }}</div>
+                                    </div>
+
+                                    <div v-show="form.checkedChems">
                                         <div class="col-span-1">
                                             <label for="chlorine" class="block text-sm font-medium text-gray-700">Chlorine</label>
                                             <select id="chlorine" name="chlorine"
@@ -88,7 +103,9 @@
                                         </div>
                                     </div>
 
-                                    <div>
+                                    <div></div>
+
+                                    <div v-show="form.checkedChems">
                                         <div class="col-span-1">
                                             <label for="pH" class="block text-sm font-medium text-gray-700">pH</label>
                                             <select id="pH" name="pH"
@@ -199,7 +216,7 @@
                                     </div>
 
                                     <div class="flex flex-col">
-                                        <label for="toggle">Empty Baskets</label>
+                                        <label for="emptyBaskets">Empty Baskets</label>
                                         <Switch
                                             @click="form.emptyBaskets = !form.emptyBaskets"
                                             id="emptyBaskets" v-model="form.emptyBaskets"
@@ -212,7 +229,7 @@
                                     </div>
 
                                     <div class="flex flex-col">
-                                        <label for="toggle">Vacuum</label>
+                                        <label for="vacuum">Vacuum</label>
                                         <Switch
                                             @click="form.vacuum = !form.vacuum"
                                             id="vacuum" v-model="form.vacuum"
@@ -225,7 +242,7 @@
                                     </div>
 
                                     <div class="flex flex-col">
-                                        <label for="toggle">Brush</label>
+                                        <label for="brush">Brush</label>
                                         <Switch
                                             @click="form.brush = !form.brush"
                                             id="brush" v-model="form.brush"
@@ -238,7 +255,7 @@
                                     </div>
 
                                     <div class="flex flex-col">
-                                        <label for="toggle">Backwash</label>
+                                        <label for="backwash">Backwash</label>
                                         <Switch
                                             @click="form.backwash = !form.backwash"
                                             id="backwash" v-model="form.backwash"
@@ -398,6 +415,7 @@ export default {
             address: null,
             brush: true,
             chlorine_level: null,
+            checkedChems: true,
             emptyBaskets: true,
             liquidChlorine: '0.0',
             notes: null,
@@ -422,6 +440,7 @@ export default {
             backwash: false,
             brush: true,
             chlorine_level: null,
+            checkedChems: true,
             emptyBaskets: true,
             liquidChlorine: '0.0',
             notes: null,
@@ -461,30 +480,41 @@ export default {
                 errors.timeOut = false
             }
 
-            if (form.ph_level === null) {
-                errors.tiph_levelmeOut = true
-            } else {
-                errors.ph_level = false
-            }
+            if (form.checkedChems) {
+                if (form.ph_level === null) {
+                    errors.ph_level = true
+                } else {
+                    errors.ph_level = false
+                }
 
-            if (form.chlorine_level === null) {
-                errors.chlorine_level = true
-            } else {
-                errors.chlorine_level = false
+                if (form.chlorine_level === null) {
+                    errors.chlorine_level = true
+                } else {
+                    errors.chlorine_level = false
+                }
             }
 
             if (form.vacuum === null) {
                 form.vacuum = false
             }
 
-            if (
-                form.timeIn
-                && form.timeOut
-                && form.ph_level
-                && form.chlorine_level
-            ) {
-                Inertia.post('/service_stops/store', form)
-            }
+           if (form.checkedChems){
+               if (
+                   form.timeIn
+                   && form.timeOut
+                   && form.ph_level
+                   && form.chlorine_level
+               ) {
+                   Inertia.post('/service_stops/store', form)
+               }
+           } else {
+               if (
+                   form.timeIn
+                   && form.timeOut
+               ) {
+                   Inertia.post('/service_stops/store', form)
+               }
+           }
 
             localStorage.removeItem("timeIn");
             localStorage.removeItem("timeOut");

@@ -171,6 +171,7 @@ class ServiceStopController extends Controller
             'address_id' => $address['id'],
             'ph_level' => $request->ph_level,
             'chlorine_level' => $request->chlorine_level,
+            'checked_chems' => $request->checkedChems,
             'tabs_whole_mine' => $request->tabsWholeMine,
             'tabs_crushed_mine' => $request->tabsCrushedMine,
             'tabs_whole_theirs' => $request->tabsWholeTheirs,
