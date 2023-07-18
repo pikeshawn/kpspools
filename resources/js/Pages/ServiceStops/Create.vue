@@ -75,7 +75,10 @@
                                     </div>
 
 
-                                    <div class="flex flex-col">
+                                    <div
+                                        v-if="form.service_type === 'Repair' ||
+                                              form.service_type === 'Intro'"
+                                        class="flex flex-col">
                                         <label for="checkedChems">Checked Chems</label>
                                         <Switch
                                             @click="form.checkedChems = !form.checkedChems"
@@ -88,8 +91,11 @@
                                         <div class="mt-2">{{ form.checkedChems }}</div>
                                     </div>
 
-                                    <div v-show="form.checkedChems">
-                                        <div class="col-span-1">
+                                    <div v-if="form.service_type === 'Repair' ||
+                                              form.service_type === 'Intro'">
+                                        <div
+                                            v-if="form.checkedChems"
+                                            class="col-span-1">
                                             <label for="chlorine" class="block text-sm font-medium text-gray-700">Chlorine</label>
                                             <select id="chlorine" name="chlorine"
                                                     v-model="form.chlorine_level"
@@ -101,12 +107,10 @@
                                             </select>
                                             <div class="mt-2" v-if="form.chlorine_level">{{ form.chlorine_level }}</div>
                                         </div>
-                                    </div>
 
-                                    <div></div>
+                                        <div v-if="form.checkedChems" ></div>
 
-                                    <div v-show="form.checkedChems">
-                                        <div class="col-span-1">
+                                        <div v-if="form.checkedChems" class="col-span-1">
                                             <label for="pH" class="block text-sm font-medium text-gray-700">pH</label>
                                             <select id="pH" name="pH"
                                                     v-model="form.ph_level"
@@ -117,6 +121,37 @@
                                             </select>
                                             <div class="mt-2" v-if="form.ph_level">{{ form.ph_level }}</div>
                                         </div>
+                                    </div>
+
+                                    <div
+                                        v-if="form.service_type !== 'Repair' &&
+                                              form.service_type !== 'Intro'"
+                                        class="col-span-1">
+                                        <label for="chlorine"
+                                               class="block text-sm font-medium text-gray-700">Chlorine</label>
+                                        <select id="chlorine" name="chlorine"
+                                                v-model="form.chlorine_level"
+                                                class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                                            <option
+                                                v-for="option in [ '0.0', '1.0', '2.0', '3.0', '4.0', '5.0', '6.0', '7.0', '8.0', '9.0', '10.0', '10+']">
+                                                {{ option }}
+                                            </option>
+                                        </select>
+                                        <div class="mt-2" v-if="form.chlorine_level">{{ form.chlorine_level }}</div>
+                                    </div>
+                                    <div
+                                        v-if="form.service_type !== 'Repair' &&
+                                              form.service_type !== 'Intro'"
+                                        class="col-span-1">
+                                        <label for="pH" class="block text-sm font-medium text-gray-700">pH</label>
+                                        <select id="pH" name="pH"
+                                                v-model="form.ph_level"
+                                                class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                                            <option v-for="option in [ '7.0', '7.2', '7.4', '7.6', '7.8', '8.0' ]">
+                                                {{ option }}
+                                            </option>
+                                        </select>
+                                        <div class="mt-2" v-if="form.ph_level">{{ form.ph_level }}</div>
                                     </div>
 
                                     <div>
@@ -205,13 +240,18 @@
 
                                     <div>
                                         <div class="col-span-1">
-                                            <label for="powder_chlorine" class="block text-sm font-medium text-gray-700">Powder Chlorine</label>
+                                            <label for="powder_chlorine"
+                                                   class="block text-sm font-medium text-gray-700">Powder
+                                                Chlorine</label>
                                             <select id="powder_chlorine" name="powder_chlorine"
                                                     v-model="form.powder_chlorine"
                                                     class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
                                                 <option v-for="option in powderChlorineRange">{{ option }}</option>
                                             </select>
-                                            <div class="mt-2" v-if="form.powder_chlorine">{{ form.powder_chlorine }}</div>
+                                            <div class="mt-2" v-if="form.powder_chlorine">{{
+                                                    form.powder_chlorine
+                                                }}
+                                            </div>
                                         </div>
                                     </div>
 
@@ -498,23 +538,23 @@ export default {
                 form.vacuum = false
             }
 
-           if (form.checkedChems){
-               if (
-                   form.timeIn
-                   && form.timeOut
-                   && form.ph_level
-                   && form.chlorine_level
-               ) {
-                   Inertia.post('/service_stops/store', form)
-               }
-           } else {
-               if (
-                   form.timeIn
-                   && form.timeOut
-               ) {
-                   Inertia.post('/service_stops/store', form)
-               }
-           }
+            if (form.checkedChems) {
+                if (
+                    form.timeIn
+                    && form.timeOut
+                    && form.ph_level
+                    && form.chlorine_level
+                ) {
+                    Inertia.post('/service_stops/store', form)
+                }
+            } else {
+                if (
+                    form.timeIn
+                    && form.timeOut
+                ) {
+                    Inertia.post('/service_stops/store', form)
+                }
+            }
 
             localStorage.removeItem("timeIn");
             localStorage.removeItem("timeOut");
