@@ -114,6 +114,77 @@
                     <MenuIcon class="h-6 w-6" aria-hidden="true" />
                 </button>
             </div>
+            <header>
+                <Popover class="relative bg-white">
+                    <div class="flex justify-between items-center max-w-7xl mx-auto px-4 py-6 sm:px-6 md:justify-start md:space-x-10 lg:px-8">
+                        <div class="flex justify-start lg:w-0 lg:flex-1">
+                        </div>
+                        <div class="-mr-2 -my-2 md:hidden">
+                        </div>
+                        <div class="md:flex items-center justify-end md:flex-1 lg:w-0">
+                            <a href="/dashboard" v-if="$page.props.user" class="mr-3 whitespace-nowrap text-base font-medium text-gray-500 hover:text-gray-900">
+                                Dashboard
+                            </a>
+
+                            <a @click="logout()" v-if="$page.props.user" class="whitespace-nowrap text-base font-medium text-gray-500 hover:text-gray-900">
+                                Logout
+                            </a>
+
+                            <a v-else :href="route('login')" class="ml-8 whitespace-nowrap inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700">
+                                Sign in
+                            </a>
+                        </div>
+                        <br>
+                    </div>
+
+
+
+<!--                    <transition enter-active-class="duration-200 ease-out" enter-from-class="opacity-0 scale-95" enter-to-class="opacity-100 scale-100" leave-active-class="duration-100 ease-in" leave-from-class="opacity-100 scale-100" leave-to-class="opacity-0 scale-95">-->
+<!--                        <PopoverPanel focus class="absolute z-30 top-0 inset-x-0 p-2 transition transform origin-top-right md:hidden">-->
+<!--                            <div class="rounded-lg shadow-lg ring-1 ring-black ring-opacity-5 bg-white divide-y-2 divide-gray-50">-->
+<!--                                <div class="pt-5 pb-6 px-5">-->
+<!--                                    <div class="flex items-center justify-between">-->
+<!--                                        <div class="hidden md:flex items-center justify-end md:flex-1 lg:w-0">-->
+<!--                                            <a href="/dashboard" v-if="$page.props.user" class="mr-3 whitespace-nowrap text-base font-medium text-gray-500 hover:text-gray-900">-->
+<!--                                                Dashboard-->
+<!--                                            </a>-->
+
+<!--                                            <a @click="logout()" v-if="$page.props.user" class="whitespace-nowrap text-base font-medium text-gray-500 hover:text-gray-900">-->
+<!--                                                Logout-->
+<!--                                            </a>-->
+
+<!--                                            <a v-else :href="route('login')" class="ml-8 whitespace-nowrap inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700">-->
+<!--                                                Sign in-->
+<!--                                            </a>-->
+<!--                                        </div>-->
+<!--                                        <div>-->
+<!--                                            <img class="h-8 w-auto" src="https://tailwindui.com/img/logos/workflow-mark-purple-600-to-indigo-600.svg" alt="Workflow" />-->
+<!--                                        </div>-->
+<!--                                        <div class="-mr-2">-->
+<!--                                            <PopoverButton class="bg-white rounded-md p-2 inline-flex items-center justify-center text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500">-->
+<!--                                                <span class="sr-only">Close menu</span>-->
+<!--                                                <XIcon class="h-6 w-6" aria-hidden="true" />-->
+<!--                                            </PopoverButton>-->
+<!--                                        </div>-->
+<!--                                    </div>-->
+<!--                                    <div class="mt-6">-->
+<!--                                        <nav class="grid grid-cols-1 gap-7">-->
+<!--                                            <a v-for="item in solutions" :key="item.name" :href="item.href" class="-m-3 p-3 flex items-center rounded-lg hover:bg-gray-50">-->
+<!--                                                <div class="flex-shrink-0 flex items-center justify-center h-10 w-10 rounded-md bg-gradient-to-r from-purple-600 to-indigo-600 text-white">-->
+<!--                                                    <component :is="item.icon" class="h-6 w-6" aria-hidden="true" />-->
+<!--                                                </div>-->
+<!--                                                <div class="ml-4 text-base font-medium text-gray-900">-->
+<!--                                                    {{ item.name }}-->
+<!--                                                </div>-->
+<!--                                            </a>-->
+<!--                                        </nav>-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                        </PopoverPanel>-->
+<!--                    </transition>-->
+                </Popover>
+            </header>
             <main class="flex-1 relative z-0 overflow-y-auto focus:outline-none">
                 <div class="py-6">
                     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-12">
@@ -165,6 +236,11 @@ export default {
         MenuIcon,
         XIcon,
         Link,
+    },
+    methods: {
+        logout() {
+            this.$inertia.post(route('logout'));
+        },
     },
     setup() {
         const sidebarOpen = ref(false)
