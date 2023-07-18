@@ -157,15 +157,26 @@
                                         Great Service Great Price!
                                     </h2>
 
-                                    <p class="mt-4 text-lg text-gray-500">Introducing KPS Pools LLC., your trusted partner for all your pool needs! With 26 years of industry experience, we have been providing exceptional services and unparalleled expertise to our valued customers. Our longevity is a testament to our commitment to quality and customer satisfaction.</p>
+                                    <p class="mt-4 text-lg text-gray-500">For over 25 years, our company has been the
+                                        trusted name in the pool industry. With a legacy of excellence, we are committed
+                                        to providing exceptional service that goes above and beyond. Our team takes pride
+                                        in our super responsive customer service, ensuring that your questions and concerns
+                                        are addressed promptly and with care. From pumps to filters and everything in between,
+                                        our skilled technicians specialize in equipment repairs, ensuring that your pool
+                                        functions flawlessly. What sets us apart is our extensive network of professionals,
+                                        ready to assist you with any pool-related need. Whether it's pool remodeling,
+                                        water treatment, or regular maintenance, our strong connections guarantee that
+                                        you have access to the best solutions and expertise. Choose us as your pool
+                                        partner and experience the unmatched expertise, responsive service, and
+                                        comprehensive solutions that have made us an industry leader for over two decades.</p>
 
-                                    <p class="mt-4 text-lg text-gray-500">At KPS Pools LLC., we pride ourselves on delivering super responsive customer service. We understand the importance of addressing your concerns promptly, and our dedicated team is always ready to assist you. Whether you have a question, need guidance, or require urgent assistance, we are just a phone call away.</p>
+<!--                                    <p class="mt-4 text-lg text-gray-500">At KPS Pools LLC., we pride ourselves on delivering super responsive customer service. We understand the importance of addressing your concerns promptly, and our dedicated team is always ready to assist you. Whether you have a question, need guidance, or require urgent assistance, we are just a phone call away.</p>-->
 
-                                    <p class="mt-4 text-lg text-gray-500">In addition to our outstanding customer service, we specialize in equipment repairs. No matter the issue, our skilled technicians possess the knowledge and expertise to diagnose and fix any problem efficiently. From pumps and filters to heaters and automation systems, we've got you covered.</p>
+<!--                                    <p class="mt-4 text-lg text-gray-500">In addition to our outstanding customer service, we specialize in equipment repairs. No matter the issue, our skilled technicians possess the knowledge and expertise to diagnose and fix any problem efficiently. From pumps and filters to heaters and automation systems, we've got you covered.</p>-->
 
-                                    <p class="mt-4 text-lg text-gray-500">What sets us apart is our extensive network of professionals who can help you with all your pool needs. Whether you're looking for pool remodeling, water treatment solutions, or regular maintenance services, we have established strong connections with industry experts. Count on us to connect you with the right professionals who can ensure your pool remains in pristine condition year-round.</p>
+<!--                                    <p class="mt-4 text-lg text-gray-500">What sets us apart is our extensive network of professionals who can help you with all your pool needs. Whether you're looking for pool remodeling, water treatment solutions, or regular maintenance services, we have established strong connections with industry experts. Count on us to connect you with the right professionals who can ensure your pool remains in pristine condition year-round.</p>-->
 
-                                    <p class="mt-4 text-lg text-gray-500">Choose KPS Pools LLC. for unparalleled experience, exceptional customer service, comprehensive equipment repairs, and access to a vast network of pool professionals. Experience the difference of working with a company that prioritizes your satisfaction and understands your pool needs like no other. Contact us today to get started on transforming your pool into a true oasis of enjoyment and relaxation.</p>
+<!--                                    <p class="mt-4 text-lg text-gray-500">Choose KPS Pools LLC. for unparalleled experience, exceptional customer service, comprehensive equipment repairs, and access to a vast network of pool professionals. Experience the difference of working with a company that prioritizes your satisfaction and understands your pool needs like no other. Contact us today to get started on transforming your pool into a true oasis of enjoyment and relaxation.</p>-->
 <!--                                    <div class="mt-6">-->
 <!--                                        <a href="#" class="inline-flex px-4 py-2 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700">-->
 <!--                                            Get started today.-->
