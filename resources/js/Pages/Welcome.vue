@@ -17,7 +17,7 @@
 <template>
     <div class="bg-white">
         <header>
-            <Popover class="relative bg-white">
+            <Popover class="relative" style="background-color: black">
                 <div class="flex justify-between items-center max-w-7xl mx-auto px-4 py-6 sm:px-6 md:justify-start md:space-x-10 lg:px-8">
                     <div class="flex justify-start lg:w-0 lg:flex-1">
                         <a href="#">
@@ -28,8 +28,6 @@
                     <div class="-mr-2 -my-2 md:hidden">
                     </div>
                     <div class="hidden md:flex items-center justify-end md:flex-1 lg:w-0">
-
-
                         <a href="/dashboard" v-if="$page.props.user" class="whitespace-nowrap text-base font-medium text-gray-500 hover:text-gray-900">
                             Dashboard
                         </a>
@@ -38,8 +36,6 @@
                         </a>
                     </div>
                     <br>
-
-
                 </div>
 
 
@@ -127,107 +123,127 @@
 
         <main>
             <!-- Hero section -->
-            <div class="relative">
-                <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                    <div class="relative shadow-xl sm:rounded-2xl sm:overflow-hidden" style="height: 60rem; width: 83rem;">
-                        <div class="absolute inset-0">
-<!--                            src="https://images.unsplash.com/photo-1521737852567-6949f3f9f2b5?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=2830&q=80&sat=-100"-->
-                            <img class="h-full w-full object-cover"
-                                 src="img/IMG_0338.jpeg"
-                                 alt="Current Flyer" />
-                            <div class="absolute inset-0 bg-gradient-to-r mix-blend-multiply" />
-                        </div>
-                        <div class="relative px-4 py-16 sm:px-6 sm:py-24 lg:py-32 lg:px-8">
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-<!--            &lt;!&ndash; Alternating Feature Sections &ndash;&gt;-->
-<!--            <div class="relative pt-16 pb-32 overflow-hidden">-->
-<!--                <div aria-hidden="true" class="absolute inset-x-0 top-0 h-48 bg-gradient-to-b from-gray-100" />-->
-<!--                <div class="relative">-->
-<!--                    <div class="lg:mx-auto lg:max-w-7xl lg:px-8 lg:grid lg:grid-cols-2 lg:grid-flow-col-dense lg:gap-24">-->
-<!--                        <div class="px-4 max-w-xl mx-auto sm:px-6 lg:py-16 lg:max-w-none lg:mx-0 lg:px-0">-->
-<!--                            <div>-->
-<!--                                <div>-->
-<!--                  <span class="h-12 w-12 rounded-md flex items-center justify-center bg-gradient-to-r from-purple-600 to-indigo-600">-->
-<!--                    <InboxIcon class="h-6 w-6 text-white" aria-hidden="true" />-->
-<!--                  </span>-->
-<!--                                </div>-->
-<!--                                <div class="mt-6">-->
-<!--                                    <h2 class="text-3xl font-extrabold tracking-tight text-gray-900">-->
-<!--                                        Stay on top of customer support-->
-<!--                                    </h2>-->
-<!--                                    <p class="mt-4 text-lg text-gray-500">-->
-<!--                                        Semper curabitur ullamcorper posuere nunc sed. Ornare iaculis bibendum malesuada faucibus lacinia porttitor. Pulvinar laoreet sagittis viverra duis. In venenatis sem arcu pretium pharetra at. Lectus viverra dui tellus ornare pharetra.-->
-<!--                                    </p>-->
-<!--                                    <div class="mt-6">-->
-<!--                                        <a href="#" class="inline-flex px-4 py-2 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700">-->
-<!--                                            Get started-->
-<!--                                        </a>-->
-<!--                                    </div>-->
-<!--                                </div>-->
-<!--                            </div>-->
-<!--                            <div class="mt-8 border-t border-gray-200 pt-6">-->
-<!--                                <blockquote>-->
-<!--                                    <div>-->
-<!--                                        <p class="text-base text-gray-500">-->
-<!--                                            &ldquo;Cras velit quis eros eget rhoncus lacus ultrices sed diam. Sit orci risus aenean curabitur donec aliquet. Mi venenatis in euismod ut.&rdquo;-->
-<!--                                        </p>-->
-<!--                                    </div>-->
-<!--                                    <footer class="mt-3">-->
-<!--                                        <div class="flex items-center space-x-3">-->
-<!--                                            <div class="flex-shrink-0">-->
-<!--                                                <img class="h-6 w-6 rounded-full" src="https://images.unsplash.com/photo-1509783236416-c9ad59bae472?ixlib=rb-=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=8&w=1024&h=1024&q=80" alt="" />-->
-<!--                                            </div>-->
-<!--                                            <div class="text-base font-medium text-gray-700">-->
-<!--                                                Marcia Hill, Digital Marketing Manager-->
-<!--                                            </div>-->
-<!--                                        </div>-->
-<!--                                    </footer>-->
-<!--                                </blockquote>-->
-<!--                            </div>-->
+<!--            <div class="relative">-->
+<!--                <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">-->
+<!--                    <div class="relative shadow-xl sm:rounded-2xl sm:overflow-hidden" style="height: 60rem; width: 83rem;">-->
+<!--                        <div class="absolute inset-0">-->
+<!--&lt;!&ndash;                            src="https://images.unsplash.com/photo-1521737852567-6949f3f9f2b5?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=2830&q=80&sat=-100"&ndash;&gt;-->
+<!--                            <img class="h-full w-full object-cover"-->
+<!--                                 src="img/IMG_0338.jpeg"-->
+<!--                                 alt="Current Flyer" />-->
+<!--                            <div class="absolute inset-0 bg-gradient-to-r mix-blend-multiply" />-->
 <!--                        </div>-->
-<!--                        <div class="mt-12 sm:mt-16 lg:mt-0">-->
-<!--                            <div class="pl-4 -mr-48 sm:pl-6 md:-mr-16 lg:px-0 lg:m-0 lg:relative lg:h-full">-->
-<!--                                <img class="w-full rounded-xl shadow-xl ring-1 ring-black ring-opacity-5 lg:absolute lg:left-0 lg:h-full lg:w-auto lg:max-w-none" src="https://tailwindui.com/img/component-images/inbox-app-screenshot-1.jpg" alt="Inbox user interface" />-->
-<!--                            </div>-->
-<!--                        </div>-->
-<!--                    </div>-->
-<!--                </div>-->
-<!--                <div class="mt-24">-->
-<!--                    <div class="lg:mx-auto lg:max-w-7xl lg:px-8 lg:grid lg:grid-cols-2 lg:grid-flow-col-dense lg:gap-24">-->
-<!--                        <div class="px-4 max-w-xl mx-auto sm:px-6 lg:py-32 lg:max-w-none lg:mx-0 lg:px-0 lg:col-start-2">-->
-<!--                            <div>-->
-<!--                                <div>-->
-<!--                  <span class="h-12 w-12 rounded-md flex items-center justify-center bg-gradient-to-r from-purple-600 to-indigo-600">-->
-<!--                    <SparklesIcon class="h-6 w-6 text-white" aria-hidden="true" />-->
-<!--                  </span>-->
-<!--                                </div>-->
-<!--                                <div class="mt-6">-->
-<!--                                    <h2 class="text-3xl font-extrabold tracking-tight text-gray-900">-->
-<!--                                        Better understand your customers-->
-<!--                                    </h2>-->
-<!--                                    <p class="mt-4 text-lg text-gray-500">-->
-<!--                                        Semper curabitur ullamcorper posuere nunc sed. Ornare iaculis bibendum malesuada faucibus lacinia porttitor. Pulvinar laoreet sagittis viverra duis. In venenatis sem arcu pretium pharetra at. Lectus viverra dui tellus ornare pharetra.-->
-<!--                                    </p>-->
-<!--                                    <div class="mt-6">-->
-<!--                                        <a href="#" class="inline-flex px-4 py-2 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700">-->
-<!--                                            Get started-->
-<!--                                        </a>-->
-<!--                                    </div>-->
-<!--                                </div>-->
-<!--                            </div>-->
-<!--                        </div>-->
-<!--                        <div class="mt-12 sm:mt-16 lg:mt-0 lg:col-start-1">-->
-<!--                            <div class="pr-4 -ml-48 sm:pr-6 md:-ml-16 lg:px-0 lg:m-0 lg:relative lg:h-full">-->
-<!--                                <img class="w-full rounded-xl shadow-xl ring-1 ring-black ring-opacity-5 lg:absolute lg:right-0 lg:h-full lg:w-auto lg:max-w-none" src="https://tailwindui.com/img/component-images/inbox-app-screenshot-2.jpg" alt="Customer profile user interface" />-->
-<!--                            </div>-->
+<!--                        <div class="relative px-4 py-16 sm:px-6 sm:py-24 lg:py-32 lg:px-8">-->
 <!--                        </div>-->
 <!--                    </div>-->
 <!--                </div>-->
 <!--            </div>-->
+
+            <!-- Alternating Feature Sections -->
+            <div class="relative pt-16 pb-32 overflow-hidden">
+                <div aria-hidden="true" class="absolute inset-x-0 top-0 h-48 bg-gradient-to-b from-gray-100" />
+                <div class="relative">
+                    <div class="lg:mx-auto lg:max-w-7xl lg:px-8 lg:grid lg:grid-cols-2 lg:grid-flow-col-dense lg:gap-24">
+                        <div class="px-4 max-w-xl mx-auto sm:px-6 lg:py-16 lg:max-w-none lg:mx-0 lg:px-0">
+                            <div>
+                                <div>
+                                    <h2 class="text-3xl font-extrabold tracking-tight text-gray-900">
+                                        Starting at 100$ per month including chemicals
+                                    </h2>
+                                    <h2 class="text-3xl font-extrabold tracking-tight text-gray-900">
+                                        480-703-4902
+                                    </h2>
+                                </div>
+                                <div class="mt-6">
+                                    <h2 class="text-3xl font-extrabold tracking-tight text-gray-900">
+                                        Great Service Great Price!
+                                    </h2>
+
+                                    <p class="mt-4 text-lg text-gray-500">Introducing KPS Pools LLC., your trusted partner for all your pool needs! With 26 years of industry experience, we have been providing exceptional services and unparalleled expertise to our valued customers. Our longevity is a testament to our commitment to quality and customer satisfaction.</p>
+
+                                    <p class="mt-4 text-lg text-gray-500">At KPS Pools LLC., we pride ourselves on delivering super responsive customer service. We understand the importance of addressing your concerns promptly, and our dedicated team is always ready to assist you. Whether you have a question, need guidance, or require urgent assistance, we are just a phone call away.</p>
+
+                                    <p class="mt-4 text-lg text-gray-500">In addition to our outstanding customer service, we specialize in equipment repairs. No matter the issue, our skilled technicians possess the knowledge and expertise to diagnose and fix any problem efficiently. From pumps and filters to heaters and automation systems, we've got you covered.</p>
+
+                                    <p class="mt-4 text-lg text-gray-500">What sets us apart is our extensive network of professionals who can help you with all your pool needs. Whether you're looking for pool remodeling, water treatment solutions, or regular maintenance services, we have established strong connections with industry experts. Count on us to connect you with the right professionals who can ensure your pool remains in pristine condition year-round.</p>
+
+                                    <p class="mt-4 text-lg text-gray-500">Choose KPS Pools LLC. for unparalleled experience, exceptional customer service, comprehensive equipment repairs, and access to a vast network of pool professionals. Experience the difference of working with a company that prioritizes your satisfaction and understands your pool needs like no other. Contact us today to get started on transforming your pool into a true oasis of enjoyment and relaxation.</p>
+<!--                                    <div class="mt-6">-->
+<!--                                        <a href="#" class="inline-flex px-4 py-2 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700">-->
+<!--                                            Get started today.-->
+<!--                                        </a>-->
+<!--                                    </div>-->
+                                </div>
+                            </div>
+                            <div class="mt-8 border-t border-gray-200 pt-6">
+                                <blockquote>
+                                    <div>
+                                        <p class="text-base text-gray-500">
+                                            I take pride in building and providing the best possible experience for our customers.
+                                            Our entire team strives to provide the utmost satisfaction in every service visit.
+                                        </p>
+                                    </div>
+                                    <footer class="mt-3">
+                                        <div class="flex items-center space-x-3">
+<!--                                            <div class="flex-shrink-0">-->
+<!--                                                <img class="h-6 w-6 rounded-full" src="https://images.unsplash.com/photo-1509783236416-c9ad59bae472?ixlib=rb-=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=8&w=1024&h=1024&q=80" alt="" />-->
+<!--                                            </div>-->
+                                            <div class="text-base font-medium text-gray-700">
+                                                Shawn Pike, Owner
+                                            </div>
+                                        </div>
+                                    </footer>
+                                </blockquote>
+                            </div>
+                        </div>
+                        <div class="mt-12 sm:mt-16 lg:mt-0">
+                            <div class="pl-4 -mr-48 sm:pl-6 md:-mr-16 lg:px-0 lg:m-0 lg:relative lg:h-full">
+                                <img class="w-full rounded-xl shadow-xl ring-1 ring-black ring-opacity-5 lg:absolute lg:left-0 lg:h-full lg:w-auto lg:max-w-none" src="img/IMG_6444.jpeg" alt="Inbox user interface" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-24">
+                    <div class="lg:mx-auto lg:max-w-7xl lg:px-8 lg:grid lg:grid-cols-2 lg:grid-flow-col-dense lg:gap-24">
+                        <div class="px-4 max-w-xl mx-auto sm:px-6 lg:py-32 lg:max-w-none lg:mx-0 lg:px-0 lg:col-start-2">
+                            <div>
+                                <div>
+                  <span class="h-12 w-12 rounded-md flex items-center justify-center bg-gradient-to-r from-purple-600 to-indigo-600">
+                    <SparklesIcon class="h-6 w-6 text-white" aria-hidden="true" />
+                  </span>
+                                </div>
+                                <div class="mt-6">
+                                    <h2 class="text-3xl font-extrabold tracking-tight text-gray-900">
+                                        Rest Easy With Responsive Service
+                                    </h2>
+                                    <p class="mt-4 text-lg text-gray-500">
+                                        Introducing our unparalleled responsive service that sets a new standard in
+                                        customer satisfaction! At our company, we take pride in delivering prompt and
+                                        reliable assistance to all our valued clients. With our lightning-fast response
+                                        time, you can expect a text message reply within a remarkable 15 minutes from the
+                                        moment you reach out to us. Our commitment to providing exceptional service is
+                                        further reinforced by our service guarantee. If, for any reason, you are not
+                                        completely satisfied with our service, we don't just stop there. We go the
+                                        extra mile by sending our dedicated expert back to your doorstep on the very
+                                        same day. Experience the epitome of customer care and let us exceed your
+                                        expectations every step of the way.
+                                    </p>
+<!--                                    <div class="mt-6">-->
+<!--                                        <a href="#" class="inline-flex px-4 py-2 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700">-->
+<!--                                            Get started-->
+<!--                                        </a>-->
+<!--                                    </div>-->
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mt-12 sm:mt-16 lg:mt-0 lg:col-start-1">
+                            <div class="pr-4 -ml-48 sm:pr-6 md:-ml-16 lg:px-0 lg:m-0 lg:relative lg:h-full">
+                                <img class="w-full rounded-xl shadow-xl ring-1 ring-black ring-opacity-5 lg:absolute lg:right-0 lg:h-full lg:w-auto lg:max-w-none" src="img/Charleston-Area-Public-Pools.png" alt="Customer profile user interface" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
 <!--            &lt;!&ndash; Gradient Feature Section &ndash;&gt;-->
 <!--            <div class="bg-gradient-to-r from-purple-800 to-indigo-700">-->
