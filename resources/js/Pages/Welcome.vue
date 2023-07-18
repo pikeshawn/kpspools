@@ -25,9 +25,7 @@
                             <img class="w-auto w-2/5" src="/img/Original.png" alt="" />
                         </a>
                     </div>
-                    <div class="-mr-2 -my-2 md:hidden">
-                    </div>
-                    <div class="hidden md:flex items-center justify-end md:flex-1 lg:w-0">
+                    <div class=" md:flex items-center justify-end md:flex-1 lg:w-0">
                         <a href="/dashboard" v-if="$page.props.user" class="whitespace-nowrap text-base font-medium text-gray-500 hover:text-gray-900">
                             Dashboard
                         </a>
