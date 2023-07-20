@@ -7,6 +7,7 @@ use App\Models\Customer;
 use App\Models\ServiceStop;
 use App\Models\User;
 use App\Notifications\ServiceStopCompleted;
+use App\Notifications\OnMyWayNotification;
 use Carbon\Carbon;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -233,6 +234,14 @@ class ServiceStopController extends Controller
         return Inertia::render('Customers/Index', [
             'customers' => $customers,
         ]);
+    }
+
+    function sendText(Request $request): RedirectResponse
+    {
+        Notification::route('vonage', $request->customerPhoneNumber)
+            ->notify(new OnMyWayNotification($request->textMessage));
+
+        return Redirect::back()->with('success', 'Text Sent');
     }
 
     /**

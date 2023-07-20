@@ -67,6 +67,10 @@ Route::middleware(['auth:sanctum', 'verified'])->post('/service_stops/store',
     [ServiceStopController::class, 'store'])
     ->name('service_stops.store');
 
+Route::middleware(['auth:sanctum', 'verified'])->post('/service_stops/sendText',
+    [ServiceStopController::class, 'sendText'])
+    ->name('service_stops.sendText');
+
 Route::middleware(['auth:sanctum', 'verified'])->get('/ss/{serviceStop}',
     [ServiceStopController::class, 'edit'])
     ->name('service_stops.edit');
