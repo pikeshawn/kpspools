@@ -150,7 +150,8 @@ export default {
                 customerName: this.customer.first_name + " " + this.customer.last_name,
                 customerPhoneNumber: null,
                 textMessage: this.user.name + " at KPS Pools will be servicing your pool within 30 minutes.",
-                textDialog: false
+                textDialog: false,
+                userPhoneNumber: this.user.phone_number
             }
         }
     },

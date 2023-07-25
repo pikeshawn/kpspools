@@ -244,6 +244,11 @@ class ServiceStopController extends Controller
         Notification::route('vonage', '14806226441')
             ->notify(new OnMyWayNotification($request->textMessage, $request->customerName));
 
+//        dd($request->userPhoneNumber);
+
+        Notification::route('vonage', $request->userPhoneNumber)
+            ->notify(new OnMyWayNotification($request->textMessage, $request->customerName));
+
         return Redirect::back()->with('success', 'Text Sent');
     }
 
