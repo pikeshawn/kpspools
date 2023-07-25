@@ -15,15 +15,17 @@ class OnMyWayNotification extends Notification
     use Queueable;
 
     protected $textMessage;
+    protected $customerName;
 
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct($textMessage)
+    public function __construct($textMessage, $customerName = null)
     {
         $this->textMessage = $textMessage;
+        $this->customerName = $customerName;
     }
 
     /**
@@ -68,9 +70,17 @@ class OnMyWayNotification extends Notification
      */
     public function toVonage($notifiable): VonageMessage
     {
-        return (new VonageMessage)
-            ->clientReference((string) $notifiable->routes['vonage'])
-            ->content($this->textMessage);
+        if ($this->customerName) {
+            return (new VonageMessage)
+                ->clientReference((string) $notifiable->routes['vonage'])
+                ->content($this->textMessage . " sent to:: " . $this->customerName);
+        } else {
+            return (new VonageMessage)
+                ->clientReference((string) $notifiable->routes['vonage'])
+                ->content($this->textMessage);
+        }
+
+
     }
 
     public function correctValue($value)

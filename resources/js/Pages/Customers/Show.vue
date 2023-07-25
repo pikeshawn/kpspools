@@ -36,17 +36,17 @@
                 <label for="company-website" class="block text-sm font-medium leading-6 text-gray-900">On My Way Text
                     Message</label>
                 <div class="mt-2">
-                    <div
-                        class="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md">
-                        <input type="text" name="company-website" id="company-website"
-                               class="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
-                               v-model="textMessage.customerPhoneNumber"/>
-                    </div>
+                    <!--                    <div-->
+                    <!--                        class="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md">-->
+                    <!--                        <input type="text" name="company-website" id="company-website"-->
+                    <!--                               class="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"-->
+                    <!--                               v-model="textMessage.customerPhoneNumber"/>-->
+                    <!--                    </div>-->
                     <div
                         class="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md">
                         <textarea rows="5" type="text" name="company-website" id="company-website"
-                               class="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
-                               v-model="textMessage.textMessage"/>
+                                  class="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
+                                  v-model="textMessage.textMessage"/>
                     </div>
                     <button type="button" @click="textMessage.textDialog = !textMessage.textDialog" class="rounded-md bg-indigo-600 px-3.5 py-2.5
                 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline
@@ -141,10 +141,14 @@ export default {
         SimpleTable,
         Link
     },
+    mounted() {
+
+    },
     data() {
         return {
             textMessage: {
-                customerPhoneNumber: this.customer.phone_number,
+                customerName: this.customer.first_name + " " + this.customer.last_name,
+                customerPhoneNumber: null,
                 textMessage: this.user.name + " at KPS Pools will be servicing your pool within 30 minutes.",
                 textDialog: false
             }
@@ -158,6 +162,17 @@ export default {
     },
     methods: {
         onMyWay() {
+
+            if (this.customer.phone_number === '14807034902') {
+                this.textMessage.customerPhoneNumber = '14806226441';
+            } else if (this.customer.phone_number === '16238260681') {
+                this.textMessage.customerPhoneNumber = '15209097558';
+            } else if (this.customer.phone_number === '14803189416') {
+                this.textMessage.customerPhoneNumber = '14803189419';
+            } else if (this.customer.phone_number === '16023124131') {
+                this.textMessage.customerPhoneNumber = '16026167672';
+            }
+
             Inertia.post('/service_stops/sendText', this.textMessage)
             this.textMessage.textDialog = false
         }
