@@ -82,6 +82,8 @@ class CustomerController extends Controller
     public function store(Request $request)
     {
 
+//        dd($request->notes);
+
         $c = Customer::firstOrCreate([
             'phone_number' => $request->phoneNumber
         ],
@@ -112,6 +114,20 @@ class CustomerController extends Controller
                 'community_gate_code' => $request->gateCode,
                 'house_gate_has_lock' => 0,
             ]);
+
+        GeneralNote::firstOrCreate([
+            'customer_id' => $c->id
+        ],
+            [
+                'customer_id' => $c->id,
+                'note' => $request->notes
+            ]);
+
+//        $note = new GeneralNote();
+//        $note->save([
+//            'customer_id' => $c->id,
+//            'note' => $request->notes
+//        ]);
 
         // Redirect to a different page after the store operation
         return Redirect::route('customers')
