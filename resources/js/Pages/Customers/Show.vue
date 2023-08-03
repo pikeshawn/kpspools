@@ -172,6 +172,8 @@ export default {
                 this.textMessage.customerPhoneNumber = '14803189419';
             } else if (this.customer.phone_number === '16023124131') {
                 this.textMessage.customerPhoneNumber = '16026167672';
+            } else {
+                this.textMessage.customerPhoneNumber = this.customer.phone_number;
             }
 
             Inertia.post('/service_stops/sendText', this.textMessage)
