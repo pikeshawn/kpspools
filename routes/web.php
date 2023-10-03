@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\TaskController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\ServiceStopController;
 use App\Http\Controllers\SummaryController;
@@ -111,3 +112,8 @@ Route::middleware(['auth:sanctum', 'verified'])
     ->get('customers/{customer}/edit',
         [CustomerController::class, 'edit'])
     ->name('customers.edit');
+
+
+Route::middleware(['auth:sanctum', 'verified'])->get('/task/create/{customer}',
+    [TaskController::class, 'create'])
+    ->name('task.create');
