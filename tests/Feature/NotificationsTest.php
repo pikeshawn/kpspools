@@ -8,337 +8,256 @@ use App\Notifications\MassTextNotification;
 
 class NotificationsTest extends TestCase
 {
+
+//  vendor/bin/phpunit /Users/shawnpike/Documents/code/business/kpspools/tests/Feature/NotificationsTest.php
+
+
+//    public function test_sending_reminder_for_bill_payment()
+//    {
+//        $fp = @fopen("/Users/shawnpike/Documents/code/business/kpspools/scratch/Billing/2023/08_August/unpaid_test.csv", "r");
+//        if ($fp) {
+//            while (($buffer = fgets($fp, 4096)) !== false) {
+////                echo $buffer;
+//                $line = explode(',', $buffer);
+//                $first_name = $line[1];
+//                $last_name = $line[2];
+//                $phone = $line[3];
+//                $invoice_name = $line[4];
+//                $bid_price = $line[5];
+//                $invoice_date = $line[7];
+//                $signedUpStatus = $line[8];
+//                $link1 = $line[10];
+//                $link2 = $line[11];
+//                $link3 = $line[12];
+//
+//                $bid_price = $bid_price / 100;
+//
+//                if ($signedUpStatus == 'signed up') {
+//                    $message = "DO NOT REPLY\n============\nHello $first_name, You have an outstanding bill:\nInvoice Name::\n$invoice_name\n$$bid_price that was billed on $invoice_date. You can use one of the following links to access it:\n\n$link1\n\n$link2\n\n$link3\nPlease reach out to Shawn if you think that this is an error or you have any questions at 480-703-4902 or 480-622-6441.";
+//                } else {
+//                    $message = "DO NOT REPLY\n============\nHello $first_name, You have an outstanding bill:\nInvoice Name::\n$invoice_name\n$$bid_price that was billed on $invoice_date. You can use one of the following links to access it:\n\n$link1\n\n$link2\n\n$link3\nYou will be prompted to sign up for the application. Once signed up, you will be taken to the invoice where you can scroll down and pay.\n\nIf you are not taken to the invoice:\n1. Select Jobs at the bottom of the application.\n2. Select approved at the top of the page.\n3. Select the blue box to view the invoice.\n4. Select 'Pay with Credit Card' at the bottom of the invoice.\n5. Enter your credit card information to make payment.\n\nPlease reach out to Shawn if you think that this is an error or you have any questions: 480-703-4902 or 480-622-6441.";
+//                }
+//
+//                echo $message;
+//                $phone_numbers = [
+//                    $phone
+//                ];
+//                self::send($phone_numbers, $message);
+//            }
+//            if (!feof($fp)) {
+//                echo "Error: unexpected fgets() fail\n";
+//            }
+//            fclose($fp);
+//        }
+//    }
+
+
     public function test_I_can_send_a_notifications(): void
     {
-//        need an array of phone numbers
-//        $phone_numbers = [
-//            '16025712575',
-//            '14807218881'
-//        ];
-//
-//        $newDay = 'Monday';
-//        $newServiceman = 'Shawn';
-//
-//        $text = self::dayAndServiceManChangedMessage($newDay, $newServiceman);
-//        self::send($phone_numbers, $text);
-//
-//        $phone_numbers = [
-//            '16023178020'
-//        ];
-//
-//        $newDay = 'Thursday';
-//        $newServiceman = 'Jeremiah';
-//
-//        $text = self::dayAndServiceManChangedMessage($newDay, $newServiceman);
-//        self::send($phone_numbers, $text);
-//
-//        $phone_numbers = [
-//            '16026190260',
-//            '16026848562',
-//            '14805185755',
-//            '14803638650',
-//            '14803239753',
-//            '14806227728',
-//            '13232190361',
-//            '16023303918',
-//            '16022910108',
-//        ];
-//
-//        $newDay = 'Tuesday';
-//        $newServiceman = 'Jeremiah';
-//
-//        $text = self::dayAndServiceManChangedMessage($newDay, $newServiceman);
-//        self::send($phone_numbers, $text);
-//
-//
-//
-//        $phone_numbers = [
-//            '16027814453'
-//        ];
-//
-//        $newDay = 'Tuesday';
-//        $newServiceman = 'Reid';
-//
-//        $text = self::dayAndServiceManChangedMessage($newDay, $newServiceman);
-//        self::send($phone_numbers, $text);
-//
-//
-//        $phone_numbers = [
-//            '13525984401',
-//            '14808151946',
-//            '14803295034',
-//        ];
-//
-//        $newDay = 'Tuesday';
-//        $newServiceman = 'Zach';
-//
-//        $text = self::dayAndServiceManChangedMessage($newDay, $newServiceman);
-//        self::send($phone_numbers, $text);
-//
-//        $phone_numbers = [
-//            '14808265558',
-//        ];
-//
-//        $newDay = 'Wednesday';
-//        $newServiceman = 'Phillip';
-//
-//        $text = self::dayAndServiceManChangedMessage($newDay, $newServiceman);
-//        self::send($phone_numbers, $text);
-//
-//
-//        $phone_numbers = [
-//            '14808288842',
-//            '14806229250',
-//        ];
-//
-//        $newDay = 'Wednesday';
-//        $newServiceman = 'Shawn';
-//
-//        $text = self::dayAndServiceManChangedMessage($newDay, $newServiceman);
-//        self::send($phone_numbers, $text);
-
-
-//        $phone_numbers = [
-//            '17606966398',
-//            '14807108935',
-//            '17076885285',
-//            '19253393726',
-//        ];
-//
-//        $newDay = 'Monday';
-//        $currentServiceman = 'Shawn';
-//        $text = self::differentDaySameServiceman($newDay, $currentServiceman);
-//        self::send($phone_numbers, $text);
-//
-//        $phone_numbers = [
-//            '14802136170',
-//            '14803640757',
-//            '16027407511',
-//        ];
-//
-//        $newDay = 'Thursday';
-//        $currentServiceman = 'Shawn';
-//        $text = self::differentDaySameServiceman($newDay, $currentServiceman);
-//        self::send($phone_numbers, $text);
-//
-//        $phone_numbers = [
+////        need an array of phone numbers
+//        $elias = [
+////            '14807034902',
+//            '14803903453',
+//            '14802775844',
+//            '14802350377',
+//            '19172571156',
+//            '14809078827',
+//            '16023097094',
 //            '13856263351',
+//            '14806229250',
 //            '16029311133',
-//            '17205056477',
+//            '14802621782',
+//            '14802503797',
+//            '14805104899',
+//            '14803323065',
+//
 //        ];
 //
-//        $newDay = 'Wednesday';
-//        $currentServiceman = 'Shawn';
-//        $text = self::differentDaySameServiceman($newDay, $currentServiceman);
-//        self::send($phone_numbers, $text);
-//
-//
-//        $phone_numbers = [
-//            '14802397745',
-//            '14802023866',
-//        ];
-//
-//        $newDay = 'Wednesday';
-//        $currentServiceman = 'Zach';
-//        $text = self::differentDaySameServiceman($newDay, $currentServiceman);
-//        self::send($phone_numbers, $text);
+////
+//        $text = self::sameDayDifferentServiceman('Elias');
+//        self::send($elias, $text);
 
 
-//        $phone_numbers = [
-//            '14807034902'
-//        ];
-
-        $phone_numbers = [
-            '14802392801',
-            '12062351787',
-            '13019052465',
+        $jeremiah = [
+//            '14807034902',
+            '14807030971'
         ];
 
-        $currentDay = 'Thursday';
-        $newSrviceman = 'Jeremiah';
-        $text = self::sameDayDifferentServiceman($currentDay, $newSrviceman);
-        self::send($phone_numbers, $text);
+//
+        $text = self::welcomeToKPS('Friday', 'Jeremiah');
+        self::send($jeremiah, $text);
 
-
-        $phone_numbers = [
-            '14807487760',
-            '14806286607',
-            '15202372437',
-            '14806286607',
+        $jeremiah = [
+//            '14807034902',
+            '15072724813',
+            '16092732934'
         ];
 
-        $currentDay = 'Thursday';
-        $newSrviceman = 'Shawn';
-        $text = self::sameDayDifferentServiceman($currentDay, $newSrviceman);
-        self::send($phone_numbers, $text);
+//
+        $text = self::welcomeToKPS('Tuesday', 'Jeremiah');
+        self::send($jeremiah, $text);
 
-        $phone_numbers = [
-            '16023124131',
-            '16023326876',
-            '14807590483',
-            '14802169397',
-            '16027702667',
-            '19083776011',
-            '14802504998',
-        ];
-
-        $currentDay = 'Thursday';
-        $newSrviceman = 'Zach';
-        $text = self::sameDayDifferentServiceman($currentDay, $newSrviceman);
-        self::send($phone_numbers, $text);
-
-
-        $phone_numbers = [
-            '13202823677',
+        $jeremiah = [
+//            '14807034902',
             '14805676186',
-            '15202396063',
-            '16025410303',
-            '14802213315',
-            '16158610479',
-            '14803189416',
-            '14804178647',
+            '14805185755'
         ];
 
-        $currentDay = 'Tuesday';
-        $newSrviceman = 'Jeremiah';
-        $text = self::sameDayDifferentServiceman($currentDay, $newSrviceman);
-        self::send($phone_numbers, $text);
-
-
-
-        $phone_numbers = [
-            '14808618840',
-            '14802503797',
-            '16029205582',
-            '19102796068',
-            '18052081347',
-            '12145496564',
-        ];
-
-        $currentDay = 'Tuesday';
-        $newSrviceman = 'Reid';
-        $text = self::sameDayDifferentServiceman($currentDay, $newSrviceman);
-        self::send($phone_numbers, $text);
-
-
-        $phone_numbers = [
-            '14803351963',
-            '14805703770',
-            '14804140108',
-            '14806940020',
-            '14803295073',
-            '16023097094',
-            '14809078827',
-            '16029094785',
-            '14805708338',
-            '18083494052',
-            '14807038320',
-        ];
-
-        $currentDay = 'Tuesday';
-        $newSrviceman = 'Shawn';
-        $text = self::sameDayDifferentServiceman($currentDay, $newSrviceman);
-        self::send($phone_numbers, $text);
-
-
-
-        $phone_numbers = [
-            '14802159123',
-            '16238260681',
-            '14807200743',
-            '14808180166',
-            '14804343425',
-            '14805803711',
-            '13036693723',
-        ];
-
-        $currentDay = 'Tuesday';
-        $newSrviceman = 'Zach';
-        $text = self::sameDayDifferentServiceman($currentDay, $newSrviceman);
-        self::send($phone_numbers, $text);
-
-
-        $phone_numbers = [
-            '13136082806',
-            '14806657845',
-            '16503913212',
-            '15053013162',
-            '15204311877',
-        ];
-
-        $currentDay = 'Wednesday';
-        $newSrviceman = 'Phillip';
-        $text = self::sameDayDifferentServiceman($currentDay, $newSrviceman);
-        self::send($phone_numbers, $text);
-
-        $phone_numbers = [
-            '16026142226',
-            '14158064083',
-        ];
-
-        $currentDay = 'Wednesday';
-        $newSrviceman = 'Reid';
-        $text = self::sameDayDifferentServiceman($currentDay, $newSrviceman);
-        self::send($phone_numbers, $text);
-
-        $phone_numbers = [
-            '14802333873',
-        ];
-
-        $currentDay = 'Wednesday';
-        $newSrviceman = 'Zach';
-        $text = self::sameDayDifferentServiceman($currentDay, $newSrviceman);
-        self::send($phone_numbers, $text);
-
-        $phone_numbers = [
-            '16025706794'
-        ];
-
-        $currentDay = 'Tuesday';
-        $newSrviceman = 'Jeremiah';
-        $text = self::sameDayDifferentServiceman($currentDay, $newSrviceman);
-        self::send($phone_numbers, $text);
 //
+        $text = self::differentDaySameServiceman('Wednesday', 'Jeremiah');
+        self::send($jeremiah, $text);
+
+
+        $jeremiah = [
+//            '14807034902',
+            '14805866570'
+        ];
+
 //
-//        $message = "DO NOT REPLY::
-//        Please disregard the prior message. It was sent in error. The below message is the correct one:
-//        ============================
+        $text = self::welcomeToKPS('Thursday', 'Reid');
+        self::send($jeremiah, $text);
+
+        $jeremiah = [
+//            '14807034902',
+            '19176851795'
+        ];
+
 //
-//        Here at KPS Pools we have gone through some rapid expansion and are making adjustments to the route. Your pool will be serviced on Wednesdays and your serviceman will be Jeremiah next week and then Phillip after that. If you have any questions, then please reach out to Shawn at 480-703-4902. Thank you";
+        $text = self::welcomeToKPS('Friday', 'Shawn');
+        self::send($jeremiah, $text);
 
-//        $message = "DO NOT REPLY::
-//        Here at KPS Pools we need to make some adjustments to the route due to our expansion. Your pool will now be serviced by Shawn.
-//        Please reach out to Shawn if you have any questions. 480-703-4902";
+        $jeremiah = [
+//            '14807034902',
+            '14806125633'
+        ];
 
-//        $message = "DO NOT REPLY::
-//        Here at KPS Pools we need to make some adjustments to the route due to our expansion. Your pool will now be serviced on Tuesdays and Zach will continue to be your service technician.
-//        Please reach out to Shawn if you have any questions. 480-703-4902";
+//
+        $text = self::welcomeToKPS('Monday', 'Shawn');
+        self::send($jeremiah, $text);
 
-//        $message = "DO NOT REPLY::
-//        Welcome to KPS Pools. Your pool will be serviced on Tuesdays and your service technician will be Jeremiah.
-//        Please reach out to Shawn if you have any questions. 480-703-4902";
+        $jeremiah = [
+//            '14807034902',
+            '16023990191'
+        ];
 
-//        need to cycle through the numbers
-//        need to call the notifications and send a specific message
+//
+        $text = self::welcomeToKPS('Tuesday', 'Shawn');
+        self::send($jeremiah, $text);
+
+        $jeremiah = [
+//            '14807034902',
+            '16236926844'
+        ];
+
+//
+        $text = self::welcomeToKPS('Tuesday', 'Zach');
+        self::send($jeremiah, $text);
+
+//
+////
+//////        $phone_numbers = [
+//////            '16023199626'
+//////        ];
+////////
+//////        $newDay = 'Tuesday';
+//////        $newServiceman = 'Jeremiah';
+//////
+//////        $text = self::dayAndServiceManChangedMessage($newDay, $newServiceman);
+//////        self::send($phone_numbers, $text);
+//////
+//////        $phone_numbers = [
+//////            '14802961150'
+//////        ];
+////////
+//////        $newDay = 'Tuesday';
+//////        $newServiceman = 'Zach';
+//////
+//////        $text = self::dayAndServiceManChangedMessage($newDay, $newServiceman);
+//////        self::send($phone_numbers, $text);
+//////
+//////        $phone_numbers = [
+//////            '17208109650'
+//////        ];
+//////
+//////        $newDay = 'Monday';
+//////        $newServiceman = 'Jeremiah';
+//////
+//////        $text = self::welcomeToKPS($newDay, $newServiceman);
+//////        self::send($phone_numbers, $text);
+//////
+//////        $phone_numbers = [
+//////            '16023808900',
+//////            '14802256369'
+//////        ];
+//////
+//////        $newDay = 'Monday';
+//////        $newServiceman = 'Shawn';
+//////
+//////        $text = self::welcomeToKPS($newDay, $newServiceman);
+//////        self::send($phone_numbers, $text);
+//////
+//////        $phone_numbers = [
+//////            '14086238007'
+//////        ];
+//////
+//////        $newDay = 'Tuesday';
+//////        $newServiceman = 'Jeremiah';
+//////
+//////        $text = self::welcomeToKPS($newDay, $newServiceman);
+//////        self::send($phone_numbers, $text);
+//////
+//////        $phone_numbers = [
+//////            '15419104514'
+//////        ];
+//////
+//////        $newDay = 'Tuesday';
+//////        $newServiceman = 'Shawn';
+//////
+//////        $text = self::welcomeToKPS($newDay, $newServiceman);
+//////        self::send($phone_numbers, $text);
+//////
+//////        $phone_numbers = [
+//////            '14805703663'
+//////        ];
+//////
+//////        $newDay = 'Tuesday';
+//////        $newServiceman = 'Jeremiah';
+//////
+//////        $text = self::differentDaySameServiceman($newDay, $newServiceman);
+//////        self::send($phone_numbers, $text);
+    }
+
+
+    private function temporarySwitchDayMessage()
+    {
+//        return "Sorry for the late notice but Jeremiah has been working through some vehicle issues, so he will be servicing your pool tomorrow. Please reach out to Shawn if you have any questions at 480-703-4902 or 480-622-6441. Really apologize for the delay in cleaning your pool and we really appreciate your patience.";
+        return "DO NOT REPLY::\nSorry for the late notice but Zach was unable to get to your pool today, so Shawn will be servicing your pool tomorrow. Please reach out to Shawn if you have any questions at 480-703-4902 or 480-622-6441. Really apologize for the delay in cleaning your pool and we really appreciate your patience.";
+    }
+
+    private function welcomeToKPS($newDay, $newServiceman)
+    {
+        return "DO NOT REPLY::\nWelcome to KPS Pools. We appreciate you joining our family and giving us the opportunity to service your pool. $newServiceman will be servicing your pool on $newDay. Please reach out to Shawn if you have any questions 480-703-4902 or 480-622-6441.";
     }
 
     private function dayAndServiceManChangedMessage($newDay, $newServiceman)
     {
-        return "We appreciate your patience as we continue to grow. We have to change the day your pool is serviced and the service technician who will be servicing your pool. Your new day will be " . $newDay . " and your service technician will be " . $newServiceman . ". Please reach out to Shawn if you have any questions 480-703-4902 or 480-622-6441.";
+        return "DO NOT REPLY::\nWe appreciate your patience as we continue to grow. We have to change the day your pool is serviced and the service technician who will be servicing your pool. Your new day will be " . $newDay . " and your service technician will be " . $newServiceman . ". Please reach out to Shawn if you have any questions 480-703-4902 or 480-622-6441.";
     }
 
     private function differentDaySameServiceman($newDay, $currentServiceman)
     {
-        return "We appreciate your patience as we continue to grow. We have to change the day your pool is serviced but your service technician will remain the same. Your new day will be " . $newDay . ". Please reach out to Shawn if you have any questions 480-703-4902 or 480-622-6441.";
+        return "DO NOT REPLY::\nWe appreciate your patience as we continue to grow. We have to change the day your pool is serviced but your service technician will remain the same. Your new day will be " . $newDay . ". Please reach out to Shawn if you have any questions 480-703-4902 or 480-622-6441.";
     }
 
-    private function sameDayDifferentServiceman($currentDay, $newSrviceman)
+    private function sameDayDifferentServiceman($newServiceman)
     {
-        return "We appreciate your patience as we continue to grow. We have to change the service technician who will be servicing your pool. Your service technician will be " . $newSrviceman . ". Please reach out to Shawn if you have any questions 480-703-4902 or 480-622-6441.";
+        return "DO NOT REPLY::\nWe appreciate your patience as we continue to grow. We have to change the service technician who will be servicing your pool. Your new service technician will be " . $newServiceman . ". Please reach out to Shawn if you have any questions 480-703-4902 or 480-622-6441.";
     }
 
     private function send($phone_numbers, $message)
     {
+//        dd($phone_numbers[0]);
+
         foreach ($phone_numbers as $num) {
             Notification::route('vonage', $num)
                 ->notify(new MassTextNotification($message));
