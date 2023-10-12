@@ -52,180 +52,180 @@ class NotificationsTest extends TestCase
 //    }
 
 
-    public function test_I_can_send_a_notifications(): void
-    {
-////        need an array of phone numbers
-//        $elias = [
-////            '14807034902',
-//            '14803903453',
-//            '14802775844',
-//            '14802350377',
-//            '19172571156',
-//            '14809078827',
-//            '16023097094',
-//            '13856263351',
-//            '14806229250',
-//            '16029311133',
-//            '14802621782',
-//            '14802503797',
-//            '14805104899',
-//            '14803323065',
+//    public function test_I_can_send_a_notifications(): void
+//    {
+//////        need an array of phone numbers
+////        $elias = [
+//////            '14807034902',
+////            '14803903453',
+////            '14802775844',
+////            '14802350377',
+////            '19172571156',
+////            '14809078827',
+////            '16023097094',
+////            '13856263351',
+////            '14806229250',
+////            '16029311133',
+////            '14802621782',
+////            '14802503797',
+////            '14805104899',
+////            '14803323065',
+////
+////        ];
+////
+//////
+////        $text = self::sameDayDifferentServiceman('Elias');
+////        self::send($elias, $text);
 //
+//
+//        $jeremiah = [
+////            '14807034902',
+//            '14807030971'
 //        ];
 //
 ////
-//        $text = self::sameDayDifferentServiceman('Elias');
-//        self::send($elias, $text);
-
-
-        $jeremiah = [
-//            '14807034902',
-            '14807030971'
-        ];
-
+//        $text = self::welcomeToKPS('Friday', 'Jeremiah');
+//        self::send($jeremiah, $text);
 //
-        $text = self::welcomeToKPS('Friday', 'Jeremiah');
-        self::send($jeremiah, $text);
-
-        $jeremiah = [
-//            '14807034902',
-            '15072724813',
-            '16092732934'
-        ];
-
-//
-        $text = self::welcomeToKPS('Tuesday', 'Jeremiah');
-        self::send($jeremiah, $text);
-
-        $jeremiah = [
-//            '14807034902',
-            '14805676186',
-            '14805185755'
-        ];
-
-//
-        $text = self::differentDaySameServiceman('Wednesday', 'Jeremiah');
-        self::send($jeremiah, $text);
-
-
-        $jeremiah = [
-//            '14807034902',
-            '14805866570'
-        ];
-
-//
-        $text = self::welcomeToKPS('Thursday', 'Reid');
-        self::send($jeremiah, $text);
-
-        $jeremiah = [
-//            '14807034902',
-            '19176851795'
-        ];
-
-//
-        $text = self::welcomeToKPS('Friday', 'Shawn');
-        self::send($jeremiah, $text);
-
-        $jeremiah = [
-//            '14807034902',
-            '14806125633'
-        ];
-
-//
-        $text = self::welcomeToKPS('Monday', 'Shawn');
-        self::send($jeremiah, $text);
-
-        $jeremiah = [
-//            '14807034902',
-            '16023990191'
-        ];
-
-//
-        $text = self::welcomeToKPS('Tuesday', 'Shawn');
-        self::send($jeremiah, $text);
-
-        $jeremiah = [
-//            '14807034902',
-            '16236926844'
-        ];
-
-//
-        $text = self::welcomeToKPS('Tuesday', 'Zach');
-        self::send($jeremiah, $text);
-
+//        $jeremiah = [
+////            '14807034902',
+//            '15072724813',
+//            '16092732934'
+//        ];
 //
 ////
-//////        $phone_numbers = [
-//////            '16023199626'
-//////        ];
+//        $text = self::welcomeToKPS('Tuesday', 'Jeremiah');
+//        self::send($jeremiah, $text);
+//
+//        $jeremiah = [
+////            '14807034902',
+//            '14805676186',
+//            '14805185755'
+//        ];
+//
+////
+//        $text = self::differentDaySameServiceman('Wednesday', 'Jeremiah');
+//        self::send($jeremiah, $text);
+//
+//
+//        $jeremiah = [
+////            '14807034902',
+//            '14805866570'
+//        ];
+//
+////
+//        $text = self::welcomeToKPS('Thursday', 'Reid');
+//        self::send($jeremiah, $text);
+//
+//        $jeremiah = [
+////            '14807034902',
+//            '19176851795'
+//        ];
+//
+////
+//        $text = self::welcomeToKPS('Friday', 'Shawn');
+//        self::send($jeremiah, $text);
+//
+//        $jeremiah = [
+////            '14807034902',
+//            '14806125633'
+//        ];
+//
+////
+//        $text = self::welcomeToKPS('Monday', 'Shawn');
+//        self::send($jeremiah, $text);
+//
+//        $jeremiah = [
+////            '14807034902',
+//            '16023990191'
+//        ];
+//
+////
+//        $text = self::welcomeToKPS('Tuesday', 'Shawn');
+//        self::send($jeremiah, $text);
+//
+//        $jeremiah = [
+////            '14807034902',
+//            '16236926844'
+//        ];
+//
+////
+//        $text = self::welcomeToKPS('Tuesday', 'Zach');
+//        self::send($jeremiah, $text);
+//
+////
+//////
+////////        $phone_numbers = [
+////////            '16023199626'
+////////        ];
+//////////
+////////        $newDay = 'Tuesday';
+////////        $newServiceman = 'Jeremiah';
 ////////
-//////        $newDay = 'Tuesday';
-//////        $newServiceman = 'Jeremiah';
-//////
-//////        $text = self::dayAndServiceManChangedMessage($newDay, $newServiceman);
-//////        self::send($phone_numbers, $text);
-//////
-//////        $phone_numbers = [
-//////            '14802961150'
-//////        ];
+////////        $text = self::dayAndServiceManChangedMessage($newDay, $newServiceman);
+////////        self::send($phone_numbers, $text);
 ////////
-//////        $newDay = 'Tuesday';
-//////        $newServiceman = 'Zach';
-//////
-//////        $text = self::dayAndServiceManChangedMessage($newDay, $newServiceman);
-//////        self::send($phone_numbers, $text);
-//////
-//////        $phone_numbers = [
-//////            '17208109650'
-//////        ];
-//////
-//////        $newDay = 'Monday';
-//////        $newServiceman = 'Jeremiah';
-//////
-//////        $text = self::welcomeToKPS($newDay, $newServiceman);
-//////        self::send($phone_numbers, $text);
-//////
-//////        $phone_numbers = [
-//////            '16023808900',
-//////            '14802256369'
-//////        ];
-//////
-//////        $newDay = 'Monday';
-//////        $newServiceman = 'Shawn';
-//////
-//////        $text = self::welcomeToKPS($newDay, $newServiceman);
-//////        self::send($phone_numbers, $text);
-//////
-//////        $phone_numbers = [
-//////            '14086238007'
-//////        ];
-//////
-//////        $newDay = 'Tuesday';
-//////        $newServiceman = 'Jeremiah';
-//////
-//////        $text = self::welcomeToKPS($newDay, $newServiceman);
-//////        self::send($phone_numbers, $text);
-//////
-//////        $phone_numbers = [
-//////            '15419104514'
-//////        ];
-//////
-//////        $newDay = 'Tuesday';
-//////        $newServiceman = 'Shawn';
-//////
-//////        $text = self::welcomeToKPS($newDay, $newServiceman);
-//////        self::send($phone_numbers, $text);
-//////
-//////        $phone_numbers = [
-//////            '14805703663'
-//////        ];
-//////
-//////        $newDay = 'Tuesday';
-//////        $newServiceman = 'Jeremiah';
-//////
-//////        $text = self::differentDaySameServiceman($newDay, $newServiceman);
-//////        self::send($phone_numbers, $text);
-    }
+////////        $phone_numbers = [
+////////            '14802961150'
+////////        ];
+//////////
+////////        $newDay = 'Tuesday';
+////////        $newServiceman = 'Zach';
+////////
+////////        $text = self::dayAndServiceManChangedMessage($newDay, $newServiceman);
+////////        self::send($phone_numbers, $text);
+////////
+////////        $phone_numbers = [
+////////            '17208109650'
+////////        ];
+////////
+////////        $newDay = 'Monday';
+////////        $newServiceman = 'Jeremiah';
+////////
+////////        $text = self::welcomeToKPS($newDay, $newServiceman);
+////////        self::send($phone_numbers, $text);
+////////
+////////        $phone_numbers = [
+////////            '16023808900',
+////////            '14802256369'
+////////        ];
+////////
+////////        $newDay = 'Monday';
+////////        $newServiceman = 'Shawn';
+////////
+////////        $text = self::welcomeToKPS($newDay, $newServiceman);
+////////        self::send($phone_numbers, $text);
+////////
+////////        $phone_numbers = [
+////////            '14086238007'
+////////        ];
+////////
+////////        $newDay = 'Tuesday';
+////////        $newServiceman = 'Jeremiah';
+////////
+////////        $text = self::welcomeToKPS($newDay, $newServiceman);
+////////        self::send($phone_numbers, $text);
+////////
+////////        $phone_numbers = [
+////////            '15419104514'
+////////        ];
+////////
+////////        $newDay = 'Tuesday';
+////////        $newServiceman = 'Shawn';
+////////
+////////        $text = self::welcomeToKPS($newDay, $newServiceman);
+////////        self::send($phone_numbers, $text);
+////////
+////////        $phone_numbers = [
+////////            '14805703663'
+////////        ];
+////////
+////////        $newDay = 'Tuesday';
+////////        $newServiceman = 'Jeremiah';
+////////
+////////        $text = self::differentDaySameServiceman($newDay, $newServiceman);
+////////        self::send($phone_numbers, $text);
+//    }
 
 
     private function temporarySwitchDayMessage()
