@@ -117,3 +117,7 @@ Route::middleware(['auth:sanctum', 'verified'])
 Route::middleware(['auth:sanctum', 'verified'])->get('/task/create/{customer}',
     [TaskController::class, 'create'])
     ->name('task.create');
+
+Route::middleware(['auth:sanctum', 'verified'])->post('/task/store',
+    [TaskController::class, 'store'])
+    ->name('task.store');

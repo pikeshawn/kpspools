@@ -27,4 +27,25 @@ class TaskController extends Controller
             'customerName' => $customer->last_name,
         ]);
     }
+
+    public function store(Request $request): Response
+    {
+        dd($request);
+
+//      get all data
+
+//      add to db with first or create
+//        - add task to db
+//        - add latest status to task table
+//        - add status to status table
+
+//      process after data has been add to db
+//        - send notification for approval - if a part, repair, or above preapproval amount
+//          - can start as notification to contact shawn
+//          - future will have the customer go on the app
+//          - auto approval for items below a certain amount
+
+//      redirect back or to another page
+//        - redirect to customer page
+    }
 }
