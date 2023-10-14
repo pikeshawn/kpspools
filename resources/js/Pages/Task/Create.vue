@@ -83,7 +83,7 @@ export default {
     remember: 'form',
     setup() {
         const form = reactive({
-            cId: '',
+            customer_id: '',
             description: '',
             type: '',
             status: 'created',

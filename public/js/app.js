@@ -22122,7 +22122,7 @@ __webpack_require__.r(__webpack_exports__);
   remember: 'form',
   setup: function setup() {
     var form = (0,vue__WEBPACK_IMPORTED_MODULE_5__.reactive)({
-      cId: '',
+      customer_id: '',
       description: '',
       type: '',
       status: 'created'
