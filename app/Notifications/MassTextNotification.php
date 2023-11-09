@@ -23,7 +23,7 @@ class MassTextNotification extends Notification
      */
     public function __construct($textMessage)
     {
-        dd('text message constructor');
+//        dd('text message constructor');
 
         $this->textMessage = $textMessage;
     }
