@@ -6,6 +6,7 @@ use App\Models\Customer;
 use App\Models\Task;
 use App\Models\TaskStatus;
 use App\Notifications\TaskApprovalNotification;
+use Carbon\Carbon;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -13,6 +14,7 @@ use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
 use Inertia\Response;
 use Illuminate\Support\Facades\Notification;
+use function PHPUnit\Framework\isNull;
 
 class TaskController extends Controller
 {
@@ -38,19 +40,28 @@ class TaskController extends Controller
     {
 
 //      get all data
+//        dd($request);
 
 //      add to db with first or create
 //        - add task to db
         $task = self::createTask($request);
 
 //        - add status to status table
-        self::createTaskStatus($task);
+        self::addTaskStatus($task, 'created');
+//        if task has been verbally approved then add the approved status
+        if ($request->approval) {
+            self::addTaskStatus($task, 'approved');
+        }
 
 //      process after data has been add to db
 //        - send notification for approval - if a part, repair, or above preapproval amount
 //                - link will have to redirect to a page for customer to approve
 //                - need notification message to send
-        self::approveTask($task);
+
+//        send for approval if the task has not been verbally approved
+        if(!$request->approval){
+            self::sendforApproval($task);
+        }
 
 //          - can start as notification to contact shawn
 //          - future will have the customer go on the app
@@ -67,23 +78,44 @@ class TaskController extends Controller
             'customer_id' => $request->customer_id,
             'description' => $request->description,
             'type' => $request->type,
-            'status' => $request->status
+            'status' => 'created'
         ]);
     }
 
-    private function createTaskStatus($task)
+    private function addTaskStatus($task, $status, $statusDate = null)
     {
+        if (is_null($statusDate)) {
+            $date = Carbon::now();
+            $statusDate = $date->format('Y-m-d H:i:s');
+        }
         return TaskStatus::firstOrCreate([
             'task_id' => $task->id,
-            'status' => $task->status
+            'status' => $status,
+            'status_date' => $statusDate
         ]);
     }
 
-    private function approveTask($task)
+    private function sendforApproval($task)
     {
 //        send notification to customer if new part or repair
 //          - create new notification
-        Notification::route('vonage', '14807034902')
-            ->notify(new TaskApprovalNotification('approve this task'));
+        $repair = false;
+        $part = false;
+        $task->type == 'repair' ? $repair = true : $repair = false;
+        $task->type == 'part' ? $part = true : $part = false;
+
+        if ($repair) {
+            $message = "We wanted to notify you that your pool needs to have a repair done:: $task->description. Please text or call Shawn to approve or deny the task at 480-703-4902.";
+        }
+
+        if ($part) {
+            $message = "We wanted to notify you that your pool needs a part:: $task->description. Please text or call Shawn to approve or deny the part at 480-703-4902.";
+        }
+
+//        TODO:: change number to make this dynamic to the customer
+        if ($repair || $part) {
+            Notification::route('vonage', '14807034902')
+                ->notify(new TaskApprovalNotification($message));
+        }
     }
 }
