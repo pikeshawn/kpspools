@@ -194,7 +194,7 @@ class SummaryController extends Controller
             'powder_chlorine' => $request->powder_chlorine,
             'notes' => $request->notes,
             'service_type' => $request->service_type,
-            'serviceman_id' => Auth::user()->id,
+            'user_id' => Auth::user()->id,
         ]);
 
         $cust = Customer::find($request->id);

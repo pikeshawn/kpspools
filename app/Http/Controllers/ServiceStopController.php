@@ -190,7 +190,7 @@ class ServiceStopController extends Controller
             'notes' => $request->notes,
             'salt_level' => $request->salt_level,
             'service_type' => $request->service_type,
-            'serviceman_id' => Auth::user()->id,
+            'user_id' => Auth::user()->id,
         ]);
 
         $cust = Customer::find($request->id);
@@ -306,7 +306,7 @@ class ServiceStopController extends Controller
         $ss->time_in = $request->timeIn;
         $ss->brush = $request->brush;
         $ss->notes = $request->notes;
-        $ss->serviceman_id = $request->servicemanId;
+        $ss->user_id = $request->servicemanId;
         $ss->service_type = $request->service_type;
         $ss->save();
 

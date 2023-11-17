@@ -33,10 +33,9 @@ return new class extends Migration
             $table->boolean('backwash')->default(true);
             $table->float('powder_chlorine');
             $table->longText('notes')->nullable();
-            $table->integer('serviceman_id');
+            $table->integer('user_id');
             $table->string('service_type');
             $table->string('salt_level');
-            $table->boolean('checked_chems');
         });
     }
 
