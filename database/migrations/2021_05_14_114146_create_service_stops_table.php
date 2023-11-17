@@ -36,6 +36,7 @@ return new class extends Migration
             $table->integer('serviceman_id');
             $table->string('service_type');
             $table->string('salt_level');
+            $table->boolean('checked_chems');
         });
     }
 

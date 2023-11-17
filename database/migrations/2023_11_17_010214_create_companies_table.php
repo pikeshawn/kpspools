@@ -11,14 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('tasks', function (Blueprint $table) {
+        Schema::create('companies', function (Blueprint $table) {
             $table->id();
-            $table->integer('assigned')->nullable();
-            $table->integer('customer_id');
-            $table->string('description');
-            $table->integer('scp_id');
-            $table->string('status');
-            $table->string('type');
+            $table->string('name');
             $table->timestamps();
         });
     }
@@ -28,6 +23,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('taska');
+        Schema::dropIfExists('companies');
     }
 };
