@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 
 class Customer extends Model
 {
@@ -16,6 +17,16 @@ class Customer extends Model
     use Notifiable;
 
     protected $guarded = [];
+
+    public function tasks()
+    {
+        return $this->hasMany(Task::class);
+    }
+
+    public function taskStatuses(): HasManyThrough
+    {
+        return $this->hasManyThrough(TaskStatus::class, Task::class);
+    }
 
     public function addresses()
     {

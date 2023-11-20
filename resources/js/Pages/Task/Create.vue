@@ -64,7 +64,7 @@
         <div class="mt-6 flex items-center justify-end gap-x-6">
             <button type="button" class="text-sm font-semibold leading-6 text-gray-900">Cancel</button>
             <button type="submit"
-                    @click="store(customerId)"
+                    @click="store(customerId, user.id)"
                     class="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
                 Save
             </button>
@@ -111,8 +111,9 @@ export default {
             status: 'created',
         })
         const errors = reactive({})
-        function store(customerId) {
+        function store(customerId, userId) {
             this.form.customer_id = customerId
+            this.form.assigned = userId
             Inertia.post('/task/store', form)
         }
 

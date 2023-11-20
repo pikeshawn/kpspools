@@ -31,10 +31,10 @@ class TaskController extends Controller
 
         if (User::isAdmin()) {
 //            dd('isAdmin');
-            $tasks = Task::allTasks();
+            $tasks = Task::allIncompleteTasks();
         } else {
 //            dd('isNotAdmin');
-            $tasks = Task::allTasksTiedToUser();
+            $tasks = Task::allIncompleteTasksByNonAdminPoolGuy();
         }
 
 //        return $tasks;
