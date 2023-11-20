@@ -113,6 +113,7 @@ Route::middleware(['auth:sanctum', 'verified'])
         [CustomerController::class, 'edit'])
     ->name('customers.edit');
 
+// Tasks
 Route::middleware(['auth:sanctum', 'verified'])->get('/task/create/{customer}',
     [TaskController::class, 'create'])
     ->name('task.create');
@@ -120,3 +121,7 @@ Route::middleware(['auth:sanctum', 'verified'])->get('/task/create/{customer}',
 Route::middleware(['auth:sanctum', 'verified'])->post('/task/store',
     [TaskController::class, 'store'])
     ->name('task.store');
+
+Route::middleware(['auth:sanctum', 'verified'])->get('/tasks',
+    [TaskController::class, 'index'])
+    ->name('tasks');
