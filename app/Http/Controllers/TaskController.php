@@ -4,11 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Models\Customer;
 use App\Models\Task;
+use App\Models\User;
 use App\Models\TaskStatus;
 use App\Notifications\TaskApprovalNotification;
 use Carbon\Carbon;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
@@ -18,6 +20,31 @@ use function PHPUnit\Framework\isNull;
 
 class TaskController extends Controller
 {
+
+
+    public function index()
+    {
+
+//        dd(Auth::user());
+
+//        dd(User::isAdmin());
+
+        if (User::isAdmin()) {
+//            dd('isAdmin');
+            $tasks = Task::allTasks();
+        } else {
+//            dd('isNotAdmin');
+            $tasks = Task::allTasksTiedToUser();
+        }
+
+//        return $tasks;
+
+        return Inertia::render('Task/Index', [
+            'tasks' => $tasks,
+        ]);
+    }
+
+
     //
     /**
      * Show the form for creating a new resource.
@@ -47,10 +74,11 @@ class TaskController extends Controller
         $task = self::createTask($request);
 
 //        - add status to status table
-        self::addTaskStatus($task, 'created');
+        self::addTaskStatus($task, 'created', );
 //        if task has been verbally approved then add the approved status
         if ($request->approval) {
-            self::addTaskStatus($task, 'approved');
+            self::addTaskStatus($task, 'approved', $request->approvedDate);
+            self::addApprovedStatusToTaskTable($task);
         }
 
 //      process after data has been add to db
@@ -72,11 +100,18 @@ class TaskController extends Controller
         return Inertia::render('ServiceStops/Index', []);
     }
 
+    private function addApprovedStatusToTaskTable($task)
+    {
+        $task->status = 'approved';
+        $task->save();
+    }
+
     private function createTask(Request $request)
     {
         return Task::firstOrCreate([
             'customer_id' => $request->customer_id,
             'description' => $request->description,
+            'assigned' => $request->assigned,
             'type' => $request->type,
             'status' => 'created'
         ]);
