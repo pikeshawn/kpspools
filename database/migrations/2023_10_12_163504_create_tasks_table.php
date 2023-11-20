@@ -16,7 +16,7 @@ return new class extends Migration
             $table->integer('assigned')->nullable();
             $table->integer('customer_id');
             $table->string('description');
-            $table->integer('scp_id');
+            $table->integer('scp_id')->nullable();
             $table->string('status');
             $table->string('type');
             $table->timestamps();

@@ -14,6 +14,11 @@ class Address extends Model
 
     public function customer()
     {
-        return $this->belongsTo('App\Customer');
+        return $this->belongsTo(Customer::class);
+    }
+
+    public function serviceStops()
+    {
+        return $this->hasMany(ServiceStop::class);
     }
 }

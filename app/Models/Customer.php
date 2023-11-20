@@ -19,7 +19,17 @@ class Customer extends Model
 
     public function addresses()
     {
-        return $this->hasMany(\App\Models\Address::class);
+        return $this->hasMany(Address::class);
+    }
+
+    public function User()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function serviceStops()
+    {
+        return $this->hasMany(ServiceStop::class);
     }
 
     public function routeNotificationForNexmo($notification)

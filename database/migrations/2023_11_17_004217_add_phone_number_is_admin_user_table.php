@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::table('users', function (Blueprint $table) {
             //
             $table->string('phone_number')->nullable();
-            $table->boolean('is_admin');
+            $table->boolean('is_admin')->default(false);
         });
     }
 

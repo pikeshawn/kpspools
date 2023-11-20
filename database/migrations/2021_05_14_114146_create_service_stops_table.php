@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('service_stops', function (Blueprint $table) {
             $table->id();
+            $table->integer('user_id');
             $table->integer('customer_id');
             $table->integer('address_id');
             $table->float('ph_level');
@@ -33,7 +34,6 @@ return new class extends Migration
             $table->boolean('backwash')->default(true);
             $table->float('powder_chlorine');
             $table->longText('notes')->nullable();
-            $table->integer('user_id');
             $table->string('service_type');
             $table->string('salt_level');
         });

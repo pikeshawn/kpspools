@@ -36,6 +36,15 @@ class UserFactory extends Factory
         });
     }
 
+    public function isAdmin(): Factory
+    {
+        return $this->state(function (array $attributes) {
+            return [
+                'is_admin' => 1,
+            ];
+        });
+    }
+
     /**
      * Indicate that the user should have a personal team.
      */

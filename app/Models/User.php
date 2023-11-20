@@ -18,6 +18,12 @@ class User extends Authenticatable
     use Notifiable;
     use TwoFactorAuthenticatable;
 
+
+    public function customers()
+    {
+        return $this->hasMany(Customer::class);
+    }
+
     /**
      * The attributes that are mass assignable.
      *
@@ -59,8 +65,13 @@ class User extends Authenticatable
         'profile_photo_url',
     ];
 
+    public function serviceStops()
+    {
+        return $this->hasMany(ServiceStop::class);
+    }
+
     public static function isAdmin()
     {
-        return Auth::user()->email === 'pike.shawn@gmail.com';
+        return Auth::user()->is_admin;
     }
 }

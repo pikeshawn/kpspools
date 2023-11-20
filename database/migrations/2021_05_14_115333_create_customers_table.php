@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('first_name');
             $table->string('middle_name')->nullable();
             $table->string('last_name')->nullable();
+            $table->boolean('active')->nullable();
             $table->timestamps();
             $table->string('type')->nullable();
             $table->string('plan')->nullable();
@@ -27,6 +28,8 @@ return new class extends Migration
             $table->tinyInteger('chemicals_included')->nullable();
             $table->string('assigned_serviceman')->nullable();
             $table->string('phone_number')->nullable();
+            $table->string('terms')->nullable();
+            $table->integer('jemmson_id')->nullable();
         });
     }
 
