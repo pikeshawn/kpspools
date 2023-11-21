@@ -26,18 +26,28 @@ class Task extends Model
     {
         $tasks = [];
         $customers = Customer::with(['tasks' => function ($query) {
-            $query->where('status', '<>', 'completed')->where('type', '<>', 'todo');
+            $query->where('status', '<>', 'completed')
+                ->where('type', '<>', 'todo');
         }])->get();
-        foreach ($customers as $customer){
+        foreach ($customers as $customer) {
             $custTasks = Task::where('customer_id', $customer->id)->get();
 
             foreach ($custTasks as $task) {
-                $cust = [];
-                $cust['first_name'] = $customer->first_name;
-                $cust['last_name'] = $customer->last_name;
-                $cust['description'] = $task->description;
-                $cust['status'] = $task->status;
-                array_push($tasks, $cust);
+
+                if ($task->assigned === Auth::user()->id) {
+                    $cust = [];
+                    $cust['customer_id'] = $customer->id;
+                    $cust['task_id'] = $task->id;
+                    $cust['first_name'] = $customer->first_name;
+                    $cust['last_name'] = $customer->last_name;
+                    $cust['description'] = $task->description;
+                    $cust['type'] = $task->type;
+                    $cust['assigned'] = $task->assigned;
+                    $cust['status'] = $task->status;
+                    $cust['pickedUp'] = false;
+                    array_push($tasks, $cust);
+                }
+
             }
         }
 
@@ -48,9 +58,14 @@ class Task extends Model
         return $allTasks;
     }
 
-    public function allIncompleteTasksByNonAdminPoolGuy()
+    static public function allIncompleteTasksByNonAdminPoolGuy()
     {
         return Task::where('status', '<>', 'completed')
-            ->where('assigned', '=', Auth::user()->id);
+            ->where('assigned', '=', Auth::user()->id)->get();
+    }
+
+    static public function allTasksRelatedToSpecificCustomer($customerId)
+    {
+        return Task::where('customer_id', $customerId)->where('status', 'pickedUp')->get();
     }
 }

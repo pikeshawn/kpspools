@@ -69,6 +69,8 @@
                 Save
             </button>
         </div>
+
+        <pre>{{ tasks }}</pre>
     </layout>
 
 </template>
@@ -95,7 +97,8 @@ export default {
         customerId: String,
         customer: String,
         customerName: String,
-        user: String
+        user: String,
+        tasks: Array
     },
     data() {
         return {}

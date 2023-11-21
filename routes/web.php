@@ -122,6 +122,14 @@ Route::middleware(['auth:sanctum', 'verified'])->post('/task/store',
     [TaskController::class, 'store'])
     ->name('task.store');
 
+Route::middleware(['auth:sanctum', 'verified'])->post('/task/pickedUp',
+    [TaskController::class, 'pickedUp'])
+    ->name('task.pickedUp');
+
+Route::middleware(['auth:sanctum', 'verified'])->post('/task/remove',
+    [TaskController::class, 'remove'])
+    ->name('task.remove');
+
 Route::middleware(['auth:sanctum', 'verified'])->get('/tasks',
     [TaskController::class, 'index'])
     ->name('tasks');

@@ -29,13 +29,8 @@ class TaskController extends Controller
 
 //        dd(User::isAdmin());
 
-        if (User::isAdmin()) {
 //            dd('isAdmin');
             $tasks = Task::allIncompleteTasks();
-        } else {
-//            dd('isNotAdmin');
-            $tasks = Task::allIncompleteTasksByNonAdminPoolGuy();
-        }
 
 //        return $tasks;
 
@@ -44,8 +39,38 @@ class TaskController extends Controller
         ]);
     }
 
+    public function pickedUp(Request $request)
+    {
+//        dd($request->all());
+        foreach ($request->all() as $taskItem) {
+//            dd($key);
+            if ($taskItem['pickedUp']) {
+                $task = Task::find($taskItem["task_id"]);
+                self::addStatus($task, 'pickedUp');
+                self::addTaskStatus($task, 'pickedUp');
+            }
+        }
+
+    }
+
+    public function remove(Request $request)
+    {
+//        dd($request->all());
+        foreach ($request->all() as $taskItem) {
+//            dd($key);
+            if ($taskItem['pickedUp']) {
+                $task = Task::find($taskItem["task_id"]);
+                self::addStatus($task, 'approved');
+                self::addTaskStatus($task, 'remove');
+                $taskStatus = TaskStatus::where('status', 'pickedUp')->where('task_id', $task->id);
+                $taskStatus->delete();
+            }
+        }
+
+    }
 
     //
+
     /**
      * Show the form for creating a new resource.
      */
@@ -63,7 +88,7 @@ class TaskController extends Controller
         ]);
     }
 
-    public function store(Request $request): Response
+    public function store(Request $request): RedirectResponse
     {
 
 //      get all data
@@ -74,7 +99,7 @@ class TaskController extends Controller
         $task = self::createTask($request);
 
 //        - add status to status table
-        self::addTaskStatus($task, 'created', );
+        self::addTaskStatus($task, 'created',);
 //        if task has been verbally approved then add the approved status
         if ($request->approval) {
             self::addTaskStatus($task, 'approved', $request->approvedDate);
@@ -87,7 +112,7 @@ class TaskController extends Controller
 //                - need notification message to send
 
 //        send for approval if the task has not been verbally approved
-        if(!$request->approval){
+        if (!$request->approval) {
             self::sendforApproval($task);
         }
 
@@ -97,12 +122,19 @@ class TaskController extends Controller
 
 //      redirect back or to another page
 //        - redirect to customer page
-        return Inertia::render('ServiceStops/Index', []);
+        return Redirect::route('customers.show', $task->customer_id);
+
     }
 
     private function addApprovedStatusToTaskTable($task)
     {
         $task->status = 'approved';
+        $task->save();
+    }
+
+    private function addStatus($task, $status)
+    {
+        $task->status = $status;
         $task->save();
     }
 
@@ -123,11 +155,15 @@ class TaskController extends Controller
             $date = Carbon::now();
             $statusDate = $date->format('Y-m-d H:i:s');
         }
-        return TaskStatus::firstOrCreate([
-            'task_id' => $task->id,
-            'status' => $status,
-            'status_date' => $statusDate
-        ]);
+
+        $taskStatus = new TaskStatus();
+        $taskStatus->task_id = $task->id;
+        $taskStatus->status = $task->status;
+        $taskStatus->status_date = $statusDate;
+
+        $taskStatus->save();
+
+        return $taskStatus;
     }
 
     private function sendforApproval($task)

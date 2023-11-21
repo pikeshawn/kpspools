@@ -2,9 +2,11 @@
 
 namespace Tests\Feature;
 
+use App\Models\TaskStatus;
 use App\Models\User;
 use App\Models\Task;
 use App\Providers\RouteServiceProvider;
+use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
@@ -15,6 +17,7 @@ use Inertia\Testing\AssertableInertia as Assert;
 class TaskCreationTest extends TestCase
 {
     use WithFaker;
+
 //    use RefreshDatabase;
     /**
      * A basic feature test example.
@@ -305,10 +308,59 @@ class TaskCreationTest extends TestCase
 
         $response = $this->get('tasks');
 
-        $response->assertInertia(fn (Assert $page) => $page->component('Task/Index')->has('tasks')->has('assigned'));
+        $response->assertInertia(fn(Assert $page) => $page->component('Task/Index')->has('tasks')->has('assigned'));
 //        $response->assertInertia(fn (Assert $page) => $page->component('Task/ViewPartRepairTasks')->has('Tuesday'));
 
     }
 
+    public function testMarkingTaskToBePickedUp(): void
+    {
+        self::login();
+
+        $task = Task::find(3);
+        $task->status = "approved";
+        $task->save();
+
+        $this->assertDatabaseHas('tasks', ["id" => 3, 'status' => 'approved']);
+
+        $taskStatuses = TaskStatus::where('task_id', 3)->get();
+        $exists = false;
+        $existsId = 0;
+        foreach ($taskStatuses as $taskStatus) {
+            if ($taskStatus->status == 'approved') {
+                $exists = true;
+                $existsId = $taskStatus->id;
+            }
+        }
+        if ($exists) {
+            $taskStatus = TaskStatus::find($existsId);
+            $taskStatus->delete();
+        } else {
+            $date = Carbon::now();
+            $statusDate = $date->format('Y-m-d H:i:s');
+            $taskStatus = new TaskStatus();
+            $taskStatus->status = 'approved';
+            $taskStatus->task_id = $task->id;
+            $taskStatus->status_date = $statusDate;
+            $taskStatus->save();
+        }
+
+        $taskData = [
+            [
+                "customer_id" => 2,
+                "task_id" => 3,
+                "first_name" => "Kaitlyn",
+                "last_name" => "Muller",
+                "description" => "filter",
+                "type" => "repair",
+                "status" => "approved",
+                "pickedUp" => true
+            ]
+        ];
+
+        $this->post('/task/pickedUp', $taskData);
+
+        $this->assertDatabaseHas('tasks', ["id" => 3, 'status' => 'pickedUp']);
+    }
 
 }

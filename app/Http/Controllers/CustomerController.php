@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Address;
 use App\Models\Customer;
+use App\Models\Task;
 use App\Models\GeneralNote;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
@@ -148,12 +149,16 @@ class CustomerController extends Controller
         $address = DB::select('Select * from addresses where customer_id = '
             . $customer->id);
 
+        $tasks = Task::allTasksRelatedToSpecificCustomer($customer->id);
+
+//        dd($tasks);
 
 
         return Inertia::render('Customers/Show', [
             'customer' => $customer,
             'notes' => $notes,
-            'address' => $address
+            'address' => $address,
+            'tasks' => $tasks
         ]);
     }
 
