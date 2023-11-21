@@ -12,22 +12,47 @@
             <div class="mx-auto max-w-2xl text-center">
                 <h2 class="text-4xl font-bold tracking-tight text-white sm:text-6xl">{{ customer.first_name }}
                     {{ customer.last_name }}</h2>
-                <p class="mt-6 text-lg leading-8 text-gray-300">
-                    {{ address[0].address_line_1 }}, {{ address[0].city }} {{ address[0].state }} {{ address[0].zip }}
-                </p>
-                <p v-show="address[0].community_gate_code" class="mt-6 text-lg leading-8 text-gray-300">
-                    Community Gate Code :: {{ address[0].community_gate_code }}
-                </p>
-                <div v-if="user.id = 2">
-                    <p class="mt-6 text-lg leading-8 text-gray-300">
-                        {{ customer.phone_number }}
-                    </p>
+                <div>
+                    <div class="mt-6 border-t border-white/10">
+                        <dl class="">
+                            <div class="px-4 py-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                                <dt class="text-sm font-medium leading-6 text-white">Address</dt>
+                                <dd class="mt-1 text-sm leading-6 text-gray-400 sm:col-span-2 sm:mt-0">{{ address[0].address_line_1 }}, {{ address[0].city }} {{ address[0].state }} {{ address[0].zip }}</dd>
+                            </div>
+                            <div class="px-4 py-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                                <dt class="text-sm font-medium leading-6 text-white">Gate Code</dt>
+                                <dd class="mt-1 text-sm leading-6 text-gray-400 sm:col-span-2 sm:mt-0">{{ address[0].community_gate_code }}</dd>
+                            </div>
+                            <div class="px-4 py-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                                <dt class="text-sm font-medium leading-6 text-white">Phone Number</dt>
+                                <dd class="mt-1 text-sm leading-6 text-gray-400 sm:col-span-2 sm:mt-0">{{ customer.phone_number }}</dd>
+                            </div>
+                            <div v-if="user.id === 2">
+                                <div class="px-4 py-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                                    <dt class="text-sm font-medium leading-6 text-white">Plan Price</dt>
+                                    <dd class="mt-1 text-sm leading-6 text-gray-400 sm:col-span-2 sm:mt-0">{{ customer.plan_price }}</dd>
+                                </div>
+                                <div class="px-4 py-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                                    <dt class="text-sm font-medium leading-6 text-white">Chemicals Included</dt>
+                                    <dd class="mt-1 text-sm leading-6 text-gray-400 sm:col-span-2 sm:mt-0">{{ customer.chemicals_included }}</dd>
+                                </div>
+                                <div class="px-4 py-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                                    <dt class="text-sm font-medium leading-6 text-white">Service Day</dt>
+                                    <dd class="mt-1 text-sm leading-6 text-gray-400 sm:col-span-2 sm:mt-0">{{ customer.service_day }}</dd>
+                                </div>
+                                <div class="px-4 py-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                                    <dt class="text-sm font-medium leading-6 text-white">Terms</dt>
+                                    <dd class="mt-1 text-sm leading-6 text-gray-400 sm:col-span-2 sm:mt-0">{{ customer.terms }}</dd>
+                                </div>
+                            </div>
+                        </dl>
+                    </div>
                 </div>
             </div>
         </div>
 
 
-        <div class="mt-10 sm:mt-0 mb-60">
+        <div class="mt-10 sm:mt-0 mb-60 py-6">
             <div class="flex flex-col">
                 <div class="md:col-span-1">
                     <div class="px-4 sm:px-0 mb-3">
