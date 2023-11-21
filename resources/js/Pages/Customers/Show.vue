@@ -30,6 +30,47 @@
             </div>
         </div>
 
+        <div class="p-10">
+
+            <h1>Picked Up Tasks</h1>
+
+            <div class="pl-6 pr-6 flex items-center justify-between space-x-3">
+                <h3 class="truncate text-3xl font-medium text-gray-900">Name</h3>
+                <h3 class="truncate text-3xl font-medium text-gray-900">Picked Up</h3>
+            </div>
+
+            <ul role="list" class="divide-y divide-gray-200">
+                <li v-for="item in tasks" :key="item.id" class="py-4">
+                    <!-- Your content -->
+                    <div class="flex-1 truncate">
+                        <div class="flex items-center justify-between space-x-3">
+                            <div>
+                                <h3 class="truncate text-sm font-medium text-gray-900">{{ item.description }}</h3>
+                            </div>
+                            <div>
+                                <Switch
+                                    @click="emitEnabled(item)"
+                                    id="toggle" v-model="item.completed"
+                                    :class="[item.completed ? 'bg-indigo-600' : 'bg-gray-200', 'relative inline-flex flex-shrink-0 h-6 w-11 border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500']">
+                                    <span class="sr-only">Use setting</span>
+                                    <span aria-hidden="true"
+                                          :class="[item.completed ? 'translate-x-5' : 'translate-x-0', 'pointer-events-none inline-block h-5 w-5 rounded-full bg-white shadow transform ring-0 transition ease-in-out duration-200']"/>
+                                </Switch>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+
+            <button @click="completed()"
+                    class="mt-4 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                Completed
+            </button>
+
+<!--            <pre>{{ tasks }}</pre>-->
+
+        </div>
+
         <div v-show="textMessage.textDialog" class="m-3 justify-center"
              style="background-color:white; margin: 2rem; padding: 2rem;">
             <div style="margin-left: auto; margin-right: auto">
@@ -132,6 +173,44 @@
                 </div>
             </div>
         </div>
+
+
+        <h1>Completed Tasks</h1>
+        <div class="pl-6 pr-6 flex items-center justify-between space-x-3">
+            <h3 class="truncate text-3xl font-medium text-gray-900">Name</h3>
+            <h3 class="truncate text-3xl font-medium text-gray-900">Remove</h3>
+        </div>
+
+        <ul role="list" class="divide-y divide-gray-200">
+            <li v-for="item in completedTasks" :key="item.id" class="py-4">
+                <!-- Your content -->
+                <div class="flex-1 truncate">
+                    <div class="flex items-center justify-between space-x-3">
+                        <div>
+                            <h3 class="truncate text-sm font-medium text-gray-900">{{ item.description }}</h3>
+                        </div>
+                        <div>
+                            <Switch
+                                @click="emitEnabled(item)"
+                                id="toggle" v-model="item.completed"
+                                :class="[item.completed ? 'bg-indigo-600' : 'bg-gray-200', 'relative inline-flex flex-shrink-0 h-6 w-11 border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500']">
+                                <span class="sr-only">Use setting</span>
+                                <span aria-hidden="true"
+                                      :class="[item.completed ? 'translate-x-5' : 'translate-x-0', 'pointer-events-none inline-block h-5 w-5 rounded-full bg-white shadow transform ring-0 transition ease-in-out duration-200']"/>
+                            </Switch>
+                        </div>
+                    </div>
+                </div>
+            </li>
+        </ul>
+
+        <button @click="notCompleted()"
+                class="mt-4 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+            Not Completed
+        </button>
+
+<!--        <pre>{{ completedTasks }}</pre>-->
+
     </Layout>
 
 </template>
@@ -170,9 +249,24 @@ export default {
         customer: String,
         notes: String,
         address: String,
-        user: String
+        user: String,
+        tasks: Array,
+        completedTasks: Array
     },
     methods: {
+
+        completed() {
+            Inertia.post('/task/completed', this.tasks)
+        },
+
+        notCompleted() {
+            Inertia.post('/task/notCompleted', this.completedTasks)
+        },
+
+        emitEnabled(item) {
+            item.completed = !item.completed
+        },
+
         onMyWay() {
 
             if (this.customer.phone_number === '14807034902') {
