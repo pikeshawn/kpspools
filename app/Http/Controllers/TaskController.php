@@ -53,6 +53,36 @@ class TaskController extends Controller
 
     }
 
+    public function completed(Request $request)
+    {
+//        dd($request->all());
+        foreach ($request->all() as $taskItem) {
+//            dd($key);
+            if ($taskItem['completed']) {
+                $task = Task::find($taskItem["id"]);
+                self::addStatus($task, 'completed');
+                self::addTaskStatus($task, 'completed');
+            }
+        }
+
+    }
+
+    public function notCompleted(Request $request)
+    {
+//        dd($request->all());
+        foreach ($request->all() as $taskItem) {
+//            dd($key);
+            if ($taskItem['completed']) {
+                $task = Task::find($taskItem["id"]);
+                self::addStatus($task, 'pickedUp');
+                self::addTaskStatus($task, 'pickedUp');
+                $taskStatus = TaskStatus::where('status', 'completed')->where('task_id', $task->id);
+                $taskStatus->delete();
+            }
+        }
+
+    }
+
     public function remove(Request $request)
     {
 //        dd($request->all());

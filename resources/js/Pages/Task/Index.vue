@@ -89,7 +89,7 @@
             Remove
         </button>
 
-        <pre>{{ tasks }}</pre>
+<!--        <pre>{{ tasks }}</pre>-->
 
         <!--        Section for Pool Guy users users  -->
 

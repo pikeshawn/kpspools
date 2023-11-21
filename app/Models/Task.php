@@ -64,8 +64,37 @@ class Task extends Model
             ->where('assigned', '=', Auth::user()->id)->get();
     }
 
-    static public function allTasksRelatedToSpecificCustomer($customerId)
+    static public function allCompletedTasksRelatedToSpecificCustomer($customerId)
     {
-        return Task::where('customer_id', $customerId)->where('status', 'pickedUp')->get();
+        $allEnabledTasks = [];
+        $t = Task::where('customer_id', $customerId)->where('status', 'completed')->get();
+
+        foreach ($t as $task) {
+            $line = [];
+            $line["id"] = $task->id;
+            $line["description"] = $task->description;
+            $line["status"] = $task->status;
+            $line["completed"] = false;
+            $allEnabledTasks[] = $line;
+        }
+
+        return collect($allEnabledTasks);
+    }
+
+    static public function allPickedUpTasksRelatedToSpecificCustomer($customerId)
+    {
+        $allEnabledTasks = [];
+        $t = Task::where('customer_id', $customerId)->where('status', 'pickedUp')->get();
+
+        foreach ($t as $task) {
+            $line = [];
+            $line["id"] = $task->id;
+            $line["description"] = $task->description;
+            $line["status"] = $task->status;
+            $line["completed"] = false;
+            $allEnabledTasks[] = $line;
+        }
+
+        return collect($allEnabledTasks);
     }
 }

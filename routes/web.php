@@ -130,6 +130,14 @@ Route::middleware(['auth:sanctum', 'verified'])->post('/task/remove',
     [TaskController::class, 'remove'])
     ->name('task.remove');
 
+Route::middleware(['auth:sanctum', 'verified'])->post('/task/completed',
+    [TaskController::class, 'completed'])
+    ->name('task.completed');
+
+Route::middleware(['auth:sanctum', 'verified'])->post('/task/notCompleted',
+    [TaskController::class, 'notCompleted'])
+    ->name('task.notCompleted');
+
 Route::middleware(['auth:sanctum', 'verified'])->get('/tasks',
     [TaskController::class, 'index'])
     ->name('tasks');

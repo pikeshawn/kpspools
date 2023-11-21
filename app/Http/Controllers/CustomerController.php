@@ -149,7 +149,8 @@ class CustomerController extends Controller
         $address = DB::select('Select * from addresses where customer_id = '
             . $customer->id);
 
-        $tasks = Task::allTasksRelatedToSpecificCustomer($customer->id);
+        $tasks = Task::allPickedUpTasksRelatedToSpecificCustomer($customer->id);
+        $completedTasks = Task::allCompletedTasksRelatedToSpecificCustomer($customer->id);
 
 //        dd($tasks);
 
@@ -158,7 +159,8 @@ class CustomerController extends Controller
             'customer' => $customer,
             'notes' => $notes,
             'address' => $address,
-            'tasks' => $tasks
+            'tasks' => $tasks,
+            'completedTasks' => $completedTasks
         ]);
     }
 
