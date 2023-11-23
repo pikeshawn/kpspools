@@ -89,42 +89,148 @@
 
         <div class="p-10">
 
-            <h1>Picked Up Tasks</h1>
-
-            <div class="pl-6 pr-6 flex items-center justify-between space-x-3">
-                <h3 class="truncate text-3xl font-medium text-gray-900">Name</h3>
-                <h3 class="truncate text-3xl font-medium text-gray-900">Picked Up</h3>
+            <div>
+                <div class="sm:hidden">
+                    <label for="tabs" class="sr-only">Select a tab</label>
+                    <!-- Use an "onChange" listener to redirect the user to the selected tab URL. -->
+                    <select id="tabs" name="tabs"
+                            class="block w-full rounded-md border-gray-300 py-2 pl-3 pr-10 text-base focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm">
+                        <option v-for="tab in tabs" :key="tab.name" :selected="tab.current">{{ tab.alternateName }}</option>
+                    </select>
+                </div>
+                <div class="hidden sm:block">
+                    <div class="border-b border-gray-200">
+                        <nav class="-mb-px flex space-x-8" aria-label="Tabs">
+                            <a v-for="tab in tabs"
+                               :key="tab.name"
+                               :href="tab.href"
+                               :data-item="tab"
+                               @click="changeTab(tab)"
+                               :class="[tab.current ? 'border-indigo-500 text-indigo-600' : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700', 'whitespace-nowrap border-b-2 py-4 px-1 text-sm font-medium']"
+                               :aria-current="tab.current ? 'page' : undefined">
+                                {{ tab.alternateName }}
+                                <span
+                                    class="inline-flex items-center rounded-md bg-pink-400/10 px-2 py-1 text-xs font-medium text-pink-400 ring-1 ring-inset ring-pink-400/20">{{
+                                        tab.count
+                                    }}</span>
+                            </a>
+                        </nav>
+                    </div>
+                </div>
             </div>
 
-            <ul role="list" class="divide-y divide-gray-200">
-                <li v-for="item in tasks" :key="item.id" class="py-4">
-                    <!-- Your content -->
-                    <div class="flex-1 truncate">
-                        <div class="flex items-center justify-between space-x-3">
-                            <div>
-                                <h3 class="truncate text-sm font-medium text-gray-900">{{ item.description }}</h3>
-                            </div>
-                            <div>
-                                <Switch
-                                    @click="emitEnabled(item)"
-                                    id="toggle" v-model="item.completed"
-                                    :class="[item.completed ? 'bg-indigo-600' : 'bg-gray-200', 'relative inline-flex flex-shrink-0 h-6 w-11 border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500']">
-                                    <span class="sr-only">Use setting</span>
-                                    <span aria-hidden="true"
-                                          :class="[item.completed ? 'translate-x-5' : 'translate-x-0', 'pointer-events-none inline-block h-5 w-5 rounded-full bg-white shadow transform ring-0 transition ease-in-out duration-200']"/>
-                                </Switch>
+            <div v-show="showTab === 'Created'">
+                <div class="px-4 sm:px-6 lg:px-8">
+                    <div class="mt-8 flow-root">
+                        <div class="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+                            <div class="inline-block min-w-full py-2 align-middle">
+                                <table class="min-w-full divide-y divide-gray-300">
+                                    <thead>
+                                    <tr>
+                                        <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Description</th>
+                                        <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Status</th>
+                                        <th scope="col" class="relative py-3.5 pl-3 pr-4 sm:pr-6 lg:pr-8">
+                                            <span class="sr-only">Edit</span>
+                                        </th>
+                                    </tr>
+                                    </thead>
+                                    <tbody class="divide-y divide-gray-200 bg-white">
+                                    <tr v-for="item in tasks" :key="item.task_id">
+                                        <td v-if="item.status === 'created'" class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ item.description }}</td>
+                                        <td v-if="item.status === 'created'" class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6 lg:pr-8">
+                                            <div class="flex justify-between">
+                                                <div>{{ item.status }}</div>
+                                                <button @click="remove(item)"
+                                                        class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                                    Remove
+                                                </button>
+                                            </div>
+                                        </td>
+                                        <td v-if="item.status === 'created'" class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6 lg:pr-8"></td>
+                                    </tr>
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
                     </div>
-                </li>
-            </ul>
+                </div>
 
-            <button @click="completed()"
-                    class="mt-4 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                Completed
-            </button>
 
-<!--            <pre>{{ tasks }}</pre>-->
+            </div>
+            <div v-show="showTab === 'PickedUp'">
+                <div class="px-4 sm:px-6 lg:px-8">
+                    <div class="mt-8 flow-root">
+                        <div class="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+                            <div class="inline-block min-w-full py-2 align-middle">
+                                <table class="min-w-full divide-y divide-gray-300">
+                                    <thead>
+                                    <tr>
+                                        <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Description</th>
+                                        <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Status</th>
+                                        <th scope="col" class="relative py-3.5 pl-3 pr-4 sm:pr-6 lg:pr-8">
+                                            <span class="sr-only">Edit</span>
+                                        </th>
+                                    </tr>
+                                    </thead>
+                                    <tbody class="divide-y divide-gray-200 bg-white">
+                                    <tr v-for="item in tasks" :key="item.task_id">
+                                        <td v-if="item.status === 'pickedUp'" class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ item.description }}</td>
+                                        <td v-if="item.status === 'pickedUp'" class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6 lg:pr-8">
+                                            <div class="flex justify-between">
+                                                <div>{{ item.status }}</div>
+                                                <button @click="completed(item)"
+                                                        class="nline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                                    Complete
+                                                </button>
+                                            </div>
+                                        </td>
+                                        <td v-if="item.status === 'pickedUp'" class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6 lg:pr-8"></td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div v-show="showTab === 'Completed'">
+                <div class="px-4 sm:px-6 lg:px-8">
+                    <div class="mt-8 flow-root">
+                        <div class="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+                            <div class="inline-block min-w-full py-2 align-middle">
+                                <table class="min-w-full divide-y divide-gray-300">
+                                    <thead>
+                                    <tr>
+                                        <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Description</th>
+                                        <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Status</th>
+                                        <th scope="col" class="relative py-3.5 pl-3 pr-4 sm:pr-6 lg:pr-8">
+                                            <span class="sr-only">Edit</span>
+                                        </th>
+                                    </tr>
+                                    </thead>
+                                    <tbody class="divide-y divide-gray-200 bg-white">
+                                    <tr v-for="item in tasks" :key="item.task_id">
+                                        <td v-if="item.status === 'completed'" class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ item.description }}</td>
+                                        <td v-if="item.status === 'completed'" class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6 lg:pr-8">
+                                            <div class="flex justify-between">
+                                                <div>{{ item.status }}</div>
+                                                <button @click="notCompleted(item)"
+                                                        class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                                    Not Completed
+                                                </button>
+                                            </div>
+                                        </td>
+                                        <td v-if="item.status === 'completed'" class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6 lg:pr-8"></td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
         </div>
 
@@ -199,44 +305,6 @@
                 </div>
             </div>
         </div>
-
-
-        <h1>Completed Tasks</h1>
-        <div class="pl-6 pr-6 flex items-center justify-between space-x-3">
-            <h3 class="truncate text-3xl font-medium text-gray-900">Name</h3>
-            <h3 class="truncate text-3xl font-medium text-gray-900">Remove</h3>
-        </div>
-
-        <ul role="list" class="divide-y divide-gray-200">
-            <li v-for="item in completedTasks" :key="item.id" class="py-4">
-                <!-- Your content -->
-                <div class="flex-1 truncate">
-                    <div class="flex items-center justify-between space-x-3">
-                        <div>
-                            <h3 class="truncate text-sm font-medium text-gray-900">{{ item.description }}</h3>
-                        </div>
-                        <div>
-                            <Switch
-                                @click="emitEnabled(item)"
-                                id="toggle" v-model="item.completed"
-                                :class="[item.completed ? 'bg-indigo-600' : 'bg-gray-200', 'relative inline-flex flex-shrink-0 h-6 w-11 border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500']">
-                                <span class="sr-only">Use setting</span>
-                                <span aria-hidden="true"
-                                      :class="[item.completed ? 'translate-x-5' : 'translate-x-0', 'pointer-events-none inline-block h-5 w-5 rounded-full bg-white shadow transform ring-0 transition ease-in-out duration-200']"/>
-                            </Switch>
-                        </div>
-                    </div>
-                </div>
-            </li>
-        </ul>
-
-        <button @click="notCompleted()"
-                class="mt-4 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-            Not Completed
-        </button>
-
-<!--        <pre>{{ completedTasks }}</pre>-->
-
     </Layout>
 
 </template>
@@ -258,17 +326,29 @@ export default {
         Link
     },
     mounted() {
-
+        this.updateCount();
+    },
+    beforeUpdate() {
+        this.updateCount();
+    },
+    updated() {
+        this.updateCount();
     },
     data() {
         return {
+            showTab: 'PickedUp',
             textMessage: {
                 customerName: this.customer.first_name + " " + this.customer.last_name,
                 customerPhoneNumber: null,
                 textMessage: this.user.name + " at KPS Pools will be servicing your pool within 30 minutes.",
                 textDialog: false,
                 userPhoneNumber: this.user.phone_number
-            }
+            },
+            tabs: [
+                {name: 'Created', alternateName: 'New', href: '#created', current: false, count: 0},
+                {name: 'PickedUp', alternateName: 'Ready To Complete', href: '#approval', current: true, count: 0},
+                {name: 'Completed', alternateName: 'Finished', href: '#approval', current: false, count: 0}
+            ]
         }
     },
     props: {
@@ -280,13 +360,37 @@ export default {
         completedTasks: Array
     },
     methods: {
+        updateCount() {
 
-        completed() {
-            Inertia.post('/task/completed', this.tasks)
+            this.createdObjects = this.tasks.filter(task => task.status === 'created').length;
+            this.approvedObjects = this.tasks.filter(task => task.status === 'pickedUp').length;
+            this.completedObjects = this.tasks.filter(task => task.status === 'completed').length;
+
+            this.tabs[0].count = this.createdObjects;
+            this.tabs[1].count = this.approvedObjects;
+            this.tabs[2].count = this.completedObjects;
+        },
+        changeTab(tab) {
+            for (let i = 0; i < this.tabs.length; i++) {
+                this.tabs[i].current = false
+
+                // this.tabs[i].current = this.tabs[i].name === tab.name;
+
+                if (this.tabs[i].name === tab.name) {
+                    this.tabs[i].current = true
+                    this.showTab = tab.name
+                }
+            }
+        },
+        remove(item){
+            Inertia.post('/task/deleteItem', item)
+        },
+        completed(item) {
+            Inertia.post('/task/completed', item)
         },
 
-        notCompleted() {
-            Inertia.post('/task/notCompleted', this.completedTasks)
+        notCompleted(item) {
+            Inertia.post('/task/notCompleted', item)
         },
 
         emitEnabled(item) {

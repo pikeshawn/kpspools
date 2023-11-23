@@ -30,13 +30,107 @@ class TaskController extends Controller
 //        dd(User::isAdmin());
 
 //            dd('isAdmin');
-            $tasks = Task::allIncompleteTasks();
+        $tasks = Task::allIncompleteTasks();
 
 //        return $tasks;
 
         return Inertia::render('Task/Index', [
             'tasks' => $tasks,
         ]);
+    }
+
+    public function tasksNeedsApproval()
+    {
+
+//        dd(Auth::user());
+
+//        dd(User::isAdmin());
+
+//            dd('isAdmin');
+        $tasks = Task::allCreatedTasks();
+
+//        return $tasks;
+
+        return Inertia::render('Task/NeedsApproval', [
+            'tasks' => $tasks,
+        ]);
+    }
+
+    public function requestApproval(Request $request)
+    {
+
+        $task = Task::find($request->task_id);
+
+        //        send for approval if the task has not been verbally approved
+        $message = "Do Not Reply\n==================\n\nKPS Pools wants to inform you that a part / repair is required at your pool:\n\n" . $request->description . " for " . $request->price . "$\n\nPlease call or text Shawn to approve, deny, or take care of issue yourself at either number:\n\n480.703.4902\n480.622.6441";
+
+        self::sendforApproval($task, $message);
+
+        $task->sent = true;
+        $task->save();
+    }
+
+    public function changeStatus(Request $request)
+    {
+//        dd($request);
+        $task = Task::find($request->task_id);
+        $task->status = $request->status;
+        $task->save();
+        self::addTaskStatus($task, $request->status);
+    }
+
+    public function approveItem(Request $request)
+    {
+        //        send for approval if the task has not been verbally approved
+
+        $task = Task::find($request->task_id);
+
+        if ($request->approved) {
+            self::addTaskStatus($task, 'approved');
+            self::addStatus($task, 'approved');
+        } else if (!$request->approved) {
+            self::addStatus($task, 'created');
+        }
+    }
+
+    public function assignServiceman(Request $request)
+    {
+//        dd($request);
+        $user = User::where('name', $request->assigned)->get();
+//        dd($user[0]->id);
+
+        $task = Task::find($request->task_id);
+        $task->assigned = $user[0]->id;
+        $task->save();
+    }
+
+    public function deleteItem(Request $request)
+    {
+
+        $task = null;
+
+        if ($request->task_id) {
+            $task = Task::find($request->task_id);
+        } else if ($request->id) {
+            $task = Task::find($request->id);
+        }
+
+        $task->delete();
+
+        $taskStatuses = TaskStatus::where('task_id', $request->task_id)->get();
+
+        foreach ($taskStatuses as $ts) {
+            $ts->delete();
+        }
+
+    }
+
+    public function updatePrice(Request $request)
+    {
+//        dd($request);
+        $task = Task::find($request->task_id);
+        $task->price = $request->price;
+        $task->save();
     }
 
     public function pickedUp(Request $request)
@@ -56,31 +150,17 @@ class TaskController extends Controller
     public function completed(Request $request)
     {
 //        dd($request->all());
-        foreach ($request->all() as $taskItem) {
-//            dd($key);
-            if ($taskItem['completed']) {
-                $task = Task::find($taskItem["id"]);
-                self::addStatus($task, 'completed');
-                self::addTaskStatus($task, 'completed');
-            }
-        }
+        $task = Task::find($request->id);
+        self::addStatus($task, 'completed');
+        self::addTaskStatus($task, 'completed');
 
     }
 
     public function notCompleted(Request $request)
     {
-//        dd($request->all());
-        foreach ($request->all() as $taskItem) {
-//            dd($key);
-            if ($taskItem['completed']) {
-                $task = Task::find($taskItem["id"]);
-                self::addStatus($task, 'pickedUp');
-                self::addTaskStatus($task, 'pickedUp');
-                $taskStatus = TaskStatus::where('status', 'completed')->where('task_id', $task->id);
-                $taskStatus->delete();
-            }
-        }
-
+        $task = Task::find($request->id);
+        self::addStatus($task, 'pickedUp');
+        self::addTaskStatus($task, 'pickedUp');
     }
 
     public function remove(Request $request)
@@ -141,11 +221,6 @@ class TaskController extends Controller
 //                - link will have to redirect to a page for customer to approve
 //                - need notification message to send
 
-//        send for approval if the task has not been verbally approved
-        if (!$request->approval) {
-            self::sendforApproval($task);
-        }
-
 //          - can start as notification to contact shawn
 //          - future will have the customer go on the app
 //          - auto approval for items below a certain amount
@@ -175,6 +250,7 @@ class TaskController extends Controller
             'description' => $request->description,
             'assigned' => $request->assigned,
             'type' => $request->type,
+            'price' => 0,
             'status' => 'created'
         ]);
     }
@@ -188,7 +264,7 @@ class TaskController extends Controller
 
         $taskStatus = new TaskStatus();
         $taskStatus->task_id = $task->id;
-        $taskStatus->status = $task->status;
+        $taskStatus->status = $status;
         $taskStatus->status_date = $statusDate;
 
         $taskStatus->save();
@@ -196,7 +272,7 @@ class TaskController extends Controller
         return $taskStatus;
     }
 
-    private function sendforApproval($task)
+    private function sendforApproval($task, $message = null)
     {
 //        send notification to customer if new part or repair
 //          - create new notification
@@ -205,12 +281,14 @@ class TaskController extends Controller
         $task->type == 'repair' ? $repair = true : $repair = false;
         $task->type == 'part' ? $part = true : $part = false;
 
-        if ($repair) {
-            $message = "We wanted to notify you that your pool needs to have a repair done:: $task->description. Please text or call Shawn to approve or deny the task at 480-703-4902.";
-        }
+        if ($message == null) {
+            if ($repair) {
+                $message = "We wanted to notify you that your pool needs to have a repair done:: $task->description. Please text or call Shawn to approve or deny the task at 480-703-4902.";
+            }
 
-        if ($part) {
-            $message = "We wanted to notify you that your pool needs a part:: $task->description. Please text or call Shawn to approve or deny the part at 480-703-4902.";
+            if ($part) {
+                $message = "We wanted to notify you that your pool needs a part:: $task->description. Please text or call Shawn to approve or deny the part at 480-703-4902.";
+            }
         }
 
 //        TODO:: change number to make this dynamic to the customer

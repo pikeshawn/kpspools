@@ -134,6 +134,30 @@ Route::middleware(['auth:sanctum', 'verified'])->post('/task/completed',
     [TaskController::class, 'completed'])
     ->name('task.completed');
 
+Route::middleware(['auth:sanctum', 'verified'])->post('/task/requestApproval',
+    [TaskController::class, 'requestApproval'])
+    ->name('task.requestApproval');
+
+Route::middleware(['auth:sanctum', 'verified'])->post('/task/approveItem',
+    [TaskController::class, 'approveItem'])
+    ->name('task.approveItem');
+
+Route::middleware(['auth:sanctum', 'verified'])->post('/task/assignServiceman',
+    [TaskController::class, 'assignServiceman'])
+    ->name('task.assignServiceman');
+
+Route::middleware(['auth:sanctum', 'verified'])->post('/task/updatePrice',
+    [TaskController::class, 'updatePrice'])
+    ->name('task.updatePrice');
+
+Route::middleware(['auth:sanctum', 'verified'])->post('/task/changeStatus',
+    [TaskController::class, 'changeStatus'])
+    ->name('task.changeStatus');
+
+Route::middleware(['auth:sanctum', 'verified'])->post('/task/deleteItem',
+    [TaskController::class, 'deleteItem'])
+    ->name('task.deleteItem');
+
 Route::middleware(['auth:sanctum', 'verified'])->post('/task/notCompleted',
     [TaskController::class, 'notCompleted'])
     ->name('task.notCompleted');
@@ -141,3 +165,7 @@ Route::middleware(['auth:sanctum', 'verified'])->post('/task/notCompleted',
 Route::middleware(['auth:sanctum', 'verified'])->get('/tasks',
     [TaskController::class, 'index'])
     ->name('tasks');
+
+Route::middleware(['auth:sanctum', 'verified'])->get('/tasksNeedsApproval',
+    [TaskController::class, 'tasksNeedsApproval'])
+    ->name('tasksNeedsApproval');
