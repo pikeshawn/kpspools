@@ -25,14 +25,7 @@ class TaskController extends Controller
     public function index()
     {
 
-//        dd(Auth::user());
-
-//        dd(User::isAdmin());
-
-//            dd('isAdmin');
         $tasks = Task::allIncompleteTasks();
-
-//        return $tasks;
 
         return Inertia::render('Task/Index', [
             'tasks' => $tasks,

@@ -141,6 +141,8 @@
 
         </div>
 
+        <pre>{{ tasks }}</pre>
+
     </layout>
 
 </template>

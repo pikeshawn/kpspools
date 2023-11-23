@@ -27,7 +27,7 @@
                                 <dt class="text-sm font-medium leading-6 text-white">Phone Number</dt>
                                 <dd class="mt-1 text-sm leading-6 text-gray-400 sm:col-span-2 sm:mt-0">{{ customer.phone_number }}</dd>
                             </div>
-                            <div v-if="user.id === 2">
+                            <div v-if="user.is_admin === 1">
                                 <div class="px-4 py-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
                                     <dt class="text-sm font-medium leading-6 text-white">Plan Price</dt>
                                     <dd class="mt-1 text-sm leading-6 text-gray-400 sm:col-span-2 sm:mt-0">{{ customer.plan_price }}</dd>

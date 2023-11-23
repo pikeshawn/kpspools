@@ -26,7 +26,7 @@
                                 <dt class="text-sm font-medium leading-6 text-white">Phone Number</dt>
                                 <dd class="mt-1 text-sm leading-6 text-gray-400 sm:col-span-2 sm:mt-0">{{ customer.phone_number }}</dd>
                             </div>
-                            <div v-if="user.id === 2">
+                            <div v-if="user.is_admin === 1">
                                 <div class="px-4 py-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
                                     <dt class="text-sm font-medium leading-6 text-white">Plan Price</dt>
                                     <dd class="mt-1 text-sm leading-6 text-gray-400 sm:col-span-2 sm:mt-0">{{ customer.plan_price }}</dd>
@@ -120,7 +120,7 @@
             </div>
 
             <div v-show="showTab === 'Created'">
-                <div class="px-4 sm:px-6 lg:px-8">
+                <div v-if="tabs[0].count > 0" class="px-4 sm:px-6 lg:px-8">
                     <div class="mt-8 flow-root">
                         <div class="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
                             <div class="inline-block min-w-full py-2 align-middle">
@@ -158,7 +158,7 @@
 
             </div>
             <div v-show="showTab === 'PickedUp'">
-                <div class="px-4 sm:px-6 lg:px-8">
+                <div v-if="tabs[1].count > 0" class="px-4 sm:px-6 lg:px-8">
                     <div class="mt-8 flow-root">
                         <div class="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
                             <div class="inline-block min-w-full py-2 align-middle">
@@ -195,7 +195,7 @@
                 </div>
             </div>
             <div v-show="showTab === 'Completed'">
-                <div class="px-4 sm:px-6 lg:px-8">
+                <div v-if="tabs[2].count > 0" class="px-4 sm:px-6 lg:px-8">
                     <div class="mt-8 flow-root">
                         <div class="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
                             <div class="inline-block min-w-full py-2 align-middle">

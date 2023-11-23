@@ -4,7 +4,8 @@
         <!--        Section for Admin users  -->
 
 
-        <div v-if="user.id === 1">
+
+        <div v-if="user.is_admin === 1">
 
             <pre>{{ showTab }}</pre>
 
