@@ -7,6 +7,10 @@
 
         <div>
             <div class="sm:hidden">
+                <div class="flex justify-between">
+                    <div>List: {{ createdObjects  }}</div>
+                    <div>Inventory: {{ approvedObjects  }}</div>
+                </div>
                 <label for="tabs" class="sr-only">Select a tab</label>
                 <!-- Use an "onChange" listener to redirect the user to the selected tab URL. -->
                 <select id="tabs" name="tabs"
@@ -175,7 +179,7 @@ export default {
     data() {
         return {
             showTab: 'Created',
-            myTab: 'Created',
+            myTab: 'Pickup',
             approved: null,
             pickedUp: false,
             createdObjects: 0,

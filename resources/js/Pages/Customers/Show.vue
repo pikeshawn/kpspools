@@ -16,32 +16,47 @@
                         <dl class="">
                             <div class="px-4 py-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
                                 <dt class="text-sm font-medium leading-6 text-white">Address</dt>
-                                <dd class="mt-1 text-sm leading-6 text-gray-400 sm:col-span-2 sm:mt-0">{{ address[0].address_line_1 }}, {{ address[0].city }} {{ address[0].state }} {{ address[0].zip }}</dd>
+                                <dd class="mt-1 text-sm leading-6 text-gray-400 sm:col-span-2 sm:mt-0">
+                                    {{ address[0].address_line_1 }}, {{ address[0].city }} {{ address[0].state }}
+                                    {{ address[0].zip }}
+                                </dd>
                             </div>
                             <div class="px-4 py-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
                                 <dt class="text-sm font-medium leading-6 text-white">Gate Code</dt>
-                                <dd class="mt-1 text-sm leading-6 text-gray-400 sm:col-span-2 sm:mt-0">{{ address[0].community_gate_code }}</dd>
+                                <dd class="mt-1 text-sm leading-6 text-gray-400 sm:col-span-2 sm:mt-0">
+                                    {{ address[0].community_gate_code }}
+                                </dd>
                             </div>
                             <div class="px-4 py-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
                                 <dt class="text-sm font-medium leading-6 text-white">Phone Number</dt>
-                                <dd class="mt-1 text-sm leading-6 text-gray-400 sm:col-span-2 sm:mt-0">{{ customer.phone_number }}</dd>
+                                <dd class="mt-1 text-sm leading-6 text-gray-400 sm:col-span-2 sm:mt-0">
+                                    {{ customer.phone_number }}
+                                </dd>
                             </div>
                             <div v-if="user.is_admin === 1">
                                 <div class="px-4 py-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
                                     <dt class="text-sm font-medium leading-6 text-white">Plan Price</dt>
-                                    <dd class="mt-1 text-sm leading-6 text-gray-400 sm:col-span-2 sm:mt-0">{{ customer.plan_price }}</dd>
+                                    <dd class="mt-1 text-sm leading-6 text-gray-400 sm:col-span-2 sm:mt-0">
+                                        {{ customer.plan_price }}
+                                    </dd>
                                 </div>
                                 <div class="px-4 py-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
                                     <dt class="text-sm font-medium leading-6 text-white">Chemicals Included</dt>
-                                    <dd class="mt-1 text-sm leading-6 text-gray-400 sm:col-span-2 sm:mt-0">{{ customer.chemicals_included }}</dd>
+                                    <dd class="mt-1 text-sm leading-6 text-gray-400 sm:col-span-2 sm:mt-0">
+                                        {{ customer.chemicals_included }}
+                                    </dd>
                                 </div>
                                 <div class="px-4 py-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
                                     <dt class="text-sm font-medium leading-6 text-white">Service Day</dt>
-                                    <dd class="mt-1 text-sm leading-6 text-gray-400 sm:col-span-2 sm:mt-0">{{ customer.service_day }}</dd>
+                                    <dd class="mt-1 text-sm leading-6 text-gray-400 sm:col-span-2 sm:mt-0">
+                                        {{ customer.service_day }}
+                                    </dd>
                                 </div>
                                 <div class="px-4 py-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
                                     <dt class="text-sm font-medium leading-6 text-white">Terms</dt>
-                                    <dd class="mt-1 text-sm leading-6 text-gray-400 sm:col-span-2 sm:mt-0">{{ customer.terms }}</dd>
+                                    <dd class="mt-1 text-sm leading-6 text-gray-400 sm:col-span-2 sm:mt-0">
+                                        {{ customer.terms }}
+                                    </dd>
                                 </div>
                             </div>
                         </dl>
@@ -87,17 +102,25 @@
             </div>
         </div>
 
-        <div class="p-10">
+        <div class="py-6">
 
             <div>
                 <div class="sm:hidden">
+                    <div class="flex justify-between">
+                        <div>Created: {{ createdObjects  }}</div>
+                        <div>Not Completed: {{ approvedObjects  }}</div>
+                        <div>Completed: {{ approvedObjects  }}</div>
+                    </div>
                     <label for="tabs" class="sr-only">Select a tab</label>
                     <!-- Use an "onChange" listener to redirect the user to the selected tab URL. -->
                     <select id="tabs" name="tabs"
                             v-model="myTab"
                             @change="changeSmallTab()"
                             class="block w-full rounded-md border-gray-300 py-2 pl-3 pr-10 text-base focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm">
-                        <option v-for="tab in tabs" :key="tab.name" :selected="tab.current">{{ tab.alternateName }}</option>
+                        <option v-for="tab in tabs" :key="tab.name" :selected="tab.current">{{
+                                tab.alternateName
+                            }}
+                        </option>
                     </select>
                 </div>
                 <div class="hidden sm:block">
@@ -129,26 +152,25 @@
                                 <table class="min-w-full divide-y divide-gray-300">
                                     <thead>
                                     <tr>
-                                        <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Description</th>
-                                        <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Status</th>
-                                        <th scope="col" class="relative py-3.5 pl-3 pr-4 sm:pr-6 lg:pr-8">
-                                            <span class="sr-only">Edit</span>
+                                        <th scope="col"
+                                            class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                                            Description
                                         </th>
                                     </tr>
                                     </thead>
                                     <tbody class="divide-y divide-gray-200 bg-white">
                                     <tr v-for="item in tasks" :key="item.task_id">
-                                        <td v-if="item.status === 'created'" class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ item.description }}</td>
-                                        <td v-if="item.status === 'created'" class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6 lg:pr-8">
-                                            <div class="flex justify-between">
-                                                <div>{{ item.status }}</div>
-                                                <button @click="remove(item)"
-                                                        class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                                                    Remove
-                                                </button>
-                                            </div>
+                                        <td v-if="item.status === 'created'"
+                                            class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                                            {{ item.description }}
                                         </td>
-                                        <td v-if="item.status === 'created'" class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6 lg:pr-8"></td>
+                                        <td v-if="item.status === 'created'"
+                                            class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6 lg:pr-8">
+                                            <button @click="remove(item)"
+                                                    class="inline-flex justify-center py-1 px-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                                Remove
+                                            </button>
+                                        </td>
                                     </tr>
                                     </tbody>
                                 </table>
@@ -167,26 +189,27 @@
                                 <table class="min-w-full divide-y divide-gray-300">
                                     <thead>
                                     <tr>
-                                        <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Description</th>
-                                        <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Status</th>
-                                        <th scope="col" class="relative py-3.5 pl-3 pr-4 sm:pr-6 lg:pr-8">
-                                            <span class="sr-only">Edit</span>
+                                        <th scope="col"
+                                            class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                                            Description
                                         </th>
                                     </tr>
                                     </thead>
                                     <tbody class="divide-y divide-gray-200 bg-white">
                                     <tr v-for="item in tasks" :key="item.task_id">
-                                        <td v-if="item.status === 'pickedUp'" class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ item.description }}</td>
-                                        <td v-if="item.status === 'pickedUp'" class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6 lg:pr-8">
+                                        <td v-if="item.status === 'pickedUp'"
+                                            class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                                            {{ item.description }}
+                                        </td>
+                                        <td v-if="item.status === 'pickedUp'"
+                                            class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6 lg:pr-8">
                                             <div class="flex justify-between">
-                                                <div>{{ item.status }}</div>
                                                 <button @click="completed(item)"
-                                                        class="nline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                                        class="nline-flex justify-center py-1 px-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                                                     Complete
                                                 </button>
                                             </div>
                                         </td>
-                                        <td v-if="item.status === 'pickedUp'" class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6 lg:pr-8"></td>
                                     </tr>
                                     </tbody>
                                 </table>
@@ -204,26 +227,27 @@
                                 <table class="min-w-full divide-y divide-gray-300">
                                     <thead>
                                     <tr>
-                                        <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Description</th>
-                                        <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Status</th>
-                                        <th scope="col" class="relative py-3.5 pl-3 pr-4 sm:pr-6 lg:pr-8">
-                                            <span class="sr-only">Edit</span>
+                                        <th scope="col"
+                                            class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                                            Description
                                         </th>
                                     </tr>
                                     </thead>
                                     <tbody class="divide-y divide-gray-200 bg-white">
                                     <tr v-for="item in tasks" :key="item.task_id">
-                                        <td v-if="item.status === 'completed'" class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ item.description }}</td>
-                                        <td v-if="item.status === 'completed'" class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6 lg:pr-8">
+                                        <td v-if="item.status === 'completed'"
+                                            class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                                            {{ item.description }}
+                                        </td>
+                                        <td v-if="item.status === 'completed'"
+                                            class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6 lg:pr-8">
                                             <div class="flex justify-between">
-                                                <div>{{ item.status }}</div>
                                                 <button @click="notCompleted(item)"
-                                                        class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                                        class="inline-flex justify-center py-1 px-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                                                     Not Completed
                                                 </button>
                                             </div>
                                         </td>
-                                        <td v-if="item.status === 'completed'" class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6 lg:pr-8"></td>
                                     </tr>
                                     </tbody>
                                 </table>
@@ -339,7 +363,7 @@ export default {
     data() {
         return {
             showTab: 'PickedUp',
-            myTab: 'PickedUp',
+            myTab: 'Ready To Complete',
             textMessage: {
                 customerName: this.customer.first_name + " " + this.customer.last_name,
                 customerPhoneNumber: null,
@@ -348,10 +372,13 @@ export default {
                 userPhoneNumber: this.user.phone_number
             },
             tabs: [
-                {name: 'Created', alternateName: 'New', href: '#created', current: false, count: 0},
-                {name: 'PickedUp', alternateName: 'Ready To Complete', href: '#approval', current: true, count: 0},
-                {name: 'Completed', alternateName: 'Finished', href: '#approval', current: false, count: 0}
-            ]
+                {name: 'Created', alternateName: 'New', href: '#', current: false, count: 0},
+                {name: 'PickedUp', alternateName: 'Ready To Complete', href: '#', current: true, count: 0},
+                {name: 'Completed', alternateName: 'Finished', href: '#', current: false, count: 0}
+            ],
+            createdObjects: 0,
+            approvedObjects: 0,
+            completedObjects: 0,
         }
     },
     props: {
@@ -399,7 +426,7 @@ export default {
                 }
             }
         },
-        remove(item){
+        remove(item) {
             Inertia.post('/task/deleteItem', item)
         },
         completed(item) {
