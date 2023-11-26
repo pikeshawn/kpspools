@@ -94,35 +94,35 @@ class Task extends Model
 
 
             foreach ($custTasks as $task) {
-               if ($task->status === 'created' ||
-                   $task->status === 'approved' ||
-                   $task->status === 'denied' ||
-                   $task->status === 'diy'
-               ) {
-                   $cust = [];
-                   $cust['customer_id'] = $customer->id;
-                   $cust['task_id'] = $task->id;
-                   $cust['first_name'] = $customer->first_name;
-                   $cust['last_name'] = $customer->last_name;
-                   $cust['description'] = $task->description;
-                   $cust['type'] = $task->type;
-                   $cust['status'] = $task->status;
-                   $cust['assigned'] = $task->assigned;
-                   $cust['price'] = $task->price;
-                   $cust['deleted'] = false;
-                   $cust['pickedUp'] = false;
-                   $cust['sent'] = $task->sent;
-                   if ($task->status == 'approved'){
-                       $cust['approved'] = true;
-                   } else {
-                       $cust['approved'] = false;
-                   }
+                if ($task->status === 'created' ||
+                    $task->status === 'approved' ||
+                    $task->status === 'denied' ||
+                    $task->status === 'diy'
+                ) {
+                    $cust = [];
+                    $cust['customer_id'] = $customer->id;
+                    $cust['task_id'] = $task->id;
+                    $cust['first_name'] = $customer->first_name;
+                    $cust['last_name'] = $customer->last_name;
+                    $cust['description'] = $task->description;
+                    $cust['type'] = $task->type;
+                    $cust['status'] = $task->status;
+                    $cust['assigned'] = $task->assigned;
+                    $cust['price'] = $task->price;
+                    $cust['deleted'] = false;
+                    $cust['pickedUp'] = false;
+                    $cust['sent'] = $task->sent;
+                    if ($task->status == 'approved') {
+                        $cust['approved'] = true;
+                    } else {
+                        $cust['approved'] = false;
+                    }
 
-                   $serviceman = User::find($task->assigned);
-                   $cust['name'] = $serviceman->name;
+                    $serviceman = User::find($task->assigned);
+                    $cust['name'] = $serviceman->name;
 
-                   array_push($tasks, $cust);
-               }
+                    array_push($tasks, $cust);
+                }
             }
         }
 
@@ -137,6 +137,48 @@ class Task extends Model
         foreach ($t as $task) {
             $line = [];
             $line["id"] = $task->id;
+            $line["description"] = $task->description;
+            $line["status"] = $task->status;
+            $line["completed"] = false;
+            $allEnabledTasks[] = $line;
+        }
+
+        return collect($allEnabledTasks);
+    }
+
+    static public function allTasksForPoolGuy()
+    {
+        $allEnabledTasks = [];
+        if (Auth::user()->is_admin == 1) {
+            $t = Task::where('status', 'pickedUp')
+                ->orWhere('status', 'completed')
+                ->orWhere('status', 'created')
+                ->orWhere('status', 'approved')
+                ->get();
+        } else {
+            $t = Task::where('assigned', Auth::user()->id)
+                ->where('status', 'pickedUp')
+                ->orWhere('status', 'completed')
+                ->orWhere('status', 'created')
+                ->orWhere('status', 'approved')
+                ->get();
+        }
+
+//        $t = Task::where('status', 'pickedUp')
+//            ->get();
+
+//        dd($t);
+
+        foreach ($t as $task) {
+            $c = Customer::find($task->customer_id);
+            $a = Address::find($c->user_id);
+            $poolGuy = User::find($task->assigned);
+            $line = [];
+            $line["id"] = $task->id;
+            $line["customerName"] = "$c->first_name $c->last_name";
+            $line["poolGuy"] = "$poolGuy->name";
+            $line["customerPhoneNumber"] = $c->phone_number;
+            $line["address"] = "$a->address_line_1, $c->city $c->state $c->zip";
             $line["description"] = $task->description;
             $line["status"] = $task->status;
             $line["completed"] = false;

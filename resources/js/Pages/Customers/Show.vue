@@ -109,7 +109,7 @@
                     <div class="flex justify-between">
                         <div>Created: {{ createdObjects  }}</div>
                         <div>Not Completed: {{ approvedObjects  }}</div>
-                        <div>Completed: {{ approvedObjects  }}</div>
+                        <div>Completed: {{ completedObjects  }}</div>
                     </div>
                     <label for="tabs" class="sr-only">Select a tab</label>
                     <!-- Use an "onChange" listener to redirect the user to the selected tab URL. -->

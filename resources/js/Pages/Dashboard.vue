@@ -8,7 +8,6 @@
                 :href="route('customers')">
                 Customers
             </inertia-link>
-            <br>
             <inertia-link
                 class="mb-2.5 inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                 :href="route('customers.create')">
@@ -22,11 +21,18 @@
                 :href="route('tasksNeedsApproval')">
                 Needs Approval
             </inertia-link>
-            <br>
             <inertia-link
                 class="mb-2.5 inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                 :href="route('tasks')">
                 SCP List
+            </inertia-link>
+        </div>
+
+        <div class="flex justify-between">
+            <inertia-link
+                class="mb-2.5 inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                :href="route('repairsAndPartsList')">
+                Repairs And Parts List
             </inertia-link>
         </div>
 

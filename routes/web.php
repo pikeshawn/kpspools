@@ -169,3 +169,7 @@ Route::middleware(['auth:sanctum', 'verified'])->get('/tasks',
 Route::middleware(['auth:sanctum', 'verified'])->get('/tasksNeedsApproval',
     [TaskController::class, 'tasksNeedsApproval'])
     ->name('tasksNeedsApproval');
+
+Route::middleware(['auth:sanctum', 'verified'])->get('/repairsAndPartsList',
+    [TaskController::class, 'repairsAndPartsList'])
+    ->name('repairsAndPartsList');

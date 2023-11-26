@@ -49,6 +49,23 @@ class TaskController extends Controller
         ]);
     }
 
+    public function repairsAndPartsList()
+    {
+
+//        dd(Auth::user());
+
+//        dd(User::isAdmin());
+
+//            dd('isAdmin');
+        $tasks = Task::allTasksForPoolGuy();
+
+//        return $tasks;
+
+        return Inertia::render('Task/RepairsAndPartsList', [
+            'tasks' => $tasks,
+        ]);
+    }
+
     public function requestApproval(Request $request)
     {
 
