@@ -10,6 +10,8 @@
                 <label for="tabs" class="sr-only">Select a tab</label>
                 <!-- Use an "onChange" listener to redirect the user to the selected tab URL. -->
                 <select id="tabs" name="tabs"
+                        v-model="myTab"
+                        @change="changeSmallTab()"
                         class="block w-full rounded-md border-gray-300 py-2 pl-3 pr-10 text-base focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm">
                     <option v-for="tab in tabs" :key="tab.name" :selected="tab.current">{{ tab.alternateName }}</option>
                 </select>
@@ -141,7 +143,7 @@
 
         </div>
 
-        <pre>{{ tasks }}</pre>
+<!--        <pre>{{ tasks }}</pre>-->
 
     </layout>
 
@@ -173,6 +175,7 @@ export default {
     data() {
         return {
             showTab: 'Created',
+            myTab: 'Created',
             approved: null,
             pickedUp: false,
             createdObjects: 0,
@@ -210,6 +213,20 @@ export default {
                 if (this.tabs[i].name === tab.name) {
                     this.tabs[i].current = true
                     this.showTab = tab.name
+                }
+            }
+        },
+        changeSmallTab() {
+            for (let i = 0; i < this.tabs.length; i++) {
+                this.tabs[i].current = false
+                if (this.tabs[i].alternateName === this.myTab) {
+                    this.tabs[i].current = true
+
+                    if (this.myTab === 'Pickup') {
+                        this.showTab = 'Created';
+                    } else if (this.myTab === 'Inventory') {
+                        this.showTab = 'Approved';
+                    }
                 }
             }
         },

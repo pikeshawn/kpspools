@@ -49,7 +49,6 @@
                                     <div class="-mr-2">
                                         <PopoverButton class="bg-white rounded-md p-2 inline-flex items-center justify-center text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500">
                                             <span class="sr-only">Close menu</span>
-                                            <XIcon class="h-6 w-6" aria-hidden="true" />
                                         </PopoverButton>
                                     </div>
                                 </div>
@@ -425,22 +424,22 @@
 import { defineComponent, h } from 'vue'
 import { Popover, PopoverButton, PopoverGroup, PopoverPanel } from '@headlessui/vue'
 import {
-    AnnotationIcon,
-    ChatAlt2Icon,
-    ChatAltIcon,
-    DocumentReportIcon,
+    // AnnotationIcon,
+    // ChatAlt2Icon,
+    // ChatAltIcon,
+    // DocumentReportIcon,
     HeartIcon,
     InboxIcon,
-    MenuIcon,
-    PencilAltIcon,
+    // MenuIcon,
+    // PencilAltIcon,
     QuestionMarkCircleIcon,
-    ReplyIcon,
+    // ReplyIcon,
     SparklesIcon,
     TrashIcon,
     UsersIcon,
-    XIcon,
-} from '@heroicons/vue/outline'
-import { ChevronDownIcon } from '@heroicons/vue/solid'
+    // XIcon,
+} from '@heroicons/vue/24/outline'
+import { ChevronDownIcon } from '@heroicons/vue/24/solid'
 
 const solutions = [
     {
@@ -449,13 +448,6 @@ const solutions = [
         href: '#',
         icon: InboxIcon,
     },
-    {
-        name: 'Messaging',
-        description: 'Speak directly to your customers in a more meaningful way.',
-        href: '#',
-        icon: AnnotationIcon,
-    },
-    { name: 'Live Chat', description: "Your customers' data will be safe and secure.", href: '#', icon: ChatAlt2Icon },
     {
         name: 'Knowledge Base',
         description: "Connect with third-party tools that you're already using.",
@@ -468,42 +460,7 @@ const features = [
         name: 'Unlimited Inboxes',
         description: 'Ac tincidunt sapien vehicula erat auctor pellentesque rhoncus. Et magna sit morbi lobortis.',
         icon: InboxIcon,
-    },
-    {
-        name: 'Manage Team Members',
-        description: 'Ac tincidunt sapien vehicula erat auctor pellentesque rhoncus. Et magna sit morbi lobortis.',
-        icon: UsersIcon,
-    },
-    {
-        name: 'Spam Report',
-        description: 'Ac tincidunt sapien vehicula erat auctor pellentesque rhoncus. Et magna sit morbi lobortis.',
-        icon: TrashIcon,
-    },
-    {
-        name: 'Compose in Markdown',
-        description: 'Ac tincidunt sapien vehicula erat auctor pellentesque rhoncus. Et magna sit morbi lobortis.',
-        icon: PencilAltIcon,
-    },
-    {
-        name: 'Team Reporting',
-        description: 'Ac tincidunt sapien vehicula erat auctor pellentesque rhoncus. Et magna sit morbi lobortis.',
-        icon: DocumentReportIcon,
-    },
-    {
-        name: 'Saved Replies',
-        description: 'Ac tincidunt sapien vehicula erat auctor pellentesque rhoncus. Et magna sit morbi lobortis.',
-        icon: ReplyIcon,
-    },
-    {
-        name: 'Email Commenting',
-        description: 'Ac tincidunt sapien vehicula erat auctor pellentesque rhoncus. Et magna sit morbi lobortis.',
-        icon: ChatAltIcon,
-    },
-    {
-        name: 'Connect with Customers',
-        description: 'Ac tincidunt sapien vehicula erat auctor pellentesque rhoncus. Et magna sit morbi lobortis.',
-        icon: HeartIcon,
-    },
+    }
 ]
 const metrics = [
     { id: 1, stat: '8K+', emphasis: 'Companies', rest: 'use laoreet amet lacus nibh integer quis.' },
@@ -621,9 +578,7 @@ export default {
         PopoverPanel,
         ChevronDownIcon,
         InboxIcon,
-        MenuIcon,
         SparklesIcon,
-        XIcon,
     },
     setup() {
         return {

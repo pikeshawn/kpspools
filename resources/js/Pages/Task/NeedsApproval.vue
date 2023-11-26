@@ -6,16 +6,23 @@
 
 
         <div v-if="user.is_admin === 1">
-
-            <pre>{{ showTab }}</pre>
-
             <div>
                 <div class="sm:hidden">
+                    <div class="flex justify-between">
+                        <div>Created: {{ createdObjects  }}</div>
+                        <div>Approved: {{ approvedObjects  }}</div>
+                        <div>Denied: {{ deniedObjects  }}</div>
+                        <div>DIY: {{ diydObjects  }}</div>
+                    </div>
                     <label for="tabs" class="sr-only">Select a tab</label>
                     <!-- Use an "onChange" listener to redirect the user to the selected tab URL. -->
                     <select id="tabs" name="tabs"
+                            v-model="myTab"
+                            @change="changeSmallTab()"
                             class="block w-full rounded-md border-gray-300 py-2 pl-3 pr-10 text-base focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm">
-                        <option v-for="tab in tabs" :key="tab.name" :selected="tab.current">{{ tab.name }}</option>
+                        <option v-for="tab in tabs" :key="tab.name" :selected="tab.current">
+                            {{ tab.name }}
+                        </option>
                     </select>
                 </div>
                 <div class="hidden sm:block">
@@ -596,6 +603,7 @@ export default {
         return {
             approved: null,
             showTab: 'Created',
+            myTab: 'Created',
             pickedUp: false,
             tabs: [
                 {name: 'Created', href: '#created', current: true, count: 0},
@@ -704,6 +712,24 @@ export default {
                 }
             }
 
+        },
+        changeSmallTab() {
+            for (let i = 0; i < this.tabs.length; i++) {
+                this.tabs[i].current = false
+                if (this.tabs[i].name === this.myTab) {
+                    this.tabs[i].current = true
+
+                    if (this.tabs[i].name === 'Created') {
+                        this.showTab = 'Created';
+                    } else if (this.tabs[i].name === 'Approval') {
+                        this.showTab = 'Approval';
+                    } else if (this.tabs[i].name === 'Denied') {
+                        this.showTab = 'Denied';
+                    } else if (this.tabs[i].name === 'DIY') {
+                        this.showTab = 'DIY';
+                    }
+                }
+            }
         },
         approveItem(item) {
             item.approved = !item.approved

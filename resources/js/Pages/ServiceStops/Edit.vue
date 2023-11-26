@@ -52,7 +52,7 @@
                                             <select id="chlorine" name="chlorine"
                                                     v-model="form.chlorine_level"
                                                     class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-                                                <option v-for="option in [ '0.0', '1.0', '2.0', '3.0', '4.0', '5.0', '6.0', '7.0', '8.0', '9.0', '10.0', '10+']">{{ option }}</option>
+                                                <option v-for="option in [ '0.0', '1.0', '2.0', '3.0', '4.0', '5.0', '6.0', '7.0', '8.0', '9.0', '10.0']">{{ option }}</option>
                                             </select>
                                             <div class="mt-2" v-if="form.chlorine_level">{{ form.chlorine_level }}</div>
                                         </div>

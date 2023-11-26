@@ -39,26 +39,6 @@
                         <label for="part" class="block text-sm font-medium leading-6 text-gray-900">Part</label>
                     </div>
                 </div>
-                <div class="flex justify-around" style="width: 100%">
-                    <div class="flex flex-col">
-                        <label for="brush">Verbal Approval</label>
-                        <Switch
-                            @click="form.approval = !form.approval"
-                            id="brush" v-model="form.approval"
-                            :class="[form.approval ? 'bg-indigo-600' : 'bg-gray-200', 'relative inline-flex flex-shrink-0 h-6 w-11 border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500']">
-                            <span class="sr-only">Use setting</span>
-                            <span aria-hidden="true"
-                                  :class="[form.approval ? 'translate-x-5' : 'translate-x-0', 'pointer-events-none inline-block h-5 w-5 rounded-full bg-white shadow transform ring-0 transition ease-in-out duration-200']"/>
-                        </Switch>
-                        <div class="mt-2">{{ form.approval }}</div>
-                    </div>
-                    <div class="flex flex-col">
-                        <label for="approvalDate">Approval Date</label>
-                        <input
-                            id="approvalDate"
-                            type="datetime-local" v-model="form.approvedDate">
-                    </div>
-                </div>
             </div>
         </fieldset>
         <div class="mt-6 flex items-center justify-end gap-x-6">

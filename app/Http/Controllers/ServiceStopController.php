@@ -167,11 +167,14 @@ class ServiceStopController extends Controller
         $start = new Carbon($request->timeIn);
         $end = new Carbon($request->timeOut);
 
+        $phLevel = $request->ph_level ?? 0;
+        $chlorineLevel = $request->chlorine_level ?? 100;
+
         $serviceStop = ServiceStop::firstOrCreate([
             'customer_id' => $request->id,
             'address_id' => $address['id'],
-            'ph_level' => $request->ph_level,
-            'chlorine_level' => $request->chlorine_level,
+            'ph_level' => $phLevel,
+            'chlorine_level' => $chlorineLevel,
             'checked_chems' => $request->checkedChems,
             'tabs_whole_mine' => $request->tabsWholeMine,
             'tabs_crushed_mine' => $request->tabsCrushedMine,

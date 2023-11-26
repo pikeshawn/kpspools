@@ -13,7 +13,6 @@
                             <div class="absolute top-0 right-0 -mr-12 pt-2">
                                 <button class="ml-1 flex items-center justify-center h-10 w-10 rounded-full focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white" @click="sidebarOpen = false">
                                     <span class="sr-only">Close sidebar</span>
-                                    <XIcon class="h-6 w-6 text-white" aria-hidden="true" />
                                 </button>
                             </div>
                         </TransitionChild>
@@ -120,7 +119,6 @@
             <div class="md:hidden pl-1 pt-1 sm:pl-3 sm:pt-3">
                 <button class="-ml-0.5 -mt-0.5 h-12 w-12 inline-flex items-center justify-center rounded-md text-gray-500 hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500" @click="sidebarOpen = true">
                     <span class="sr-only">Open sidebar</span>
-                    <MenuIcon class="h-6 w-6" aria-hidden="true" />
                 </button>
             </div>
             <header>
@@ -219,10 +217,10 @@ import {
     FolderIcon,
     HomeIcon,
     InboxIcon,
-    MenuIcon,
+    // MenuIcon,
     UsersIcon,
-    XIcon
-} from '@heroicons/vue/outline'
+    // XIcon
+} from '@heroicons/vue/24/outline'
 
 const navigation = [
     { name: 'Dashboard', href: '#', icon: HomeIcon, current: true },
@@ -243,8 +241,6 @@ export default {
         DialogOverlay,
         TransitionChild,
         TransitionRoot,
-        MenuIcon,
-        XIcon,
         Link,
     },
     methods: {
