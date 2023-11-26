@@ -154,6 +154,10 @@ Route::middleware(['auth:sanctum', 'verified'])->post('/task/changeStatus',
     [TaskController::class, 'changeStatus'])
     ->name('task.changeStatus');
 
+Route::middleware(['auth:sanctum', 'verified'])->post('/task/changeDescription',
+    [TaskController::class, 'changeDescription'])
+    ->name('task.changeDescription');
+
 Route::middleware(['auth:sanctum', 'verified'])->post('/task/deleteItem',
     [TaskController::class, 'deleteItem'])
     ->name('task.deleteItem');

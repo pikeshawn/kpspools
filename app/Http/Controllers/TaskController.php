@@ -88,6 +88,14 @@ class TaskController extends Controller
         $task->save();
         self::addTaskStatus($task, $request->status);
     }
+    public function changeDescription(Request $request)
+    {
+//        dd($request);
+        $task = Task::find($request->task_id);
+        $task->description = $request->description;
+        $task->save();
+        self::addTaskStatus($task, $request->status);
+    }
 
     public function approveItem(Request $request)
     {

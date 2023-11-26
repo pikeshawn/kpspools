@@ -156,12 +156,7 @@ class Task extends Model
                 ->orWhere('status', 'approved')
                 ->get();
         } else {
-            $t = Task::where('assigned', Auth::user()->id)
-                ->where('status', 'pickedUp')
-                ->orWhere('status', 'completed')
-                ->orWhere('status', 'created')
-                ->orWhere('status', 'approved')
-                ->get();
+            $t = Task::where('assigned', Auth::user()->id)->get();
         }
 
 //        $t = Task::where('status', 'pickedUp')
