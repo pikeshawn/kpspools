@@ -223,7 +223,7 @@ class TaskController extends Controller
     {
 
 //      get all data
-//        dd($request);
+//        dd($request->todoAssignee);
 
         if (is_null($request->type)){
             $request->type = 'part';
@@ -240,6 +240,7 @@ class TaskController extends Controller
             self::addStatus($task, 'pickedUp');
             self::addTaskStatus($task, 'pickedUp',);
             $task->assigned = $request->todoAssignee;
+            $task->save();
         }
 //        if task has been verbally approved then add the approved status
 //        if ($request->approval) {
