@@ -207,12 +207,15 @@ class TaskController extends Controller
         $address = DB::select('Select * from addresses where customer_id = '
             . $customer->id);
 
+        $users = User::select(['id', 'name'])->where('type', '=', 'serviceman')->where('active', '=', true)->get();
+
 //        dd($customer->id);
 
         return Inertia::render('Task/Create', [
             'customerId' => $customer->id,
             'customer' => $customer,
             'customerName' => $customer->last_name,
+            'users' => $users,
         ]);
     }
 
@@ -236,6 +239,7 @@ class TaskController extends Controller
         if ($request->type == 'todo'){
             self::addStatus($task, 'pickedUp');
             self::addTaskStatus($task, 'pickedUp',);
+            $task->assigned = $request->todoAssignee;
         }
 //        if task has been verbally approved then add the approved status
 //        if ($request->approval) {

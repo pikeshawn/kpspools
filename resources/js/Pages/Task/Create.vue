@@ -41,16 +41,34 @@
                 </div>
             </div>
         </fieldset>
-        <div class="mt-6 flex items-center justify-end gap-x-6">
-            <button type="button" class="text-sm font-semibold leading-6 text-gray-900">Cancel</button>
+        <div class="mt-6 flex items-center justify-around gap-x-6">
+            <button type="button" class="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
+                Cancel
+            </button>
             <button type="submit"
                     @click="store(customerId, user.id)"
                     class="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
                 Add Task
             </button>
         </div>
-
-<!--        <pre>{{ tasks }}</pre>-->
+        <div v-if="form.type === 'todo' && user.is_admin === 1" class="py-6">
+            <div>
+                <label class="text-base font-semibold text-gray-900">Assign Todo</label>
+                <fieldset class="mt-4">
+                    <legend class="sr-only">Assign Task</legend>
+                    <div class="space-y-4">
+                        <div v-for="user in users" :key="user.id" class="flex items-center">
+                            <input :id="user.id" name="notification-method" type="radio" v-model="form.todoAssignee" :value="user.id"
+                                   class="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600"/>
+                            <label :for="user.id" class="ml-3 block text-sm font-medium leading-6 text-gray-900">{{
+                                    user.name
+                                }}</label>
+                        </div>
+                    </div>
+                </fieldset>
+            </div>
+            <!--                <pre>{{ users }}</pre>-->
+        </div>
     </layout>
 
 </template>
@@ -78,6 +96,7 @@ export default {
         customer: String,
         customerName: String,
         user: String,
+        users: String,
         tasks: Array
     },
     data() {
@@ -89,11 +108,13 @@ export default {
             customer_id: '',
             description: '',
             type: '',
+            todoAssignee: null,
             approval: false,
             approvedDate: null,
             status: 'created',
         })
         const errors = reactive({})
+
         function store(customerId, userId) {
             this.form.customer_id = customerId
             this.form.assigned = userId
@@ -104,6 +125,7 @@ export default {
 
     },
     mounted() {
+        this.form.todoAssignee = this.user.id
     },
     methods: {},
     computed: {
