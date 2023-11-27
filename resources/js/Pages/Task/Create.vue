@@ -50,7 +50,7 @@
             </button>
         </div>
 
-        <pre>{{ tasks }}</pre>
+<!--        <pre>{{ tasks }}</pre>-->
     </layout>
 
 </template>

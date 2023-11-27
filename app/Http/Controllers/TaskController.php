@@ -222,17 +222,26 @@ class TaskController extends Controller
 //      get all data
 //        dd($request);
 
+        if (is_null($request->type)){
+            $request->type = 'part';
+        }
+
 //      add to db with first or create
 //        - add task to db
         $task = self::createTask($request);
 
 //        - add status to status table
         self::addTaskStatus($task, 'created',);
-//        if task has been verbally approved then add the approved status
-        if ($request->approval) {
-            self::addTaskStatus($task, 'approved', $request->approvedDate);
-            self::addApprovedStatusToTaskTable($task);
+
+        if ($request->type == 'todo'){
+            self::addStatus($task, 'pickedUp');
+            self::addTaskStatus($task, 'pickedUp',);
         }
+//        if task has been verbally approved then add the approved status
+//        if ($request->approval) {
+//            self::addTaskStatus($task, 'approved', $request->approvedDate);
+//            self::addApprovedStatusToTaskTable($task);
+//        }
 
 //      process after data has been add to db
 //        - send notification for approval - if a part, repair, or above preapproval amount

@@ -38,6 +38,8 @@ class NotificationsTest extends TestCase
                     $message = "DO NOT REPLY\n============\nHello $first_name, You have an outstanding bill:\nInvoice Name::\n$invoice_name\n$$bid_price that was billed on $invoice_date. You can use one of the following links to access it:\n\n$link1\n\n$link2\n\n$link3\nYou will be prompted to sign up for the application. Once signed up, you will be taken to the invoice where you can scroll down and pay.\n\nIf you are not taken to the invoice:\n1. Select Jobs at the bottom of the application.\n2. Select approved at the top of the page.\n3. Select the blue box to view the invoice.\n4. Select 'Pay with Credit Card' at the bottom of the invoice.\n5. Enter your credit card information to make payment.\n\nPlease reach out to Shawn if you think that this is an error or you have any questions: 480-703-4902 or 480-622-6441.";
                 }
 
+                $message = "";
+
                 echo $message;
                 $phone_numbers = [
                     $phone
