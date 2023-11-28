@@ -9,36 +9,47 @@ use Tests\TestCase;
 class NotificationsTest extends TestCase
 {
 
-//  vendor/bin/phpunit /Users/shawnpike/Documents/code/business/kpspools/tests/Feature/NotificationsTest.php
+//  vendor/bin/phpunit /Users/shawnpike/Documents/code/business/kpspools/tests/Feature/Notifications/NotificationsTest.php
 
 
     public function test_sending_reminder_for_bill_payment()
     {
-        $fp = @fopen("/Users/shawnpike/Documents/code/business/kpspools/scratch/Billing/2023/10_October/unpaid_test.csv", "r");
+        $fp = @fopen("/Users/shawnpike/Documents/code/business/kpspools/scratch/Billing/2023/11_November/unpaid_test.csv", "r");
         if ($fp) {
             while (($buffer = fgets($fp, 4096)) !== false) {
 //                echo $buffer;
                 $line = explode(',', $buffer);
                 $first_name = $line[1];
                 $last_name = $line[2];
-                $phone = $line[3];
-                $invoice_name = $line[4];
-                $bid_price = $line[5];
-                $invoice_date = $line[7];
-                $signedUpStatus = $line[8];
-                $link1 = $line[9];
-                $link2 = $line[10];
-                $link3 = $line[11];
+                $phone = $line[4];
+                $invoice_name = $line[5];
+                $bid_price = $line[6];
+                $invoice_date = $line[8];
+                $signedUpStatus = $line[9];
+                $link1 = $line[10];
+                $link2 = $line[11];
+                $link3 = $line[12];
+
+//                dd("
+//                    $first_name\n
+//                    $phone\n
+//                    $invoice_name\n
+//                    $bid_price\n
+//                    $invoice_date\n
+//                    $link1\n
+//                    $link2\n
+//                    $link3\n
+//                ");
 
                 $bid_price = $bid_price / 100;
 
-                if ($signedUpStatus == 'signed up') {
-                    $message = "DO NOT REPLY\n============\nHello $first_name, You have an outstanding bill:\nInvoice Name::\n$invoice_name\n$$bid_price that was billed on $invoice_date. You can use one of the following links to access it:\n\n$link1\n\n$link2\n\n$link3\nPlease reach out to Shawn if you think that this is an error or you have any questions at 480-703-4902 or 480-622-6441.";
-                } else {
-                    $message = "DO NOT REPLY\n============\nHello $first_name, You have an outstanding bill:\nInvoice Name::\n$invoice_name\n$$bid_price that was billed on $invoice_date. You can use one of the following links to access it:\n\n$link1\n\n$link2\n\n$link3\nYou will be prompted to sign up for the application. Once signed up, you will be taken to the invoice where you can scroll down and pay.\n\nIf you are not taken to the invoice:\n1. Select Jobs at the bottom of the application.\n2. Select approved at the top of the page.\n3. Select the blue box to view the invoice.\n4. Select 'Pay with Credit Card' at the bottom of the invoice.\n5. Enter your credit card information to make payment.\n\nPlease reach out to Shawn if you think that this is an error or you have any questions: 480-703-4902 or 480-622-6441.";
-                }
+//                if ($signedUpStatus == 'signed up') {
+//                    $message = "DO NOT REPLY\n============\nHello $first_name, You have an outstanding bill:\nInvoice Name::\n$invoice_name\n$$bid_price that was billed on $invoice_date. You can use one of the following links to access it:\n\n$link1\n\n$link2\n\n$link3\nPlease reach out to Shawn if you think that this is an error or you have any questions at 480-703-4902 or 480-622-6441.";
+//                } else {
+//                    $message = "DO NOT REPLY\n============\nHello $first_name, You have an outstanding bill:\nInvoice Name::\n$invoice_name\n$$bid_price that was billed on $invoice_date. You can use one of the following links to access it:\n\n$link1\n\n$link2\n\n$link3\nYou will be prompted to sign up for the application. Once signed up, you will be taken to the invoice where you can scroll down and pay.\n\nIf you are not taken to the invoice:\n1. Select Jobs at the bottom of the application.\n2. Select approved at the top of the page.\n3. Select the blue box to view the invoice.\n4. Select 'Pay with Credit Card' at the bottom of the invoice.\n5. Enter your credit card information to make payment.\n\nPlease reach out to Shawn if you think that this is an error or you have any questions: 480-703-4902 or 480-622-6441.";
+//                }
 
-                $message = "";
+                $message = "DO NOT REPLY\n============\nHi $first_name, just a friendly reminder about your bill for:\nInvoice Name::\n$invoice_name\n$$bid_price that was billed on $invoice_date. You can use one of the following links to access it:\n\n$link1\n\n$link2\n\n$link3\nYour prompt payment would be much appreciated.\nPlease reach out to Shawn if you think that this is an error or you have any questions at 480-703-4902 or 480-622-6441.\nHappy holidays from KPS POOLS LLC!";
 
                 echo $message;
                 $phone_numbers = [

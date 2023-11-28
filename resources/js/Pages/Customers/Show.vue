@@ -34,29 +34,39 @@
                                 </dd>
                             </div>
                             <div v-if="user.is_admin === 1">
-                                <div class="px-4 py-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-                                    <dt class="text-sm font-medium leading-6 text-white">Plan Price</dt>
-                                    <dd class="mt-1 text-sm leading-6 text-gray-400 sm:col-span-2 sm:mt-0">
-                                        {{ customer.plan_price }}
-                                    </dd>
+                                <div class="flex justify-between">
+                                    <div class="px-4 py-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                                        <dt class="text-sm font-medium leading-6 text-white">Plan Price</dt>
+                                        <dd class="mt-1 text-sm leading-6 text-gray-400 sm:col-span-2 sm:mt-0">
+                                            {{ customer.plan_price }}
+                                        </dd>
+                                    </div>
+                                    <div class="px-4 py-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                                        <dt class="text-sm font-medium leading-6 text-white">Chemicals Included</dt>
+                                        <dd class="mt-1 text-sm leading-6 text-gray-400 sm:col-span-2 sm:mt-0">
+                                            {{ customer.chemicals_included }}
+                                        </dd>
+                                    </div>
                                 </div>
-                                <div class="px-4 py-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-                                    <dt class="text-sm font-medium leading-6 text-white">Chemicals Included</dt>
-                                    <dd class="mt-1 text-sm leading-6 text-gray-400 sm:col-span-2 sm:mt-0">
-                                        {{ customer.chemicals_included }}
-                                    </dd>
-                                </div>
-                                <div class="px-4 py-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-                                    <dt class="text-sm font-medium leading-6 text-white">Service Day</dt>
-                                    <dd class="mt-1 text-sm leading-6 text-gray-400 sm:col-span-2 sm:mt-0">
-                                        {{ customer.service_day }}
-                                    </dd>
-                                </div>
-                                <div class="px-4 py-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-                                    <dt class="text-sm font-medium leading-6 text-white">Terms</dt>
-                                    <dd class="mt-1 text-sm leading-6 text-gray-400 sm:col-span-2 sm:mt-0">
-                                        {{ customer.terms }}
-                                    </dd>
+                                <div class="flex justify-between">
+                                    <div class="px-4 py-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                                        <dt class="text-sm font-medium leading-6 text-white">Service Day</dt>
+                                        <dd class="mt-1 text-sm leading-6 text-gray-400 sm:col-span-2 sm:mt-0">
+                                            {{ customer.service_day }}
+                                        </dd>
+                                    </div>
+                                    <div class="px-4 py-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                                        <dt class="text-sm font-medium leading-6 text-white">Serviceman</dt>
+                                        <dd class="mt-1 text-sm leading-6 text-gray-400 sm:col-span-2 sm:mt-0">
+                                            {{ serviceman.name }}
+                                        </dd>
+                                    </div>
+                                    <div class="px-4 py-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                                        <dt class="text-sm font-medium leading-6 text-white">Terms</dt>
+                                        <dd class="mt-1 text-sm leading-6 text-gray-400 sm:col-span-2 sm:mt-0">
+                                            {{ customer.terms }}
+                                        </dd>
+                                    </div>
                                 </div>
                             </div>
                         </dl>
@@ -387,6 +397,7 @@ export default {
         address: String,
         user: String,
         tasks: Array,
+        serviceman: Array,
         completedTasks: Array
     },
     methods: {

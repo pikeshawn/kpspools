@@ -152,6 +152,8 @@ class CustomerController extends Controller
         $tasks = Task::allPickedUpTasksRelatedToSpecificCustomer($customer->id);
         $completedTasks = Task::allCompletedTasksRelatedToSpecificCustomer($customer->id);
 
+        $serviceman = User::find($customer->user_id);
+
 //        dd($tasks);
 
 
@@ -160,7 +162,8 @@ class CustomerController extends Controller
             'notes' => $notes,
             'address' => $address,
             'tasks' => $tasks,
-            'completedTasks' => $completedTasks
+            'completedTasks' => $completedTasks,
+            'serviceman' => $serviceman
         ]);
     }
 
