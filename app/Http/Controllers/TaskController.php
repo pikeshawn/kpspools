@@ -68,13 +68,12 @@ class TaskController extends Controller
 
     public function requestApproval(Request $request)
     {
-
         $task = Task::find($request->task_id);
 
         //        send for approval if the task has not been verbally approved
-        $message = "Do Not Reply\n==================\n\nKPS Pools wants to inform you that a part / repair is required at your pool:\n\n" . $request->description . " for " . $request->price . "$\n\nPlease call or text Shawn to approve, deny, or take care of issue yourself at either number:\n\n480.703.4902\n480.622.6441";
+        $message = "Do Not Reply\n==================\n\nKPS Pools needs to inform you about a necessary repair for your pool:\n\n" . $request->description . " for $" . $request->price . "\n\nPlease contact Shawn at 480.703.4902 or 480.622.6441 to approve, deny, or handle the issue yourself.";
 
-        self::sendforApproval($task, $message);
+        self::sendforApproval($task, $request->phone_number, $message);
 
         $task->sent = true;
         $task->save();
@@ -304,7 +303,7 @@ class TaskController extends Controller
         return $taskStatus;
     }
 
-    private function sendforApproval($task, $message = null)
+    private function sendforApproval($task, $phoneNumber, $message = null)
     {
 //        send notification to customer if new part or repair
 //          - create new notification
@@ -325,7 +324,7 @@ class TaskController extends Controller
 
 //        TODO:: change number to make this dynamic to the customer
         if ($repair || $part) {
-            Notification::route('vonage', '14807034902')
+            Notification::route('vonage', $phoneNumber)
                 ->notify(new TaskApprovalNotification($message));
         }
     }
