@@ -4,15 +4,14 @@
         <!--        Section for Admin users  -->
 
 
-
         <div v-if="user.is_admin === 1">
             <div>
                 <div class="sm:hidden">
                     <div class="flex justify-between">
-                        <div>Created: {{ createdObjects  }}</div>
-                        <div>Approved: {{ approvedObjects  }}</div>
-                        <div>Denied: {{ deniedObjects  }}</div>
-                        <div>DIY: {{ diydObjects  }}</div>
+                        <div>Created: {{ createdObjects }}</div>
+                        <div>Approved: {{ approvedObjects }}</div>
+                        <div>Denied: {{ deniedObjects }}</div>
+                        <div>DIY: {{ diydObjects }}</div>
                     </div>
                     <label for="tabs" class="sr-only">Select a tab</label>
                     <!-- Use an "onChange" listener to redirect the user to the selected tab URL. -->
@@ -55,8 +54,14 @@
                         <div v-if="item.status === 'created'">
                             <div class="border-b border-gray-200 bg-white px-4 py-5 sm:px-6">
                                 <div class="flex justify-between">
-                                    <h3 class="text-base font-semibold leading-6 text-gray-900">{{ item.first_name }}
-                                        {{ item.last_name }}</h3>
+                                    <div class="flex" style="flex-direction: column;">
+                                        <h3 class="text-base font-semibold leading-6 text-gray-900">
+                                            {{ item.first_name }} {{ item.last_name }}
+                                        </h3>
+                                        <label class="block text-sm font-medium leading-6 text-gray-900">
+                                            {{ item.phone_number }}
+                                        </label>
+                                    </div>
                                     <h3 class="text-base font-semibold leading-6 text-gray-900">{{ item.name }}</h3>
                                     <h3 class="text-base font-semibold leading-6 text-gray-900">{{ item.status }}</h3>
                                 </div>
@@ -186,8 +191,14 @@
                         <div v-if="item.status === 'approved'">
                             <div class="border-b border-gray-200 bg-white px-4 py-5 sm:px-6">
                                 <div class="flex justify-between">
-                                    <h3 class="text-base font-semibold leading-6 text-gray-900">{{ item.first_name }}
-                                        {{ item.last_name }}</h3>
+                                    <div class="flex" style="flex-direction: column;">
+                                        <h3 class="text-base font-semibold leading-6 text-gray-900">
+                                            {{ item.first_name }} {{ item.last_name }}
+                                        </h3>
+                                        <label class="block text-sm font-medium leading-6 text-gray-900">
+                                            {{ item.phone_number }}
+                                        </label>
+                                    </div>
                                     <h3 class="text-base font-semibold leading-6 text-gray-900">{{ item.name }}</h3>
                                     <h3 class="text-base font-semibold leading-6 text-gray-900">{{ item.status }}</h3>
                                 </div>
@@ -318,8 +329,14 @@
                         <div v-if="item.status === 'denied'">
                             <div class="border-b border-gray-200 bg-white px-4 py-5 sm:px-6">
                                 <div class="flex justify-between">
-                                    <h3 class="text-base font-semibold leading-6 text-gray-900">{{ item.first_name }}
-                                        {{ item.last_name }}</h3>
+                                    <div class="flex" style="flex-direction: column;">
+                                        <h3 class="text-base font-semibold leading-6 text-gray-900">
+                                            {{ item.first_name }} {{ item.last_name }}
+                                        </h3>
+                                        <label class="block text-sm font-medium leading-6 text-gray-900">
+                                            {{ item.phone_number }}
+                                        </label>
+                                    </div>
                                     <h3 class="text-base font-semibold leading-6 text-gray-900">{{ item.name }}</h3>
                                     <h3 class="text-base font-semibold leading-6 text-gray-900">{{ item.status }}</h3>
                                 </div>
@@ -449,8 +466,14 @@
                         <div v-if="item.status === 'diy'">
                             <div class="border-b border-gray-200 bg-white px-4 py-5 sm:px-6">
                                 <div class="flex justify-between">
-                                    <h3 class="text-base font-semibold leading-6 text-gray-900">{{ item.first_name }}
-                                        {{ item.last_name }}</h3>
+                                    <div class="flex" style="flex-direction: column;">
+                                        <h3 class="text-base font-semibold leading-6 text-gray-900">
+                                            {{ item.first_name }} {{ item.last_name }}
+                                        </h3>
+                                        <label class="block text-sm font-medium leading-6 text-gray-900">
+                                            {{ item.phone_number }}
+                                        </label>
+                                    </div>
                                     <h3 class="text-base font-semibold leading-6 text-gray-900">{{ item.name }}</h3>
                                     <h3 class="text-base font-semibold leading-6 text-gray-900">{{ item.status }}</h3>
                                 </div>

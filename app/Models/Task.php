@@ -89,6 +89,7 @@ class Task extends Model
             $query->where('status', 'created');
         }])->get();
 
+
         foreach ($customers as $customer) {
             $custTasks = Task::where('customer_id', $customer->id)->get();
 
@@ -99,8 +100,10 @@ class Task extends Model
                     $task->status === 'denied' ||
                     $task->status === 'diy'
                 ) {
+
                     $cust = [];
                     $cust['customer_id'] = $customer->id;
+                    $cust['phone_number'] = $customer->phone_number;
                     $cust['task_id'] = $task->id;
                     $cust['first_name'] = $customer->first_name;
                     $cust['last_name'] = $customer->last_name;
