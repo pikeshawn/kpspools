@@ -117,9 +117,9 @@
             <div>
                 <div class="sm:hidden">
                     <div class="flex justify-between">
-                        <div>Created: {{ createdObjects  }}</div>
-                        <div>Not Completed: {{ approvedObjects  }}</div>
-                        <div>Completed: {{ completedObjects  }}</div>
+                        <div>Created: {{ createdObjects }}</div>
+                        <div>Not Completed: {{ approvedObjects }}</div>
+                        <div>Completed: {{ completedObjects }}</div>
                     </div>
                     <label for="tabs" class="sr-only">Select a tab</label>
                     <!-- Use an "onChange" listener to redirect the user to the selected tab URL. -->
@@ -172,7 +172,9 @@
                                     <tr v-for="item in tasks" :key="item.task_id">
                                         <td v-if="item.status === 'created'"
                                             class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                                            {{ item.description }}
+                                            <div>{{ item.description }}</div>
+                                            <div>_______________________</div>
+                                            <div>{{ item.assigned }}</div>
                                         </td>
                                         <td v-if="item.status === 'created'"
                                             class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6 lg:pr-8">
@@ -209,7 +211,9 @@
                                     <tr v-for="item in tasks" :key="item.task_id">
                                         <td v-if="item.status === 'pickedUp'"
                                             class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                                            {{ item.description }}
+                                            <div>{{ item.description }}</div>
+                                            <div>_______________________</div>
+                                            <div>{{ item.assigned }}</div>
                                         </td>
                                         <td v-if="item.status === 'pickedUp'"
                                             class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6 lg:pr-8">
@@ -247,7 +251,9 @@
                                     <tr v-for="item in tasks" :key="item.task_id">
                                         <td v-if="item.status === 'completed'"
                                             class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                                            {{ item.description }}
+                                            <div>{{ item.description }}</div>
+                                            <div>_______________________</div>
+                                            <div>{{ item.assigned }}</div>
                                         </td>
                                         <td v-if="item.status === 'completed'"
                                             class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6 lg:pr-8">
@@ -269,6 +275,8 @@
             </div>
 
         </div>
+
+        <pre>{{ tasks }}</pre>
 
         <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <inertia-link

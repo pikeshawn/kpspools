@@ -136,6 +136,7 @@ class Task extends Model
     {
         $allEnabledTasks = [];
         $t = Task::where('customer_id', $customerId)->get();
+        $user = User::find($t[0]->assigned);
 
         foreach ($t as $task) {
             $line = [];
@@ -143,6 +144,7 @@ class Task extends Model
             $line["description"] = $task->description;
             $line["status"] = $task->status;
             $line["completed"] = false;
+            $line["assigned"] = $user->name;
             $allEnabledTasks[] = $line;
         }
 
