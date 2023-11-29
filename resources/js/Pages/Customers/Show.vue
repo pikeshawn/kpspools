@@ -276,7 +276,7 @@
 
         </div>
 
-        <pre>{{ tasks }}</pre>
+<!--        <pre>{{ tasks }}</pre>-->
 
         <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <inertia-link
