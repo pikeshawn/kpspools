@@ -4,6 +4,7 @@ use App\Http\Controllers\TaskController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\ServiceStopController;
 use App\Http\Controllers\SummaryController;
+use App\Http\Controllers\VonageWebhookController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -177,3 +178,15 @@ Route::middleware(['auth:sanctum', 'verified'])->get('/tasksNeedsApproval',
 Route::middleware(['auth:sanctum', 'verified'])->get('/repairsAndPartsList',
     [TaskController::class, 'repairsAndPartsList'])
     ->name('repairsAndPartsList');
+
+Route::get('/delivery',
+    [VonageWebhookController::class, 'delivery'])
+    ->name('delivery');
+
+Route::get('/inbound',
+    [VonageWebhookController::class, 'inbound'])
+    ->name('inbound');
+
+
+
+

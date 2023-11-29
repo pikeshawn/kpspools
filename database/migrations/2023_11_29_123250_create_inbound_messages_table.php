@@ -11,8 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('personal_access_tokens', function (Blueprint $table) {
-            $table->timestamp('expires_at')->nullable()->after('last_used_at');
+        Schema::create('inbound_messages', function (Blueprint $table) {
+            $table->id();
+            $table->integer('customer_id');
+            $table->string('text');
+            $table->json('message');
+            $table->timestamps();
         });
     }
 
@@ -21,8 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('personal_access_tokens', function (Blueprint $table) {
-            $table->dropColumn('expires_at');
-        });
+        Schema::dropIfExists('inbound_messages');
     }
 };
