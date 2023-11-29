@@ -62,6 +62,11 @@
                                             {{ item.phone_number }}
                                         </label>
                                     </div>
+                                    <Link :href="route('customers.show', item.customer_id)"
+                                          class="sticky top-0 z-10 border-y border-b-blue-500 border-t-blue-400 bg-blue-200 px-3 py-2 text-sm font-semibold leading-6 text-gray-900"
+                                          method="get" as="button">
+                                        <label class="block text-sm font-medium leading-6 text-gray-900">Customer Page</label>
+                                    </Link>
                                     <h3 class="text-base font-semibold leading-6 text-gray-900">{{ item.name }}</h3>
                                     <h3 class="text-base font-semibold leading-6 text-gray-900">{{ item.status }}</h3>
                                 </div>
@@ -199,6 +204,11 @@
                                             {{ item.phone_number }}
                                         </label>
                                     </div>
+                                    <Link :href="route('customers.show', item.customer_id)"
+                                          class="sticky top-0 z-10 border-y border-b-blue-500 border-t-blue-400 bg-blue-200 px-3 py-2 text-sm font-semibold leading-6 text-gray-900"
+                                          method="get" as="button">
+                                        <label class="block text-sm font-medium leading-6 text-gray-900">Customer Page</label>
+                                    </Link>
                                     <h3 class="text-base font-semibold leading-6 text-gray-900">{{ item.name }}</h3>
                                     <h3 class="text-base font-semibold leading-6 text-gray-900">{{ item.status }}</h3>
                                 </div>
@@ -337,6 +347,11 @@
                                             {{ item.phone_number }}
                                         </label>
                                     </div>
+                                    <Link :href="route('customers.show', item.customer_id)"
+                                          class="sticky top-0 z-10 border-y border-b-blue-500 border-t-blue-400 bg-blue-200 px-3 py-2 text-sm font-semibold leading-6 text-gray-900"
+                                          method="get" as="button">
+                                        <label class="block text-sm font-medium leading-6 text-gray-900">Customer Page</label>
+                                    </Link>
                                     <h3 class="text-base font-semibold leading-6 text-gray-900">{{ item.name }}</h3>
                                     <h3 class="text-base font-semibold leading-6 text-gray-900">{{ item.status }}</h3>
                                 </div>
@@ -474,6 +489,11 @@
                                             {{ item.phone_number }}
                                         </label>
                                     </div>
+                                    <Link :href="route('customers.show', item.customer_id)"
+                                          class="sticky top-0 z-10 border-y border-b-blue-500 border-t-blue-400 bg-blue-200 px-3 py-2 text-sm font-semibold leading-6 text-gray-900"
+                                          method="get" as="button">
+                                        <label class="block text-sm font-medium leading-6 text-gray-900">Customer Page</label>
+                                    </Link>
                                     <h3 class="text-base font-semibold leading-6 text-gray-900">{{ item.name }}</h3>
                                     <h3 class="text-base font-semibold leading-6 text-gray-900">{{ item.status }}</h3>
                                 </div>
@@ -595,7 +615,6 @@
             </div>
 
         </div>
-
 <!--        <pre>{{ tasks }}</pre>-->
 
         <!--        Section for Pool Guy users users  -->
