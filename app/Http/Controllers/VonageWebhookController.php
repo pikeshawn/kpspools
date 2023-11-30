@@ -18,7 +18,8 @@ class VonageWebhookController extends Controller
     public function inbound(Request $request)
     {
         $fullMessage = self::createMessage($request);
-        $customer = Customer::where('phone_number', $request['msisdn'])->first()->get();
+        $customer = Customer::where('phone_number', $request['msisdn'])->first();
+//        Log::debug($customer);
         self::storeMessage($request, $fullMessage, $customer);
 
         $customerName = $customer[0]->first_name . " " . $customer[0]->last_name;

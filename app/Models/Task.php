@@ -136,16 +136,28 @@ class Task extends Model
     {
         $allEnabledTasks = [];
         $t = Task::where('customer_id', $customerId)->get();
-        $user = User::find($t[0]->assigned);
 
-        foreach ($t as $task) {
-            $line = [];
-            $line["id"] = $task->id;
-            $line["description"] = $task->description;
-            $line["status"] = $task->status;
-            $line["completed"] = false;
-            $line["assigned"] = $user->name;
-            $allEnabledTasks[] = $line;
+        if($t->isNotEmpty()){
+            $user = User::find($t[0]->assigned);
+            foreach ($t as $task) {
+                $line = [];
+                $line["id"] = $task->id;
+                $line["description"] = $task->description;
+                $line["status"] = $task->status;
+                $line["completed"] = false;
+                $line["assigned"] = $user->name;
+                $allEnabledTasks[] = $line;
+            }
+        } else {
+            foreach ($t as $task) {
+                $line = [];
+                $line["id"] = $task->id;
+                $line["description"] = $task->description;
+                $line["status"] = $task->status;
+                $line["completed"] = false;
+                $line["assigned"] = '';
+                $allEnabledTasks[] = $line;
+            }
         }
 
         return collect($allEnabledTasks);
