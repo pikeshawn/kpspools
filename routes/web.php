@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\TaskController;
+use App\Http\Controllers\ChatController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\ServiceStopController;
 use App\Http\Controllers\SummaryController;
@@ -187,6 +188,13 @@ Route::get('/inbound',
     [VonageWebhookController::class, 'inbound'])
     ->name('inbound');
 
+Route::post('/chat/response',
+    [ChatController::class, 'chatResponse'])
+    ->name('chat.response');
+
+Route::get('/chat',
+    [ChatController::class, 'chat'])
+    ->name('chat');
 
 
 

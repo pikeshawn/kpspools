@@ -290,8 +290,9 @@ class ServiceStopController extends Controller
         //
 
         $ss = ServiceStop::find($request->id);
-        $ss->powder_chlorine = $request->powder_chlorine;
+        $ss->powder_chlorine = $request->powder_chlorine ?? 0;
         $ss->backwash = $request->backwash;
+        $ss->user_id = Auth::user()->getAuthIdentifier();
         $ss->vacuum = $request->vacuum;
         $ss->service_time = $request->serviceTime;
         $ss->time_out = $request->timeOut;
@@ -299,17 +300,16 @@ class ServiceStopController extends Controller
         $ss->tabs_crushed_theirs = $request->tabsCrushedTheirs;
         $ss->tabs_whole_theirs = $request->tabsWholeTheirs;
         $ss->tabs_crushed_mine = $request->tabsCrushedMine;
-        $ss->chlorine_level = $request->chlorine_level;
+        $ss->chlorine_level = $request->chlorine_level ?? 100;
         $ss->address_id = $request->addressId;
         $ss->id = $request->id;
         $ss->empty_baskets = $request->emptyBaskets;
-        $ss->ph_level = $request->ph_level;
+        $ss->ph_level = $request->ph_level ?? 0;
         $ss->tabs_whole_mine = $request->tabsWholeMine;
         $ss->liquid_chlorine = $request->liquidChlorine;
         $ss->time_in = $request->timeIn;
         $ss->brush = $request->brush;
         $ss->notes = $request->notes;
-        $ss->user_id = $request->servicemanId;
         $ss->service_type = $request->service_type;
         $ss->save();
 
