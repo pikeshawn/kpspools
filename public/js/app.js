@@ -20162,7 +20162,7 @@ __webpack_require__.r(__webpack_exports__);
   data: function data() {
     return {
       prompt: {
-        input: ''
+        message: ''
       }
     };
   },
@@ -20173,7 +20173,7 @@ __webpack_require__.r(__webpack_exports__);
       promise.then(function (response) {
         // Handle the response data here
         var $element = document.getElementById('response');
-        $element.innerHTML = _this.message;
+        $element.innerHTML = _this.response;
       })["catch"](function (error) {
         // Handle any errors that occurred during the request
         console.error(error);
@@ -25549,7 +25549,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
           return $options.store();
         }),
         "class": "inline-flex items-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-      }, "Post")])]), _hoisted_4];
+      }, "Post")])]), _hoisted_4, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("        <pre>{{ response }}</pre>")];
     }),
     _: 1 /* STABLE */
   });

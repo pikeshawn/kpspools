@@ -12,6 +12,9 @@
             </div>
         </div>
         <div id="response"></div>
+
+<!--        <pre>{{ response }}</pre>-->
+
     </layout>
 
 </template>
@@ -38,7 +41,7 @@ export default {
     data() {
         return {
             prompt: {
-                input: ''
+                message: ''
             }
         }
     },
@@ -49,7 +52,7 @@ export default {
             promise.then(response => {
                 // Handle the response data here
                 const $element = document.getElementById('response')
-                $element.innerHTML = this.message;
+                $element.innerHTML = this.response;
 
             }).catch(error => {
                 // Handle any errors that occurred during the request
