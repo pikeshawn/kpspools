@@ -22615,6 +22615,9 @@ __webpack_require__.r(__webpack_exports__);
       }, {
         id: 4,
         name: 'diy'
+      }, {
+        id: 5,
+        name: 'completed'
       }],
       createdObjects: 0,
       approvedObjects: 0,

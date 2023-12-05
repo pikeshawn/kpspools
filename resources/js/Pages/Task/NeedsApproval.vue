@@ -699,6 +699,10 @@ export default {
                 {
                     id: 4,
                     name: 'diy',
+                },
+                {
+                    id: 5,
+                    name: 'completed',
                 }
             ],
             createdObjects: 0,
