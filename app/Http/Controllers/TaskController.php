@@ -71,7 +71,7 @@ class TaskController extends Controller
         $task = Task::find($request->task_id);
 
         //        send for approval if the task has not been verbally approved
-        $message = "Do Not Reply\n==================\n\nKPS Pools needs to inform you about a necessary repair for your pool:\n\n" . $request->description . " for $" . $request->price . "\n\nPlease contact Shawn at 480.703.4902 or 480.622.6441 to approve, deny, or handle the issue yourself.";
+        $message = "Please Reply\n==================\n\nKPS Pools needs to inform you about a necessary repair for your pool:\n\n" . $request->description . " for $" . $request->price . "\n\nWould you like for us to complete this for you?\n\nY$task->count for Yes\nN$task->count for No\n\nYou may also reach out to Shawn at 480.703.4902 or 480.622.6441. If you have any questions";
 
         self::sendforApproval($task, $request->phone_number, $message);
 
@@ -276,13 +276,17 @@ class TaskController extends Controller
 
     private function createTask(Request $request)
     {
+
+        $tasks = Task::where('customer_id', $request->customer_id)->get();
+
         return Task::firstOrCreate([
             'customer_id' => $request->customer_id,
             'description' => $request->description,
             'assigned' => $request->assigned,
             'type' => $request->type,
             'price' => 0,
-            'status' => 'created'
+            'status' => 'created',
+            'count' => $tasks->count() + 1
         ]);
     }
 
