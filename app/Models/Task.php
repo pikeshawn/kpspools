@@ -85,10 +85,7 @@ class Task extends Model
     static public function allCreatedTasks(): Collection
     {
         $tasks = [];
-        $customers = Customer::with(['tasks' => function ($query) {
-            $query->where('status', 'created');
-        }])->get();
-
+        $customers = Customer::has('tasks')->get();
 
         foreach ($customers as $customer) {
             $custTasks = Task::where('customer_id', $customer->id)->get();
@@ -135,12 +132,12 @@ class Task extends Model
     static public function allCustomerCreatedTasks($customerId): Collection
     {
         $tasks = [];
-        $customers = Customer::with(['tasks' => function ($query) use ($customerId) {
-            $query->where('status', 'created')->where('customer_id', $customerId);
-        }])->get();
 
+        $customerWithTasks = Customer::whereHas('tasks', function ($query) use ($customerId) {
+            $query->where('customer_id', $customerId);
+        })->with('tasks')->get();
 
-        foreach ($customers as $customer) {
+        foreach ($customerWithTasks as $customer) {
             $custTasks = Task::where('customer_id', $customer->id)->get();
 
 
@@ -187,7 +184,7 @@ class Task extends Model
         $allEnabledTasks = [];
         $t = Task::where('customer_id', $customerId)->get();
 
-        if($t->isNotEmpty()){
+        if ($t->isNotEmpty()) {
             $user = User::find($t[0]->assigned);
             foreach ($t as $task) {
                 $line = [];
