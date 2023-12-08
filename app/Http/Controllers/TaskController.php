@@ -49,6 +49,25 @@ class TaskController extends Controller
         ]);
     }
 
+    public function customerTasks(Request $request)
+    {
+
+//        dd($request->customerId);
+
+//        dd(Auth::user());
+
+//        dd(User::isAdmin());
+
+//            dd('isAdmin');
+        $tasks = Task::allCustomerCreatedTasks($request->customerId);
+
+//        return $tasks;
+
+        return Inertia::render('Task/NeedsApproval', [
+            'tasks' => $tasks,
+        ]);
+    }
+
     public function repairsAndPartsList()
     {
 

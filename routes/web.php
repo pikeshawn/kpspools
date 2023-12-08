@@ -176,9 +176,16 @@ Route::middleware(['auth:sanctum', 'verified'])->get('/tasksNeedsApproval',
     [TaskController::class, 'tasksNeedsApproval'])
     ->name('tasksNeedsApproval');
 
+Route::middleware(['auth:sanctum', 'verified'])->get('/customerTasks',
+    [TaskController::class, 'customerTasks'])
+    ->name('task.customerTasks');
+
 Route::middleware(['auth:sanctum', 'verified'])->get('/repairsAndPartsList',
     [TaskController::class, 'repairsAndPartsList'])
     ->name('repairsAndPartsList');
+
+
+
 
 Route::get('/delivery',
     [VonageWebhookController::class, 'delivery'])

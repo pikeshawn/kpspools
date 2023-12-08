@@ -132,6 +132,56 @@ class Task extends Model
         return collect($tasks);
     }
 
+    static public function allCustomerCreatedTasks($customerId): Collection
+    {
+        $tasks = [];
+        $customers = Customer::with(['tasks' => function ($query) use ($customerId) {
+            $query->where('status', 'created')->where('customer_id', $customerId);
+        }])->get();
+
+
+        foreach ($customers as $customer) {
+            $custTasks = Task::where('customer_id', $customer->id)->get();
+
+
+            foreach ($custTasks as $task) {
+                if ($task->status === 'created' ||
+                    $task->status === 'approved' ||
+                    $task->status === 'denied' ||
+                    $task->status === 'diy'
+                ) {
+
+                    $cust = [];
+                    $cust['customer_id'] = $customer->id;
+                    $cust['phone_number'] = $customer->phone_number;
+                    $cust['task_id'] = $task->id;
+                    $cust['first_name'] = $customer->first_name;
+                    $cust['last_name'] = $customer->last_name;
+                    $cust['description'] = $task->description;
+                    $cust['type'] = $task->type;
+                    $cust['status'] = $task->status;
+                    $cust['assigned'] = $task->assigned;
+                    $cust['price'] = $task->price;
+                    $cust['deleted'] = false;
+                    $cust['pickedUp'] = false;
+                    $cust['sent'] = $task->sent;
+                    if ($task->status == 'approved') {
+                        $cust['approved'] = true;
+                    } else {
+                        $cust['approved'] = false;
+                    }
+
+                    $serviceman = User::find($task->assigned);
+                    $cust['name'] = $serviceman->name;
+
+                    array_push($tasks, $cust);
+                }
+            }
+        }
+
+        return collect($tasks);
+    }
+
     static public function allPickedUpTasksRelatedToSpecificCustomer($customerId): Collection
     {
         $allEnabledTasks = [];
