@@ -53,22 +53,28 @@ class VonageWebhookController extends Controller
     private function updateStatus($request)
     {
         $task = Task::where('customer_id', $this->customer->id)->where('count', $this->taskNumber)->first();
-        if (strtoupper($this->answer) == 'N') {
-            $task->status = 'denied';
-            Notification::route('vonage', $request['msisdn'])->notify(new GenericNotification('Thank you for response. We will remove this task from the list.'));
-        } else if (strtoupper($this->answer) == 'Y') {
-            $task->status = 'approved';
-            Notification::route('vonage', $request['msisdn'])->notify(new GenericNotification('Thank you for response. We will get you scheduled and complete the work as soon as possible'));
+
+        if ($task) {
+            if (strtoupper($this->answer) == 'N') {
+                $task->status = 'denied';
+                Notification::route('vonage', $request['msisdn'])->notify(new GenericNotification('Thank you for response. We will remove this task from the list.'));
+            } else if (strtoupper($this->answer) == 'Y') {
+                $task->status = 'approved';
+                Notification::route('vonage', $request['msisdn'])->notify(new GenericNotification('Thank you for response. We will get you scheduled and complete the work as soon as possible'));
+            }
+            $task->save();
+            $date = Carbon::now();
+            $statusDate = $date->format('Y-m-d H:i:s');
+            $taskStatus = new TaskStatus([
+                'task_id' => $task->id,
+                'status' => $task->status,
+                'status_date' => $statusDate
+            ]);
+            $taskStatus->save();
+        } else {
+            Notification::route('vonage', $request['msisdn'])->notify(new GenericNotification('We can not find that task. Can you please retype your response to match the text above or reach out to Shawn at 480.703.4902 or 480.622.6441 if you have any questions.'));
         }
-        $task->save();
-        $date = Carbon::now();
-        $statusDate = $date->format('Y-m-d H:i:s');
-        $taskStatus = new TaskStatus([
-            'task_id' => $task->id,
-            'status' => $task->status,
-            'status_date' => $statusDate
-        ]);
-        $taskStatus->save();
+
     }
 
     private function notifyAdmin($request)
