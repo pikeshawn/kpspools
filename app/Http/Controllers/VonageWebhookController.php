@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\TaskStatus;
 use App\Notifications\InboundMessageNotification;
 use App\Notifications\GenericNotification;
 use Illuminate\Support\Facades\Notification;
@@ -13,7 +14,7 @@ use App\Models\Customer;
 use App\Models\Task;
 use function Psy\debug;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Carbon\Carbon;
 
 class VonageWebhookController extends Controller
 {
@@ -60,6 +61,14 @@ class VonageWebhookController extends Controller
             Notification::route('vonage', $request['msisdn'])->notify(new GenericNotification('Thank you for response. We will get you scheduled and complete the work as soon as possible'));
         }
         $task->save();
+        $date = Carbon::now();
+        $statusDate = $date->format('Y-m-d H:i:s');
+        $taskStatus = new TaskStatus([
+            'task_id' => $task->id,
+            'status' => $task->status,
+            'status_date' => $statusDate
+        ]);
+        $taskStatus->save();
     }
 
     private function notifyAdmin($request)
