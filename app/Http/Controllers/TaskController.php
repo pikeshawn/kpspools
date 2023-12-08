@@ -63,7 +63,7 @@ class TaskController extends Controller
 
 //        return $tasks;
 
-        return Inertia::render('Task/NeedsApproval', [
+        return Inertia::render('Task/CustomerNeedsApproval', [
             'tasks' => $tasks,
         ]);
     }
