@@ -1,6 +1,7 @@
 <template>
     <layout
         title="Customers"
+        :user="user"
     >
 
         <inertia-link

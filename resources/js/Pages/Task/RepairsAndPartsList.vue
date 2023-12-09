@@ -1,5 +1,7 @@
 <template>
-    <layout>
+    <layout
+        :user="user"
+    >
 
         <div class="py-6">
 

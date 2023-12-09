@@ -1,6 +1,7 @@
 <template>
     <layout
         title="Service Stops Notes"
+        :user="user"
     >
 
         <h1>{{ customer_name }}</h1>
@@ -46,7 +47,8 @@ export default {
     },
     props: {
         notes: Array,
-        customer_name: String
+        customer_name: String,
+        user: Object
     },
     computed: {
         noNullNotes(){

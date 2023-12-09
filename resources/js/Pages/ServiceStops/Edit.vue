@@ -1,5 +1,7 @@
 <template>
-    <layout>
+    <layout
+        :user="user"
+    >
 
         <div class="mt-10 sm:mt-0 mb-60">
             <div class="flex flex-col">
@@ -229,7 +231,8 @@ export default {
     },
     props: {
         serviceStop: Object,
-        customer: Object
+        customer: Object,
+        user: Object
     },
     setup(serviceStop) {
 

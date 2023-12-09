@@ -1,6 +1,7 @@
 <template>
     <layout
         title="Summary"
+        :user="user"
     >
 <!--        <h1 class="text-lg font-medium leading-6 text-gray-900 mb-4 capitalize font-bold text-4xl">{{ totalTabPrice }}</h1>-->
 
@@ -69,6 +70,7 @@ export default {
         totalTabs: String,
         totalLiquidChlorine: String,
         totalMuriaticAcid: String,
+        user: Object
     }
 }
 </script>

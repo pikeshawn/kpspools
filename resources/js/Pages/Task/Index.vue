@@ -1,5 +1,7 @@
 <template>
-    <layout>
+    <layout
+        :user="user"
+    >
 
         <!--        Section for Admin users  -->
 

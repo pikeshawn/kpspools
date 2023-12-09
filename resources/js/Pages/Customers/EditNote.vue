@@ -1,5 +1,7 @@
 <template>
-    <layout>
+    <layout
+        :user="user"
+    >
 
         <div class="flex flex-col col-span-2">
             <label
@@ -35,7 +37,8 @@ export default {
         return {}
     },
     props: {
-        note: Object
+        note: Object,
+        user: Object
     },
     methods: {
         updateNote() {

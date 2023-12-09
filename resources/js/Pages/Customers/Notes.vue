@@ -1,6 +1,7 @@
 <template>
     <layout
         title="General Notes"
+        :user="user"
     >
 
         <h1>{{ customer_name }}</h1>
@@ -58,6 +59,7 @@ export default {
         notes: Array,
         customer_name: String,
         customer_id: Number,
+        user: Object
     },
     computed: {
         noNullNotes(){

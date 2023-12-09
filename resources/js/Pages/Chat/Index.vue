@@ -1,5 +1,7 @@
 <template>
-    <layout>
+    <layout
+        :user="user"
+    >
         <div>
             <label for="comment" class="block text-sm font-medium leading-6 text-gray-900">Add your comment</label>
             <div class="mt-2">
@@ -36,7 +38,8 @@ export default {
     },
     props: {
         Chat: Array,
-        response: String
+        response: String,
+        user: Object
     },
     data() {
         return {

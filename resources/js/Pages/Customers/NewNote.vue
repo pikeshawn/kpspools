@@ -1,6 +1,7 @@
 <template>
     <layout
         title="New Note"
+        :user="user"
     >
 
         <h1>{{ customer_name }}</h1>
@@ -46,7 +47,8 @@ export default {
     },
     props: {
         customer_name: String,
-        customer_id: Number
+        customer_id: Number,
+        user: Object
     },
     computed: {},
     methods: {

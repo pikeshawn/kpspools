@@ -1,5 +1,7 @@
 <template>
-    <Layout>
+    <Layout
+        :user="user"
+    >
         <Link
             class="mb-2.5 inline-flex items-center px-6 py-3 border border-transparent
             text-base font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700

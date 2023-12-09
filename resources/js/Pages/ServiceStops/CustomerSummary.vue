@@ -1,9 +1,11 @@
 <template>
     <layout
         title="Service Stops"
+        :user="user"
     >
-        <h1 class="text-lg font-medium leading-6 text-gray-900 mb-4 capitalize font-bold text-4xl">{{ customer_name }}</h1>
-
+        <h1 class="text-lg font-medium leading-6 text-gray-900 mb-4 capitalize font-bold text-4xl">{{
+                customer_name
+            }}</h1>
 
 
     </layout>
@@ -89,6 +91,7 @@ export default {
         service_stops: Array,
         customer_name: String,
         customer_id: Number,
+        user: Object
     }
 }
 </script>
