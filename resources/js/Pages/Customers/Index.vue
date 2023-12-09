@@ -3,18 +3,6 @@
         title="Customers"
         :user="user"
     >
-
-        <inertia-link
-            v-if="user.id = 2"
-            class="mb-2.5 inline-flex items-center px-6 py-3 border border-transparent
-            text-base font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700
-            focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-            :href="route('customers.create')">
-            Customers Add
-        </inertia-link>
-
-        <br>
-
         <span class="relative z-0 inline-flex shadow-sm rounded-md" style="margin-bottom: 1rem">
     <button type="button"
             class="relative inline-flex items-center px-4 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:z-10 focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500"
