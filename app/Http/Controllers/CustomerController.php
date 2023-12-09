@@ -141,7 +141,7 @@ class CustomerController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function show(Customer $customer)
+    public function show(Customer $customer): Response
     {
         $notes = DB::select('Select * from general_notes where customer_id = '
             . $customer->id . ' Order By updated_at DESC');

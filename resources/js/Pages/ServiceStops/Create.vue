@@ -360,10 +360,16 @@
                                     <div></div>
 
                                 </div>
-                                <button type="submit"
-                                        class="mt-4 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                                    Save
-                                </button>
+                                <div class="flex justify-around">
+                                    <button type="submit"
+                                            class="mt-4 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                        Save - All Customers
+                                    </button>
+                                    <button @click="submitToCustomer()"
+                                            class="mt-4 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                        Save - Customer
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     </form>
@@ -496,6 +502,8 @@ export default {
             brush: true,
             chlorine_level: null,
             checkedChems: true,
+            customerId: null,
+            toCustomer: false,
             emptyBaskets: true,
             liquidChlorine: '0.0',
             notes: null,
@@ -521,6 +529,8 @@ export default {
             brush: true,
             chlorine_level: null,
             checkedChems: true,
+            customerId: null,
+            toCustomer: false,
             emptyBaskets: true,
             liquidChlorine: '0.0',
             notes: null,
@@ -613,7 +623,13 @@ export default {
             this.form.timeIn = localStorage.getItem('timeOut')
         }
     },
-    methods: {},
+    methods: {
+        submitToCustomer() {
+            this.form.customerId = this.customer.id;
+            this.form.toCustomer = true;
+            this.store()
+        }
+    },
     computed: {
         errorClass() {
             return this.errors.timeIn ? 'text-red-600' : ''

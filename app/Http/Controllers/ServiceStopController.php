@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Address;
 use App\Models\Customer;
 use App\Models\ServiceStop;
+use App\Models\Task;
 use App\Models\User;
 use App\Notifications\ServiceStopCompleted;
 use App\Notifications\OnMyWayNotification;
@@ -228,15 +229,42 @@ class ServiceStopController extends Controller
                 ->notify(new ServiceStopCompleted($serviceStop, $cust, $address, true));
         }
 
-        if (User::isAdmin()) {
-            $customers = Customer::allCustomers();
+        if ($request->toCustomer) {
+//            $cc = new CustomerController();
+            $customer = Customer::find($request->customerId);
+            $notes = DB::select('Select * from general_notes where customer_id = '
+                . $customer->id . ' Order By updated_at DESC');
+
+            $address = DB::select('Select * from addresses where customer_id = '
+                . $customer->id);
+
+            $tasks = Task::allPickedUpTasksRelatedToSpecificCustomer($customer->id);
+            $completedTasks = Task::allCompletedTasksRelatedToSpecificCustomer($customer->id);
+
+            $serviceman = User::find($customer->user_id);
+
+//        dd($tasks);
+
+
+            return Inertia::render('Customers/Show', [
+                'customer' => $customer,
+                'notes' => $notes,
+                'address' => $address,
+                'tasks' => $tasks,
+                'completedTasks' => $completedTasks,
+                'serviceman' => $serviceman
+            ]);
         } else {
-            $customers = Customer::allCustomersTiedToUser();
+            if (User::isAdmin()) {
+                $customers = Customer::allCustomers();
+            } else {
+                $customers = Customer::allCustomersTiedToUser();
+            }
+            return Inertia::render('Customers/Index', [
+                'customers' => $customers,
+            ]);
         }
 
-        return Inertia::render('Customers/Index', [
-            'customers' => $customers,
-        ]);
     }
 
     function sendText(Request $request): RedirectResponse

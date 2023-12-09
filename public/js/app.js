@@ -21524,6 +21524,8 @@ __webpack_require__.r(__webpack_exports__);
       brush: true,
       chlorine_level: null,
       checkedChems: true,
+      customerId: null,
+      toCustomer: false,
       emptyBaskets: true,
       liquidChlorine: '0.0',
       notes: null,
@@ -21548,6 +21550,8 @@ __webpack_require__.r(__webpack_exports__);
       brush: true,
       chlorine_level: null,
       checkedChems: true,
+      customerId: null,
+      toCustomer: false,
       emptyBaskets: true,
       liquidChlorine: '0.0',
       notes: null,
@@ -21625,7 +21629,13 @@ __webpack_require__.r(__webpack_exports__);
       this.form.timeIn = localStorage.getItem('timeOut');
     }
   },
-  methods: {},
+  methods: {
+    submitToCustomer: function submitToCustomer() {
+      this.form.customerId = this.customer.id;
+      this.form.toCustomer = true;
+      this.store();
+    }
+  },
   computed: {
     errorClass: function errorClass() {
       return this.errors.timeIn ? 'text-red-600' : '';
@@ -29196,11 +29206,14 @@ var _hoisted_97 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElement
   "for": "notes"
 }, "Notes", -1 /* HOISTED */);
 var _hoisted_98 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", null, null, -1 /* HOISTED */);
-var _hoisted_99 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
+var _hoisted_99 = {
+  "class": "flex justify-around"
+};
+var _hoisted_100 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
   type: "submit",
   "class": "mt-4 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-}, " Save ", -1 /* HOISTED */);
-var _hoisted_100 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
+}, " Save - All Customers ", -1 /* HOISTED */);
+var _hoisted_101 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
   "class": "mt-24"
 }, null, -1 /* HOISTED */);
 
@@ -29228,7 +29241,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       }, [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)(['Service Stop', 'Repair', 'Clear Green Pool', 'Chemical Stop', 'Intro'], function (option) {
         return (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("option", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(option), 1 /* TEXT */);
       }), 64 /* STABLE_FRAGMENT */))], 512 /* NEED_PATCH */), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelSelect, $setup.form.service_type]])])]), _hoisted_34])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_35, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("form", {
-        onSubmit: _cache[24] || (_cache[24] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.withModifiers)(function () {
+        onSubmit: _cache[25] || (_cache[25] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.withModifiers)(function () {
           return $setup.store && $setup.store.apply($setup, arguments);
         }, ["prevent"]))
       }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_36, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_37, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_38, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
@@ -29442,7 +29455,12 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         "onUpdate:modelValue": _cache[23] || (_cache[23] = function ($event) {
           return $setup.form.notes = $event;
         })
-      }, "\n                                    ", 512 /* NEED_PATCH */), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, $setup.form.notes]])]), _hoisted_98]), _hoisted_99])])], 32 /* HYDRATE_EVENTS */)]), _hoisted_100])])];
+      }, "\n                                    ", 512 /* NEED_PATCH */), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, $setup.form.notes]])]), _hoisted_98]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_99, [_hoisted_100, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
+        onClick: _cache[24] || (_cache[24] = function ($event) {
+          return $options.submitToCustomer();
+        }),
+        "class": "mt-4 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+      }, " Save - Customer ")])])])], 32 /* HYDRATE_EVENTS */)]), _hoisted_101])])];
     }),
     _: 1 /* STABLE */
   });
