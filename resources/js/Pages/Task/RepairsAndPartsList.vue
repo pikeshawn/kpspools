@@ -70,11 +70,18 @@
                         <div>{{ item.customerPhoneNumber }}</div>
                         <div>{{ item.address }}</div>
                         <div>{{ item.status }}</div>
-                        <button @click="remove(item)"
-                                v-if="item.status === 'created'"
-                                class="mt-6 inline-flex justify-center py-1 px-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                          Remove
-                        </button>
+                        <div class="flex justify-around"
+                             v-if="item.status === 'created'"
+                        >
+                          <button @click="completed(item)"
+                                  class="mr-2 w-full mt-6 inline-flex justify-center py-1 px-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                            Completed
+                          </button>
+                          <button @click="remove(item)"
+                                  class="ml-2 w-full mt-6 inline-flex justify-center py-1 px-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                            Delete
+                          </button>
+                        </div>
                       </div>
                     </td>
                   </tr>
@@ -112,11 +119,18 @@
                         <div>{{ item.customerPhoneNumber }}</div>
                         <div>{{ item.address }}</div>
                         <div>{{ item.status }}</div>
-                        <button @click="completed(item)"
-                                v-if="item.status === 'pickedUp'"
-                                class="mt-6 inline-flex justify-center py-1 px-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                          Complete
-                        </button>
+                        <div class="flex justify-around"
+                             v-if="item.status === 'pickedUp'"
+                        >
+                          <button @click="completed(item)"
+                                  class="mr-2 w-full mt-6 inline-flex justify-center py-1 px-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                            Not Completed
+                          </button>
+                          <button @click="remove(item)"
+                                  class="ml-2 w-full mt-6 inline-flex justify-center py-1 px-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                            Delete
+                          </button>
+                        </div>
                       </div>
                     </td>
                   </tr>
@@ -153,11 +167,18 @@
                         <div>{{ item.customerPhoneNumber }}</div>
                         <div>{{ item.address }}</div>
                         <div>{{ item.status }}</div>
-                        <button @click="notCompleted(item)"
-                                v-if="item.status === 'completed'"
-                                class="mt-6 inline-flex justify-center py-1 px-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                          Not Completed
-                        </button>
+                        <div class="flex justify-around"
+                             v-if="item.status === 'completed'"
+                        >
+                          <button @click="notCompleted(item)"
+                                  class="mr-2 w-full mt-6 inline-flex justify-center py-1 px-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                            Not Completed
+                          </button>
+                          <button @click="remove(item)"
+                                  class="ml-2 w-full mt-6 inline-flex justify-center py-1 px-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                            Delete
+                          </button>
+                        </div>
                       </div>
                     </td>
                   </tr>
