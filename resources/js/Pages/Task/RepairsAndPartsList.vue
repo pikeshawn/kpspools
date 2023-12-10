@@ -69,6 +69,7 @@
                         <div>{{ item.customerName }}</div>
                         <div>{{ item.customerPhoneNumber }}</div>
                         <div>{{ item.address }}</div>
+                        <div>{{ item.status }}</div>
                         <button @click="remove(item)"
                                 v-if="item.status === 'created'"
                                 class="mt-6 inline-flex justify-center py-1 px-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
@@ -110,6 +111,7 @@
                         <div>{{ item.customerName }}</div>
                         <div>{{ item.customerPhoneNumber }}</div>
                         <div>{{ item.address }}</div>
+                        <div>{{ item.status }}</div>
                         <button @click="completed(item)"
                                 v-if="item.status === 'pickedUp'"
                                 class="mt-6 inline-flex justify-center py-1 px-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
@@ -150,6 +152,7 @@
                         <div>{{ item.customerName }}</div>
                         <div>{{ item.customerPhoneNumber }}</div>
                         <div>{{ item.address }}</div>
+                        <div>{{ item.status }}</div>
                         <button @click="notCompleted(item)"
                                 v-if="item.status === 'completed'"
                                 class="mt-6 inline-flex justify-center py-1 px-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
