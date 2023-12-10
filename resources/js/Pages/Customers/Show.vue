@@ -186,8 +186,6 @@
             </div>
           </div>
         </div>
-
-
       </div>
       <div v-show="showTab === 'PickedUp'">
         <div v-if="tabs[1].count > 0" class="px-4 sm:px-6 lg:px-8">

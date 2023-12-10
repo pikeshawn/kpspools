@@ -130,8 +130,12 @@ class ServiceStopController extends Controller
      */
     public function create(Customer $customer): Response
     {
-        $address = DB::select('Select * from addresses where customer_id = '
-            . $customer->id);
+//        $address = DB::select('Select * from addresses where customer_id = '
+//            . $customer->id);
+
+        $address = Address::where('customer_id', $customer->id)->get();
+
+        $tasks = Task::where('customer_id', $customer->id)->where('status', 'pickedUp')->get();
 
 //        dd($customer->id);
 
@@ -140,6 +144,7 @@ class ServiceStopController extends Controller
             'customer' => $customer,
             'address' => $address,
             'customerName' => $customer->last_name,
+            'tasks' => $tasks
         ]);
     }
 
