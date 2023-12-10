@@ -225,6 +225,10 @@
                              style="flex-direction: column"
                              v-if="item.status === 'completed'"
                         >
+                          <button @click="changeStatus(item, 'created')"
+                                  class="w-1/2 mt-6 inline-flex justify-center py-1 px-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                            Needs Approval
+                          </button>
                           <button @click="notCompleted(item)"
                                   class="w-1/2 mt-6 inline-flex justify-center py-1 px-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                             Not Completed
@@ -372,6 +376,10 @@ export default {
     },
     deleteItem(item) {
       item.deleted = true;
+    },
+    changeStatus(item, status) {
+      item.status = status
+      Inertia.post('/task/changeStatus', item)
     },
     cancelDeletion(item) {
       item.deleted = false;
