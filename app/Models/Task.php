@@ -240,6 +240,7 @@ class Task extends Model
             $line["address"] = "$a->address_line_1, $c->city $c->state $c->zip";
             $line["description"] = $task->description;
             $line["status"] = $task->status;
+            $line['deleted'] = false;
             $line["completed"] = false;
             $allEnabledTasks[] = $line;
         }
