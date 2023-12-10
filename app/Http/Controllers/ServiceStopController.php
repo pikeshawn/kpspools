@@ -138,6 +138,10 @@ class ServiceStopController extends Controller
         $tasks = Task::where('customer_id', $customer->id)->where('status', 'pickedUp')->get();
 
 //        dd($customer->id);
+        foreach ($tasks as $task){
+            $assigned = User::find($task->assigned);
+            $task->assigned = $assigned->name;
+        }
 
         return Inertia::render('ServiceStops/Create', [
             'customerId' => $customer->id,
