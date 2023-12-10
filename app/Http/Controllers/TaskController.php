@@ -102,6 +102,11 @@ class TaskController extends Controller
     {
 //        dd($request);
         $task = Task::find($request->task_id);
+
+        if ($task === null) {
+            $task = Task::find($request->id);
+        }
+
         $task->status = $request->status;
         $task->save();
         self::addTaskStatus($task, $request->status);
