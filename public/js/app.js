@@ -20698,9 +20698,11 @@ var __default__ = {
     var props = __props;
     var people = props.customers.map(function (_ref2) {
       var id = _ref2.id,
+        first_name = _ref2.first_name,
         last_name = _ref2.last_name;
       return {
         id: id,
+        first_name: first_name,
         last_name: last_name
       };
     });
@@ -27388,17 +27390,17 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
             "class": "block text-sm font-medium leading-6 text-gray-900"
           }, {
             "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
-              return [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)((0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($setup.selectedPerson.last_name), 1 /* TEXT */)];
+              return [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)((0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($setup.selectedPerson.first_name) + " " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($setup.selectedPerson.last_name), 1 /* TEXT */)];
             }),
 
             _: 1 /* STABLE */
-          })) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_1, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)($setup["ComboboxInput"], {
+          })) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_1, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("              @change=\"query = $event.target.value\" :display-value=\"person && (person?.first_name + ' ' + person?.last_name) !== undefined ? '' : person.first_name + ' ' + person.last_name\"/>"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("              @change=\"query = $event.target.value\" :display-value=\"(person) {if(person?.first_name !== undefined && person?.last_name !== undefined){ return ''} else {return person.first_name + ' ' + person.last_name}}\"/>"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)($setup["ComboboxInput"], {
             "class": "w-full rounded-md border-0 bg-white py-1.5 pl-3 pr-10 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6",
             onChange: _cache[0] || (_cache[0] = function ($event) {
               return $setup.query = $event.target.value;
             }),
             "display-value": function displayValue(person) {
-              return person === null || person === void 0 ? void 0 : person.name;
+              return person === null || person === void 0 ? void 0 : person.last_name;
             }
           }, null, 8 /* PROPS */, ["display-value"]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)($setup["ComboboxButton"], {
             "class": "absolute inset-y-0 right-0 flex items-center rounded-r-md px-2 focus:outline-none"
