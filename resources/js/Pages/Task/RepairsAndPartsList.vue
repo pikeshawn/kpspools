@@ -233,36 +233,6 @@
                                   class="w-1/2 mt-6 inline-flex justify-center py-1 px-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                             Not Completed
                           </button>
-                          <button @click="deleteItem(item)"
-                                  class="w-1/2 mt-6 inline-flex justify-center py-1 px-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                            Delete
-                          </button>
-                        </div>
-                        <div v-if="item.deleted" class="mt-2 rounded-md bg-red-50 p-4">
-                          <div class="flex">
-                            <div class="flex-shrink-0">
-                              <XCircleIcon class="h-5 w-5 text-red-400" aria-hidden="true"/>
-                            </div>
-                            <div class="ml-3">
-                              <h3 class="text-sm font-medium text-red-800">You are about to delete this item.
-                                Do you
-                                wish to continue</h3>
-                              <div class="flex justify-around mt-2 text-sm text-red-700">
-                                <button @click="doTheDeletion(item)"
-                                        class="mt-4 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm
-                                text-sm font-medium rounded-md text-white bg-red-600 hover:bg-red-700
-                                focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
-                                  Yes
-                                </button>
-                                <button @click="cancelDeletion(item)"
-                                        class="mt-4 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm
-                                text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700
-                                focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
-                                  No
-                                </button>
-                              </div>
-                            </div>
-                          </div>
                         </div>
                       </div>
                     </td>
