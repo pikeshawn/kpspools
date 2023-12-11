@@ -6,6 +6,7 @@ use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\ServiceStopController;
 use App\Http\Controllers\SummaryController;
 use App\Http\Controllers\VonageWebhookController;
+use App\Http\Controllers\RouteController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -183,6 +184,14 @@ Route::middleware(['auth:sanctum', 'verified'])->get('/customerTasks',
 Route::middleware(['auth:sanctum', 'verified'])->get('/repairsAndPartsList',
     [TaskController::class, 'repairsAndPartsList'])
     ->name('repairsAndPartsList');
+
+Route::middleware(['auth:sanctum', 'verified'])->get('/route',
+    [RouteController::class, 'index'])
+    ->name('route');
+
+Route::middleware(['auth:sanctum', 'verified'])->post('/route/store',
+    [RouteController::class, 'store'])
+    ->name('store');
 
 
 
