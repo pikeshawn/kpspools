@@ -6,6 +6,7 @@ use App\Models\Customer;
 use App\Models\Task;
 use App\Models\User;
 use App\Models\TaskStatus;
+use App\Notifications\GenericNotification;
 use App\Notifications\TaskApprovalNotification;
 use Carbon\Carbon;
 use Illuminate\Http\RedirectResponse;
@@ -140,9 +141,16 @@ class TaskController extends Controller
         $user = User::where('name', $request->assigned)->get();
 //        dd($user[0]->id);
 
+        $customer = Customer::find($request->customer_id);
+
         $task = Task::find($request->task_id);
         $task->assigned = $user[0]->id;
         $task->save();
+        if (Auth::user()->getAuthIdentifier() !== $user->id) {
+            Notification::route('vonage', $user[0]->phone_number)->notify(new GenericNotification(
+                "You were assigned a Task::\n$customer->first_name $customer->last_name\n$request->description\n" . env('APP_URL') . "/customers/show/" . $customer->id
+            ));
+        }
     }
 
     public function deleteItem(Request $request)
@@ -246,6 +254,7 @@ class TaskController extends Controller
     {
 
 //      get all data
+//        dd($request);
 //        dd($request->todoAssignee);
 
         if (is_null($request->type)){
@@ -264,24 +273,15 @@ class TaskController extends Controller
             self::addTaskStatus($task, 'pickedUp',);
             $task->assigned = $request->todoAssignee;
             $task->save();
+            $user = User::find($request->todoAssignee);
+            $customer = Customer::find($request->customer_id);
+            if (Auth::user()->getAuthIdentifier() !== $user->id) {
+                Notification::route('vonage', $user->phone_number)->notify(new GenericNotification(
+                    "You were assigned a Task::\n$customer->first_name $customer->last_name\n$request->description\n" . env('APP_URL') . "/customers/show/" . $customer->id
+                ));
+            }
         }
-//        if task has been verbally approved then add the approved status
-//        if ($request->approval) {
-//            self::addTaskStatus($task, 'approved', $request->approvedDate);
-//            self::addApprovedStatusToTaskTable($task);
-//        }
 
-//      process after data has been add to db
-//        - send notification for approval - if a part, repair, or above preapproval amount
-//                - link will have to redirect to a page for customer to approve
-//                - need notification message to send
-
-//          - can start as notification to contact shawn
-//          - future will have the customer go on the app
-//          - auto approval for items below a certain amount
-
-//      redirect back or to another page
-//        - redirect to customer page
         return Redirect::route('customers.show', $task->customer_id);
 
     }
