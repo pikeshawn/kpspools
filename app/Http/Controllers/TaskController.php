@@ -146,7 +146,7 @@ class TaskController extends Controller
         $task = Task::find($request->task_id);
         $task->assigned = $user[0]->id;
         $task->save();
-        if (Auth::user()->getAuthIdentifier() !== $user->id) {
+        if (Auth::user()->getAuthIdentifier() !== $user[0]->id) {
             Notification::route('vonage', $user[0]->phone_number)->notify(new GenericNotification(
                 "You were assigned a Task::\n$customer->first_name $customer->last_name\n$request->description\n" . env('APP_URL') . "/customers/show/" . $customer->id
             ));
