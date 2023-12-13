@@ -230,7 +230,7 @@ class Task extends Model
 
         foreach ($t as $task) {
             $c = Customer::find($task->customer_id);
-            $a = Address::find($c->user_id);
+            $a = Address::find($c->customer_id);
             $poolGuy = User::find($task->assigned);
             $line = [];
             $line["id"] = $task->id;
