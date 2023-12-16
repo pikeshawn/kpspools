@@ -14,7 +14,7 @@ class NotificationsTest extends TestCase
 
     public function test_sending_reminder_for_bill_payment()
     {
-        $fp = @fopen("/Users/shawnpike/Documents/code/business/kpspools/scratch/Billing/2023/11_November/unpaid_test.csv", "r");
+        $fp = @fopen("/Users/shawnpike/Documents/code/business/kpspools/scratch/Billing/2023/12_December/unpaid_test.csv", "r");
         if ($fp) {
             while (($buffer = fgets($fp, 4096)) !== false) {
 //                echo $buffer;
@@ -49,7 +49,20 @@ class NotificationsTest extends TestCase
 //                    $message = "DO NOT REPLY\n============\nHello $first_name, You have an outstanding bill:\nInvoice Name::\n$invoice_name\n$$bid_price that was billed on $invoice_date. You can use one of the following links to access it:\n\n$link1\n\n$link2\n\n$link3\nYou will be prompted to sign up for the application. Once signed up, you will be taken to the invoice where you can scroll down and pay.\n\nIf you are not taken to the invoice:\n1. Select Jobs at the bottom of the application.\n2. Select approved at the top of the page.\n3. Select the blue box to view the invoice.\n4. Select 'Pay with Credit Card' at the bottom of the invoice.\n5. Enter your credit card information to make payment.\n\nPlease reach out to Shawn if you think that this is an error or you have any questions: 480-703-4902 or 480-622-6441.";
 //                }
 
-                $message = "DO NOT REPLY\n============\nHi $first_name, just a friendly reminder about your bill for:\nInvoice Name::\n$invoice_name\n$$bid_price that was billed on $invoice_date. You can use one of the following links to access it:\n\n$link1\n\n$link2\n\n$link3\nYour prompt payment would be much appreciated.\nPlease reach out to Shawn if you think that this is an error or you have any questions at 480-703-4902 or 480-622-6441.\nHappy holidays from KPS POOLS LLC!";
+//                $message = "Hi $first_name, just a friendly reminder about your bill for:\nInvoice Name::\n$invoice_name\n$$bid_price that was billed on $invoice_date. You can use one of the following links to access it:\n\n$link1\n\n$link2\n\n$link3\nYour prompt payment would be much appreciated.\nPlease reach out to Shawn if you think that this is an error or you have any questions at 480-703-4902 or 480-622-6441.\nHappy holidays from KPS POOLS LLC!";
+
+                $message = self::paymentReminder(
+                    $bid_price,
+                    $first_name,
+                    $last_name,
+                    $invoice_name,
+                    $invoice_date,
+                    $signedUpStatus,
+                    $link1,
+                    $link2,
+                    $link3
+                );
+
 
                 echo $message;
                 $phone_numbers = [
@@ -65,179 +78,39 @@ class NotificationsTest extends TestCase
     }
 
 
-//    public function test_I_can_send_a_notifications(): void
+//    public function test_sending_Holiday_Notification()
 //    {
-////////        need an array of phone numbers
-//        $elias = [
-//            '14807034902'
-////            '16023359897',
-////            '14805708338',
-////            '14807038320',
-////            '14808886460',
-////            '14803351963',
-////            '18083494052',
-////            '14802277622',
-////            '14807590483',
-////            '14807030971',
-////            '14802169397',
-////            '19176851795',
-////            '14802061258'
-//        ];
-//////
-////////
-//        $text = self::delayedDayMessage();
-//        self::send($elias, $text);
-////
-////
-////        $jeremiah = [
-//////            '14807034902',
-////            '14807030971'
-////        ];
-////
-//////
-////        $text = self::welcomeToKPS('Friday', 'Jeremiah');
-////        self::send($jeremiah, $text);
-////
-////        $jeremiah = [
-//////            '14807034902',
-////            '15072724813',
-////            '16092732934'
-////        ];
-////
-//////
-////        $text = self::welcomeToKPS('Tuesday', 'Jeremiah');
-////        self::send($jeremiah, $text);
-////
-////        $jeremiah = [
-//////            '14807034902',
-////            '14805676186',
-////            '14805185755'
-////        ];
-////
-//////
-////        $text = self::differentDaySameServiceman('Wednesday', 'Jeremiah');
-////        self::send($jeremiah, $text);
-////
-////
-////        $jeremiah = [
-//////            '14807034902',
-////            '14805866570'
-////        ];
-////
-//////
-////        $text = self::welcomeToKPS('Thursday', 'Reid');
-////        self::send($jeremiah, $text);
-////
-////        $jeremiah = [
-//////            '14807034902',
-////            '19176851795'
-////        ];
-////
-//////
-////        $text = self::welcomeToKPS('Friday', 'Shawn');
-////        self::send($jeremiah, $text);
-////
-////        $jeremiah = [
-//////            '14807034902',
-////            '14806125633'
-////        ];
-////
-//////
-////        $text = self::welcomeToKPS('Monday', 'Shawn');
-////        self::send($jeremiah, $text);
-////
-////        $jeremiah = [
-//////            '14807034902',
-////            '16023990191'
-////        ];
-////
-//////
-////        $text = self::welcomeToKPS('Tuesday', 'Shawn');
-////        self::send($jeremiah, $text);
-////
-////        $jeremiah = [
-//////            '14807034902',
-////            '16236926844'
-////        ];
-////
-//////
-////        $text = self::welcomeToKPS('Tuesday', 'Zach');
-////        self::send($jeremiah, $text);
-////
-//////
-////////
-//////////        $phone_numbers = [
-//////////            '16023199626'
-//////////        ];
-////////////
-//////////        $newDay = 'Tuesday';
-//////////        $newServiceman = 'Jeremiah';
-//////////
-//////////        $text = self::dayAndServiceManChangedMessage($newDay, $newServiceman);
-//////////        self::send($phone_numbers, $text);
-//////////
-//////////        $phone_numbers = [
-//////////            '14802961150'
-//////////        ];
-////////////
-//////////        $newDay = 'Tuesday';
-//////////        $newServiceman = 'Zach';
-//////////
-//////////        $text = self::dayAndServiceManChangedMessage($newDay, $newServiceman);
-//////////        self::send($phone_numbers, $text);
-//////////
-//////////        $phone_numbers = [
-//////////            '17208109650'
-//////////        ];
-//////////
-//////////        $newDay = 'Monday';
-//////////        $newServiceman = 'Jeremiah';
-//////////
-//////////        $text = self::welcomeToKPS($newDay, $newServiceman);
-//////////        self::send($phone_numbers, $text);
-//////////
-//////////        $phone_numbers = [
-//////////            '16023808900',
-//////////            '14802256369'
-//////////        ];
-//////////
-//////////        $newDay = 'Monday';
-//////////        $newServiceman = 'Shawn';
-//////////
-//////////        $text = self::welcomeToKPS($newDay, $newServiceman);
-//////////        self::send($phone_numbers, $text);
-//////////
-//////////        $phone_numbers = [
-//////////            '14086238007'
-//////////        ];
-//////////
-//////////        $newDay = 'Tuesday';
-//////////        $newServiceman = 'Jeremiah';
-//////////
-//////////        $text = self::welcomeToKPS($newDay, $newServiceman);
-//////////        self::send($phone_numbers, $text);
-//////////
-//////////        $phone_numbers = [
-//////////            '15419104514'
-//////////        ];
-//////////
-//////////        $newDay = 'Tuesday';
-//////////        $newServiceman = 'Shawn';
-//////////
-//////////        $text = self::welcomeToKPS($newDay, $newServiceman);
-//////////        self::send($phone_numbers, $text);
-//////////
-//////////        $phone_numbers = [
-//////////            '14805703663'
-//////////        ];
-//////////
-//////////        $newDay = 'Tuesday';
-//////////        $newServiceman = 'Jeremiah';
-//////////
-//////////        $text = self::differentDaySameServiceman($newDay, $newServiceman);
-//////////        self::send($phone_numbers, $text);
+//        $f = @fopen('/Users/shawnpike/Documents/code/business/kpspools/tests/Feature/Notifications/phone_numbers.csv', 'r');
+//        if ($f) {
+//            while (($buffer = fgets($f, 4096)) !== false) {
+//                $line = explode(',', $buffer);
+//                $message = self::secondHolidayMessage();
+//                $this->sendOneNumber($line[0], $message);
+//            }
+//        }
 //    }
 
+
+    private function paymentReminder(
+        $bid_price,
+        $first_name,
+        $last_name,
+        $invoice_name,
+        $invoice_date,
+        $signedUpStatus,
+        $link1,
+        $link2,
+        $link3
+    ): string
+    {
+//        return "Hello $first_name $last_name!\n\nThis is a friendly reminder about your past due bill.\n\n$invoice_name was invoiced on $invoice_date for $$bid_price.\n\nTo settle it conveniently, you can use the following links to make a payment::\n\n$link1\n\n$link2\n\n$link3\n\nWould you like to set up autopay for future bills? Reply with:\n\n* 'Yes' for autopay\n* 'No' if you prefer not to use autopay";
+        return "Hello $first_name $last_name!\n\nThis is a friendly reminder about your current bill.\n\n$invoice_name was invoiced on $invoice_date for $$bid_price.\n\nTo settle it conveniently, you can use the following links to make a payment::\n\n$link1\n\n$link2\n\n$link3\n\nWould you like to set up autopay for future bills? Reply with:\n\n* 'Yes' for autopay\n* 'No' if you prefer not to use autopay";
+    }
+
+    private function secondHolidayMessage(): string
+    {
+        return "As we embrace the holiday season, we wanted to remind you that our team will be taking our second well-deserved break for the next two weeks. During this time, our services will be temporarily paused.\n\nRest assured, if you encounter any urgent issues or require assistance, please don't hesitate to reach out to us directly. We remain committed to ensuring your satisfaction and will respond promptly.\n\nWe extend our warmest wishes to you and yours for a joyous holiday season and a prosperous New Year ahead. Thank you for your continued support and understanding.";
+    }
 
     private function delayedDayMessage()
     {
@@ -268,6 +141,12 @@ class NotificationsTest extends TestCase
     private function sameDayDifferentServiceman($newServiceman)
     {
         return "DO NOT REPLY::\nWe appreciate your patience as we continue to grow. We have to change the service technician who will be servicing your pool. Your new service technician will be " . $newServiceman . ". Please reach out to Shawn if you have any questions 480-703-4902 or 480-622-6441.";
+    }
+
+    private function sendOneNumber($num, $message)
+    {
+        Notification::route('vonage', $num)
+            ->notify(new MassTextNotification($message));
     }
 
     private function send($phone_numbers, $message)
