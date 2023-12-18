@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::table('customers', function (Blueprint $table) {
             //
-            $table->boolean('autopay')->nullable();
+            $table->date('date_to_run_card')->nullable();
         });
     }
 
@@ -24,7 +24,7 @@ return new class extends Migration
     {
         Schema::table('customers', function (Blueprint $table) {
             //
-            $table->boolean('autopay')->nullable();
+            $table->date('date_to_run_card')->nullable();
         });
     }
 };
