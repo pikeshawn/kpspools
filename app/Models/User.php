@@ -33,6 +33,10 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'type',
+        'active',
+        'is_admin',
+        'phone_number'
     ];
 
     /**
@@ -75,3 +79,4 @@ class User extends Authenticatable
         return Auth::user()->is_admin;
     }
 }
+
