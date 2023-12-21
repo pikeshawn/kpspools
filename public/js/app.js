@@ -19935,10 +19935,15 @@ __webpack_require__.r(__webpack_exports__);
   data: function data() {
     return {
       form: this.$inertia.form({
-        name: '',
-        email: '',
-        password: '',
-        password_confirmation: '',
+        first_name: 'Shawn',
+        last_name: 'Pike',
+        phoneNumber: '',
+        addressLine1: '705 E Oxford Dr Tempe Az',
+        city: 'Tempe',
+        zip: '85283',
+        email: 'pike.shawn@gmail.com',
+        password: 'password',
+        password_confirmation: 'password',
         terms: false
       })
     };
@@ -25606,23 +25611,94 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       return [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_jet_validation_errors, {
         "class": "mb-4"
       }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("form", {
-        onSubmit: _cache[5] || (_cache[5] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.withModifiers)(function () {
+        onSubmit: _cache[10] || (_cache[10] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.withModifiers)(function () {
           return $options.submit && $options.submit.apply($options, arguments);
         }, ["prevent"]))
       }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_jet_label, {
-        "for": "name",
-        value: "Name"
+        "for": "first_name",
+        value: "First Name"
       }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_jet_input, {
-        id: "name",
+        id: "first_name",
         type: "text",
         "class": "mt-1 block w-full",
-        modelValue: $data.form.name,
+        modelValue: $data.form.first_name,
         "onUpdate:modelValue": _cache[0] || (_cache[0] = function ($event) {
-          return $data.form.name = $event;
+          return $data.form.first_name = $event;
         }),
         required: "",
         autofocus: "",
-        autocomplete: "name"
+        autocomplete: "first_name"
+      }, null, 8 /* PROPS */, ["modelValue"])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_jet_label, {
+        "for": "last_name",
+        value: "Last Name"
+      }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_jet_input, {
+        id: "last_name",
+        type: "text",
+        "class": "mt-1 block w-full",
+        modelValue: $data.form.last_name,
+        "onUpdate:modelValue": _cache[1] || (_cache[1] = function ($event) {
+          return $data.form.last_name = $event;
+        }),
+        required: "",
+        autofocus: "",
+        autocomplete: "last_name"
+      }, null, 8 /* PROPS */, ["modelValue"])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_jet_label, {
+        "for": "phoneNumber",
+        value: "Phone Number (15555551234)"
+      }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_jet_input, {
+        id: "phoneNumber",
+        type: "text",
+        "class": "py-2 mt-1 block w-full",
+        modelValue: $data.form.phoneNumber,
+        "onUpdate:modelValue": _cache[2] || (_cache[2] = function ($event) {
+          return $data.form.phoneNumber = $event;
+        }),
+        required: "",
+        autofocus: "",
+        autocomplete: "phoneNumber",
+        "aria-placeholder": "15555551234"
+      }, null, 8 /* PROPS */, ["modelValue"])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_jet_label, {
+        "for": "addressLine1",
+        value: "Street Address"
+      }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_jet_input, {
+        id: "addressLine1",
+        type: "text",
+        "class": "py-2 mt-1 block w-full",
+        modelValue: $data.form.addressLine1,
+        "onUpdate:modelValue": _cache[3] || (_cache[3] = function ($event) {
+          return $data.form.addressLine1 = $event;
+        }),
+        required: "",
+        autofocus: "",
+        autocomplete: "addressLine1"
+      }, null, 8 /* PROPS */, ["modelValue"])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_jet_label, {
+        "for": "city",
+        value: "City"
+      }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_jet_input, {
+        id: "city",
+        type: "text",
+        "class": "py-2 mt-1 block w-full",
+        modelValue: $data.form.city,
+        "onUpdate:modelValue": _cache[4] || (_cache[4] = function ($event) {
+          return $data.form.city = $event;
+        }),
+        required: "",
+        autofocus: "",
+        autocomplete: "city"
+      }, null, 8 /* PROPS */, ["modelValue"])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_jet_label, {
+        "for": "zip",
+        value: "Zip Code"
+      }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_jet_input, {
+        id: "zip",
+        type: "text",
+        "class": "py-2 mt-1 block w-full",
+        modelValue: $data.form.zip,
+        "onUpdate:modelValue": _cache[5] || (_cache[5] = function ($event) {
+          return $data.form.zip = $event;
+        }),
+        required: "",
+        autofocus: "",
+        autocomplete: "zip"
       }, null, 8 /* PROPS */, ["modelValue"])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_1, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_jet_label, {
         "for": "email",
         value: "Email"
@@ -25631,7 +25707,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         type: "email",
         "class": "mt-1 block w-full",
         modelValue: $data.form.email,
-        "onUpdate:modelValue": _cache[1] || (_cache[1] = function ($event) {
+        "onUpdate:modelValue": _cache[6] || (_cache[6] = function ($event) {
           return $data.form.email = $event;
         }),
         required: ""
@@ -25643,7 +25719,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         type: "password",
         "class": "mt-1 block w-full",
         modelValue: $data.form.password,
-        "onUpdate:modelValue": _cache[2] || (_cache[2] = function ($event) {
+        "onUpdate:modelValue": _cache[7] || (_cache[7] = function ($event) {
           return $data.form.password = $event;
         }),
         required: "",
@@ -25656,7 +25732,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         type: "password",
         "class": "mt-1 block w-full",
         modelValue: $data.form.password_confirmation,
-        "onUpdate:modelValue": _cache[3] || (_cache[3] = function ($event) {
+        "onUpdate:modelValue": _cache[8] || (_cache[8] = function ($event) {
           return $data.form.password_confirmation = $event;
         }),
         required: "",
@@ -25669,7 +25745,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
             name: "terms",
             id: "terms",
             checked: $data.form.terms,
-            "onUpdate:checked": _cache[4] || (_cache[4] = function ($event) {
+            "onUpdate:checked": _cache[9] || (_cache[9] = function ($event) {
               return $data.form.terms = $event;
             })
           }, null, 8 /* PROPS */, ["checked"]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_6, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" I agree to the "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("a", {
