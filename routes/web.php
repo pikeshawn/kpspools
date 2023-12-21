@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\TaskController;
+use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\ChatController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\ServiceStopController;
@@ -194,7 +195,14 @@ Route::middleware(['auth:sanctum', 'verified'])->post('/route/store',
     ->name('store');
 
 
+Route::middleware(['auth:sanctum', 'verified'])->post('/registerLink',
+    [RegisterController::class, 'registerLink'])
+    ->name('registerLink');
 
+
+Route::get('/registerLink',
+    [VonageWebhookController::class, 'registerLink'])
+    ->name('registerLink');
 
 Route::get('/delivery',
     [VonageWebhookController::class, 'delivery'])
