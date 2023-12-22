@@ -199,11 +199,6 @@ Route::middleware(['auth:sanctum', 'verified'])->post('/registerLink',
     [RegisterController::class, 'registerLink'])
     ->name('registerLink');
 
-
-Route::get('/registerLink',
-    [VonageWebhookController::class, 'registerLink'])
-    ->name('registerLink');
-
 Route::get('/delivery',
     [VonageWebhookController::class, 'delivery'])
     ->name('delivery');
@@ -219,6 +214,3 @@ Route::post('/chat/response',
 Route::get('/chat',
     [ChatController::class, 'chat'])
     ->name('chat');
-
-
-
