@@ -55,12 +55,8 @@ class Customer extends Model
 
     public static function allCustomers()
     {
-//        $customers = DB::select('select c.first_name, c.last_name, c.id, c.service_day, c.assigned_serviceman,
-//       c.phone_number,
-//       a.community_gate_code, a.address_line_1, a.city, a.zip
-//from customers c
-//         join addresses a on c.id = a.customer_id
-//where c.order is not NULL order By c.order DESC');
+
+//        dd('allCustomers');
 
         $customers = Customer::select(
             'customers.first_name',
@@ -74,34 +70,26 @@ class Customer extends Model
             'addresses.city',
             'addresses.zip')
             ->join('addresses', 'customers.id', '=', 'addresses.customer_id')
+            ->where('active', 1)
             ->whereNotNull('customers.service_day')
             ->orderByDesc('customers.order')
             ->get();
 
+//        dd(Auth::user()->getAuthIdentifier());
+//        dd($customers);
 
         return self::completedCustomers($customers);
     }
 
     public static function allCustomersTiedToUser()
     {
-//        $customers = DB::select('select c.first_name,
-//       c.last_name,
-//       u.name,
-//       c.id,
-//       c.service_day,
-//       c.assigned_serviceman,
-//       a.community_gate_code,
-//       a.address_line_1,
-//       a.city,
-//       a.zip
-//from customers c
-//         join addresses a on c.id = a.customer_id
-//         join users u on u.id = c.user_id
-//where c.order is not NULL AND u.id = ' . Auth::user()->id . '
-//order By c.order DESC');
+
+//        dd('allCustomersTiedToUser');
 
 
-        $userId = Auth::user()->id;
+        $servicemanId = Auth::user()->id;
+
+//        dd($servicemanId);
 
         $customers = Customer::select(
             'customers.first_name',
@@ -117,12 +105,16 @@ class Customer extends Model
             ->join('addresses', 'customers.id', '=', 'addresses.customer_id')
             ->join('users', 'users.id', '=', 'customers.user_id')
             ->whereNotNull('customers.service_day')
-            ->where('users.id', $userId)
+            ->where('customers.serviceman_id', $servicemanId)
+            ->where('customers.active', 1)
             ->orderByDesc('customers.order')
             ->get();
 
+//        dd($customers);
 
-        return self::completedCustomers($customers);
+        $customers = self::completedCustomers($customers);
+
+        return $customers;
     }
 
     public static function completedCustomers($customers)

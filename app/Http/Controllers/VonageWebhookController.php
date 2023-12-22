@@ -47,12 +47,17 @@ class VonageWebhookController extends Controller
         $this->taskNumber = $taskNumber;
         $this->answer = $answer[0];
 
+//        Notification::route('vonage', $request['msisdn'])->notify(new GenericNotification($taskNumber));
+
         return (strtoupper($this->answer) == 'N' || strtoupper($this->answer) == 'Y') && ctype_digit((string)$this->taskNumber);
     }
 
     private function updateStatus($request)
     {
         $task = Task::where('customer_id', $this->customer->id)->where('count', $this->taskNumber)->first();
+        Log::debug($task);
+        Log::debug('Customer Id:: ' . $this->customer->id);
+        Log::debug('taskNumber:: ' . $this->taskNumber);
 
         if ($task) {
             if (strtoupper($this->answer) == 'N') {

@@ -89,7 +89,7 @@ class CustomerController extends Controller
             'phone_number' => $request->phoneNumber
         ],
             [
-                'user_id' => 2,
+                'serviceman_id' => 2,
                 'last_name' => $request->lastName,
                 'first_name' => $request->firstName,
                 'type' => "Service",
@@ -152,7 +152,7 @@ class CustomerController extends Controller
         $tasks = Task::allPickedUpTasksRelatedToSpecificCustomer($customer->id);
         $completedTasks = Task::allCompletedTasksRelatedToSpecificCustomer($customer->id);
 
-        $serviceman = User::find($customer->user_id);
+        $serviceman = User::find($customer->serviceman_id);
 
 //        dd($tasks);
 

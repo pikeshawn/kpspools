@@ -250,7 +250,7 @@ class ServiceStopController extends Controller
             $tasks = Task::allPickedUpTasksRelatedToSpecificCustomer($customer->id);
             $completedTasks = Task::allCompletedTasksRelatedToSpecificCustomer($customer->id);
 
-            $serviceman = User::find($customer->user_id);
+            $serviceman = User::find($customer->serviceman_id);
 
 //        dd($tasks);
 

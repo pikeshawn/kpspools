@@ -60,10 +60,10 @@ class CreateNewUser implements CreatesNewUsers
 
         Address::create([
             'customer_id' => $customer->id,
-            'address_line_1' => $input['first_name'],
-            'city' => $input['first_name'],
-            'state' => $input['first_name'],
-            'zip' => $input['first_name']
+            'address_line_1' => $input['addressLine1'],
+            'city' => $input['city'],
+            'state' => $input['state'],
+            'zip' => $input['zip']
         ]);
 
         return $user;

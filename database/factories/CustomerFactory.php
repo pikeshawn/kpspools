@@ -15,7 +15,7 @@ class CustomerFactory extends Factory
     {
         return [
             //
-            'user_id' => random_int(6, 8),
+            'serviceman_id' => random_int(6, 8),
             'first_name' => $this->faker->firstName,
             'middle_name' => $this->faker->firstName,
             'last_name' => $this->faker->lastName,
@@ -47,7 +47,7 @@ class CustomerFactory extends Factory
         $user = User::where('name', $serviceMan)->first();
 
         return $this->state(fn(array $attributes) => [
-            'user_id' => $user->id,
+            'serviceman_id' => $user->id,
             'assigned_serviceman' => $serviceMan
         ]);
     }

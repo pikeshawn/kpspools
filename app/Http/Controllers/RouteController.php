@@ -16,7 +16,7 @@ class RouteController extends Controller
     {
 
         $customers = Customer::select(['id', 'first_name', 'last_name', 'order', 'service_day'])
-            ->where('user_id', Auth::user()
+            ->where('serviceman_id', Auth::user()
                 ->getAuthIdentifier())->orderBy('service_day')->orderBy('order')->get();
 
         return Inertia::render('Route/Index', [

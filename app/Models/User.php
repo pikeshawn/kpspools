@@ -19,9 +19,9 @@ class User extends Authenticatable
     use TwoFactorAuthenticatable;
 
 
-    public function customers()
+    public function customer()
     {
-        return $this->hasMany(Customer::class);
+        return $this->hasOne(Customer::class);
     }
 
     /**
