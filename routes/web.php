@@ -40,7 +40,7 @@ Route::middleware(['auth:sanctum', 'verified'])->get('/customers',
     [CustomerController::class, 'index'])
     ->name('customers');
 
-Route::middleware(['auth:sanctum', 'verified'])->get('/customers/show/{customer}',
+Route::middleware(['auth:sanctum', 'verified'])->get('/customers/show/{address}',
     [CustomerController::class, 'show'])
     ->name('customers.show');
 

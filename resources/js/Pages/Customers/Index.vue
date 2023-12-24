@@ -5,7 +5,7 @@
   >
 
       <Combobox as="div" v-model="selectedPerson">
-        <ComboboxLabel v-if="selectedPerson" class="block text-sm font-medium leading-6 text-gray-900">{{selectedPerson.first_name }} {{ selectedPerson.last_name }}</ComboboxLabel>
+        <ComboboxLabel v-if="selectedPerson" class="block text-sm font-medium leading-6 text-gray-900">{{selectedPerson.first_name }} {{ selectedPerson.last_name }} - {{ selectedPerson.address_line_1 }}</ComboboxLabel>
         <div class="relative mt-2">
           <!--              @change="query = $event.target.value" :display-value="person && (person?.first_name + ' ' + person?.last_name) !== undefined ? '' : person.first_name + ' ' + person.last_name"/>-->
           <!--              @change="query = $event.target.value" :display-value="(person) {if(person?.first_name !== undefined && person?.last_name !== undefined){ return ''} else {return person.first_name + ' ' + person.last_name}}"/>-->
@@ -22,7 +22,7 @@
                             v-slot="{ active, selected }">
               <li :class="['relative cursor-default select-none py-2 pl-8 pr-4', active ? 'bg-indigo-600 text-white' : 'text-gray-900']">
             <span :class="['block truncate', selected && 'font-semibold']">
-              {{ person.last_name }}
+              {{ person.first_name }} {{ person.last_name }} - {{ person.address_line_1 }}
             </span>
 
                 <span v-if="selected"
@@ -35,7 +35,7 @@
         </div>
         <button type="button"
                 class="-ml-px relative inline-flex items-center px-4 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:z-10 focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500"
-                @click="goToCustomer(selectedPerson.id)"
+                @click="goToCustomer(selectedPerson.addressId)"
         >Go</button>
       </Combobox>
 
@@ -121,88 +121,99 @@
     <!--        </div>-->
 
     <nav class="h-full overflow-y-auto" aria-label="Directory">
-      <div v-for="row in valueObjectArray" :key="row[0]" class="relative">
+      <div v-for="row in customers" :key="row.id" class="relative">
         <div v-show="monday">
-          <div v-if="row[2] == 'Monday'">
-            <Link :href="route('customers.show', row[0])"
+          <div v-if="row.service_day === 'Monday'">
+            <Link :href="route('customers.show', row.addressId)"
                   class="sticky top-0 z-10 border-y border-b-gray-200 border-t-gray-100 bg-gray-50 px-3 py-2 text-sm font-semibold leading-6 text-gray-900"
-                  :class="row[5] ? 'completed' : 'notCompleted'"
+                  :class="row.completed ? 'completed' : 'notCompleted'"
                   style="border: solid thin black; width: -webkit-fill-available;"
                   method="get" as="button">
-              <h3 style="font-size: 1.4rem">{{ row[1] }}</h3>
-              <span>{{ row[3] }}</span><br>
-              <span v-if="user.id = 2">{{ row[6] }}</span>
+              <h3 style="font-size: 1.4rem">{{ row.first_name }} {{ row.last_name }}</h3>
+              <div>{{ row.address_line_1 }}, {{ row.city }} AZ {{ row.zip }}</div>
+              <div>{{ row.community_gate_code }}</div>
+              <div>{{ row.assigned_serviceman }}</div>
+              <div v-if="user.is_admin === 1">{{ row.phone_number }}</div>
             </Link>
           </div>
         </div>
 
         <div v-show="tuesday">
-          <div v-if="row[2] == 'Tuesday'">
-            <Link :href="route('customers.show', row[0])"
+          <div v-if="row.service_day === 'Tuesday'">
+            <Link :href="route('customers.show', row.addressId)"
                   class="sticky top-0 z-10 border-y border-b-gray-200 border-t-gray-100 bg-gray-50 px-3 py-2 text-sm font-semibold leading-6 text-gray-900"
-                  :class="row[5] ? 'completed' : 'notCompleted'"
+                  :class="row.completed ? 'completed' : 'notCompleted'"
                   style="border: solid thin black; width: -webkit-fill-available;"
                   method="get" as="button">
-              <h3 style="font-size: 1.4rem">{{ row[1] }}</h3>
-              <span>{{ row[3] }}</span><br>
-              <span v-if="user.id = 2">{{ row[6] }}</span>
-
+              <h3 style="font-size: 1.4rem">{{ row.first_name }} {{ row.last_name }}</h3>
+              <div>{{ row.address_line_1 }}, {{ row.city }} AZ {{ row.zip }}</div>
+              <div>{{ row.community_gate_code }}</div>
+              <div>{{ row.assigned_serviceman }}</div>
+              <div v-if="user.is_admin === 1">{{ row.phone_number }}</div>
             </Link>
           </div>
         </div>
 
         <div v-show="wednesday">
-          <div v-if="row[2] == 'Wednesday'">
-            <Link :href="route('customers.show', row[0])"
+          <div v-if="row.service_day === 'Wednesday'">
+            <Link :href="route('customers.show', row.addressId)"
                   class="sticky top-0 z-10 border-y border-b-gray-200 border-t-gray-100 bg-gray-50 px-3 py-2 text-sm font-semibold leading-6 text-gray-900"
-                  :class="row[5] ? 'completed' : 'notCompleted'"
+                  :class="row.completed ? 'completed' : 'notCompleted'"
                   style="border: solid thin black; width: -webkit-fill-available;"
                   method="get" as="button">
-              <h3 style="font-size: 1.4rem">{{ row[1] }}</h3>
-              <span>{{ row[3] }}</span><br>
-              <span v-if="user.id = 2">{{ row[6] }}</span>
+              <h3 style="font-size: 1.4rem">{{ row.first_name }} {{ row.last_name }}</h3>
+              <div>{{ row.address_line_1 }}, {{ row.city }} AZ {{ row.zip }}</div>
+              <div>{{ row.community_gate_code }}</div>
+              <div>{{ row.assigned_serviceman }}</div>
+              <div v-if="user.is_admin === 1">{{ row.phone_number }}</div>
             </Link>
           </div>
         </div>
 
         <div v-show="thursday">
-          <div v-if="row[2] == 'Thursday'">
-            <Link :href="route('customers.show', row[0])"
+          <div v-if="row.service_day === 'Thursday'">
+            <Link :href="route('customers.show', row.addressId)"
                   class="sticky top-0 z-10 border-y border-b-gray-200 border-t-gray-100 bg-gray-50 px-3 py-2 text-sm font-semibold leading-6 text-gray-900"
-                  :class="row[5] ? 'completed' : 'notCompleted'"
+                  :class="row.completed ? 'completed' : 'notCompleted'"
                   style="border: solid thin black; width: -webkit-fill-available;"
                   method="get" as="button">
-              <h3 style="font-size: 1.4rem">{{ row[1] }}</h3>
-              <span>{{ row[3] }}</span><br>
-              <span v-if="user.id = 2">{{ row[6] }}</span>
+              <h3 style="font-size: 1.4rem">{{ row.first_name }} {{ row.last_name }}</h3>
+              <div>{{ row.address_line_1 }}, {{ row.city }} AZ {{ row.zip }}</div>
+              <div>{{ row.community_gate_code }}</div>
+              <div>{{ row.assigned_serviceman }}</div>
+              <div v-if="user.is_admin === 1">{{ row.phone_number }}</div>
             </Link>
           </div>
         </div>
 
         <div v-show="friday">
-          <div v-if="row[2] == 'Friday'">
-            <Link :href="route('customers.show', row[0])"
+          <div v-if="row.service_day === 'Friday'">
+            <Link :href="route('customers.show', row.addressId)"
                   class="sticky top-0 z-10 border-y border-b-gray-200 border-t-gray-100 bg-gray-50 px-3 py-2 text-sm font-semibold leading-6 text-gray-900"
-                  :class="row[5] ? 'completed' : 'notCompleted'"
+                  :class="row.completed ? 'completed' : 'notCompleted'"
                   style="border: solid thin black; width: -webkit-fill-available;"
                   method="get" as="button">
-              <h3 style="font-size: 1.4rem">{{ row[1] }}</h3>
-              <span>{{ row[3] }}</span><br>
-              <span v-if="user.id = 2">{{ row[6] }}</span>
+              <h3 style="font-size: 1.4rem">{{ row.first_name }} {{ row.last_name }}</h3>
+              <div>{{ row.address_line_1 }}, {{ row.city }} AZ {{ row.zip }}</div>
+              <div>{{ row.community_gate_code }}</div>
+              <div>{{ row.assigned_serviceman }}</div>
+              <div v-if="user.is_admin === 1">{{ row.phone_number }}</div>
             </Link>
           </div>
         </div>
 
         <div v-show="saturday">
-          <div v-if="row[2] == 'Saturday'">
-            <Link :href="route('customers.show', row[0])"
+          <div v-if="row.service_day === 'Saturday'">
+            <Link :href="route('customers.show', row.addressId)"
                   class="sticky top-0 z-10 border-y border-b-gray-200 border-t-gray-100 bg-gray-50 px-3 py-2 text-sm font-semibold leading-6 text-gray-900"
-                  :class="row[5] ? 'completed' : 'notCompleted'"
+                  :class="row.completed ? 'completed' : 'notCompleted'"
                   style="border: solid thin black; width: -webkit-fill-available;"
                   method="get" as="button">
-              <h3 style="font-size: 1.4rem">{{ row[1] }}</h3>
-              <span>{{ row[3] }}</span><br>
-              <span v-if="user.id = 2">{{ row[6] }}</span>
+              <h3 style="font-size: 1.4rem">{{ row.first_name }} {{ row.last_name }}</h3>
+              <div>{{ row.address_line_1 }}, {{ row.city }} AZ {{ row.zip }}</div>
+              <div>{{ row.community_gate_code }}</div>
+              <div>{{ row.assigned_serviceman }}</div>
+              <div v-if="user.is_admin === 1">{{ row.phone_number }}</div>
             </Link>
           </div>
         </div>
@@ -229,7 +240,7 @@ const props = defineProps({
   user: Object
 });
 
-const people = props.customers.map(({id, first_name, last_name}) => ({id, first_name, last_name}));
+const people = props.customers.map(({id, first_name, last_name, address_line_1, addressId}) => ({id, first_name, last_name, address_line_1, addressId}));
 
 const query = ref('')
 const selectedPerson = ref(null)

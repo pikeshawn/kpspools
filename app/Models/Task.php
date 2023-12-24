@@ -230,8 +230,23 @@ class Task extends Model
 
         foreach ($t as $task) {
             $c = Customer::find($task->customer_id);
-            $a = Address::where('customer_id', $task->customer_id)->first();
+            $a = Address::find($task->address_id);
             $poolGuy = User::find($task->assigned);
+
+            if ($c === null) {
+                dd("CUSTOMER IS NULL\n\ntask :: $task\ncustomer :: $c\naddress :: $a\npoolguy :: $poolGuy\n");
+            }
+
+            if ($a === null) {
+                dd("ADDRESS IS NULL\n\ntask :: $task\ncustomer :: $c\naddress :: $a\npoolguy :: $poolGuy\n");
+            }
+
+            if ($poolGuy === null) {
+                dd("POOLGUY IS NULL\n\ntask :: $task\ncustomer :: $c\naddress :: $a\npoolguy :: $poolGuy\n");
+            }
+
+
+
             $line = [];
             $line["id"] = $task->id;
             $line["customerName"] = "$c->first_name $c->last_name";

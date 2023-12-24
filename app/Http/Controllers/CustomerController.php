@@ -21,7 +21,7 @@ class CustomerController extends Controller
      */
     public function index(): Response
     {
-        $customers = '';
+//        dd('index');
 
         if (User::isAdmin()) {
             $customers = Customer::allCustomers();
@@ -141,18 +141,21 @@ class CustomerController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function show(Customer $customer): Response
+    public function show(Address $address): Response
     {
+//        dd($address);
+
+        $customer = Customer::find($address->customer_id);
+
+//        dd($customer);
+
         $notes = DB::select('Select * from general_notes where customer_id = '
             . $customer->id . ' Order By updated_at DESC');
-
-        $address = DB::select('Select * from addresses where customer_id = '
-            . $customer->id);
 
         $tasks = Task::allPickedUpTasksRelatedToSpecificCustomer($customer->id);
         $completedTasks = Task::allCompletedTasksRelatedToSpecificCustomer($customer->id);
 
-        $serviceman = User::find($customer->serviceman_id);
+        $serviceman = User::find($address->serviceman_id);
 
 //        dd($tasks);
 

@@ -68,12 +68,16 @@ class Customer extends Model
             'addresses.community_gate_code',
             'addresses.address_line_1',
             'addresses.city',
-            'addresses.zip')
+            'addresses.zip',
+            'addresses.id as addressId'
+        )
             ->join('addresses', 'customers.id', '=', 'addresses.customer_id')
             ->where('active', 1)
             ->whereNotNull('customers.service_day')
             ->orderByDesc('customers.order')
             ->get();
+
+//        dd($customers[0]);
 
 //        dd(Auth::user()->getAuthIdentifier());
 //        dd($customers);
@@ -101,7 +105,9 @@ class Customer extends Model
             'addresses.community_gate_code',
             'addresses.address_line_1',
             'addresses.city',
-            'addresses.zip')
+            'addresses.zip',
+            'addresses.id as addressId'
+        )
             ->join('addresses', 'customers.id', '=', 'addresses.customer_id')
             ->join('users', 'users.id', '=', 'customers.user_id')
             ->whereNotNull('customers.service_day')
@@ -119,6 +125,9 @@ class Customer extends Model
 
     public static function completedCustomers($customers)
     {
+
+//        dd($customers[0]);
+
         $now = Carbon::now();
         $startOfWeek = $now->startOfWeek(CarbonInterface::MONDAY)->format('Y-m-d H:i');
         $endOfWeek = $now->endOfWeek(CarbonInterface::SUNDAY)->format('Y-m-d H:i');
