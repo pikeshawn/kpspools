@@ -10,6 +10,7 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
+use Stripe\Collection;
 
 class Customer extends Model
 {
@@ -61,6 +62,7 @@ class Customer extends Model
         $customers = Customer::select(
             'customers.first_name',
             'customers.last_name',
+            'customers.order',
             'customers.id',
             'customers.service_day',
             'customers.assigned_serviceman',
@@ -77,7 +79,7 @@ class Customer extends Model
             ->orderByDesc('customers.order')
             ->get();
 
-//        dd($customers[0]);
+//        dd($customers);
 
 //        dd(Auth::user()->getAuthIdentifier());
 //        dd($customers);
@@ -95,32 +97,88 @@ class Customer extends Model
 
 //        dd($servicemanId);
 
-        $customers = Customer::select(
-            'customers.first_name',
-            'customers.last_name',
-            'users.name',
-            'customers.id',
-            'customers.service_day',
-            'customers.assigned_serviceman',
-            'addresses.community_gate_code',
-            'addresses.address_line_1',
-            'addresses.city',
-            'addresses.zip',
-            'addresses.id as addressId'
-        )
-            ->join('addresses', 'customers.id', '=', 'addresses.customer_id')
-            ->join('users', 'users.id', '=', 'customers.user_id')
-            ->whereNotNull('customers.service_day')
-            ->where('customers.serviceman_id', $servicemanId)
-            ->where('customers.active', 1)
-            ->orderByDesc('customers.order')
-            ->get();
 
-//        dd($customers);
+        $customers = Customer::select(['assigned_serviceman', 'phone_number', 'id', 'first_name', 'last_name', 'order', 'service_day'])
+            ->where('serviceman_id', Auth::user()
+                ->getAuthIdentifier())->orderBy('service_day')->orderBy('order')->get();
 
-        $customers = self::completedCustomers($customers);
+        $customerCollection = [];
 
-        return $customers;
+        foreach ($customers as $customer) {
+
+            $customerArray = [];
+
+            $addresses = Address::find($customer->id);
+//            dd($addresses->count());
+            if ($addresses instanceof Collection) {
+                foreach ($addresses as $address) {
+
+                    $customerArray['first_name'] = $customer->first_name;
+                    $customerArray['last_name'] = $customer->last_name;
+                    $customerArray['order'] = $customer->order;
+                    $customerArray['id'] = $customer->id;
+                    $customerArray['service_day'] = $customer->service_day;
+                    $customerArray['assigned_serviceman'] = $customer->assigned_serviceman;
+                    $customerArray['phone_number'] = $customer->phone_number;
+                    $customerArray['community_gate_code'] = $address->community_gate_code;
+                    $customerArray['address_line_1'] = $address->address_line_1;
+                    $customerArray['city'] = $address->city;
+                    $customerArray['zip'] = $address->zip;
+                    $customerArray['addressId'] = $address->id;
+                    $customerArray['completed'] = false;
+                }
+            } else {
+                $customerArray['first_name'] = $customer->first_name;
+                $customerArray['last_name'] = $customer->last_name;
+                $customerArray['order'] = $customer->order;
+                $customerArray['id'] = $customer->id;
+                $customerArray['service_day'] = $customer->service_day;
+                $customerArray['assigned_serviceman'] = $customer->assigned_serviceman;
+                $customerArray['phone_number'] = $customer->phone_number;
+                $customerArray['community_gate_code'] = $addresses->community_gate_code;
+                $customerArray['address_line_1'] = $addresses->address_line_1;
+                $customerArray['city'] = $addresses->city;
+                $customerArray['zip'] = $addresses->zip;
+                $customerArray['addressId'] = $addresses->id;
+                $customerArray['completed'] = false;
+//                dd($customerArray);
+            }
+
+            $customerCollection[] = $customerArray;
+
+        }
+
+
+//        $customers = Customer::select(
+//            'customers.first_name',
+//            'customers.last_name',
+//            'customers.order',
+//            'users.name',
+//            'customers.id',
+//            'customers.service_day',
+//            'customers.assigned_serviceman',
+//            'addresses.community_gate_code',
+//            'addresses.address_line_1',
+//            'addresses.city',
+//            'addresses.zip',
+//            'addresses.id as addressId'
+//        )
+//            ->join('addresses', 'customers.id', '=', 'addresses.customer_id')
+//            ->join('users', 'users.id', '=', 'customers.user_id')
+//            ->whereNotNull('customers.service_day')
+//            ->where('customers.serviceman_id', $servicemanId)
+//            ->where('customers.active', 1)
+//            ->orderByDesc('customers.order')
+//            ->get();
+//
+//        var_dump($customers);
+//
+//
+//
+//
+//        $customers = self::completedCustomers($customers);
+
+        return $customerCollection;
     }
 
     public static function completedCustomers($customers)

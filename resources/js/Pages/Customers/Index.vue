@@ -121,9 +121,9 @@
     <!--        </div>-->
 
     <nav class="h-full overflow-y-auto" aria-label="Directory">
-      <div v-for="row in customers" :key="row.id" class="relative">
+<!--      <div v-for="row in customers" :key="row.id" class="relative">-->
         <div v-show="monday">
-          <div v-if="row.service_day === 'Monday'">
+          <div v-for="row in sortedRoute('Monday')" :key="row.id" class="relative">
             <Link :href="route('customers.show', row.addressId)"
                   class="sticky top-0 z-10 border-y border-b-gray-200 border-t-gray-100 bg-gray-50 px-3 py-2 text-sm font-semibold leading-6 text-gray-900"
                   :class="row.completed ? 'completed' : 'notCompleted'"
@@ -133,13 +133,14 @@
               <div>{{ row.address_line_1 }}, {{ row.city }} AZ {{ row.zip }}</div>
               <div>{{ row.community_gate_code }}</div>
               <div>{{ row.assigned_serviceman }}</div>
+<!--              <div>{{ row.order }}</div>-->
               <div v-if="user.is_admin === 1">{{ row.phone_number }}</div>
             </Link>
           </div>
         </div>
 
         <div v-show="tuesday">
-          <div v-if="row.service_day === 'Tuesday'">
+          <div v-for="row in sortedRoute('Tuesday')" :key="row.id" class="relative">
             <Link :href="route('customers.show', row.addressId)"
                   class="sticky top-0 z-10 border-y border-b-gray-200 border-t-gray-100 bg-gray-50 px-3 py-2 text-sm font-semibold leading-6 text-gray-900"
                   :class="row.completed ? 'completed' : 'notCompleted'"
@@ -155,7 +156,7 @@
         </div>
 
         <div v-show="wednesday">
-          <div v-if="row.service_day === 'Wednesday'">
+          <div v-for="row in sortedRoute('Wednesday')" :key="row.id" class="relative">
             <Link :href="route('customers.show', row.addressId)"
                   class="sticky top-0 z-10 border-y border-b-gray-200 border-t-gray-100 bg-gray-50 px-3 py-2 text-sm font-semibold leading-6 text-gray-900"
                   :class="row.completed ? 'completed' : 'notCompleted'"
@@ -171,7 +172,7 @@
         </div>
 
         <div v-show="thursday">
-          <div v-if="row.service_day === 'Thursday'">
+          <div v-for="row in sortedRoute('Thursday')" :key="row.id" class="relative">
             <Link :href="route('customers.show', row.addressId)"
                   class="sticky top-0 z-10 border-y border-b-gray-200 border-t-gray-100 bg-gray-50 px-3 py-2 text-sm font-semibold leading-6 text-gray-900"
                   :class="row.completed ? 'completed' : 'notCompleted'"
@@ -187,7 +188,7 @@
         </div>
 
         <div v-show="friday">
-          <div v-if="row.service_day === 'Friday'">
+          <div v-for="row in sortedRoute('Friday')" :key="row.id" class="relative">
             <Link :href="route('customers.show', row.addressId)"
                   class="sticky top-0 z-10 border-y border-b-gray-200 border-t-gray-100 bg-gray-50 px-3 py-2 text-sm font-semibold leading-6 text-gray-900"
                   :class="row.completed ? 'completed' : 'notCompleted'"
@@ -203,7 +204,7 @@
         </div>
 
         <div v-show="saturday">
-          <div v-if="row.service_day === 'Saturday'">
+          <div v-for="row in sortedRoute('Saturday')" :key="row.id" class="relative">
             <Link :href="route('customers.show', row.addressId)"
                   class="sticky top-0 z-10 border-y border-b-gray-200 border-t-gray-100 bg-gray-50 px-3 py-2 text-sm font-semibold leading-6 text-gray-900"
                   :class="row.completed ? 'completed' : 'notCompleted'"
@@ -217,7 +218,6 @@
             </Link>
           </div>
         </div>
-      </div>
     </nav>
 
   </layout>
@@ -339,6 +339,28 @@ export default {
 
   },
   methods: {
+    sortedRoute(day){
+
+      const dayOfWeek = this.customers.filter(obj => obj.service_day === day);
+      return dayOfWeek.sort((a, b) => a.order - b.order);
+
+      // first_name:"Scott"
+      // last_name:"Conley"
+      // name:"Scott Conley "
+      // id:310
+      // service_day:"Thursday"
+      // assigned_serviceman:"Jeremiah"
+      // community_gate_code:"Don’t Backwash"
+      // address_line_1:"14434 S 35th Place"
+      // city:"Phoenix"
+      // zip:"85044"
+      // addressId:311
+      // completed:false
+
+      // let dayOfWeek = [];
+      // for()
+
+    },
     goToCustomer(id){
       Inertia.get('customers/show/' + id);
     },
