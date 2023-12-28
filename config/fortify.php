@@ -61,7 +61,7 @@ return [
     |
     */
 
-    'home' => RouteServiceProvider::HOME,
+    'home' => RouteServiceProvider::PROSPECTIVE_HOME,
 
     /*
     |--------------------------------------------------------------------------

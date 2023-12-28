@@ -62,7 +62,7 @@ class CreateNewUser implements CreatesNewUsers
             'customer_id' => $customer->id,
             'address_line_1' => $input['addressLine1'],
             'city' => $input['city'],
-            'state' => $input['state'],
+            'state' => 'AZ',
             'zip' => $input['zip']
         ]);
 

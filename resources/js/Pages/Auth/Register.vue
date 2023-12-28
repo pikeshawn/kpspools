@@ -1,5 +1,5 @@
 <template>
-  <jet-authentication-card>
+  <jet-authentication-card class="py-24">
     <template #logo>
       <jet-authentication-card-logo/>
     </template>
@@ -107,19 +107,21 @@ export default {
     JetLabel,
     JetValidationErrors
   },
+  props: {
 
+  },
   data() {
     return {
       form: this.$inertia.form({
-        first_name: 'Shawn',
-        last_name: 'Pike',
+        first_name: '',
+        last_name: '',
         phoneNumber: '',
-        addressLine1: '705 E Oxford Dr Tempe Az',
-        city: 'Tempe',
-        zip: '85283',
-        email: 'pike.shawn@gmail.com',
-        password: 'password',
-        password_confirmation: 'password',
+        addressLine1: '',
+        city: '',
+        zip: '',
+        email: '',
+        password: '',
+        password_confirmation: '',
         terms: false,
       })
     }
