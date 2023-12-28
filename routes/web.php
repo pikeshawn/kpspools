@@ -40,6 +40,15 @@ Route::middleware(['auth:sanctum', 'verified', 'serviceman'])->get('/dashboard',
 Route::middleware(['auth:sanctum', 'verified', 'prospective'])->get('/prospective',
     [ProspectiveController::class, 'index'])->name('prospective');
 
+Route::middleware(['auth:sanctum', 'verified', 'prospective'])->post('/prospectiveTimes',
+    [ProspectiveController::class, 'times'])->name('prospectiveTimes');
+
+Route::middleware(['auth:sanctum', 'verified', 'prospective'])->post('/prospective/requested',
+    [ProspectiveController::class, 'requested'])->name('prospective.requested');
+
+Route::middleware(['auth:sanctum', 'verified', 'prospective'])->get('/prospectiveTimes',
+    [ProspectiveController::class, 'index'])->name('prospective');
+
 Route::middleware(['auth:sanctum', 'verified', 'serviceman'])->group(function () {
     Route::get('/customers',
         [CustomerController::class, 'index'])
