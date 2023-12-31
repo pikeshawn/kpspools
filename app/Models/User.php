@@ -24,6 +24,11 @@ class User extends Authenticatable
         return $this->hasOne(Customer::class);
     }
 
+    public function appointment()
+    {
+        return $this->hasOne(Appointment::class);
+    }
+
     /**
      * The attributes that are mass assignable.
      *

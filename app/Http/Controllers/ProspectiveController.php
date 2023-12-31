@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Appointment;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
@@ -94,7 +95,30 @@ class ProspectiveController extends Controller
             $appt[0]->appointment_time = $request->time;
             $appt[0]->save();
         }
+    }
 
+    public function customers()
+    {
+        $prospective = User::where('type', 'prospective')->get();
 
+        $prospectiveUsers = [];
+        foreach ($prospective as $prosp){
+            $appointment = Appointment::where('user_id', $prosp->id)->get();
+            $prospUsers = [];
+            $prospUsers['id'] = $prosp->id;
+            $prospUsers['name'] = $prosp->name;
+
+            if ($appointment->isNotEmpty()){
+                $prospUsers['appointment'] = $appointment[0]->date . " " . $appointment[0]->time;
+            } else {
+                $prospUsers['appointment'] = null;
+            }
+
+            array_push($prospectiveUsers, $prospUsers);
+        }
+
+        return Inertia::render('Prospective/Index', [
+            'prospectiveUsers' => $prospectiveUsers
+        ]);
     }
 }

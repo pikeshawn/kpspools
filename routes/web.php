@@ -50,6 +50,10 @@ Route::middleware(['auth:sanctum', 'verified', 'prospective'])->get('/prospectiv
     [ProspectiveController::class, 'index'])->name('prospective');
 
 Route::middleware(['auth:sanctum', 'verified', 'serviceman'])->group(function () {
+
+    Route::get('/prospective/customers',
+        [ProspectiveController::class, 'customers'])->name('prospective.customers');
+
     Route::get('/customers',
         [CustomerController::class, 'index'])
         ->name('customers');
