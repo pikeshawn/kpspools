@@ -344,22 +344,6 @@ export default {
       const dayOfWeek = this.customers.filter(obj => obj.service_day === day);
       return dayOfWeek.sort((a, b) => a.order - b.order);
 
-      // first_name:"Scott"
-      // last_name:"Conley"
-      // name:"Scott Conley "
-      // id:310
-      // service_day:"Thursday"
-      // assigned_serviceman:"Jeremiah"
-      // community_gate_code:"Don’t Backwash"
-      // address_line_1:"14434 S 35th Place"
-      // city:"Phoenix"
-      // zip:"85044"
-      // addressId:311
-      // completed:false
-
-      // let dayOfWeek = [];
-      // for()
-
     },
     goToCustomer(id){
       Inertia.get('customers/show/' + id);

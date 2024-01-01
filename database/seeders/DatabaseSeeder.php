@@ -117,6 +117,8 @@ class DatabaseSeeder extends Seeder
                 'password' => Hash::make('password')
             ]);
 
+            $serviceDay = $faker->dayOfWeek;
+
             $customer = Customer::create([
                 'user_id' => $user->id,
                 'first_name' => $firstName,
@@ -125,7 +127,7 @@ class DatabaseSeeder extends Seeder
                 'type' => 'Service',
                 'plan' => null,
                 'plan_duration' => 'Monthly',
-                'service_day' => $faker->dayOfWeek,
+                'service_day' => $serviceDay,
                 'plan_price' => null,
                 'chemicals_included' => 1,
                 'assigned_serviceman' => $serviceman->name,
@@ -139,6 +141,7 @@ class DatabaseSeeder extends Seeder
                 'address_line_1' => $faker->streetAddress,
                 'city' => $faker->city,
                 'state' => 'AZ',
+                'service_day' => $serviceDay,
                 'serviceman_id' => $serviceman->id,
                 'zip' => $faker->postcode
             ]);

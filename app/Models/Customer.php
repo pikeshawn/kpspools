@@ -66,7 +66,7 @@ class Customer extends Model
             'customers.last_name',
             'customers.order',
             'customers.id',
-            'customers.service_day',
+            'addresses.service_day',
             'customers.assigned_serviceman',
             'customers.phone_number',
             'addresses.community_gate_code',
@@ -121,7 +121,7 @@ class Customer extends Model
             $customerArray['last_name'] = $customer->last_name;
             $customerArray['order'] = $customer->order;
             $customerArray['id'] = $customer->id;
-            $customerArray['service_day'] = $customer->service_day;
+            $customerArray['service_day'] = $address->service_day;
             $customerArray['assigned_serviceman'] = $user->name;
             $customerArray['phone_number'] = $customer->phone_number;
             $customerArray['community_gate_code'] = $address->community_gate_code;
