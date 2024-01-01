@@ -117,10 +117,6 @@ class Customer extends Model
             $customer = Customer::where('id', $address->customer_id)->first();
             $user = User::find($address->serviceman_id);
 
-//                Log::debug($address->id);
-//                Log::debug($customer);
-//                Log::debug($address);
-
             $customerArray['first_name'] = $customer->first_name;
             $customerArray['last_name'] = $customer->last_name;
             $customerArray['order'] = $customer->order;
@@ -133,55 +129,22 @@ class Customer extends Model
             $customerArray['city'] = $address->city;
             $customerArray['zip'] = $address->zip;
             $customerArray['addressId'] = $address->id;
-            $customerArray['completed'] = false;
+            $customerArray['completed'] = self::completedCustomer($customer->id);
 
             $customerCollection[] = $customerArray;
 
 
         }
-//        $customers = Customer::select(
-//            'customers.first_name',
-//            'customers.last_name',
-//            'customers.order',
-//            'users.name',
-//            'customers.id',
-//            'customers.service_day',
-//            'customers.assigned_serviceman',
-//            'addresses.community_gate_code',
-//            'addresses.address_line_1',
-//            'addresses.city',
-//            'addresses.zip',
-//            'addresses.id as addressId'
-//        )
-//            ->join('addresses', 'customers.id', '=', 'addresses.customer_id')
-//            ->join('users', 'users.id', '=', 'customers.user_id')
-//            ->whereNotNull('customers.service_day')
-//            ->where('customers.serviceman_id', $servicemanId)
-//            ->where('customers.active', 1)
-//            ->orderByDesc('customers.order')
-//            ->get();
-//
-//        var_dump($customers);
-//
-//
-//
-//
-//        $customers = self::completedCustomers($customers);
-
         return $customerCollection;
     }
 
     public static function completedCustomers($customers)
     {
 
-//        dd($customers[0]);
-
         $now = Carbon::now();
         $startOfWeek = $now->startOfWeek(CarbonInterface::MONDAY)->format('Y-m-d H:i');
-        $endOfWeek = $now->endOfWeek(CarbonInterface::SUNDAY)->format('Y-m-d H:i');
 
         $startOfWeek = new Carbon($startOfWeek);
-        $endOfWeek = new Carbon($endOfWeek);
 
         $dayBeforeStartOfWeek = $startOfWeek->subDays(1)->toDate()->format('Y-m-d H:i');
 
@@ -201,5 +164,29 @@ where ss.customer_id = ' . $customer->id . ' and ss.time_in > "' .
         }
 
         return $customers;
+    }
+
+    public static function completedCustomer($id)
+    {
+        $now = Carbon::now();
+        $startOfWeek = $now->startOfWeek(CarbonInterface::MONDAY)->format('Y-m-d H:i');
+
+        $startOfWeek = new Carbon($startOfWeek);
+
+        $dayBeforeStartOfWeek = $startOfWeek->subDays(1)->toDate()->format('Y-m-d H:i');
+
+        $query = 'select count(ss.time_in) as stops
+from service_stops ss
+where ss.customer_id = ' . $id . ' and ss.time_in > "' .
+            $dayBeforeStartOfWeek . '" and ss.service_type = "Service Stop" order by ss.time_in DESC Limit 1';
+
+        $stops = DB::select($query);
+
+        if ($stops[0]->stops > 0) {
+            return true;
+        } else {
+            return false;
+        }
+
     }
 }

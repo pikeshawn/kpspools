@@ -23,7 +23,6 @@ class DatabaseSeeder extends Seeder
      */
 
 
-
     public function run(): void
     {
 
@@ -36,7 +35,9 @@ class DatabaseSeeder extends Seeder
         self::createCustomers();
 
         for ($i = 1; $i < 31; $i++) {
-            self::createAddresses($i);
+            $customer = Customer::find($i);
+//            dd($customer);
+            self::createAddresses($i, $customer->serviceman_id);
         }
 
         self::createServiceStops();
@@ -47,11 +48,11 @@ class DatabaseSeeder extends Seeder
     public function createServiceStops()
     {
         $users = User::where('type', 'serviceman')->get();
-        foreach ($users as $user){
+        foreach ($users as $user) {
             $customers = Customer::where('serviceman_id', $user->id)->get();
-            foreach ($customers as $customer){
+            foreach ($customers as $customer) {
                 $addresses = $customer->addresses()->get();
-                foreach ($addresses as $address){
+                foreach ($addresses as $address) {
                     self::createServiceStop($customer->id, $user->id, $address->id);
                 }
             }
@@ -69,12 +70,14 @@ class DatabaseSeeder extends Seeder
             ])->create();
     }
 
-    public function createAddresses($id)
+    public function createAddresses($id, $serviceman_id)
     {
+
         Address::factory()
             ->count(2)
             ->state([
-                'customer_id' => $id
+                'customer_id' => $id,
+                'serviceman_id' => $serviceman_id
             ])
             ->create();
     }
@@ -92,12 +95,12 @@ class DatabaseSeeder extends Seeder
             $type = 'customer';
             $active = 1;
 
-            if($i > 90 ){
+            if ($i > 90) {
                 $type = 'prospective';
                 $rand = 0;
             }
 
-            if($i > 70 ){
+            if ($i > 70) {
                 $active = 0;
             }
 
@@ -126,7 +129,7 @@ class DatabaseSeeder extends Seeder
                 'plan_price' => null,
                 'chemicals_included' => 1,
                 'assigned_serviceman' => $serviceman->name,
-                'serviceman_id' => $rand,
+                'serviceman_id' => $serviceman->id,
                 'phone_number' => '14807034902',
                 'terms' => 'begin'
             ]);
@@ -136,6 +139,7 @@ class DatabaseSeeder extends Seeder
                 'address_line_1' => $faker->streetAddress,
                 'city' => $faker->city,
                 'state' => 'AZ',
+                'serviceman_id' => $serviceman->id,
                 'zip' => $faker->postcode
             ]);
         }
