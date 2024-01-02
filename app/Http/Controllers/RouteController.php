@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Address;
 use App\Models\Customer;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -15,9 +16,22 @@ class RouteController extends Controller
     public function index()
     {
 
-        $customers = Customer::select(['id', 'first_name', 'last_name', 'order', 'service_day'])
-            ->where('serviceman_id', Auth::user()
-                ->getAuthIdentifier())->orderBy('service_day')->orderBy('order')->get();
+        $customers = Customer::select([
+            'addresses.id',
+            'customers.first_name',
+            'customers.last_name',
+            'addresses.order',
+            'addresses.service_day'
+        ])
+            ->join('addresses', 'customers.id', '=', 'addresses.customer_id')
+            ->where(
+                'addresses.serviceman_id',
+                Auth::user()->getAuthIdentifier())
+            ->orderBy('addresses.service_day')
+            ->orderBy('addresses.order')
+            ->get();
+
+//        dd($customers[0]);
 
         return Inertia::render('Route/Index', [
             'customers' => $customers,
@@ -28,9 +42,9 @@ class RouteController extends Controller
     {
 //        dd();
         foreach(json_decode($request->getContent()) as $route){
-            $customer = Customer::find($route->id);
-            $customer->order = $route->order;
-            $customer->save();
+            $address = Address::find($route->id);
+            $address->order = $route->order;
+            $address->save();
         }
 
         if (User::isAdmin()) {

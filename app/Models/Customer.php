@@ -64,7 +64,7 @@ class Customer extends Model
         $customers = Customer::select(
             'customers.first_name',
             'customers.last_name',
-            'customers.order',
+            'addresses.order',
             'customers.id',
             'addresses.service_day',
             'customers.assigned_serviceman',
@@ -119,7 +119,7 @@ class Customer extends Model
 
             $customerArray['first_name'] = $customer->first_name;
             $customerArray['last_name'] = $customer->last_name;
-            $customerArray['order'] = $customer->order;
+            $customerArray['order'] = $address->order;
             $customerArray['id'] = $customer->id;
             $customerArray['service_day'] = $address->service_day;
             $customerArray['assigned_serviceman'] = $user->name;
