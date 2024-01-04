@@ -136,7 +136,7 @@ Route::middleware(['auth:sanctum', 'verified', 'serviceman'])->group(function ()
         ->name('customers.edit');
 
 // Tasks
-    Route::get('/task/create/{customer}',
+    Route::get('/task/create/{address}',
         [TaskController::class, 'create'])
         ->name('task.create');
 

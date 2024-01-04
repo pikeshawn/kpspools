@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Customer;
+use App\Models\Address;
 use App\Models\Task;
 use App\Models\User;
 use App\Models\TaskStatus;
@@ -233,17 +234,22 @@ class TaskController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create(Customer $customer): Response
+    public function create(Address $address): Response
     {
-        $address = DB::select('Select * from addresses where customer_id = '
-            . $customer->id);
+//        dd($address);
 
+//        $address = DB::select('Select * from addresses where customer_id = '
+//            . $customer->id);
+//
         $users = User::select(['id', 'name'])->where('type', '=', 'serviceman')->where('active', '=', true)->get();
 
 //        dd($customer->id);
 
+        $customer = Customer::find($address->customer_id);
+
         return Inertia::render('Task/Create', [
-            'customerId' => $customer->id,
+            'addressId' => $address->id,
+            'customerId' => $address->customer_id,
             'customer' => $customer,
             'customerName' => $customer->last_name,
             'users' => $users,
@@ -301,9 +307,12 @@ class TaskController extends Controller
     private function createTask(Request $request)
     {
 
+//        dd($request);
+
         $tasks = Task::where('customer_id', $request->customer_id)->get();
 
         return Task::firstOrCreate([
+            'address_id' => $request->address_id,
             'customer_id' => $request->customer_id,
             'description' => $request->description,
             'assigned' => $request->assigned,
