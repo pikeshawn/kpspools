@@ -85,7 +85,7 @@ class ServiceStopCompleted extends Notification
         $text = "Jemmson:\n".$this->customer->first_name.' '.
             $this->customer->last_name.' your pool has been completed by '
             .$this->customer->assigned_serviceman." from KPS Pools\n".
-            'address:    '.$this->address[0]->address_line_1."\n".
+            'address:    '.$this->address->address_line_1."\n".
             'time in:     '.$this->service_stop->time_in."\n".
             'time out:   '.$this->service_stop->time_out."\n".
             'pH:                '.$this->service_stop->ph_level."\n".

@@ -78,7 +78,7 @@ Route::middleware(['auth:sanctum', 'verified', 'serviceman'])->group(function ()
         [SummaryController::class, 'customerSummary'])
         ->name('summary');
 
-    Route::get('/service_stops/create/{customer}',
+    Route::get('/service_stops/create/{address}',
         [ServiceStopController::class, 'create'])
         ->name('service_stops.create');
 

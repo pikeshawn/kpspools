@@ -3,6 +3,8 @@
       :user="user"
   >
 
+<!--    <pre>{{ address }}</pre>-->
+
     <div class="bg-gray-900 px-6 py-24 sm:py-8 lg:px-8">
       <div class="mx-auto max-w-2xl text-center">
         <h2 class="text-4xl font-bold tracking-tight text-white sm:text-6xl">{{ customer.first_name }}
@@ -13,14 +15,14 @@
               <div class="px-4 py-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
                 <dt class="text-sm font-medium leading-6 text-white">Address</dt>
                 <dd class="mt-1 text-sm leading-6 text-gray-400 sm:col-span-2 sm:mt-0">
-                  {{ address[0].address_line_1 }}, {{ address[0].city }} {{ address[0].state }}
-                  {{ address[0].zip }}
+                  {{ address.address_line_1 }}, {{ address.city }} {{ address.state }}
+                  {{ address.zip }}
                 </dd>
               </div>
               <div class="px-4 py-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
                 <dt class="text-sm font-medium leading-6 text-white">Gate Code</dt>
                 <dd class="mt-1 text-sm leading-6 text-gray-400 sm:col-span-2 sm:mt-0">
-                  {{ address[0].community_gate_code }}
+                  {{ address.community_gate_code }}
                 </dd>
               </div>
               <div class="px-4 py-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
@@ -395,7 +397,7 @@
 
                 </div>
                 <div class="flex justify-around">
-                  <button type="submit"
+                  <button @click="submit()"
                           class="mt-4 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                     Save - All Customers
                   </button>
@@ -659,6 +661,10 @@ export default {
     }
   },
   methods: {
+    submit() {
+      this.form.address = this.address.id;
+      this.store()
+    },
     submitToCustomer() {
       this.form.customerId = this.customer.id;
       this.form.toCustomer = true;

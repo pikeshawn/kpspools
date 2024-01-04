@@ -128,12 +128,17 @@ class ServiceStopController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create(Customer $customer): Response
+    public function create(Address $address): Response
     {
 //        $address = DB::select('Select * from addresses where customer_id = '
 //            . $customer->id);
 
-        $address = Address::where('customer_id', $customer->id)->get();
+//        dd($address);
+
+
+        $customer = Customer::find($address->customer_id);
+
+//        $address = Address::where('customer_id', $customer->id)->get();
 
         $tasks = Task::where('customer_id', $customer->id)->where('status', 'pickedUp')->get();
 
@@ -172,7 +177,9 @@ class ServiceStopController extends Controller
     public function store(Request $request): Response
     {
 
-        $address = Address::select(['id'])->where('customer_id', '=', $request->id)->get()->first();
+//        dd($request);
+
+        $address = Address::find($request->address);
 
         $start = new Carbon($request->timeIn);
         $end = new Carbon($request->timeOut);
@@ -182,7 +189,7 @@ class ServiceStopController extends Controller
 
         $serviceStop = ServiceStop::firstOrCreate([
             'customer_id' => $request->id,
-            'address_id' => $address['id'],
+            'address_id' => $address->id,
             'ph_level' => $phLevel,
             'chlorine_level' => $chlorineLevel,
             'checked_chems' => $request->checkedChems,
@@ -207,8 +214,6 @@ class ServiceStopController extends Controller
         ]);
 
         $cust = Customer::find($request->id);
-
-        $address = DB::select('select * from addresses a where a.customer_id ='.$cust->id);
 
         if ($request->service_type == 'Service Stop') {
             if ($cust->phone_number) {

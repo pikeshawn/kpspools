@@ -129,7 +129,7 @@ class Customer extends Model
             $customerArray['city'] = $address->city;
             $customerArray['zip'] = $address->zip;
             $customerArray['addressId'] = $address->id;
-            $customerArray['completed'] = self::completedCustomer($customer->id);
+            $customerArray['completed'] = self::completedCustomer($address->id);
 
             $customerCollection[] = $customerArray;
 
@@ -149,18 +149,35 @@ class Customer extends Model
         $dayBeforeStartOfWeek = $startOfWeek->subDays(1)->toDate()->format('Y-m-d H:i');
 
         foreach ($customers as $customer) {
-            $query = 'select count(ss.time_in) as stops
-from service_stops ss
-where ss.customer_id = ' . $customer->id . ' and ss.time_in > "' .
-                $dayBeforeStartOfWeek . '" and ss.service_type = "Service Stop" order by ss.time_in DESC Limit 1';
 
-            $stops = DB::select($query);
+            $addresses = Address::where('customer_id', $customer->id)->get();
 
-            if ($stops[0]->stops > 0) {
-                $customer->completed = true;
-            } else {
-                $customer->completed = false;
+            foreach ($addresses as $address) {
+
+//                dd($address);
+
+                $stops = ServiceStop::where('address_id', $address->id)
+                    ->where('time_in', '>', $dayBeforeStartOfWeek)
+                    ->where('service_type', 'Service Stop')
+                    ->orderBy('time_in')
+                    ->get();
+
+//                dd();
+
+                if($address->id === 63) {
+//                    dd($stops);
+                }
+
+
+                if ($stops->isEmpty()) {
+                    $customer->completed = false;
+                } else {
+                    $customer->completed = true;
+                }
             }
+
+
+
         }
 
         return $customers;
@@ -177,7 +194,7 @@ where ss.customer_id = ' . $customer->id . ' and ss.time_in > "' .
 
         $query = 'select count(ss.time_in) as stops
 from service_stops ss
-where ss.customer_id = ' . $id . ' and ss.time_in > "' .
+where ss.address_id = ' . $id . ' and ss.time_in > "' .
             $dayBeforeStartOfWeek . '" and ss.service_type = "Service Stop" order by ss.time_in DESC Limit 1';
 
         $stops = DB::select($query);
