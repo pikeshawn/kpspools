@@ -666,6 +666,7 @@ export default {
       this.store()
     },
     submitToCustomer() {
+      this.form.address = this.address.id;
       this.form.customerId = this.customer.id;
       this.form.toCustomer = true;
       this.store()

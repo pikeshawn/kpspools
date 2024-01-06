@@ -288,7 +288,7 @@ class TaskController extends Controller
             }
         }
 
-        return Redirect::route('customers.show', $task->customer_id);
+        return Redirect::route('customers.show', $request->address_id);
 
     }
 
