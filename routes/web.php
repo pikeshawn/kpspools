@@ -62,7 +62,7 @@ Route::middleware(['auth:sanctum', 'verified', 'serviceman'])->group(function ()
         [CustomerController::class, 'show'])
         ->name('customers.show');
 
-    Route::get('/customers/create',
+    Route::get('/customers/create/{id}',
         [CustomerController::class, 'create'])
         ->name('customers.create');
 

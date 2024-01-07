@@ -7,12 +7,14 @@ use App\Models\Customer;
 use App\Models\Task;
 use App\Models\GeneralNote;
 use App\Models\User;
+use App\Notifications\GenericNotification;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
 use Inertia\Response;
+use Illuminate\Support\Facades\Notification;
 
 class CustomerController extends Controller
 {
@@ -69,10 +71,17 @@ class CustomerController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create(): Response
+    public function create($userId): Response
     {
         //
-        return Inertia::render('Customers/Create');
+
+        $customer = Customer::where('user_id', $userId)->get();
+        $address = Address::where('customer_id', $customer[0]->id)->get();
+
+        return Inertia::render('Customers/Create', [
+            'prospective' => $customer[0],
+            'address' => $address[0]
+        ]);
     }
 
     /**
@@ -80,41 +89,42 @@ class CustomerController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request): RedirectResponse
     {
 
 //        dd($request->notes);
 
-        $c = Customer::firstOrCreate([
-            'phone_number' => $request->phoneNumber
-        ],
-            [
-                'serviceman_id' => 2,
-                'last_name' => $request->lastName,
-                'first_name' => $request->firstName,
-                'type' => "Service",
-                'service_day' => $request->serviceDay,
-                'order' => 1000,
-                'plan_duration' => "Monthly",
-                'plan_price' => $request->planPrice,
-                'chemicals_included' => $request->chemsIncluded,
-                'assigned_serviceman' => $request->assignedServiceman,
-                'phone_number' => $request->phoneNumber
-            ]);
 
-        Address::firstOrCreate([
-            'customer_id' => $c->id
-        ],
-            [
-                'customer_id' => $c->id,
-                'address_line_1' => $request->address,
-                'address_line_2' => null,
-                'city' => $request->city,
-                'state' => "AZ",
-                'zip' => $request->zip,
-                'community_gate_code' => $request->gateCode,
-                'house_gate_has_lock' => 0,
-            ]);
+
+        $u = User::find($request->userId);
+        $u->name = $request->firstName . " " . $request->lastName;
+        $u->phone_number = $request->phoneNumber;
+        $u->active = 1;
+        $u->type = 'customer';
+
+        $u->save();
+
+        $c = Customer::find($request->customerId);
+        $c->first_name = $request->firstName;
+        $c->last_name = $request->lastName;
+        $c->service_day = $request->serviceDay;
+        $c->chemicals_included = $request->chemsIncluded;
+        $c->phone_number = $request->phoneNumber;
+        $c->plan_price = $request->planPrice;
+
+        $c->save();
+
+        $a = Address::find($request->addressId);
+        $a->address_line_1 = $request->address;
+        $a->city = $request->city;
+        $a->state = "AZ";
+        $a->zip = $request->zip;
+        $a->service_day = $request->serviceDay;
+        $a->community_gate_code = $request->gateCode;
+
+        $a->save();
+
+
 
         GeneralNote::firstOrCreate([
             'customer_id' => $c->id
@@ -124,11 +134,17 @@ class CustomerController extends Controller
                 'note' => $request->notes
             ]);
 
-//        $note = new GeneralNote();
-//        $note->save([
-//            'customer_id' => $c->id,
-//            'note' => $request->notes
-//        ]);
+        // create a one time passcode
+        // create tokens table
+        // generate a token
+        // create a url based on that token
+        // create a route for the url
+        // method in the route will log the user in
+        // method will route the customer to the onboarding page
+
+        $message = "Thank you for becoming a new KPS Pools customer. Please use the link here to finish the onboarding process. https//kpspools.com";
+        Notification::route('vonage', $c->phone_number)->notify(
+            new GenericNotification($message));
 
         // Redirect to a different page after the store operation
         return Redirect::route('customers')

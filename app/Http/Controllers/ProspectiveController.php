@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Appointment;
+use App\Models\Address;
+use App\Models\Customer;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -94,6 +96,12 @@ class ProspectiveController extends Controller
             $appt[0]->appointment_date = $request->date;
             $appt[0]->appointment_time = $request->time;
             $appt[0]->save();
+        } else {
+            Appointment::create([
+                'user_id' =>  Auth::user()->id,
+                'appointment_date' => $request->date,
+                'appointment_time' => $request->time
+            ]);
         }
     }
 
@@ -104,12 +112,14 @@ class ProspectiveController extends Controller
         $prospectiveUsers = [];
         foreach ($prospective as $prosp){
             $appointment = Appointment::where('user_id', $prosp->id)->get();
-            $prospUsers = [];
+            $customer = Customer::where('user_id', $prosp->id)->get();
+            $address = Address::where('customer_id', $customer[0]->id)->get();
+            $prospUsers['address'] = $address[0]->address_line_1 . "," . $address[0]->city . " AZ " . $address[0]->zip;
             $prospUsers['id'] = $prosp->id;
             $prospUsers['name'] = $prosp->name;
 
             if ($appointment->isNotEmpty()){
-                $prospUsers['appointment'] = $appointment[0]->date . " " . $appointment[0]->time;
+                $prospUsers['appointment'] = $appointment[0]->appointment_date . " " . $appointment[0]->appointment_time;
             } else {
                 $prospUsers['appointment'] = null;
             }
