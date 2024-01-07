@@ -10,22 +10,6 @@
                     style="clip-path: polygon(74.1% 44.1%, 100% 61.6%, 97.5% 26.9%, 85.5% 0.1%, 80.7% 2%, 72.5% 32.5%, 60.2% 62.4%, 52.4% 68.1%, 47.5% 58.3%, 45.2% 34.5%, 27.5% 76.7%, 0.1% 64.9%, 17.9% 100%, 27.6% 76.8%, 76.1% 97.7%, 74.1% 44.1%)"/>
             </div>
 
-            <div>
-                <label for="last-name" class="block text-sm font-semibold leading-6 text-gray-900">Send Registration
-                    Link</label>
-                <div class="mt-2.5">
-                    <input type="text" v-model="new_customer_phone_number" name="new_customer_phone_number"
-                           id="new_customer_phone_number"
-                           class="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"/>
-                </div>
-                <button type="button"
-                        v-if="user.is_admin"
-                        class="relative inline-flex items-center px-4 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:z-10 focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500"
-                        @click="sendRegistrationLink()">
-                    Send Register Link
-                </button>
-            </div>
-
 
 <!--            <pre>{{ prospective }}</pre>-->
 <!--            <pre>{{ address }}</pre>-->
@@ -327,18 +311,6 @@ export default {
         this.customer.phoneNumber = this.prospective.phone_number;
     },
     methods: {
-        sendRegistrationLink() {
-            this.$inertia.post('/registerLink', {'phoneNumber': this.new_customer_phone_number}, {
-                onSuccess: () => {
-                    // Handle the success response
-                    // e.g., show a success message
-                },
-                onError: (errors) => {
-                    // Handle the error response
-                    // e.g., display validation errors
-                }
-            });
-        },
         addCustomer() {
             // Perform the POST request
             this.$inertia.post('/customers/store', this.customer, {

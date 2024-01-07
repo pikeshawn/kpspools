@@ -13,6 +13,12 @@ use Inertia\Inertia;
 class ProspectiveController extends Controller
 {
     //
+
+    public function registrationLink()
+    {
+        return Inertia::render('Prospective/RegistrationLink');
+    }
+
     public function index()
     {
 //        dd(Auth::user());

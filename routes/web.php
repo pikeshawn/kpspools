@@ -59,6 +59,10 @@ Route::middleware(['auth:sanctum', 'verified', 'serviceman'])->group(function ()
         [CustomerController::class, 'index'])
         ->name('customers');
 
+    Route::get('/registrationLink',
+        [ProspectiveController::class, 'registrationLink'])
+        ->name('prospective.registrationLink');
+
     Route::get('/customers/show/{address}',
         [CustomerController::class, 'show'])
         ->name('customers.show');
