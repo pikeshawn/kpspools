@@ -218,8 +218,8 @@ class ServiceStopController extends Controller
         if ($request->service_type == 'Service Stop') {
             if ($cust->phone_number) {
 //                $cust->notify(new ServiceStopCompleted($serviceStop, $cust, $address));
-//                Notification::route('vonage', $cust->phone_number)
-//                    ->notify(new ServiceStopCompleted($serviceStop, $cust, $address));
+                Notification::route('vonage', $cust->phone_number)
+                    ->notify(new ServiceStopCompleted($serviceStop, $cust, $address));
             }
 
             if ($cust->phone_number == '14802966330') {
@@ -239,8 +239,8 @@ class ServiceStopController extends Controller
                     ->notify(new ServiceStopCompleted($serviceStop, $cust, $address, true));
             }
 
-//            Notification::route('vonage', '14806226441')
-//                ->notify(new ServiceStopCompleted($serviceStop, $cust, $address, true));
+            Notification::route('vonage', '14806226441')
+                ->notify(new ServiceStopCompleted($serviceStop, $cust, $address, true));
         }
 
         if ($request->toCustomer) {
