@@ -70,7 +70,7 @@ Route::middleware(['auth:sanctum', 'verified', 'serviceman'])->group(function ()
         [CustomerController::class, 'store'])
         ->name('customers.store');
 
-    Route::get('/service_stops/{customer}',
+    Route::get('/service_stops/{address}',
         [ServiceStopController::class, 'index'])
         ->name('service_stops');
 

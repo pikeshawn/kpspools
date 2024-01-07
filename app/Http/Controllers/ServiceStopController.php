@@ -24,36 +24,39 @@ class ServiceStopController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(Customer $customer): Response
+    public function index(Address $address): Response
     {
         //
 
-        $serviceStops = ServiceStop::where('customer_id', '=', $customer->id)
-            ->select([
-                'id',
-                'ph_level',
-                'chlorine_level',
-                'tabs_whole_mine',
-                'tabs_crushed_mine',
-                'tabs_whole_theirs',
-                'tabs_crushed_theirs',
-                'liquid_chlorine',
-                'liquid_acid',
-                'time_in',
-                'time_out',
-                'service_time',
-                'service_type',
-                'vacuum',
-                'brush',
-                'empty_baskets',
-                'backwash',
-                'powder_chlorine',
-                'notes',
-            ])->orderBy('time_in', 'desc')->get();
+//        $serviceStops = ServiceStop::where('address_id', '=', $address->id)
+//            ->select([
+//                'id',
+//                'ph_level',
+//                'chlorine_level',
+//                'tabs_whole_mine',
+//                'tabs_crushed_mine',
+//                'tabs_whole_theirs',
+//                'tabs_crushed_theirs',
+//                'liquid_chlorine',
+//                'liquid_acid',
+//                'time_in',
+//                'time_out',
+//                'service_time',
+//                'service_type',
+//                'vacuum',
+//                'brush',
+//                'empty_baskets',
+//                'backwash',
+//                'powder_chlorine',
+//                'notes',
+//            ])->orderBy('time_in', 'desc')->get();
 
-        $serviceStops = ServiceStop::where('customer_id', '=', $customer->id)->orderBy('created_at', 'desc')->get();
+        $serviceStops = ServiceStop::where('address_id', '=', $address->id)->orderBy('created_at', 'desc')->get();
+
+        $customer = Customer::find($address->customer_id);
 
         return Inertia::render('ServiceStops/Index', [
+            'address' => $address,
             'service_stops' => $serviceStops,
             'customer_name' => $customer->last_name,
             'customer_id' => $customer->id,

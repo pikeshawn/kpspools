@@ -5,7 +5,7 @@
     >
 
         <inertia-link
-            :href="route('service_stops.create', customer_id)"
+            :href="route('service_stops.create', address.id)"
             class="mb-2.5 inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
         >
             Add Stop
@@ -302,6 +302,7 @@ export default {
         }
     },
     props: {
+        address: Array,
         service_stops: Array,
         customer_name: String,
         customer_id: Number,
