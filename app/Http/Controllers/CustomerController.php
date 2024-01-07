@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Address;
 use App\Models\Customer;
+use App\Models\PasswordlessToken;
 use App\Models\Task;
 use App\Models\GeneralNote;
 use App\Models\User;
@@ -15,9 +16,13 @@ use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
 use Inertia\Response;
 use Illuminate\Support\Facades\Notification;
+use App\Traits\Passwordless;
 
 class CustomerController extends Controller
 {
+
+    use Passwordless;
+
     /**
      * Display a listing of the resource.
      */
@@ -135,14 +140,12 @@ class CustomerController extends Controller
             ]);
 
         // create a one time passcode
-        // create tokens table
-        // generate a token
-        // create a url based on that token
-        // create a route for the url
-        // method in the route will log the user in
-        // method will route the customer to the onboarding page
+        $token = self::generateToken($u->id);
 
-        $message = "Thank you for becoming a new KPS Pools customer. Please use the link here to finish the onboarding process. https//kpspools.com";
+        // create a url based on that token
+        $url = "https://kpspools.com/login/onboard/". $token;
+
+        $message = "Thank you for becoming a new KPS Pools customer. Please use the link here to finish the onboarding process. $url";
         Notification::route('vonage', $c->phone_number)->notify(
             new GenericNotification($message));
 

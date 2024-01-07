@@ -9,6 +9,7 @@ use App\Http\Controllers\SummaryController;
 use App\Http\Controllers\VonageWebhookController;
 use App\Http\Controllers\RouteController;
 use App\Http\Controllers\ProspectiveController;
+use App\Http\Controllers\PasswordlessController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -233,3 +234,7 @@ Route::post('/chat/response',
 Route::get('/chat',
     [ChatController::class, 'chat'])
     ->name('chat');
+
+Route::get('/login/onboard/{token}',
+    [PasswordlessController::class, 'onboard'])
+    ->name('onboard');

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Http\Controllers\PasswordlessController;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -22,6 +23,11 @@ class User extends Authenticatable
     public function customer()
     {
         return $this->hasOne(Customer::class);
+    }
+
+    public function tokens()
+    {
+        return $this->hasMany(PasswordlessToken::class);
     }
 
     public function appointment()
