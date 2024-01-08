@@ -49,8 +49,8 @@
                     and we will come out to take a look at your pool.</p>
                 <div style="margin-top: 50px">
                     <div>
-                        <h2 class="font-bold py-2.5 text-2xl">Current Appointment Time :: <span>{{
-                                this.appointments
+                        <h2 v-if="appointments" class="font-bold py-2.5 text-2xl">Current Appointment Time :: <span>{{
+                                appointments
                             }}</span></h2>
                     </div>
                 </div>
