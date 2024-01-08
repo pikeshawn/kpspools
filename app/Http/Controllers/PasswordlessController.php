@@ -8,6 +8,7 @@ use App\Models\PasswordlessToken;
 use App\Models\UserToken;
 use Illuminate\Support\Facades\Log;
 use Auth;
+use Inertia\Inertia;
 
 
 class PasswordlessController {

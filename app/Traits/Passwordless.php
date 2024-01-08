@@ -5,6 +5,7 @@ namespace App\Traits;
 use App\Models\PasswordlessToken;
 use App\Models\UserToken;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
 
 trait Passwordless
 {
@@ -62,7 +63,7 @@ trait Passwordless
         $token = new UserToken();
         $attributes = [
             'user_id' => $user_id,
-            'token' => str_random(16),
+            'token' => Str::random(16),
             'created_at' => time()
         ];
 //        $token = App::make(PasswordlessToken::class);
@@ -74,7 +75,7 @@ trait Passwordless
             return null;
         }
 
-        return $token;
+        return $token->token;
     }
 
     /**
