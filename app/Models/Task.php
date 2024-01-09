@@ -234,15 +234,15 @@ class Task extends Model
             $poolGuy = User::find($task->assigned);
 
             if ($c === null) {
-                dd("CUSTOMER IS NULL\n\ntask :: $task\ncustomer :: $c\naddress :: $a\npoolguy :: $poolGuy\n");
+                Log::debug("CUSTOMER IS NULL\n\ntask :: $task\ncustomer :: $c\naddress :: $a\npoolguy :: $poolGuy\n");
             }
 
             if ($a === null) {
-                dd("ADDRESS IS NULL\n\ntask :: $task\ncustomer :: $c\naddress :: $a\npoolguy :: $poolGuy\n");
+                Log::debug("ADDRESS IS NULL\n\ntask :: $task\ncustomer :: $c\naddress :: $a\npoolguy :: $poolGuy\n");
             }
 
             if ($poolGuy === null) {
-                dd("POOLGUY IS NULL\n\ntask :: $task\ncustomer :: $c\naddress :: $a\npoolguy :: $poolGuy\n");
+                Log::debug("POOLGUY IS NULL\n\ntask :: $task\ncustomer :: $c\naddress :: $a\npoolguy :: $poolGuy\n");
             }
 
 
