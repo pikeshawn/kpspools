@@ -7,6 +7,7 @@ use App\Models\Customer;
 use App\Models\ServiceStop;
 use App\Models\Task;
 use App\Models\User;
+use App\Notifications\GenericNotification;
 use App\Notifications\ServiceStopCompleted;
 use App\Notifications\OnMyWayNotification;
 use Carbon\Carbon;
@@ -180,17 +181,52 @@ class ServiceStopController extends Controller
     public function store(Request $request): RedirectResponse
     {
 
-//        dd($request);
-
         $address = Address::find($request->address);
-
-        $start = new Carbon($request->timeIn);
-        $end = new Carbon($request->timeOut);
-
         $phLevel = $request->ph_level ?? 0;
         $chlorineLevel = $request->chlorine_level ?? 100;
+        $start = new Carbon($request->timeIn);
+        $end = new Carbon($request->timeOut);
+        $cust = Customer::find($request->id);
 
-        $serviceStop = ServiceStop::firstOrCreate([
+        if ($request->service_type === 'Missed Service') {
+            $serviceStop = self::missedService($request, $address, $phLevel, $chlorineLevel, $start, $end);
+            self::sendMissedServiceNotification($serviceStop, Auth::user(), $cust);
+        } else {
+            $serviceStop = self::createServiceStop($request, $address, $phLevel, $chlorineLevel, $start, $end);
+            self::sendNotification($request, $cust, $serviceStop, $address);
+        }
+
+        if ($request->toCustomer) {
+            return Redirect::route('customers.show', $address->id);
+        } else {
+            if (User::isAdmin()) {
+                $customers = Customer::allCustomers();
+            } else {
+                $customers = Customer::allCustomersTiedToUser();
+            }
+
+            return Redirect::route('customers', [
+                'customers' => $customers,
+            ]);
+
+        }
+
+    }
+
+    private function sendMissedServiceNotification($servicestop, $user, $customer)
+    {
+        Notification::route('vonage', $user->phone_number)->notify(new GenericNotification(
+            "Apologies, we couldn't service your pool today as we couldn't access your backyard at $servicestop->time_in. Please contact $user->name at $user->phone_number to make further arrangements, or you can reach out to Shawn at 480.703.4902 or 480.622.6441.\n\nKindly note, there may still be a charge for the service as access was beyond our control."
+        ));
+
+        Notification::route('vonage', '14806226441')->notify(new GenericNotification(
+            "A Missed Service message was sent by $user->name to " . $customer->first_name . " " . $customer->last_name
+        ));
+    }
+
+    private function createServiceStop($request, $address, $phLevel, $chlorineLevel, $start, $end)
+    {
+        return ServiceStop::firstOrCreate([
             'customer_id' => $request->id,
             'address_id' => $address->id,
             'ph_level' => $phLevel,
@@ -215,9 +251,32 @@ class ServiceStopController extends Controller
             'service_type' => $request->service_type,
             'user_id' => Auth::user()->id,
         ]);
+    }
 
-        $cust = Customer::find($request->id);
+    private function missedService($request, $address, $phLevel, $chlorineLevel, $start, $end)
+    {
+        return ServiceStop::firstOrCreate([
+            'user_id' => Auth::user()->id,
+            'customer_id' => $request->id,
+            'address_id' => $address->id,
+            'ph_level' => $phLevel,
+            'chlorine_level' => $chlorineLevel,
+            'checked_chems' => $request->checkedChems,
+            'time_in' => $request->timeIn,
+            'time_out' => $request->timeOut,
+            'service_time' => $start->diff($end)->format('%H:%I:%S'),
+            'brush' => 0,
+            'empty_baskets' => 0,
+            'backwash' => 0,
+            'powder_chlorine' => 0.0,
+            'notes' => $request->notes,
+            'salt_level' => $request->salt_level,
+            'service_type' => $request->service_type
+        ]);
+    }
 
+    private function sendNotification($request, $cust, $serviceStop, $address)
+    {
         if ($request->service_type == 'Service Stop') {
             if ($cust->phone_number) {
 //                $cust->notify(new ServiceStopCompleted($serviceStop, $cust, $address));
@@ -245,22 +304,6 @@ class ServiceStopController extends Controller
             Notification::route('vonage', '14806226441')
                 ->notify(new ServiceStopCompleted($serviceStop, $cust, $address, true));
         }
-
-        if ($request->toCustomer) {
-            return Redirect::route('customers.show', $address->id);
-        } else {
-            if (User::isAdmin()) {
-                $customers = Customer::allCustomers();
-            } else {
-                $customers = Customer::allCustomersTiedToUser();
-            }
-
-            return Redirect::route('customers', [
-                'customers' => $customers,
-            ]);
-
-        }
-
     }
 
     function sendText(Request $request): RedirectResponse

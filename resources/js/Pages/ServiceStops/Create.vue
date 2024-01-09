@@ -3,7 +3,7 @@
       :user="user"
   >
 
-<!--    <pre>{{ address }}</pre>-->
+    <!--    <pre>{{ address }}</pre>-->
 
     <div class="bg-gray-900 px-6 py-24 sm:py-8 lg:px-8">
       <div class="mx-auto max-w-2xl text-center">
@@ -64,9 +64,7 @@
     </div>
 
 
-
-
-    <div  class="px-4 sm:px-6 lg:px-8">
+    <div class="px-4 sm:px-6 lg:px-8">
       <div class="mt-8 flow-root">
         <div class="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
           <div class="inline-block min-w-full py-2 align-middle">
@@ -114,7 +112,7 @@
                         v-model="form.service_type"
                         class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
                   <option v-for="option in [
-                                                           'Service Stop','Repair', 'Clear Green Pool', 'Chemical Stop', 'Intro'
+                                                           'Service Stop', 'Repair', 'Missed Service', 'Clear Green Pool', 'Chemical Stop', 'Intro'
                                                            ]">{{ option }}
                   </option>
                 </select>
@@ -167,8 +165,10 @@
                     <div class="mt-2">{{ form.checkedChems }}</div>
                   </div>
 
-                  <div v-if="form.service_type === 'Repair' ||
-                                              form.service_type === 'Intro'">
+                  <div v-if="
+                  form.service_type === 'Repair' ||
+                  form.service_type === 'Intro'
+">
                     <div
                         v-if="form.checkedChems"
                         class="col-span-1">
@@ -201,7 +201,8 @@
 
                   <div
                       v-if="form.service_type !== 'Repair' &&
-                                              form.service_type !== 'Intro'"
+                                              form.service_type !== 'Intro' &&
+                      form.service_type !== 'Missed Service'"
                       class="col-span-1">
                     <label for="chlorine"
                            class="block text-sm font-medium text-gray-700">Chlorine</label>
@@ -217,7 +218,8 @@
                   </div>
                   <div
                       v-if="form.service_type !== 'Repair' &&
-                                              form.service_type !== 'Intro'"
+                                              form.service_type !== 'Intro' &&
+                      form.service_type !== 'Missed Service'"
                       class="col-span-1">
                     <label for="pH" class="block text-sm font-medium text-gray-700">pH</label>
                     <select id="pH" name="pH"
@@ -592,6 +594,10 @@ export default {
     }
 
     function store() {
+
+      if (form.service_type === 'Missed Service') {
+        form.checkedChems = false
+      }
 
       if (form.timeIn === null) {
         errors.timeIn = true
