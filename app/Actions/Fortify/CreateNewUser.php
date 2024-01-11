@@ -26,8 +26,7 @@ class CreateNewUser implements CreatesNewUsers
             'last_name' => ['required', 'string', 'max:255'],
             'phoneNumber' => ['required', 'string', 'min_digits:10', 'max_digits:11'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'password' => $this->passwordRules(),
-            'terms' => Jetstream::hasTermsAndPrivacyPolicyFeature() ? ['required', 'accepted'] : '',
+            'password' => $this->passwordRules()
         ])->validate();
 
         $phone = self::validatePhoneNumber($input['phoneNumber']);

@@ -16,23 +16,16 @@ class Serviceman
      */
     public function handle(Request $request, Closure $next): Response
     {
+
 //        dd($request->user());
 
-//        return $request->expectsJson() ? null : route('login');
-
-//        if ($request->user() === null){
-//            return redirect(RouteServiceProvider::LOGIN);
-//        }
-
-
-//        dd($type . "  " . $type1);
-//        dd($request);
-//        dd($request->user());
         if ($request->user() !== null) {
             if ($request->user()->type === 'serviceman') {
                 return $next($request);
             } else if ($request->user()->type === 'prospective') {
                 return redirect('/prospective');
+            } else if ($request->user()->type === 'customer') {
+                return redirect('/customer/dashboard');
             }
         } else {
             return redirect('/dashboard');

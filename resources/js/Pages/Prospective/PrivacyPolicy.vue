@@ -1,6 +1,6 @@
 <template>
   <layout
-      title=""
+      title="Privacy Policy"
       :user="user"
   >
 
@@ -9,7 +9,7 @@
         <div class="container">
           <div class="grid items-center grid-cols-4 gap-6 lg:grid-cols-12">
             <div class="justify-center col-span-4 border-b border-b-wuiSlate-200 lg:col-span-8 lg:col-start-3"><h1
-                class="pb-6 text-4xl font-medium text-wuiSlate-900">Terms &amp; Conditions</h1>
+                class="pb-6 text-4xl font-medium text-wuiSlate-900">Privacy Policy</h1>
               <p class="pb-6 text-lg">Read about the terms and conditions for WindUI.</p></div>
             <div class="justify-center col-span-4 lg:col-span-8 lg:col-start-3"><p class="pb-6 text-md">These Terms of
               Use constitute a legally binding agreement made between you, whether personally or on behalf of an entity
@@ -271,7 +271,7 @@ export default {
   },
   methods: {
     next() {
-      Inertia.post('/terms', {'terms': this.accept})
+      Inertia.post('/privacy', {'privacy': this.accept})
     }
   }
 }

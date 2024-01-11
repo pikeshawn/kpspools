@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\TaskController;
+use App\Http\Controllers\BillingController;
+use App\Http\Controllers\CustomerFacingController;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\ChatController;
 use App\Http\Controllers\CustomerController;
@@ -49,6 +51,30 @@ Route::middleware(['auth:sanctum', 'verified', 'prospective'])->post('/prospecti
 
 Route::middleware(['auth:sanctum', 'verified', 'prospective'])->get('/prospectiveTimes',
     [ProspectiveController::class, 'index'])->name('prospective');
+
+Route::middleware(['auth:sanctum', 'verified'])->get('/termSigning',
+    [CustomerFacingController::class, 'termSigning'])
+    ->name('terms.signing');
+
+Route::middleware(['auth:sanctum', 'verified'])->get('/prospective/privacy',
+    [CustomerFacingController::class, 'prospectivePrivacy'])->name('prospective.privacy');
+
+Route::middleware(['auth:sanctum', 'verified'])->get('/billing/setup',
+    [BillingController::class, 'setup'])->name('setup');
+
+Route::middleware(['auth:sanctum', 'verified', 'customer'])->group(function () {
+
+    Route::get('/customer/dashboard',
+        [CustomerFacingController::class, 'dashboard'])->name('customer.dashboard');
+
+    Route::post('/terms',
+        [CustomerFacingController::class, 'terms'])->name('customer.terms');
+
+
+    Route::post('/privacy',
+        [CustomerFacingController::class, 'privacy'])->name('privacy');
+
+});
 
 Route::middleware(['auth:sanctum', 'verified', 'serviceman'])->group(function () {
 
