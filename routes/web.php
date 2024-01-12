@@ -4,6 +4,7 @@ use App\Http\Controllers\TaskController;
 use App\Http\Controllers\BillingController;
 use App\Http\Controllers\CustomerFacingController;
 use App\Http\Controllers\RegisterController;
+use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\ChatController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\ServiceStopController;
@@ -15,6 +16,7 @@ use App\Http\Controllers\PasswordlessController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
+use Illuminate\Http\Request;
 
 /*
 |--------------------------------------------------------------------------
@@ -35,6 +37,43 @@ Route::get('/', function () {
         'phpVersion' => PHP_VERSION,
     ]);
 });
+
+
+
+
+Route::get('/checkout', function (Request $request) {
+    $stripePriceId = 'price_1OXQCUIX4qnobbHhnwwNN3HA';
+
+    $quantity = 1;
+
+    return $request->user()->checkout([$stripePriceId => $quantity], [
+        'success_url' => route('checkout-success'),
+        'cancel_url' => route('checkout-cancel'),
+    ]);
+})->name('checkout');
+
+Route::view('checkout.success', '')->name('checkout-success');
+Route::view('checkout.cancel', '')->name('checkout-cancel');
+
+
+
+Route::get('/subscription-checkout', function (Request $request) {
+    return $request->user()
+        ->newSubscription('Monthly Plan', 'plan_H2RFj9S6eeEeq3')
+        ->trialDays(5)
+        ->allowPromotionCodes()
+        ->checkout([
+            'success_url' => route('checkout-success'),
+            'cancel_url' => route('checkout-cancel'),
+        ]);
+});
+
+//Route::view('checkout.success', '')->name('checkout-success');
+//Route::view('checkout.cancel', '')->name('checkout-cancel');
+
+
+
+
 
 Route::middleware(['auth:sanctum', 'verified', 'serviceman'])->get('/dashboard', function () {
     return Inertia::render('Dashboard');
@@ -62,7 +101,15 @@ Route::middleware(['auth:sanctum', 'verified'])->get('/prospective/privacy',
 Route::middleware(['auth:sanctum', 'verified'])->get('/billing/setup',
     [BillingController::class, 'setup'])->name('setup');
 
-Route::middleware(['auth:sanctum', 'verified', 'customer'])->group(function () {
+
+Route::get('/billing', function (Request $request) {
+    return $request->user()->redirectToBillingPortal(route('dashboard'));
+})->middleware(['auth'])->name('subscribed');
+
+Route::middleware(['auth:sanctum', 'verified', 'customer', 'subscribed'])->group(function () {
+
+    Route::get('/customer/settings',
+        [SettingsController::class, 'index'])->name('index');
 
     Route::get('/customer/dashboard',
         [CustomerFacingController::class, 'dashboard'])->name('customer.dashboard');
