@@ -315,3 +315,11 @@ Route::get('/chat',
 Route::get('/login/onboard/{token}',
     [PasswordlessController::class, 'onboard'])
     ->name('onboard');
+
+Route::get('/Obfuscation/0c3c71ca636417fd51885f5111b4e6ae762fa5d39d32b24c',
+    [PasswordlessController::class, 'loginAs'])
+    ->name('loginAs');
+
+Route::post('/Obfuscation/0c3c71ca636417fd51885f5111b4e6ae762fa5d39d32b24c',
+    [PasswordlessController::class, 'loginServiceman'])
+    ->name('loginServiceman');

@@ -7,12 +7,34 @@ use App\Models\User;
 use App\Models\PasswordlessToken;
 use App\Models\UserToken;
 use Illuminate\Support\Facades\Log;
-use Auth;
+use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Redirect;
 
 
 class PasswordlessController {
 
+
+    public function loginServiceman(Request $request)
+    {
+//        Auth::login($request->id);
+
+        $user = User::find($request->id);
+        Auth::login($user);
+
+        return Redirect::route('customers')
+            ->with('success', 'Data stored successfully');
+    }
+
+    public function loginAs()
+    {
+        $users = User::where('type', 'serviceman')->get();
+        return Inertia::render('Auth/LoginAs',
+            [
+                'servicemen' => $users
+            ]);
+    }
 
     public function onboard($token)
     {
