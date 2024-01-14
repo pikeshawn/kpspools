@@ -20,11 +20,14 @@ class PasswordlessController {
     {
 //        Auth::login($request->id);
 
+        Auth::logout();
         $user = User::find($request->id);
         Auth::login($user);
 
-        return Redirect::route('customers')
-            ->with('success', 'Data stored successfully');
+        return Redirect::route('customers', [
+            'user' => $user,
+        ]);
+
     }
 
     public function loginAs()
