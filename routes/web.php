@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\TaskController;
+use App\Http\Controllers\TransferController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\BillingController;
 use App\Http\Controllers\CustomerFacingController;
@@ -125,6 +126,12 @@ Route::middleware(['auth:sanctum', 'verified', 'customer', 'subscribed'])->group
 });
 
 Route::middleware(['auth:sanctum', 'verified', 'serviceman'])->group(function () {
+
+    Route::get('/transfer',
+        [TransferController::class, 'index'])->name('transfer');
+
+    Route::post('/transfer/store',
+        [TransferController::class, 'transfer'])->name('transfer.transfer');
 
     Route::post('/notification/generic',
         [NotificationController::class, 'generic'])->name('generic');
