@@ -71,6 +71,7 @@ class VonageWebhookController extends Controller
             $date = Carbon::now();
             $statusDate = $date->format('Y-m-d H:i:s');
             $taskStatus = new TaskStatus([
+                'status_creator' => $this->customer->user_id,
                 'task_id' => $task->id,
                 'status' => $task->status,
                 'status_date' => $statusDate

@@ -331,6 +331,7 @@ class TaskController extends Controller
         }
 
         $taskStatus = new TaskStatus();
+        $taskStatus->status_creator = Auth::user()->id;
         $taskStatus->task_id = $task->id;
         $taskStatus->status = $status;
         $taskStatus->status_date = $statusDate;
