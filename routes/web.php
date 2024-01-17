@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\TaskController;
+use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\BillingController;
 use App\Http\Controllers\CustomerFacingController;
 use App\Http\Controllers\RegisterController;
@@ -124,6 +125,12 @@ Route::middleware(['auth:sanctum', 'verified', 'customer', 'subscribed'])->group
 });
 
 Route::middleware(['auth:sanctum', 'verified', 'serviceman'])->group(function () {
+
+    Route::post('/notification/generic',
+        [NotificationController::class, 'generic'])->name('generic');
+
+    Route::get('/notification',
+        [NotificationController::class, 'notification'])->name('notification');
 
     Route::get('/prospective/customers',
         [ProspectiveController::class, 'customers'])->name('prospective.customers');
