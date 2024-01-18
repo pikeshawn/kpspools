@@ -50,4 +50,28 @@ class TransferController extends Controller
 
     }
 
+    public function storeFromCustomers(Request $request)
+    {
+//        dd($request->address);
+
+        $serviceManName = explode(" ", $request->address)[0];
+        $serviceManId = explode(" ", $request->address)[1];
+        $addressId = explode(" ", $request->address)[2];
+
+        $address = Address::find($addressId);
+        $customer = Customer::find($address->customer_id);
+
+
+        $customer->assigned_serviceman = $serviceManName;
+        $customer->serviceman_id = $serviceManId;;
+
+        $address->assigned_serviceman = $serviceManName;
+        $address->serviceman_id = $serviceManId;;
+
+        $customer->save();
+        $address->save();
+
+
+    }
+
 }

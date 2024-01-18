@@ -81,10 +81,9 @@ class Customer extends Model
             ->orderByDesc('customers.order')
             ->get();
 
-//        dd($customers);
-
-//        dd(Auth::user()->getAuthIdentifier());
-//        dd($customers);
+        foreach ($customers as $customer) {
+            $customer->newServicemanId = null;
+        }
 
         return self::completedCustomers($customers);
     }

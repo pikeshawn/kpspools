@@ -36,8 +36,11 @@ class CustomerController extends Controller
             $customers = Customer::allCustomersTiedToUser();
         }
 
+        $servicemen = User::where('type', 'serviceman')->orderBy('name', 'asc')->where('active', 1)->get();
+
         return Inertia::render('Customers/Index', [
             'customers' => $customers,
+            'servicemen' => $servicemen,
         ]);
     }
 

@@ -133,6 +133,9 @@ Route::middleware(['auth:sanctum', 'verified', 'serviceman'])->group(function ()
     Route::post('/transfer/store',
         [TransferController::class, 'transfer'])->name('transfer.transfer');
 
+    Route::post('/transfer/storeFromCustomers',
+        [TransferController::class, 'storeFromCustomers'])->name('transfer.storeFromCustomers');
+
     Route::post('/notification/generic',
         [NotificationController::class, 'generic'])->name('generic');
 

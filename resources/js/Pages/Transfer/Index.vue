@@ -11,25 +11,23 @@
                       <div class="min-w-0 flex-auto">
                           <p class="text-sm font-semibold leading-6 text-gray-900">{{ address.name }}</p>
                           <p class="text-sm font-semibold leading-6 text-gray-900">{{ address.address_line_1 }}</p>
+                          <p class="text-sm font-semibold leading-6 text-gray-900">{{ address.assigned_serviceman }}</p>
+                          <p class="text-sm font-semibold leading-6 text-gray-900">{{ address.service_day }}</p>
+                          <button type="button"
+                                  class="relative inline-flex items-center px-4 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:z-10 focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500"
+                                  @click="transfer(address)">
+                              transfer
+                          </button>
                       </div>
                   </div>
               </div>
               <div class="hidden shrink-0 sm:flex sm:flex-col sm:items-end">
                   <div>
-                      <pre>{{ address.assigned_serviceman }}</pre>
-                      <pre>{{ address.serviceman_id }}</pre>
-                      <pre>{{ address.newServicemanId }}</pre>
-                      <label for="location" class="block text-sm font-medium leading-6 text-gray-900">Location</label>
                       <select v-model="address.newServicemanId" id="location" name="location" class="mt-2 block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6">
                           <option v-for="serviceman in servicemen" :key="serviceman.id">{{ serviceman.name }} {{ serviceman.id }}</option>
                       </select>
                   </div>
               </div>
-              <button type="button"
-                      class="relative inline-flex items-center px-4 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:z-10 focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500"
-                      @click="transfer(address)">
-                  transfer
-              </button>
           </li>
       </ul>
 
