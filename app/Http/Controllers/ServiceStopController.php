@@ -20,6 +20,7 @@ use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
 use Inertia\Response;
+use function PHPUnit\Framework\isEmpty;
 
 class ServiceStopController extends Controller
 {
@@ -233,17 +234,17 @@ class ServiceStopController extends Controller
 
         if ($request->filter_type){
 
-            $f = Filter::where('customer_id', $request->id)->get();
-            if ($f) {
-                $filter = Filter::find($f[0]->id);
-                $filter->type = $request->filter_type;
-                $filter->save();
-            } else {
+            $f = Filter::where('customer_id', $request->id)->where('address_id', $address->id)->get();
+            if ($f->isEmpty()) {
                 Filter::firstOrCreate([
                     'customer_id' => $request->id,
                     'address_id' => $address->id,
                     'type' => $request->filter_type
                 ]);
+            } else {
+                $filter = Filter::find($f[0]->id);
+                $filter->type = $request->filter_type;
+                $filter->save();
             }
 
         }

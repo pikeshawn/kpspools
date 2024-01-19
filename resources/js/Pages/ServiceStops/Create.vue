@@ -64,7 +64,7 @@
         </div>
 
 
-        <pre>{{ equipment }}</pre>
+<!--        <pre>{{ equipment }}</pre>-->
 
 
         <div class="px-4 sm:px-6 lg:px-8">
