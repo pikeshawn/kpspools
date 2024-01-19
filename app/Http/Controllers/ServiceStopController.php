@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Address;
 use App\Models\Customer;
+use App\Models\Filter;
 use App\Models\ServiceStop;
 use App\Models\Task;
 use App\Models\User;
@@ -152,9 +153,12 @@ class ServiceStopController extends Controller
             $task->assigned = $assigned->name;
         }
 
+        $equipment = Filter::where('customer_id', $customer->id)->first();
+
         return Inertia::render('ServiceStops/Create', [
             'customerId' => $customer->id,
             'customer' => $customer,
+            'equipment' => $equipment,
             'address' => $address,
             'customerName' => $customer->last_name,
             'tasks' => $tasks
@@ -215,7 +219,7 @@ class ServiceStopController extends Controller
 
     private function sendMissedServiceNotification($servicestop, $user, $customer)
     {
-        Notification::route('vonage', $user->phone_number)->notify(new GenericNotification(
+        Notification::route('vonage', $customer->phone_number)->notify(new GenericNotification(
             "Apologies, we couldn't service your pool today as we couldn't access your backyard at $servicestop->time_in. Please contact $user->name at $user->phone_number to make further arrangements, or you can reach out to Shawn at 480.703.4902 or 480.622.6441.\n\nKindly note, there may still be a charge for the service as access was beyond our control."
         ));
 
@@ -226,6 +230,24 @@ class ServiceStopController extends Controller
 
     private function createServiceStop($request, $address, $phLevel, $chlorineLevel, $start, $end)
     {
+
+        if ($request->filter_type){
+
+            $f = Filter::where('customer_id', $request->id)->get();
+            if ($f) {
+                $filter = Filter::find($f[0]->id);
+                $filter->type = $request->filter_type;
+                $filter->save();
+            } else {
+                Filter::firstOrCreate([
+                    'customer_id' => $request->id,
+                    'address_id' => $address->id,
+                    'type' => $request->filter_type
+                ]);
+            }
+
+        }
+
         return ServiceStop::firstOrCreate([
             'customer_id' => $request->id,
             'address_id' => $address->id,
@@ -251,6 +273,9 @@ class ServiceStopController extends Controller
             'service_type' => $request->service_type,
             'user_id' => Auth::user()->id,
         ]);
+
+
+
     }
 
     private function missedService($request, $address, $phLevel, $chlorineLevel, $start, $end)
