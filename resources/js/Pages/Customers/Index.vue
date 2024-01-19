@@ -141,7 +141,9 @@
                         <!--              <div>{{ row.order }}</div>-->
                         <div v-if="user.is_admin === 1">{{ row.phone_number }}</div>
                     </Link>
-                    <div v-if="user.is_admin === 1" class="flex justify-between">
+                    <div v-if="user.is_admin === 1" class="flex justify-between"
+                         style="width: 220px; margin-bottom: 20px; margin-top: 5px;"
+                    >
                         <div>
                             <select v-model="row.newServicemanId" id="location" name="location"
                                     class="mt-2 block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6">
@@ -172,7 +174,9 @@
                         <div>{{ row.assigned_serviceman }}</div>
                         <div v-if="user.is_admin === 1">{{ row.phone_number }}</div>
                     </Link>
-                    <div v-if="user.is_admin === 1" class="flex justify-between">
+                    <div v-if="user.is_admin === 1" class="flex justify-between"
+                         style="width: 220px; margin-bottom: 20px; margin-top: 5px;"
+                    >
                         <div>
                             <select v-model="row.newServicemanId" id="location" name="location"
                                     class="mt-2 block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6">
@@ -203,7 +207,9 @@
                         <div>{{ row.assigned_serviceman }}</div>
                         <div v-if="user.is_admin === 1">{{ row.phone_number }}</div>
                     </Link>
-                    <div v-if="user.is_admin === 1" class="flex justify-between">
+                    <div v-if="user.is_admin === 1" class="flex justify-between"
+                         style="width: 220px; margin-bottom: 20px; margin-top: 5px;"
+                    >
                         <div>
                             <select v-model="row.newServicemanId" id="location" name="location"
                                     class="mt-2 block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6">
@@ -234,7 +240,9 @@
                         <div>{{ row.assigned_serviceman }}</div>
                         <div v-if="user.is_admin === 1">{{ row.phone_number }}</div>
                     </Link>
-                    <div v-if="user.is_admin === 1" class="flex justify-between">
+                    <div v-if="user.is_admin === 1" class="flex justify-between"
+                         style="width: 220px; margin-bottom: 20px; margin-top: 5px;"
+                    >
                         <div>
                             <select v-model="row.newServicemanId" id="location" name="location"
                                     class="mt-2 block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6">
@@ -265,7 +273,9 @@
                         <div>{{ row.assigned_serviceman }}</div>
                         <div v-if="user.is_admin === 1">{{ row.phone_number }}</div>
                     </Link>
-                    <div v-if="user.is_admin === 1" class="flex justify-between">
+                    <div v-if="user.is_admin === 1" class="flex justify-between"
+                    style="width: 220px; margin-bottom: 20px; margin-top: 5px;"
+                    >
                         <div>
                             <select v-model="row.newServicemanId" id="location" name="location"
                                     class="mt-2 block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6">
@@ -296,7 +306,9 @@
                         <div>{{ row.assigned_serviceman }}</div>
                         <div v-if="user.is_admin === 1">{{ row.phone_number }}</div>
                     </Link>
-                    <div v-if="user.is_admin === 1" class="flex justify-between">
+                    <div v-if="user.is_admin === 1" class="flex justify-between"
+                         style="width: 220px; margin-bottom: 20px; margin-top: 5px;"
+                    >
                         <div>
                             <select v-model="row.newServicemanId" id="location" name="location"
                                     class="mt-2 block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6">
