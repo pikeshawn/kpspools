@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\TaskController;
+use App\Http\Controllers\TestingController;
 use App\Http\Controllers\TransferController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\BillingController;
@@ -235,6 +236,10 @@ Route::middleware(['auth:sanctum', 'verified', 'serviceman'])->group(function ()
         [TaskController::class, 'create'])
         ->name('task.create');
 
+    Route::get('/tasks/display',
+        [TaskController::class, 'display'])
+        ->name('tasks.display');
+
     Route::post('/task/store',
         [TaskController::class, 'store'])
         ->name('task.store');
@@ -340,3 +345,6 @@ Route::get('/Obfuscation/0c3c71ca636417fd51885f5111b4e6ae762fa5d39d32b24c',
 Route::post('/Obfuscation/0c3c71ca636417fd51885f5111b4e6ae762fa5d39d32b24c',
     [PasswordlessController::class, 'loginServiceman'])
     ->name('loginServiceman');
+
+Route::get('/testing/draggable',
+    [TestingController::class, 'draggable'])->name('draggable');
