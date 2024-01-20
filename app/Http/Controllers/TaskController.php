@@ -26,19 +26,20 @@ class TaskController extends Controller
 
     public function display()
     {
-        $tasks = Task::where('status', '!=', 'invoiced')->where('status', '!=', 'billed')->where('status', '!=', 'paid')->where('status', '!=', 'completed')->where('status', '!=', 'created')->where('assigned', 2)->get();
+        $tasks = Task::where('status', "pickedUp")->orWhere('status', "approved")->where('assigned', 1)->get();
 
         $servicemen = User::where('type', 'serviceman')->where('active', 1)->get();
 
         foreach ($tasks as $task){
 
             $name = '';
+            $customer = Customer::find($task->customer_id);
             foreach($servicemen as $sm) {
                 if ($task->assigned === $sm->id){
                     $name = $sm->name;
                 }
             }
-
+            $task->customerName = $customer->first_name . " " . $customer->last_name;
             $task->assignedName = $name;
         }
 

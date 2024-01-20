@@ -7,19 +7,21 @@
             <draggable class="dragArea list-group w-full" :list="tasks" @change="log">
                 <li v-for="task in tasks" :key="task.id" class="flex gap-x-4 py-5">
                     <!--                <img class="h-12 w-12 flex-none rounded-full bg-gray-50" :src="comment.imageUrl" alt="" />-->
-                    <div class="flex-auto">
+                    <div class="flex-auto" style="margin-right: 50px">
                         <div class="flex items-baseline justify-between gap-x-4">
                             <p class="text-sm font-semibold leading-6 text-gray-900">{{ task.description }}</p>
-                            <p class="flex-none text-xs  text-gray-600">
-                                <time :datetime="task.created_at">{{ task.created_at }}</time>
-                            </p>
                         </div>
+                        <p class="flex-none text-xs  text-gray-600">
+                            <time :datetime="task.created_at">{{ task.created_at }}</time>
+                        </p>
                         <p class="mt-1 line-clamp-2 text-sm leading-6 text-gray-600">{{ task.assignedName }}</p>
                         <p class="mt-1 line-clamp-2 text-sm leading-6 text-gray-600">{{ task.status }}</p>
                         <Link :href="route('customers.show', task.customer_id)"
                               class="sticky top-0 z-10 border-y border-b-blue-500 border-t-blue-400 bg-blue-200 px-3 py-2 text-sm font-semibold leading-6 text-gray-900"
                               method="get" as="button">
-                            <label class="block text-sm font-medium leading-6 text-gray-900">Customer Page</label>
+                            <label class="block text-sm font-medium leading-6 text-gray-900">{{
+                                    task.customerName
+                                }}</label>
                         </Link>
                     </div>
                 </li>
