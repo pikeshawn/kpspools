@@ -26,7 +26,7 @@ class TaskController extends Controller
 
     public function display()
     {
-        $tasks = Task::where('status', '!=', 'invoiced')->where('status', '!=', 'billed')->where('status', '!=', 'completed')->where('status', '!=', 'created')->where('assigned', 2)->get();
+        $tasks = Task::where('status', '!=', 'invoiced')->where('status', '!=', 'billed')->where('status', '!=', 'paid')->where('status', '!=', 'completed')->where('status', '!=', 'created')->where('assigned', 2)->get();
 
         $servicemen = User::where('type', 'serviceman')->where('active', 1)->get();
 
