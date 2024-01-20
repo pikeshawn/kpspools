@@ -16,7 +16,7 @@
                         </p>
                         <p class="mt-1 line-clamp-2 text-sm leading-6 text-gray-600">{{ task.assignedName }}</p>
                         <p class="mt-1 line-clamp-2 text-sm leading-6 text-gray-600">{{ task.status }}</p>
-                        <Link :href="route('customers.show', task.customer_id)"
+                        <Link :href="route('customers.show', task.address_id)"
                               class="sticky top-0 z-10 border-y border-b-blue-500 border-t-blue-400 bg-blue-200 px-3 py-2 text-sm font-semibold leading-6 text-gray-900"
                               method="get" as="button">
                             <label class="block text-sm font-medium leading-6 text-gray-900">{{
@@ -27,7 +27,7 @@
                 </li>
             </draggable>
         </ul>
-        <pre>{{ tasks }}</pre>
+<!--        <pre>{{ tasks }}</pre>-->
     </layout>
 
 </template>
