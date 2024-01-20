@@ -4,10 +4,16 @@
     >
 
         <ul role="list" class="divide-y divide-gray-100">
-            <draggable class="dragArea list-group w-full" :list="tasks" @change="log">
+            <draggable
+                handle=".handle"
+                class="dragArea list-group w-full" :list="tasks" @change="log">
                 <li v-for="task in tasks" :key="task.id" class="flex gap-x-4 py-5">
                     <!--                <img class="h-12 w-12 flex-none rounded-full bg-gray-50" :src="comment.imageUrl" alt="" />-->
-                    <div class="flex-auto" style="margin-right: 50px">
+                    <svg class="handle block h-4 w-4 fill-current" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                        <title>Mobile menu</title>
+                        <path d="M0 3h20v2H0V3zm0 6h20v2H0V9zm0 6h20v2H0v-2z"></path>
+                    </svg>
+                    <div class="flex-auto">
                         <div class="flex items-baseline justify-between gap-x-4">
                             <p class="text-sm font-semibold leading-6 text-gray-900">{{ task.description }}</p>
                         </div>
