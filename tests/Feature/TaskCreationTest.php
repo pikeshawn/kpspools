@@ -36,6 +36,7 @@ class TaskCreationTest extends TestCase
 
         $taskData = [
             'customer_id' => $int,
+            'address_id' => $int,
             'description' => 'chlorine floaty',
             'type' => 'part',
             'status' => 'created'
@@ -64,6 +65,7 @@ class TaskCreationTest extends TestCase
         $taskData = [
             'customer_id' => $customerId,
             "description" => "filter",
+            "address_id" => 1,
             "type" => "repair",
             "assigned" => 2,
             "approval" => true,
@@ -77,7 +79,7 @@ class TaskCreationTest extends TestCase
             "assigned" => 2,
             "description" => "filter",
             "type" => "repair",
-            "status" => "approved"
+            "status" => "created"
         ]);
 
         $task = Task::where('customer_id', '=', $taskData['customer_id'])->first();
@@ -92,6 +94,9 @@ class TaskCreationTest extends TestCase
             'status' => 'approved',
             'status_date' => '2021-09-09 11:11:00',
         ];
+
+        $this->post('/task/approveItem', $taskStatusDataApproved);
+
 
         $this->assertDatabaseHas('task_statuses', $taskStatusDataCreated);
         $this->assertDatabaseHas('task_statuses', $taskStatusDataApproved);
@@ -108,6 +113,7 @@ class TaskCreationTest extends TestCase
         $taskData = [
             'customer_id' => $customerId,
             "description" => "filter",
+            "address_id" => 1,
             "type" => "repair",
             "assigned" => 2,
             "approval" => true,
@@ -151,6 +157,7 @@ class TaskCreationTest extends TestCase
         $taskData = [
             'customer_id' => $customerId,
             "description" => "filter",
+            "address_id" => 1,
             "type" => "repair",
             "approval" => false,
             "assigned" => 2,
@@ -199,6 +206,7 @@ class TaskCreationTest extends TestCase
 
         $taskData = [
             'customer_id' => $int,
+            "address_id" => 1,
             'description' => 'chlorine floaty',
             'type' => 'part',
             'status' => 'created'
@@ -215,6 +223,7 @@ class TaskCreationTest extends TestCase
 
         $taskData = [
             'customer_id' => $int,
+            "address_id" => 1,
             'description' => 'replumb ins and outs',
             'type' => 'repair',
             'status' => 'created'
@@ -231,6 +240,7 @@ class TaskCreationTest extends TestCase
 
         $taskData = [
             'customer_id' => $int,
+            "address_id" => 1,
             'description' => 'backwash every week',
             'type' => 'todo',
             'status' => 'created'
@@ -241,7 +251,9 @@ class TaskCreationTest extends TestCase
 
     private function login()
     {
-        $user = User::factory()->create();
+        $user = User::factory()->create([
+            'type' => 'serviceman'
+        ]);
 
         $this->post('/login', [
             'email' => $user->email,
@@ -349,6 +361,7 @@ class TaskCreationTest extends TestCase
             [
                 "customer_id" => 2,
                 "task_id" => 3,
+                "address_id" => 1,
                 "first_name" => "Kaitlyn",
                 "last_name" => "Muller",
                 "description" => "filter",

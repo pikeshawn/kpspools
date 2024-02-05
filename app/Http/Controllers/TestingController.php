@@ -14,4 +14,9 @@ class TestingController extends Controller
         return Inertia::render('Testing/Draggable');
     }
 
+    public function cloudinary()
+    {
+        return Inertia::render('Testing/Cloudinary');
+    }
+
 }

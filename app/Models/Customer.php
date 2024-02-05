@@ -76,9 +76,8 @@ class Customer extends Model
             'addresses.id as addressId'
         )
             ->join('addresses', 'customers.id', '=', 'addresses.customer_id')
-            ->where('customers.active', 1)
-            ->whereNotNull('customers.service_day')
-            ->orderByDesc('customers.order')
+            ->where('addresses.active', 1)
+            ->orderByDesc('addresses.order')
             ->get();
 
         foreach ($customers as $customer) {

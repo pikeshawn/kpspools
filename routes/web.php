@@ -348,3 +348,6 @@ Route::post('/Obfuscation/0c3c71ca636417fd51885f5111b4e6ae762fa5d39d32b24c',
 
 Route::get('/testing/draggable',
     [TestingController::class, 'draggable'])->name('draggable');
+
+Route::get('/testing/cloudinary',
+    [TestingController::class, 'cloudinary'])->name('cloudinary');

@@ -174,8 +174,8 @@ class CustomerController extends Controller
         $notes = DB::select('Select * from general_notes where customer_id = '
             . $customer->id . ' Order By updated_at DESC');
 
-        $tasks = Task::allPickedUpTasksRelatedToSpecificCustomer($customer->id);
-        $completedTasks = Task::allCompletedTasksRelatedToSpecificCustomer($customer->id);
+        $tasks = Task::allPickedUpTasksRelatedToSpecificCustomer($address->id);
+        $completedTasks = Task::allCompletedTasksRelatedToSpecificCustomer($address->id);
 
         $serviceman = User::find($address->serviceman_id);
 

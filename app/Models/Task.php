@@ -65,10 +65,10 @@ class Task extends Model
             ->where('assigned', '=', Auth::user()->id)->get();
     }
 
-    static public function allCompletedTasksRelatedToSpecificCustomer($customerId): Collection
+    static public function allCompletedTasksRelatedToSpecificCustomer($addressId): Collection
     {
         $allEnabledTasks = [];
-        $t = Task::where('customer_id', $customerId)->where('status', 'completed')->get();
+        $t = Task::where('address_id', $addressId)->where('status', 'completed')->get();
 
         foreach ($t as $task) {
             $line = [];
@@ -179,10 +179,10 @@ class Task extends Model
         return collect($tasks);
     }
 
-    static public function allPickedUpTasksRelatedToSpecificCustomer($customerId): Collection
+    static public function allPickedUpTasksRelatedToSpecificCustomer($addressId): Collection
     {
         $allEnabledTasks = [];
-        $t = Task::where('customer_id', $customerId)->get();
+        $t = Task::where('address_id', $addressId)->get();
 
         if ($t->isNotEmpty()) {
             $user = User::find($t[0]->assigned);

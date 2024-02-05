@@ -31,14 +31,14 @@ class DatabaseSeeder extends Seeder
 //        dd($faker->streetAddress);
 
         self::createAdminUsers();
-        self::createRegularUsers();
-        self::createCustomers();
+//        self::createRegularUsers();
+//        self::createCustomers();
 
-        for ($i = 1; $i < 31; $i++) {
-            $customer = Customer::find($i);
-//            dd($customer);
-            self::createAddresses($i, $customer->serviceman_id);
-        }
+//        for ($i = 1; $i < 31; $i++) {
+//            $customer = Customer::find($i);
+////            dd($customer);
+//            self::createAddresses($i, $customer->serviceman_id);
+//        }
 
         self::createServiceStops();
 
@@ -150,17 +150,19 @@ class DatabaseSeeder extends Seeder
 
     public function createAdminUsers()
     {
-        User::factory()
-            ->state([
-                    'name' => 'Shawn',
-                    'email' => 'pike.shawn@gmail.com',
-                    'phone_number' => '14807034902',
-                    'type' => 'serviceman',
-                    'is_admin' => 1,
-                    'password' => Hash::make('asdasd')
-                ]
-            )
-            ->create();
+//        User::factory()
+//            ->state([
+//                    'name' => 'Shawn',
+//                    'email' => 'pike.shawn@gmail.com',
+//                    'phone_number' => '14807034902',
+//                    'type' => 'serviceman',
+//                    'is_admin' => 1,
+//                    'password' => Hash::make('asdasd')
+//                ]
+//            )
+//            ->create();
+
+        User::factory()->create();
     }
 
     private function createRegularUsers()
