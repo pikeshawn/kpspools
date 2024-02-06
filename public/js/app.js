@@ -36920,10 +36920,10 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     "class": "form-control @error('media') is-invalid @enderror",
     placeholder: "Choose file...",
     id: "media-file",
-    "onUpdate:modelValue": _cache[0] || (_cache[0] = function ($event) {
-      return _ctx.media = $event;
+    onChange: _cache[0] || (_cache[0] = function () {
+      return _ctx.media && _ctx.media.apply(_ctx, arguments);
     })
-  }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_4, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(_ctx.message), 1 /* TEXT */)]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("                <small class=\"text-muted text-center mt-2\" loading wire:target=\"media\">"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("                    {{ __('Uploading') }}&hellip;"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("                </small>")]), _hoisted_5], 32 /* HYDRATE_EVENTS */), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" Original Image "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_6, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("img", {
+  }, null, 32 /* HYDRATE_EVENTS */), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_4, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(_ctx.message), 1 /* TEXT */)]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("                <small class=\"text-muted text-center mt-2\" loading wire:target=\"media\">"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("                    {{ __('Uploading') }}&hellip;"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("                </small>")]), _hoisted_5], 32 /* HYDRATE_EVENTS */), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" Original Image "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_6, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("img", {
     "class": "card-img-top",
     src: _ctx.media,
     alt: "Original Image",

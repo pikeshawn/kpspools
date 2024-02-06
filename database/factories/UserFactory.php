@@ -45,6 +45,15 @@ class UserFactory extends Factory
         });
     }
 
+    public function isServiceman(): Factory
+    {
+        return $this->state(function (array $attributes) {
+            return [
+                'type' => 'serviceman'
+            ];
+        });
+    }
+
     /**
      * Indicate that the user should have a personal team.
      */

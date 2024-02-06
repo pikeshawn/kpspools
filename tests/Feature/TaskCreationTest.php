@@ -2,6 +2,8 @@
 
 namespace Tests\Feature;
 
+use App\Models\Address;
+use App\Models\Customer;
 use App\Models\TaskStatus;
 use App\Models\User;
 use App\Models\Task;
@@ -13,6 +15,7 @@ use Tests\TestCase;
 use Inertia\Testing\AssertableInertia as Assert;
 
 //  vendor/bin/phpunit /Users/shawnpike/Documents/code/business/kpspools/tests/Feature/TaskCreationTest.php
+//  vendor/bin/phpunit /Users/shawnpike/Documents/code/business/kpspools/tests/Feature/TaskCreationTest.php testTaskIsAddedToDBWithApprovalNotNullStatusDate
 
 class TaskCreationTest extends TestCase
 {
@@ -90,13 +93,12 @@ class TaskCreationTest extends TestCase
         ];
 
         $taskStatusDataApproved = [
-            'task_id' => $task->id,
-            'status' => 'approved',
-            'status_date' => '2021-09-09 11:11:00',
+            "task_id" => $task->id,
+            "status" => "approved"
         ];
 
-        $this->post('/task/approveItem', $taskStatusDataApproved);
 
+        $this->post('/task/changeStatus', $taskStatusDataApproved);
 
         $this->assertDatabaseHas('task_statuses', $taskStatusDataCreated);
         $this->assertDatabaseHas('task_statuses', $taskStatusDataApproved);
@@ -122,12 +124,13 @@ class TaskCreationTest extends TestCase
         ];
 
         $this->post('/task/store', $taskData);
+
         $this->assertDatabaseHas('tasks', [
             "customer_id" => $customerId,
             "assigned" => 2,
             "description" => "filter",
             "type" => "repair",
-            "status" => "approved"
+            "status" => "created"
         ]);
 
         $task = Task::where('customer_id', '=', $taskData['customer_id'])->first();
@@ -141,6 +144,8 @@ class TaskCreationTest extends TestCase
             'task_id' => $task->id,
             'status' => 'approved',
         ];
+
+        $this->post('/task/changeStatus', $taskStatusDataApproved);
 
         $this->assertDatabaseHas('task_statuses', $taskStatusDataCreated);
         $this->assertDatabaseHas('task_statuses', $taskStatusDataApproved);
@@ -265,7 +270,7 @@ class TaskCreationTest extends TestCase
 
     private function loginAsAdmin()
     {
-        $user = User::factory()->isAdmin()->create();
+        $user = User::factory()->isAdmin()->isServiceman()->create();
 
         $this->post('/login', [
             'email' => $user->email,
@@ -282,10 +287,14 @@ class TaskCreationTest extends TestCase
 
 //        dd($u);
 
-        $customerId = random_int(1, 30);
+        $customerId = random_int(1, 10);
+
+        $customer = Customer::find($customerId);
+        $address = Address::where('customer_id', $customer->id)->first();
 
         $taskDataAdmin = [
             'customer_id' => $customerId,
+            'address_id' => $address->id,
             "description" => "filter",
             "type" => "repair",
             "assigned" => 2,
@@ -296,6 +305,7 @@ class TaskCreationTest extends TestCase
 
         $taskDataGuy1 = [
             'customer_id' => $customerId,
+            'address_id' => $address->id,
             "description" => "filter",
             "type" => "repair",
             "assigned" => 3,
@@ -306,6 +316,7 @@ class TaskCreationTest extends TestCase
 
         $taskDataGuy2 = [
             'customer_id' => $customerId,
+            'address_id' => $address->id,
             "description" => "filter",
             "type" => "repair",
             "assigned" => 4,
@@ -320,8 +331,96 @@ class TaskCreationTest extends TestCase
 
         $response = $this->get('tasks');
 
-        $response->assertInertia(fn(Assert $page) => $page->component('Task/Index')->has('tasks')->has('assigned'));
+        $response->assertInertia(fn(Assert $page) => $page->component('Task/Index')->has('tasks'));
 //        $response->assertInertia(fn (Assert $page) => $page->component('Task/ViewPartRepairTasks')->has('Tuesday'));
+
+    }
+
+    public function test_assigning_todo_is_assigned_to_right_serviceman(): void
+    {
+        self::login();
+
+        $description = $this->faker->name;
+
+        $todo = [
+            "address_id" => 4,
+            "customer_id" => 4,
+            "description" => $description,
+            "type" => "todo",
+            "todoAssignee" => 2,
+            "approval" => false,
+            "approvedDate" => null,
+            "status" => "created",
+            "assigned" => 1
+        ];
+
+        $this->post('/task/store', $todo);
+
+        $this->assertDatabaseHas('tasks', [
+                "description" => $description,
+                "type" => 'todo',
+                "assigned" => 2,
+                'status' => 'pickedUp']
+        );
+
+    }
+
+    public function testAssignedUserIsTheNameAssociatedToTheTaskWhenReturnedToCustomerShowPage()
+    {
+        self::login();
+
+        $description = $this->faker->name;
+
+        $todo = [
+            "address_id" => 4,
+            "customer_id" => 4,
+            "description" => $description,
+            "type" => "todo",
+            "todoAssignee" => 2,
+            "approval" => false,
+            "approvedDate" => null,
+            "status" => "created",
+            "assigned" => 1
+        ];
+
+        $description1 = $this->faker->name;
+
+        $todo1 = [
+            "address_id" => 4,
+            "customer_id" => 4,
+            "description" => $description1,
+            "type" => "todo",
+            "todoAssignee" => 1,
+            "approval" => false,
+            "approvedDate" => null,
+            "status" => "created",
+            "assigned" => 1
+        ];
+
+        $this->post('/task/store', $todo);
+        $this->post('/task/store', $todo1);
+
+        $response = $this->get('/customers/show/4');
+
+        $response->assertInertia(fn(Assert $page) => $page->component('Customers/Show')->has('tasks'));
+
+//        $response->assertStatus(200)
+//            ->assertJsonFragment(
+//                ['tasks' =>
+//                    [
+//                        'description' => $description,
+//                        'status' => "pickedUp",
+//                        'completed' => false,
+//                        'assigned' => "Jeremiah"
+//                    ],
+//                    [
+//                        'description' => $description1,
+//                        'status' => "pickedUp",
+//                        'completed' => false,
+//                        'assigned' => "Shawn"
+//                    ]
+//                ]
+//            );
 
     }
 

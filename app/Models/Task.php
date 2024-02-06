@@ -185,8 +185,8 @@ class Task extends Model
         $t = Task::where('address_id', $addressId)->get();
 
         if ($t->isNotEmpty()) {
-            $user = User::find($t[0]->assigned);
             foreach ($t as $task) {
+                $user = User::find($task->assigned);
                 $line = [];
                 $line["id"] = $task->id;
                 $line["description"] = $task->description;
