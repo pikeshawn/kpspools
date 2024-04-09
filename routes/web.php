@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\TaskController;
+use App\Http\Controllers\ProfitController;
 use App\Http\Controllers\TestingController;
 use App\Http\Controllers\TransferController;
 use App\Http\Controllers\NotificationController;
@@ -127,6 +128,9 @@ Route::middleware(['auth:sanctum', 'verified', 'customer', 'subscribed'])->group
 });
 
 Route::middleware(['auth:sanctum', 'verified', 'serviceman'])->group(function () {
+
+    Route::get('/profit',
+        [ProfitController::class, 'index'])->name('profit.index');
 
     Route::get('/transfer',
         [TransferController::class, 'index'])->name('transfer');

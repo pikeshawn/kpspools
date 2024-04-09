@@ -275,6 +275,13 @@
                             Display
                         </inertia-link>
 
+                        <inertia-link type="button"
+                                      v-if="user.is_admin"
+                                      class="relative inline-flex items-center px-4 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:z-10 focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500"
+                                      :href="route('profit.index')">
+                            Profit
+                        </inertia-link>
+
                     </div>
                 </header>
                 <main class="flex-1 relative z-0 overflow-y-auto focus:outline-none"
