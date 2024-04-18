@@ -92,6 +92,84 @@ class CustomerController extends Controller
         ]);
     }
 
+
+    /**
+     * Show the form for adding a new customer.
+     */
+    public function add(): Response
+    {
+        //
+        return Inertia::render('Customers/Add');
+    }
+
+    public function addStore(Request $request)
+    {
+        $user = User::firstOrCreate([
+            'phone_number'  => $request->phoneNumber
+        ],
+        [
+            'name' => $request->firstName . ' ' . $request->lastName,
+            'email' => $request->firstName . rand(0,1000000) . $request->lastName,
+            'password' => bcrypt('Welcome1234'),
+            'phone_number' => $request->phoneNumber,
+            'is_admin' => false,
+            'type' => 'customer',
+            'active' => true,
+            'terms_and_conditions' => false,
+            'privacy_policy' => false
+        ]);
+
+        if ($user) {
+            $customer = Customer::firstOrCreate([
+                'phone_number'  => $request->phoneNumber
+            ],
+            [
+                'user_id' => $user->id,
+                'first_name' => $request->firstName,
+                'last_name' => $request->lastName,
+                'active' => true,
+                'type' => 'Service',
+                'service_day' => 'Saturday',
+                'order' => 1000,
+                'plan_duration' => 'monthly',
+                'plan_price' => $request->planPrice,
+                'chemicals_included' => $request->chemsIncluded,
+                'assigned_serviceman' => 'Shawn',
+                'phone_number' => $request->phoneNumber,
+                'terms' => 'begin',
+                'autopay' => false,
+                'serviceman_id' => 2
+            ]);
+
+            Address::firstOrCreate([
+                'address_line_1'  => $request->address
+            ],
+                [
+                    'customer_id' => $customer->id,
+                    'address_line_1' => $request->address,
+                    'city' => $request->city,
+                    'state' => 'AZ',
+                    'zip' => $request->zip,
+                    'community_gate_code' => $request->gateCode,
+                    'house_gate_has_lock' => $request->gateCode,
+                    'serviceman_id' => 2,
+                    'service_day' => 'Saturday',
+                    'order' => 1000,
+                    'active' => true,
+                    'type' => 'Service',
+                    'plan_duration' => 'monthly',
+                    'plan_price' => $request->planPrice,
+                    'chemicals_included' => $request->chemsIncluded,
+                    'assigned_serviceman' => 'Shawn',
+                    'terms' => 'begin',
+                    'sold' => false
+                ]);
+            return Redirect::route('customers')
+                ->with('success', 'Data stored successfully');
+        }
+
+    }
+
     /**
      * Store a newly created resource in storage.
      *

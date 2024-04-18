@@ -166,6 +166,14 @@ Route::middleware(['auth:sanctum', 'verified', 'serviceman'])->group(function ()
         [CustomerController::class, 'create'])
         ->name('customers.create');
 
+    Route::get('/customers/add',
+        [CustomerController::class, 'add'])
+        ->name('customers.add');
+
+    Route::post('/customers/addStore',
+        [CustomerController::class, 'addStore'])
+        ->name('customers.addStore');
+
     Route::post('/customers/store',
         [CustomerController::class, 'store'])
         ->name('customers.store');
