@@ -32,7 +32,7 @@ class PasswordlessController {
 
     public function loginAs()
     {
-        $users = User::where('type', 'serviceman')->get();
+        $users = User::where('type', 'serviceman')->where('active', true)->get();
         return Inertia::render('Auth/LoginAs',
             [
                 'servicemen' => $users
