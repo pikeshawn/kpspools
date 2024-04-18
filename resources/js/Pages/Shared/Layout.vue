@@ -229,6 +229,7 @@
                                       class="relative inline-flex items-center px-4 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:z-10 focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500"
                                       :href="route('tasks')">
                             SCP List
+<!--                            <span class="absolute top-0 right-0 transform translate-x-1/2 -translate-y-1/2 bg-red-500 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded-full" id="notificationCount">3</span>-->
                         </inertia-link>
                         <inertia-link type="button"
                                       class="relative inline-flex items-center px-4 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:z-10 focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500"
@@ -339,20 +340,21 @@ export default {
         Link,
     },
     methods: {
-        showRoute() {
-
-        },
+        showRoute() {},
         logout() {
             this.$inertia.post(route('logout'));
-        },
+        }
     },
     setup() {
         const sidebarOpen = ref(false)
-
         return {
             navigation,
-            sidebarOpen,
+            sidebarOpen
         }
     },
 }
 </script>
+
+<style>
+
+</style>
