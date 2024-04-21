@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Address;
+use App\Models\Cya;
 use App\Models\Customer;
 use App\Models\Filter;
 use App\Models\ServiceStop;
@@ -154,10 +155,15 @@ class ServiceStopController extends Controller
             $task->assigned = $assigned->name;
         }
 
+        $lastBackwash = ServiceStop::where('address_id', $address->id)->where('backwash', '=', 1)->orderBy('time_in', 'DESC')->first();
+
         $equipment = Filter::where('customer_id', $customer->id)->first();
+        $cya = Cya::where('address_id', $address->id)->orderBy('tested_date', 'DESC')->first();
 
         return Inertia::render('ServiceStops/Create', [
             'customerId' => $customer->id,
+            'cya' => $cya,
+            'lastBackwash' => $lastBackwash->time_in,
             'customer' => $customer,
             'equipment' => $equipment,
             'address' => $address,
@@ -242,9 +248,37 @@ class ServiceStopController extends Controller
                     'type' => $request->filter_type
                 ]);
             } else {
-                $filter = Filter::find($f[0]->id);
-                $filter->type = $request->filter_type;
-                $filter->save();
+                if ($f[0]->filter_type != $request->filter_type) {
+                    $filter = new Filter([
+                        'customer_id' => $request->id,
+                        'address_id' => $address->id,
+                        'type' => $request->filter_type
+                    ]);
+                    $filter->save();
+                }
+            }
+
+        }
+
+        if ($request->cya){
+            $cya = Cya::where('address_id', $address->id)->orderBy('tested_date', 'DESC')->first();
+            $date = Carbon::now();
+            $testedDate = $date->format('Y-m-d');
+            if (is_null($cya)) {
+                Cya::firstOrCreate([
+                    'level' => $request->cya,
+                    'address_id' => $address->id,
+                    'tested_date' => $testedDate
+                ]);
+            } else {
+                if ($cya->level != $request->cya) {
+                    $c = new Cya([
+                        'level' => $request->cya,
+                        'address_id' => $address->id,
+                        'tested_date' => $testedDate
+                    ]);
+                    $c->save();
+                }
             }
 
         }

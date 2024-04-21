@@ -64,8 +64,7 @@
         </div>
 
 
-<!--        <pre>{{ equipment }}</pre>-->
-
+<!--        <pre>{{ cya }}</pre>-->
 
         <div class="px-4 sm:px-6 lg:px-8">
             <div class="mt-8 flow-root">
@@ -131,6 +130,9 @@
                         <div class="shadow overflow-hidden sm:rounded-md">
                             <div class="px-4 py-5 bg-white sm:p-6">
                                 <div class="grid grid-cols-2 gap-6">
+
+                                    <h1>Date of last Backwash - {{ lastBackwash }}</h1>
+                                    <br>
 
                                     <div class="flex flex-col"
                                          :class="errorClass"
@@ -352,6 +354,34 @@
                                         </div>
                                     </div>
 
+                                    <div>
+                                        <div class="col-span-1">
+                                            <label for="powder_chlorine"
+                                                   class="block text-sm font-medium text-gray-700">Cyanuric Acid<span v-if="cya"> - {{ cya.tested_date }}</span></label>
+                                            <select id="powder_chlorine" name="powder_chlorine"
+                                                    v-model="form.cya"
+                                                    class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                                                <option v-for="option in [
+                                                    0,
+                                                    10,
+                                                    20,
+                                                    30,
+                                                    40,
+                                                    50,
+                                                    60,
+                                                    70,
+                                                    80,
+                                                    90,
+                                                    100
+                                                ]">{{ option }}</option>
+                                            </select>
+                                            <div class="mt-2" v-if="form.cya">{{
+                                                    form.cya
+                                                }}
+                                            </div>
+                                        </div>
+                                    </div>
+
                                     <div class="flex flex-col">
                                         <label for="emptyBaskets">Empty Baskets</label>
                                         <Switch
@@ -462,6 +492,8 @@ export default {
         customer: String,
         address: String,
         equipment: String,
+        cya: String,
+        lastBackwash: String,
         customerName: String,
         user: String,
         tasks: Array
@@ -562,6 +594,7 @@ export default {
             chlorine_level: null,
             checkedChems: true,
             customerId: null,
+            cya: null,
             toCustomer: false,
             emptyBaskets: true,
             liquidChlorine: '0.0',
@@ -682,6 +715,7 @@ export default {
     mounted() {
         this.form.id = this.customerId
         this.equipment && this.equipment.type ? this.form.filter_type = this.equipment.type : this.form.filter_type = null;
+        this.cya && this.cya.level ? this.form.cya = this.cya.level : this.form.cya = null;
         if (localStorage.getItem('timeIn')) {
             this.form.timeIn = localStorage.getItem('timeIn')
         }
