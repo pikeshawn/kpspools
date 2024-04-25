@@ -54,6 +54,30 @@ class TaskController extends Controller
 
     }
 
+    public function reconcile () {
+
+//        $tasks = Task::with(['task_statuses', 'customer', 'address'])  // Eager load the task statuses
+//        ->orderBy('customer_id')  // Order by customer_id
+//        ->get();
+
+        $tasks = Task::select(
+            'id', 'customer_id', 'assigned', 'created_at',
+            'description', 'status', 'type', 'price', 'address_id'
+        )  // Selecting specific fields from tasks
+        ->with([
+            'task_statuses',  // Selecting specific fields from task statuses
+            'customer:id,first_name,last_name',             // Selecting specific fields from customers
+            'address:id,address_line_1',             // Selecting specific fields from customers
+        ])
+            ->orderBy('customer_id')
+            ->get();
+
+        return Inertia::render('Task/Reconcile',[
+            'tasks' => $tasks
+        ]);
+
+    }
+
     public function index()
     {
 

@@ -292,6 +292,10 @@ Route::middleware(['auth:sanctum', 'verified', 'serviceman'])->group(function ()
         [TaskController::class, 'changeDescription'])
         ->name('task.changeDescription');
 
+    Route::get('/task/reconcile',
+        [TaskController::class, 'reconcile'])
+        ->name('task.reconcile');
+
     Route::post('/task/deleteItem',
         [TaskController::class, 'deleteItem'])
         ->name('task.deleteItem');

@@ -15,7 +15,12 @@ class Task extends Model
 
     public function customer()
     {
-        return $this->belongsTo(Customer::class);
+        return $this->belongsTo(Customer::class, 'customer_id', 'id');
+    }
+
+    public function address()
+    {
+        return $this->belongsTo(Address::class, 'address_id', 'id');
     }
 
     public function task_statuses()
@@ -191,6 +196,7 @@ class Task extends Model
                 $line["id"] = $task->id;
                 $line["description"] = $task->description;
                 $line["status"] = $task->status;
+                $line["price"] = $task->price;
                 $line["completed"] = false;
                 $line["assigned"] = $user->name;
                 $allEnabledTasks[] = $line;

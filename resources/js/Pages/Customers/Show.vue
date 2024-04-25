@@ -206,6 +206,7 @@
                                             class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
                                             <div class="flex" style="flex-direction: column">
                                                 <div>{{ item.description }}</div>
+                                                <div v-if="user.is_admin === 1">${{ item.price }}</div>
                                                 <div>_______________________</div>
                                                 <div>{{ item.assigned }}</div>
 

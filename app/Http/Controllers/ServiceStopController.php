@@ -160,10 +160,16 @@ class ServiceStopController extends Controller
         $equipment = Filter::where('customer_id', $customer->id)->first();
         $cya = Cya::where('address_id', $address->id)->orderBy('tested_date', 'DESC')->first();
 
+        if (is_null($lastBackwash)) {
+            $lastBackwashTime = "Haven't Backwashed Yet";
+        } else {
+            $lastBackwashTime = $lastBackwash->time_in;
+        }
+
         return Inertia::render('ServiceStops/Create', [
             'customerId' => $customer->id,
             'cya' => $cya,
-            'lastBackwash' => $lastBackwash->time_in,
+            'lastBackwash' => $lastBackwashTime,
             'customer' => $customer,
             'equipment' => $equipment,
             'address' => $address,
@@ -238,7 +244,7 @@ class ServiceStopController extends Controller
     private function createServiceStop($request, $address, $phLevel, $chlorineLevel, $start, $end)
     {
 
-        if ($request->filter_type){
+        if ($request->filter_type) {
 
             $f = Filter::where('customer_id', $request->id)->where('address_id', $address->id)->get();
             if ($f->isEmpty()) {
@@ -260,7 +266,7 @@ class ServiceStopController extends Controller
 
         }
 
-        if ($request->cya){
+        if ($request->cya) {
             $cya = Cya::where('address_id', $address->id)->orderBy('tested_date', 'DESC')->first();
             $date = Carbon::now();
             $testedDate = $date->format('Y-m-d');
@@ -308,7 +314,6 @@ class ServiceStopController extends Controller
             'service_type' => $request->service_type,
             'user_id' => Auth::user()->id,
         ]);
-
 
 
     }

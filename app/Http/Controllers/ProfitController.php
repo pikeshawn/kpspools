@@ -16,7 +16,7 @@ class ProfitController extends Controller
     public function index()
     {
         $totalSCPCost = ScpInvoice::sum('sales_order_amount');
-        $totalActiveCustomers = Address::where('sold', false)->count('active');
+        $totalActiveCustomers = Address::where('sold', false)->where('customer_id', '<>', 101)->count('active');
         $totalServiceAmount = Address::where('active', 1)->where('sold', false)->sum('plan_price');
         $totalAverageServiceAmount = Address::where('active', 1)->where('sold', false)->average('plan_price');
 
