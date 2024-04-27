@@ -129,6 +129,11 @@ Route::middleware(['auth:sanctum', 'verified', 'customer', 'subscribed'])->group
 
 Route::middleware(['auth:sanctum', 'verified', 'serviceman'])->group(function () {
 
+
+    Route::get('/admin', function () {
+        return Inertia::render('Admin/Index');
+    })->name('admin.links');
+
     Route::get('/profit',
         [ProfitController::class, 'index'])->name('profit.index');
 
