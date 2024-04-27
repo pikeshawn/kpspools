@@ -4,45 +4,123 @@
         :user="user"
     >
 
-        <Combobox as="div" v-model="selectedPerson">
-            <ComboboxLabel v-if="selectedPerson" class="block text-sm font-medium leading-6 text-gray-900">
-                {{ selectedPerson.first_name }} {{ selectedPerson.last_name }} - {{ selectedPerson.address_line_1 }}
-            </ComboboxLabel>
-            <div class="relative mt-2">
-                <!--              @change="query = $event.target.value" :display-value="person && (person?.first_name + ' ' + person?.last_name) !== undefined ? '' : person.first_name + ' ' + person.last_name"/>-->
-                <!--              @change="query = $event.target.value" :display-value="(person) {if(person?.first_name !== undefined && person?.last_name !== undefined){ return ''} else {return person.first_name + ' ' + person.last_name}}"/>-->
-                <ComboboxInput
-                    class="w-full rounded-md border-0 bg-white py-1.5 pl-3 pr-10 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                    @change="query = $event.target.value" :display-value="(person) => person?.last_name"/>
-                <ComboboxButton
-                    class="absolute inset-y-0 right-0 flex items-center rounded-r-md px-2 focus:outline-none">
-                    <ChevronUpDownIcon class="h-5 w-5 text-gray-400" aria-hidden="true"/>
-                </ComboboxButton>
+        <TransitionRoot as="template" :show="open">
+            <Dialog as="div" class="relative z-10" @close="open = false">
+                <TransitionChild as="template" enter="ease-out duration-300" enter-from="opacity-0"
+                                 enter-to="opacity-100" leave="ease-in duration-200" leave-from="opacity-100"
+                                 leave-to="opacity-0">
+                    <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"/>
+                </TransitionChild>
 
-                <ComboboxOptions v-if="filteredPeople.length > 0"
-                                 class="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
-                    <ComboboxOption v-for="person in filteredPeople" :key="person.id" :value="person" as="template"
-                                    v-slot="{ active, selected }">
-                        <li :class="['relative cursor-default select-none py-2 pl-8 pr-4', active ? 'bg-indigo-600 text-white' : 'text-gray-900']">
-            <span :class="['block truncate', selected && 'font-semibold']">
-              {{ person.first_name }} {{ person.last_name }} - {{ person.address_line_1 }}
-            </span>
+                <div class="fixed inset-0 z-10 w-screen overflow-y-auto">
+                    <div class="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
+                        <TransitionChild as="template" enter="ease-out duration-300"
+                                         enter-from="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+                                         enter-to="opacity-100 translate-y-0 sm:scale-100" leave="ease-in duration-200"
+                                         leave-from="opacity-100 translate-y-0 sm:scale-100"
+                                         leave-to="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95">
+                            <DialogPanel
+                                style="width: 100%;"
+                            >
+                                <div>
 
-                            <span v-if="selected"
-                                  :class="['absolute inset-y-0 left-0 flex items-center pl-1.5', active ? 'text-white' : 'text-indigo-600']">
-              <CheckIcon class="h-5 w-5" aria-hidden="true"/>
-            </span>
-                        </li>
-                    </ComboboxOption>
-                </ComboboxOptions>
-            </div>
-            <button type="button"
-                    class="-ml-px relative inline-flex items-center px-4 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:z-10 focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500"
-                    @click="goToCustomer(selectedPerson.addressId)"
-            >Go
-            </button>
-        </Combobox>
 
+                                    <div class="mt-2">
+                                        <input @input="getCustomers($event.target.value)" type="text" name="text"
+                                               id="text"
+                                               class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                               placeholder="type customer last name"/>
+                                    </div>
+
+                                    <div v-for="name in dbNames" :key="name.id">
+                                        <Link :href="route('customers.show', name.addressId)"
+                                              class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                              style="background: white"
+                                        >
+                                            <div>
+                                                {{ name.first_name }} {{ name.last_name }} - {{ name.address_line_1}}
+                                            </div>
+                                        </Link>
+                                    </div>
+
+
+                                    <!--                                    <div-->
+                                    <!--                                        class="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-green-100">-->
+                                    <!--                                        <CheckIcon class="h-6 w-6 text-green-600" aria-hidden="true"/>-->
+                                    <!--                                    </div>-->
+                                    <!--                                    <div class="mt-3 text-center sm:mt-5">-->
+                                    <!--                                        <DialogTitle as="h3" class="text-base font-semibold leading-6 text-gray-900">-->
+                                    <!--                                            Payment successful-->
+                                    <!--                                        </DialogTitle>-->
+                                    <!--                                        <div class="mt-2">-->
+                                    <!--                                            <p class="text-sm text-gray-500">Lorem ipsum dolor sit amet consectetur-->
+                                    <!--                                                adipisicing elit. Consequatur amet labore.</p>-->
+                                    <!--                                        </div>-->
+                                    <!--                                    </div>-->
+                                    <!--                                </div>-->
+                                    <!--                                <div class="mt-5 sm:mt-6">-->
+                                    <!--                                    <button type="button"-->
+                                    <!--                                            class="inline-flex w-full justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"-->
+                                    <!--                                            @click="open = false">Go back to dashboard-->
+                                    <!--                                    </button>-->
+                                </div>
+                            </DialogPanel>
+                        </TransitionChild>
+                    </div>
+                </div>
+            </Dialog>
+        </TransitionRoot>
+
+
+        <!--        <Combobox as="div" v-model="selectedPerson">-->
+        <!--            <ComboboxLabel v-if="selectedPerson" class="block text-sm font-medium leading-6 text-gray-900">-->
+        <!--                {{ selectedPerson.first_name }} {{ selectedPerson.last_name }} - {{ selectedPerson.address_line_1 }}-->
+        <!--            </ComboboxLabel>-->
+        <!--            <div class="relative mt-2">-->
+        <!--                &lt;!&ndash;              @change="query = $event.target.value" :display-value="person && (person?.first_name + ' ' + person?.last_name) !== undefined ? '' : person.first_name + ' ' + person.last_name"/>&ndash;&gt;-->
+        <!--                &lt;!&ndash;              @change="query = $event.target.value" :display-value="(person) {if(person?.first_name !== undefined && person?.last_name !== undefined){ return ''} else {return person.first_name + ' ' + person.last_name}}"/>&ndash;&gt;-->
+        <!--                <ComboboxInput-->
+        <!--                    class="w-full rounded-md border-0 bg-white py-1.5 pl-3 pr-10 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"-->
+        <!--                    @change="query = $event.target.value" :display-value="(person) => person?.last_name"/>-->
+        <!--                &lt;!&ndash;                <ComboboxButton&ndash;&gt;-->
+        <!--                &lt;!&ndash;                    class="absolute inset-y-0 right-0 flex items-center rounded-r-md px-2 focus:outline-none">&ndash;&gt;-->
+        <!--                &lt;!&ndash;                    <ChevronUpDownIcon class="h-5 w-5 text-gray-400" aria-hidden="true"/>&ndash;&gt;-->
+        <!--                &lt;!&ndash;                </ComboboxButton>&ndash;&gt;-->
+
+        <!--                <ComboboxOptions v-if="filteredPeople.length > 0"-->
+        <!--                                 class="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">-->
+        <!--                    <ComboboxOption v-for="person in filteredPeople" :key="person.id" :value="person" as="template"-->
+        <!--                                    v-slot="{ active, selected }">-->
+        <!--                        <li :class="['relative cursor-default select-none py-2 pl-8 pr-4', active ? 'bg-indigo-600 text-white' : 'text-gray-900']">-->
+        <!--            <span :class="['block truncate', selected && 'font-semibold']">-->
+        <!--              {{ person.first_name }} {{ person.last_name }} - {{ person.address_line_1 }}-->
+        <!--            </span>-->
+
+        <!--                            <span v-if="selected"-->
+        <!--                                  :class="['absolute inset-y-0 left-0 flex items-center pl-1.5', active ? 'text-white' : 'text-indigo-600']">-->
+        <!--              <CheckIcon class="h-5 w-5" aria-hidden="true"/>-->
+        <!--            </span>-->
+        <!--                        </li>-->
+        <!--                    </ComboboxOption>-->
+        <!--                </ComboboxOptions>-->
+        <!--            </div>-->
+        <!--            <button type="button"-->
+        <!--                    class="-ml-px relative inline-flex items-center px-4 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:z-10 focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500"-->
+        <!--                    @click="goToCustomer(selectedPerson.addressId)"-->
+        <!--            >Go-->
+        <!--            </button>-->
+        <!--        </Combobox>-->
+
+
+        <br>
+
+        <button @click="open = !open" type="button" class="items-center justify-center rounded-lg lg:ml-8">Search
+            Customers
+            <svg fill="none" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 fill-gray-900 hover:fill-gray-900">
+                <path
+                    d="M20.47 21.53a.75.75 0 1 0 1.06-1.06l-1.06 1.06Zm-9.97-4.28a6.75 6.75 0 0 1-6.75-6.75h-1.5a8.25 8.25 0 0 0 8.25 8.25v-1.5ZM3.75 10.5a6.75 6.75 0 0 1 6.75-6.75v-1.5a8.25 8.25 0 0 0-8.25 8.25h1.5Zm6.75-6.75a6.75 6.75 0 0 1 6.75 6.75h1.5a8.25 8.25 0 0 0-8.25-8.25v1.5Zm11.03 16.72-5.196-5.197-1.061 1.06 5.197 5.197 1.06-1.06Zm-4.28-9.97c0 1.864-.755 3.55-1.977 4.773l1.06 1.06A8.226 8.226 0 0 0 18.75 10.5h-1.5Zm-1.977 4.773A6.727 6.727 0 0 1 10.5 17.25v1.5a8.226 8.226 0 0 0 5.834-2.416l-1.061-1.061Z"></path>
+            </svg>
+        </button>
 
         <br>
 
@@ -274,7 +352,7 @@
                         <div v-if="user.is_admin === 1">{{ row.phone_number }}</div>
                     </Link>
                     <div v-if="user.is_admin === 1" class="flex justify-between"
-                    style="width: 220px; margin-bottom: 20px; margin-top: 5px;"
+                         style="width: 220px; margin-bottom: 20px; margin-top: 5px;"
                     >
                         <div>
                             <select v-model="row.newServicemanId" id="location" name="location"
@@ -341,6 +419,9 @@ import {
     ComboboxOption,
     ComboboxOptions,
 } from '@headlessui/vue'
+import {Dialog, DialogPanel, DialogTitle, TransitionChild, TransitionRoot} from '@headlessui/vue'
+
+const open = ref(false)
 
 const props = defineProps({
     customers: Array,
@@ -386,6 +467,8 @@ export default {
     },
     data() {
         return {
+            csrfToken: null,
+            dbNames: [],
             liquidChlorine: null,
             monday: false,
             tuesday: false,
@@ -431,6 +514,7 @@ export default {
         }
     },
     mounted() {
+        this.csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
         this.valueObjectArray = this.tableValues();
         let date = new Date()
         let d = date.toDateString();
@@ -453,6 +537,51 @@ export default {
 
     },
     methods: {
+        getCustomers(name) {
+
+            console.debug(name)
+
+            // Inertia.post('/customers/getNames', {'name': name})
+            console.log(this.csrfToken); // Use this token in your component
+            fetch('/customers/getNames', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json', // Specify the content type
+                    'X-CSRF-TOKEN': this.csrfToken
+                },
+                // Include CSRF token
+                body: JSON.stringify({'name': name})
+            }).then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                // console.log(response.json()) // Parse the JSON in the response
+                return response.json(); // Parse the JSON in the response
+            })
+                .then(data => {
+                    console.log('Success:', data); // Handle the success case
+                    this.dbNames = data
+                })
+                .catch((error) => {
+                    console.error('Error:', error); // Handle errors
+                });
+
+
+            // const promise = Inertia.post('/customers/getNames', {'name': name})
+            //
+            // promise.then(response => {
+            //     // Handle the response data here
+            //     // const $element = document.getElementById('response')
+            //     // $element.innerHTML = this.response;
+            //
+            //     console.log(response)
+            //
+            // }).catch(error => {
+            //     // Handle any errors that occurred during the request
+            //     console.error(error);
+            // });
+
+        },
         sortedRoute(day) {
 
             const dayOfWeek = this.customers.filter(obj => obj.service_day === day);

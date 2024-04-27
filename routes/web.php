@@ -183,6 +183,10 @@ Route::middleware(['auth:sanctum', 'verified', 'serviceman'])->group(function ()
         [CustomerController::class, 'store'])
         ->name('customers.store');
 
+    Route::post('/customers/getNames',
+        [CustomerController::class, 'getNames'])
+        ->name('customers.getNames');
+
     Route::get('/service_stops/{address}',
         [ServiceStopController::class, 'index'])
         ->name('service_stops');

@@ -44,6 +44,39 @@ class CustomerController extends Controller
         ]);
     }
 
+    public function getNames(Request $request)
+    {
+//        dd($request);
+
+        if (User::isAdmin()) {
+            $customers = Customer::select(
+                'customers.first_name',
+                'customers.last_name',
+                'addresses.address_line_1',
+                'addresses.id as addressId'
+            )
+                ->join('addresses', 'customers.id', '=', 'addresses.customer_id')
+                ->where('customers.last_name', 'like', "$request->name%")
+                ->orderByDesc('addresses.order')
+                ->get();
+        } else {
+            $customers = Customer::select(
+                'customers.first_name',
+                'customers.last_name',
+                'addresses.address_line_1',
+                'addresses.id as addressId'
+            )
+                ->join('addresses', 'customers.id', '=', 'addresses.customer_id')
+                ->where('addresses.active', 1)
+                ->where('addresses.sold', 0)
+                ->where('customers.last_name', 'like', "$request->name%")
+                ->orderByDesc('addresses.order')
+                ->get();
+        }
+
+        return $customers;
+    }
+
     public function notes(Customer $customer): Response
     {
         $notes = DB::select('Select * from general_notes where customer_id = '
@@ -105,44 +138,44 @@ class CustomerController extends Controller
     public function addStore(Request $request)
     {
         $user = User::firstOrCreate([
-            'phone_number'  => $request->phoneNumber
+            'phone_number' => $request->phoneNumber
         ],
-        [
-            'name' => $request->firstName . ' ' . $request->lastName,
-            'email' => $request->firstName . rand(0,1000000) . $request->lastName,
-            'password' => bcrypt('Welcome1234'),
-            'phone_number' => $request->phoneNumber,
-            'is_admin' => false,
-            'type' => 'customer',
-            'active' => true,
-            'terms_and_conditions' => false,
-            'privacy_policy' => false
-        ]);
+            [
+                'name' => $request->firstName . ' ' . $request->lastName,
+                'email' => $request->firstName . rand(0, 1000000) . $request->lastName,
+                'password' => bcrypt('Welcome1234'),
+                'phone_number' => $request->phoneNumber,
+                'is_admin' => false,
+                'type' => 'customer',
+                'active' => true,
+                'terms_and_conditions' => false,
+                'privacy_policy' => false
+            ]);
 
         if ($user) {
             $customer = Customer::firstOrCreate([
-                'phone_number'  => $request->phoneNumber
+                'phone_number' => $request->phoneNumber
             ],
-            [
-                'user_id' => $user->id,
-                'first_name' => $request->firstName,
-                'last_name' => $request->lastName,
-                'active' => true,
-                'type' => 'Service',
-                'service_day' => 'Saturday',
-                'order' => 1000,
-                'plan_duration' => 'monthly',
-                'plan_price' => $request->planPrice,
-                'chemicals_included' => $request->chemsIncluded,
-                'assigned_serviceman' => 'Shawn',
-                'phone_number' => $request->phoneNumber,
-                'terms' => 'begin',
-                'autopay' => false,
-                'serviceman_id' => 2
-            ]);
+                [
+                    'user_id' => $user->id,
+                    'first_name' => $request->firstName,
+                    'last_name' => $request->lastName,
+                    'active' => true,
+                    'type' => 'Service',
+                    'service_day' => 'Saturday',
+                    'order' => 1000,
+                    'plan_duration' => 'monthly',
+                    'plan_price' => $request->planPrice,
+                    'chemicals_included' => $request->chemsIncluded,
+                    'assigned_serviceman' => 'Shawn',
+                    'phone_number' => $request->phoneNumber,
+                    'terms' => 'begin',
+                    'autopay' => false,
+                    'serviceman_id' => 2
+                ]);
 
             Address::firstOrCreate([
-                'address_line_1'  => $request->address
+                'address_line_1' => $request->address
             ],
                 [
                     'customer_id' => $customer->id,
@@ -181,7 +214,6 @@ class CustomerController extends Controller
 //        dd($request->notes);
 
 
-
         $u = User::find($request->userId);
         $u->name = $request->firstName . " " . $request->lastName;
         $u->phone_number = $request->phoneNumber;
@@ -211,7 +243,6 @@ class CustomerController extends Controller
         $a->save();
 
 
-
         GeneralNote::firstOrCreate([
             'customer_id' => $c->id
         ],
@@ -224,7 +255,7 @@ class CustomerController extends Controller
         $token = self::generateToken($u->id);
 
         // create a url based on that token
-        $url = "https://kpspools.com/login/onboard/". $token;
+        $url = "https://kpspools.com/login/onboard/" . $token;
 
         $message = "Thank you for becoming a new KPS Pools customer. Please use the link here to finish the onboarding process. $url";
         Notification::route('vonage', $c->phone_number)->notify(
