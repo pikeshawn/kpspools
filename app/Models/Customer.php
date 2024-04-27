@@ -67,7 +67,7 @@ class Customer extends Model
             'addresses.order',
             'customers.id',
             'addresses.service_day',
-            'customers.assigned_serviceman',
+            'addresses.assigned_serviceman',
             'customers.phone_number',
             'addresses.community_gate_code',
             'addresses.address_line_1',
@@ -77,6 +77,7 @@ class Customer extends Model
         )
             ->join('addresses', 'customers.id', '=', 'addresses.customer_id')
             ->where('addresses.active', 1)
+            ->where('addresses.sold', 0)
             ->orderByDesc('addresses.order')
             ->get();
 
