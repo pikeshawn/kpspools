@@ -249,6 +249,14 @@ class CustomerController extends Controller
 
 //        dd($customer);
 
+
+        if (User::isAdmin()) {
+            $customers = Customer::allCustomers();
+        } else {
+            $customers = Customer::allCustomersTiedToUser();
+        }
+
+
         $notes = DB::select('Select * from general_notes where customer_id = '
             . $customer->id . ' Order By updated_at DESC');
 
@@ -262,6 +270,7 @@ class CustomerController extends Controller
 
         return Inertia::render('Customers/Show', [
             'customer' => $customer,
+            'customers' => $customers,
             'notes' => $notes,
             'address' => $address,
             'tasks' => $tasks,

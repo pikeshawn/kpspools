@@ -315,6 +315,47 @@
 
         <!--        <pre>{{ tasks }}</pre>-->
 
+
+        <Combobox as="div" v-model="selectedPerson" style="margin-bottom: 2rem;">
+            <ComboboxLabel v-if="selectedPerson" class="block text-sm font-medium leading-6 text-gray-900">
+                {{ selectedPerson.first_name }} {{ selectedPerson.last_name }} - {{ selectedPerson.address_line_1 }}
+            </ComboboxLabel>
+            <div class="relative mt-2">
+                <!--              @change="query = $event.target.value" :display-value="person && (person?.first_name + ' ' + person?.last_name) !== undefined ? '' : person.first_name + ' ' + person.last_name"/>-->
+                <!--              @change="query = $event.target.value" :display-value="(person) {if(person?.first_name !== undefined && person?.last_name !== undefined){ return ''} else {return person.first_name + ' ' + person.last_name}}"/>-->
+                <ComboboxInput
+                    class="w-full rounded-md border-0 bg-white py-1.5 pl-3 pr-10 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                    @change="query = $event.target.value" :display-value="(person) => person?.last_name"/>
+                <ComboboxButton
+                    class="absolute inset-y-0 right-0 flex items-center rounded-r-md px-2 focus:outline-none">
+                    <ChevronUpDownIcon class="h-5 w-5 text-gray-400" aria-hidden="true"/>
+                </ComboboxButton>
+
+                <ComboboxOptions v-if="filteredPeople.length > 0"
+                                 class="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
+                    <ComboboxOption v-for="person in filteredPeople" :key="person.id" :value="person" as="template"
+                                    v-slot="{ active, selected }">
+                        <li :class="['relative cursor-default select-none py-2 pl-8 pr-4', active ? 'bg-indigo-600 text-white' : 'text-gray-900']">
+            <span :class="['block truncate', selected && 'font-semibold']">
+              {{ person.first_name }} {{ person.last_name }} - {{ person.address_line_1 }}
+            </span>
+
+                            <span v-if="selected"
+                                  :class="['absolute inset-y-0 left-0 flex items-center pl-1.5', active ? 'text-white' : 'text-indigo-600']">
+              <CheckIcon class="h-5 w-5" aria-hidden="true"/>
+            </span>
+                        </li>
+                    </ComboboxOption>
+                </ComboboxOptions>
+            </div>
+            <button type="button"
+                    class="-ml-px relative inline-flex items-center px-4 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:z-10 focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500"
+                    @click="goToCustomer(selectedPerson.addressId)"
+            >Go
+            </button>
+        </Combobox>
+
+
         <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <inertia-link
                 class="relative inline-flex items-center px-4 py-2 rounded-l-md bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:z-10 focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500"
@@ -402,6 +443,49 @@
 
 </template>
 
+<script setup>
+import {computed, ref, defineProps} from 'vue'
+import {CheckIcon, ChevronUpDownIcon} from '@heroicons/vue/20/solid'
+import {
+    Combobox,
+    ComboboxButton,
+    ComboboxInput,
+    ComboboxLabel,
+    ComboboxOption,
+    ComboboxOptions,
+} from '@headlessui/vue'
+
+const props = defineProps({
+    customer: Object,
+    customers: Array,
+    notes: String,
+    address: String,
+    user: String,
+    tasks: Array,
+    serviceman: Array,
+    completedTasks: Array
+});
+
+const people = props.customers.map(({id, first_name, last_name, address_line_1, addressId}) => ({
+    id,
+    first_name,
+    last_name,
+    address_line_1,
+    addressId
+}));
+
+const query = ref('')
+const selectedPerson = ref(null)
+const filteredPeople = computed(() =>
+    query.value === ''
+        ? people
+        : people.filter((person) => {
+            return person.last_name.toLowerCase().includes(query.value.toLowerCase())
+        })
+)
+
+</script>
+
 <script>
 
 import JetInput from '@/Jetstream/Input'
@@ -409,10 +493,20 @@ import SimpleTable from "../Shared/SimpleTable";
 import Layout from "../Shared/Layout";
 import {Link} from '@inertiajs/inertia-vue3'
 import {Inertia} from "@inertiajs/inertia";
+import {Combobox, ComboboxButton, ComboboxInput, ComboboxLabel, ComboboxOption, ComboboxOptions} from "@headlessui/vue";
+import {CheckIcon, ChevronUpDownIcon} from "@heroicons/vue/20/solid";
 
 export default {
     name: 'CustomerIndex',
     components: {
+        ComboboxButton,
+        Combobox,
+        CheckIcon,
+        ComboboxLabel,
+        ComboboxInput,
+        ChevronUpDownIcon,
+        ComboboxOptions,
+        ComboboxOption,
         JetInput,
         Layout,
         SimpleTable,
@@ -432,7 +526,7 @@ export default {
             showTab: 'PickedUp',
             myTab: 'Ready To Complete',
             textMessage: {
-                customerName: this.customer.first_name + " " + this.customer.last_name,
+                // customerName: this.customer.first_name + " " + this.customer.last_name,
                 customerPhoneNumber: null,
                 textMessage: this.user.name + " at KPS Pools will be servicing your pool within 30 minutes.",
                 textDialog: false,
@@ -449,7 +543,8 @@ export default {
         }
     },
     props: {
-        customer: String,
+        customer: Object,
+        customers: Array,
         notes: String,
         address: String,
         user: String,
@@ -506,6 +601,9 @@ export default {
         },
         completed(item) {
             Inertia.post('/task/completed', item)
+        },
+        goToCustomer(id) {
+            Inertia.get(id);
         },
         deleteItem(item) {
             item.deleted = true;

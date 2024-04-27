@@ -145,7 +145,7 @@
                             <div>
                                 <div>
                                     <h2 class="text-3xl font-extrabold tracking-tight text-gray-900">
-                                        Starting at 120$ per month including chemicals
+                                        Starting at 110$ per month including chemicals
                                     </h2>
                                     <h2 class="text-3xl font-extrabold tracking-tight text-gray-900">
                                         480-703-4902
