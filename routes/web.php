@@ -183,6 +183,10 @@ Route::middleware(['auth:sanctum', 'verified', 'serviceman'])->group(function ()
         [CustomerController::class, 'store'])
         ->name('customers.store');
 
+    Route::post('/customers/changeActiveStatus',
+        [CustomerController::class, 'changeActiveStatus'])
+        ->name('customers.changeActiveStatus');
+
     Route::post('/customers/getNames',
         [CustomerController::class, 'getNames'])
         ->name('customers.getNames');

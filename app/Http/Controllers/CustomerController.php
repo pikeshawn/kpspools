@@ -328,6 +328,32 @@ class CustomerController extends Controller
         ]);
     }
 
+    public function changeActiveStatus(Request $request)
+    {
+        $address = Address::find($request->addressId);
+        $customer = Customer::find($address->customer_id);
+
+        $address->active = $request->active;
+        $customer->active = $request->active;
+
+        if ($request->active){
+            $address->serviceman_id = '2';
+            $address->service_day = 'Saturday';
+            $address->assigned_serviceman = 'Shawn';
+            $customer->serviceman_id = '2';
+            $customer->service_day = 'Saturday';
+            $customer->assigned_serviceman = 'Shawn';
+        }
+
+        $address->save();
+        $customer->save();
+
+
+
+
+
+    }
+
     /**
      * Update the specified resource in storage.
      *

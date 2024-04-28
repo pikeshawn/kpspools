@@ -77,7 +77,7 @@ export default {
                 {
                     id: 1,
                     name: "Needs Approval",
-                    route: "task.reconcile"
+                    route: "tasksNeedsApproval"
                 },
                 {
                     id: 2,

@@ -73,6 +73,20 @@
                         class="rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
                     On My Way
                 </button>
+
+                <div v-if="user.is_admin" class="flex">
+                    <label for="emptyBaskets" style="color: white">Active</label>
+                    <Switch
+                        @click="changeActiveStatus()"
+                        id="active" v-model="active"
+                        :class="[active ? 'bg-indigo-600' : 'bg-gray-200', 'relative inline-flex flex-shrink-0 h-6 w-11 border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500']">
+                        <span class="sr-only">Use setting</span>
+                        <span aria-hidden="true"
+                              :class="[active ? 'translate-x-5' : 'translate-x-0', 'pointer-events-none inline-block h-5 w-5 rounded-full bg-white shadow transform ring-0 transition ease-in-out duration-200']"/>
+                    </Switch>
+                    <div class="mt-2">{{ active }}</div>
+                </div>
+
             </div>
         </div>
 
@@ -514,6 +528,7 @@ export default {
     },
     mounted() {
         this.updateCount();
+        this.active = this.address.active;
     },
     beforeUpdate() {
         this.updateCount();
@@ -525,6 +540,7 @@ export default {
         return {
             showTab: 'PickedUp',
             myTab: 'Ready To Complete',
+            active: null,
             textMessage: {
                 // customerName: this.customer.first_name + " " + this.customer.last_name,
                 customerPhoneNumber: null,
@@ -559,6 +575,21 @@ export default {
             } else {
                 return address;
             }
+        },
+        changeActiveStatus(){
+          this.active = !this.active;
+
+            this.$inertia.post('/customers/changeActiveStatus', {'addressId': this.address.id, 'active': this.active}, {
+                onSuccess: () => {
+                    // Handle the success response
+                    // e.g., show a success message
+                },
+                onError: (errors) => {
+                    // Handle the error response
+                    // e.g., display validation errors
+                }
+            });
+
         },
         updateCount() {
 

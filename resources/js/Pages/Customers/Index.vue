@@ -21,6 +21,7 @@
                                          leave-to="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95">
                             <DialogPanel
                                 style="width: 100%;"
+                                class="absolute top-0"
                             >
                                 <div>
 
@@ -28,6 +29,7 @@
                                     <div class="mt-2">
                                         <input @input="getCustomers($event.target.value)" type="text" name="text"
                                                id="text"
+                                               style="padding: 1rem; margin-top: 1rem;"
                                                class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                                                placeholder="type customer last name"/>
                                     </div>
@@ -35,7 +37,7 @@
                                     <div v-for="name in dbNames" :key="name.id">
                                         <Link :href="route('customers.show', name.addressId)"
                                               class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                                              style="background: white"
+                                              style="padding: 1rem; background: white"
                                         >
                                             <div>
                                                 {{ name.first_name }} {{ name.last_name }} - {{ name.address_line_1}}
