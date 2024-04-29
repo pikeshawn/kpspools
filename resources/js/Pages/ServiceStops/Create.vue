@@ -131,7 +131,22 @@
                             <div class="px-4 py-5 bg-white sm:p-6">
                                 <div class="grid grid-cols-2 gap-6">
 
-                                    <h1>Date of last Backwash - {{ lastBackwash }}</h1>
+                                    <div v-if="equipment.type === 'cartridge'">
+                                        Cartridge Filter - No Need to Backwash
+                                    </div>
+                                    <div v-else>
+                                        <div v-if="lastBackwash">
+                                            <div class="bg-red-500 text-white p-4 rounded-md">
+                                                <p class="font-bold">Warning!</p>
+                                                <p>Pool Needs a Backwash</p>
+                                            </div>
+                                        </div>
+                                        <div v-else>
+                                            <div class="bg-green-500 text-white p-4 rounded-md shadow">
+                                                <p>No Need to Backwash This week</p>
+                                            </div>
+                                        </div>
+                                    </div>
                                     <br>
 
                                     <div class="flex flex-col"
