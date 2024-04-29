@@ -116,13 +116,14 @@
 
         <br>
 
-        <button @click="open = !open" type="button" class="items-center justify-center rounded-lg lg:ml-8">Search
-            Customers
-            <svg fill="none" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 fill-gray-900 hover:fill-gray-900">
-                <path
-                    d="M20.47 21.53a.75.75 0 1 0 1.06-1.06l-1.06 1.06Zm-9.97-4.28a6.75 6.75 0 0 1-6.75-6.75h-1.5a8.25 8.25 0 0 0 8.25 8.25v-1.5ZM3.75 10.5a6.75 6.75 0 0 1 6.75-6.75v-1.5a8.25 8.25 0 0 0-8.25 8.25h1.5Zm6.75-6.75a6.75 6.75 0 0 1 6.75 6.75h1.5a8.25 8.25 0 0 0-8.25-8.25v1.5Zm11.03 16.72-5.196-5.197-1.061 1.06 5.197 5.197 1.06-1.06Zm-4.28-9.97c0 1.864-.755 3.55-1.977 4.773l1.06 1.06A8.226 8.226 0 0 0 18.75 10.5h-1.5Zm-1.977 4.773A6.727 6.727 0 0 1 10.5 17.25v1.5a8.226 8.226 0 0 0 5.834-2.416l-1.061-1.061Z"></path>
+        <div class="flex">
+            <button @click="open = !open" type="button" class="items-center justify-center rounded-lg lg:ml-8" style="margin-right: 1rem;">Search
+                Customers
+            </button>
+            <svg class="h-6 w-6 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
             </svg>
-        </button>
+        </div>
 
         <br>
 
@@ -214,7 +215,19 @@
                           :class="row.completed ? 'completed' : 'notCompleted'"
                           style="border: solid thin black; width: -webkit-fill-available;"
                           method="get" as="button">
-                        <h3 style="font-size: 1.4rem">{{ row.first_name }} {{ row.last_name }}</h3>
+                        <div class="flex justify-center">
+                            <h3 style="font-size: 1.4rem" :class="row.needsBackwash ? 'text-red-700 dark:bg-red-200 dark:text-red-800' : 'text-green-700 dark:bg-green-200 dark:text-green-800'">{{ row.first_name }} {{ row.last_name }}</h3>
+                            <div v-if="row.needsBackwash">
+                                <svg class="h-6 w-6 text-red-500" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M8.257 3.099c.366-.011.668.279.707.648l.007.106v8a.75.75 0 01-1.493.102l-.007-.102v-8c0-.414.335-.75.75-.75zm.006 10.77a.75.75 0 110 1.5.75.75 0 010-1.5z" clip-rule="evenodd" />
+                                </svg>
+                            </div>
+                            <div v-else>
+                                <svg class="h-6 w-6 text-green-500" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 111.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+                                </svg>
+                            </div>
+                        </div>
                         <div>{{ row.address_line_1 }}, {{ row.city }} AZ {{ row.zip }}</div>
                         <div>{{ row.community_gate_code }}</div>
                         <div>{{ row.assigned_serviceman }}</div>
@@ -248,7 +261,19 @@
                           :class="row.completed ? 'completed' : 'notCompleted'"
                           style="border: solid thin black; width: -webkit-fill-available;"
                           method="get" as="button">
-                        <h3 style="font-size: 1.4rem">{{ row.first_name }} {{ row.last_name }}</h3>
+                        <div class="flex justify-center">
+                            <h3 style="font-size: 1.4rem" :class="row.needsBackwash ? 'text-red-700 dark:bg-red-200 dark:text-red-800' : 'text-green-700 dark:bg-green-200 dark:text-green-800'">{{ row.first_name }} {{ row.last_name }}</h3>
+                            <div v-if="row.needsBackwash">
+                                <svg class="h-6 w-6 text-red-500" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M8.257 3.099c.366-.011.668.279.707.648l.007.106v8a.75.75 0 01-1.493.102l-.007-.102v-8c0-.414.335-.75.75-.75zm.006 10.77a.75.75 0 110 1.5.75.75 0 010-1.5z" clip-rule="evenodd" />
+                                </svg>
+                            </div>
+                            <div v-else>
+                                <svg class="h-6 w-6 text-green-500" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 111.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+                                </svg>
+                            </div>
+                        </div>
                         <div>{{ row.address_line_1 }}, {{ row.city }} AZ {{ row.zip }}</div>
                         <div>{{ row.community_gate_code }}</div>
                         <div>{{ row.assigned_serviceman }}</div>
@@ -281,7 +306,19 @@
                           :class="row.completed ? 'completed' : 'notCompleted'"
                           style="border: solid thin black; width: -webkit-fill-available;"
                           method="get" as="button">
-                        <h3 style="font-size: 1.4rem">{{ row.first_name }} {{ row.last_name }}</h3>
+                        <div class="flex justify-center">
+                            <h3 style="font-size: 1.4rem" :class="row.needsBackwash ? 'text-red-700 dark:bg-red-200 dark:text-red-800' : 'text-green-700 dark:bg-green-200 dark:text-green-800'">{{ row.first_name }} {{ row.last_name }}</h3>
+                            <div v-if="row.needsBackwash">
+                                <svg class="h-6 w-6 text-red-500" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M8.257 3.099c.366-.011.668.279.707.648l.007.106v8a.75.75 0 01-1.493.102l-.007-.102v-8c0-.414.335-.75.75-.75zm.006 10.77a.75.75 0 110 1.5.75.75 0 010-1.5z" clip-rule="evenodd" />
+                                </svg>
+                            </div>
+                            <div v-else>
+                                <svg class="h-6 w-6 text-green-500" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 111.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+                                </svg>
+                            </div>
+                        </div>
                         <div>{{ row.address_line_1 }}, {{ row.city }} AZ {{ row.zip }}</div>
                         <div>{{ row.community_gate_code }}</div>
                         <div>{{ row.assigned_serviceman }}</div>
@@ -314,7 +351,19 @@
                           :class="row.completed ? 'completed' : 'notCompleted'"
                           style="border: solid thin black; width: -webkit-fill-available;"
                           method="get" as="button">
-                        <h3 style="font-size: 1.4rem">{{ row.first_name }} {{ row.last_name }}</h3>
+                        <div class="flex justify-center">
+                            <h3 style="font-size: 1.4rem" :class="row.needsBackwash ? 'text-red-700 dark:bg-red-200 dark:text-red-800' : 'text-green-700 dark:bg-green-200 dark:text-green-800'">{{ row.first_name }} {{ row.last_name }}</h3>
+                            <div v-if="row.needsBackwash">
+                                <svg class="h-6 w-6 text-red-500" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M8.257 3.099c.366-.011.668.279.707.648l.007.106v8a.75.75 0 01-1.493.102l-.007-.102v-8c0-.414.335-.75.75-.75zm.006 10.77a.75.75 0 110 1.5.75.75 0 010-1.5z" clip-rule="evenodd" />
+                                </svg>
+                            </div>
+                            <div v-else>
+                                <svg class="h-6 w-6 text-green-500" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 111.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+                                </svg>
+                            </div>
+                        </div>
                         <div>{{ row.address_line_1 }}, {{ row.city }} AZ {{ row.zip }}</div>
                         <div>{{ row.community_gate_code }}</div>
                         <div>{{ row.assigned_serviceman }}</div>
@@ -347,7 +396,19 @@
                           :class="row.completed ? 'completed' : 'notCompleted'"
                           style="border: solid thin black; width: -webkit-fill-available;"
                           method="get" as="button">
-                        <h3 style="font-size: 1.4rem">{{ row.first_name }} {{ row.last_name }}</h3>
+                        <div class="flex justify-center">
+                            <h3 style="font-size: 1.4rem" :class="row.needsBackwash ? 'text-red-700 dark:bg-red-200 dark:text-red-800' : 'text-green-700 dark:bg-green-200 dark:text-green-800'">{{ row.first_name }} {{ row.last_name }}</h3>
+                            <div v-if="row.needsBackwash">
+                                <svg class="h-6 w-6 text-red-500" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M8.257 3.099c.366-.011.668.279.707.648l.007.106v8a.75.75 0 01-1.493.102l-.007-.102v-8c0-.414.335-.75.75-.75zm.006 10.77a.75.75 0 110 1.5.75.75 0 010-1.5z" clip-rule="evenodd" />
+                                </svg>
+                            </div>
+                            <div v-else>
+                                <svg class="h-6 w-6 text-green-500" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 111.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+                                </svg>
+                            </div>
+                        </div>
                         <div>{{ row.address_line_1 }}, {{ row.city }} AZ {{ row.zip }}</div>
                         <div>{{ row.community_gate_code }}</div>
                         <div>{{ row.assigned_serviceman }}</div>
@@ -380,7 +441,19 @@
                           :class="row.completed ? 'completed' : 'notCompleted'"
                           style="border: solid thin black; width: -webkit-fill-available;"
                           method="get" as="button">
-                        <h3 style="font-size: 1.4rem">{{ row.first_name }} {{ row.last_name }}</h3>
+                        <div class="flex justify-center">
+                            <h3 style="font-size: 1.4rem" :class="row.needsBackwash ? 'text-red-700 dark:bg-red-200 dark:text-red-800' : 'text-green-700 dark:bg-green-200 dark:text-green-800'">{{ row.first_name }} {{ row.last_name }}</h3>
+                            <div v-if="row.needsBackwash">
+                                <svg class="h-6 w-6 text-red-500" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M8.257 3.099c.366-.011.668.279.707.648l.007.106v8a.75.75 0 01-1.493.102l-.007-.102v-8c0-.414.335-.75.75-.75zm.006 10.77a.75.75 0 110 1.5.75.75 0 010-1.5z" clip-rule="evenodd" />
+                                </svg>
+                            </div>
+                            <div v-else>
+                                <svg class="h-6 w-6 text-green-500" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 111.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+                                </svg>
+                            </div>
+                        </div>
                         <div>{{ row.address_line_1 }}, {{ row.city }} AZ {{ row.zip }}</div>
                         <div>{{ row.community_gate_code }}</div>
                         <div>{{ row.assigned_serviceman }}</div>

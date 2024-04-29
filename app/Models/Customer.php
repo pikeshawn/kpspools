@@ -83,6 +83,7 @@ class Customer extends Model
 
         foreach ($customers as $customer) {
             $customer->newServicemanId = null;
+            $customer->needsBackwash = self::needsBackwash($customer['addressId'], Filter::getFilter($customer['addressId']));
         }
 
         return self::completedCustomers($customers);
@@ -129,12 +130,56 @@ class Customer extends Model
             $customerArray['zip'] = $address->zip;
             $customerArray['addressId'] = $address->id;
             $customerArray['completed'] = self::completedCustomer($address->id);
+            $customerArray['needsBackwash'] = self::needsBackwash($address->id, Filter::getFilter($address->id));
 
             $customerCollection[] = $customerArray;
 
 
         }
         return $customerCollection;
+    }
+
+    /**
+     * Determines if a filter needs backwashing based on the last maintenance date and filter type.
+     *
+     * @param string $lastMaintenanceDate MySQL date string (e.g., '2020-01-01')
+     * @param Carbon $currentDate Carbon instance of the current date
+     * @param string $filterType Type of filter ('sand' or 'DE')
+     * @return bool True if the filter needs backwashing, false otherwise
+     */
+    public static function needsBackwash($addressId, $equipment)
+    {
+
+        $lastBackwash = ServiceStop::where('address_id', $addressId)->where('backwash', '=', 1)->orderBy('time_in', 'DESC')->first();
+
+        if (is_null($equipment)) {
+            return true;
+        } else if ($equipment->type === 'cartridge') {
+            return false;
+        } else {
+            if (is_null($lastBackwash)) {
+                return true;
+            } else {
+                $currentDate = Carbon::now();         // Current date as a Carbon instance
+                $filterType = $equipment->type; // Type of filter
+
+                // Convert MySQL date string to Carbon instance
+                $lastMaintenance = Carbon::parse($lastBackwash->time_in);
+
+                // Calculate the difference in weeks and months
+                $diffInWeeks = $lastMaintenance->diffInWeeks($currentDate, false);
+                $diffInMonths = $lastMaintenance->diffInMonths($currentDate, false);
+
+                // Determine if backwash is needed based on filter type and time elapsed
+                if ($filterType == 'sand' && $diffInWeeks > 2) {
+                    return true;  // Sand filters need backwashing if it's been more than 2 weeks
+                } elseif ($filterType == 'DE' && $diffInMonths > 1) {
+                    return true;  // DE filters need backwashing if it's been more than a month
+                }
+                return false;  // Default to no backwashing needed
+            }
+        }
+
     }
 
     public static function completedCustomers($customers)
