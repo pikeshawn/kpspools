@@ -32,13 +32,13 @@ class TaskController extends Controller
 
         $finalTaskArray = [];
 
-        foreach ($tasks as $task){
+        foreach ($tasks as $task) {
 
             if ($task->assigned === 2) {
                 $name = '';
                 $customer = Customer::find($task->customer_id);
-                foreach($servicemen as $sm) {
-                    if ($task->assigned === $sm->id){
+                foreach ($servicemen as $sm) {
+                    if ($task->assigned === $sm->id) {
                         $name = $sm->name;
                     }
                 }
@@ -48,13 +48,14 @@ class TaskController extends Controller
             }
         }
 
-        return Inertia::render('Task/DisplayTasks',[
+        return Inertia::render('Task/DisplayTasks', [
             'tasks' => $finalTaskArray
         ]);
 
     }
 
-    public function reconcile () {
+    public function reconcile()
+    {
 
 //        $tasks = Task::with(['task_statuses', 'customer', 'address'])  // Eager load the task statuses
 //        ->orderBy('customer_id')  // Order by customer_id
@@ -72,7 +73,7 @@ class TaskController extends Controller
             ->orderBy('customer_id')
             ->get();
 
-        return Inertia::render('Task/Reconcile',[
+        return Inertia::render('Task/Reconcile', [
             'tasks' => $tasks
         ]);
 
@@ -167,6 +168,7 @@ class TaskController extends Controller
         $task->save();
         self::addTaskStatus($task, $request->status);
     }
+
     public function changeDescription(Request $request)
     {
 //        dd($request);
@@ -313,35 +315,80 @@ class TaskController extends Controller
     public function store(Request $request): RedirectResponse
     {
 
-//      get all data
+        if ($request->skyline) {
+            $customer = Customer::find($request->customer_id);
+            $address = Address::find($request->address_id);
+//            Notification::route('vonage', '14806226441')->notify(new GenericNotification("KPS Pools has a job for you.
+            Notification::route('vonage', '14803387305')->notify(new GenericNotification("KPS Pools has a job for you.
+=====================
+$request->description
+=====================
+Customer Info::
+$customer->first_name $customer->last_name
+$customer->phone_number
+$address->address_line_1 $address->city $address->zip
+=====================
+Please reach out to Shawn for any questions at 14807034902"));
+//            Notification::route('vonage', '14807034902')->notify(new GenericNotification("Skyline has been notified. They can be reached at:
+            Notification::route('vonage', $customer->phone_number)->notify(new GenericNotification("Skyline has been notified. They can be reached at:
+=====================
+Jason Lecouq
+Skyline Pools and Spas
+14803387305
+=====================
+Please reach out to Shawn for any questions at 14807034902"));
+        } else if ($request->sundance) {
+            $request->description = 'Tile Clean';
+            $customer = Customer::find($request->customer_id);
+            $address = Address::find($request->address_id);
+//            Notification::route('vonage', '14806226441')->notify(new GenericNotification(
+            Notification::route('vonage', '16026974483')->notify(new GenericNotification("KPS Pools has a tile clean for you.
+=====================
+Customer Info::
+$customer->first_name $customer->last_name
+$customer->phone_number
+$address->address_line_1 $address->city $address->zip
+=====================
+Please reach out to Shawn for any questions at 14807034902"
+            ));
+//            Notification::route('vonage', '14807034902')->notify(new GenericNotification("Sundance has been notified. They can be reached at:
+Notification::route('vonage', $customer->phone_number)->notify(new GenericNotification("Sundance has been notified. They can be reached at:
+=====================
+Dennis Salazar
+Sundance Pool Tile Cleaning
+16026974483
+=====================
+Please reach out to Shawn for any questions at 14807034902"));
+        } else {
+            //      get all data
 //        dd($request);
 //        dd($request->todoAssignee);
 
-        if (is_null($request->type)){
-            $request->type = 'part';
-        }
+            if (is_null($request->type)) {
+                $request->type = 'part';
+            }
 
 //      add to db with first or create
 //        - add task to db
-        $task = self::createTask($request);
+            $task = self::createTask($request);
 
 //        - add status to status table
-        self::addTaskStatus($task, 'created',);
+            self::addTaskStatus($task, 'created',);
 
-        if ($request->type == 'todo'){
-            self::addStatus($task, 'pickedUp');
-            self::addTaskStatus($task, 'pickedUp',);
-            $task->assigned = $request->todoAssignee;
-            $task->save();
-            $user = User::find($request->todoAssignee);
-            $customer = Customer::find($request->customer_id);
-            if (Auth::user()->getAuthIdentifier() !== $user->id) {
-                Notification::route('vonage', $user->phone_number)->notify(new GenericNotification(
-                    "You were assigned a Task::\n$customer->first_name $customer->last_name\n$request->description\n" . env('APP_URL') . "/customers/show/" . $request->address_id
-                ));
+            if ($request->type == 'todo') {
+                self::addStatus($task, 'pickedUp');
+                self::addTaskStatus($task, 'pickedUp',);
+                $task->assigned = $request->todoAssignee;
+                $task->save();
+                $user = User::find($request->todoAssignee);
+                $customer = Customer::find($request->customer_id);
+                if (Auth::user()->getAuthIdentifier() !== $user->id) {
+                    Notification::route('vonage', $user->phone_number)->notify(new GenericNotification(
+                        "You were assigned a Task::\n$customer->first_name $customer->last_name\n$request->description\n" . env('APP_URL') . "/customers/show/" . $request->address_id
+                    ));
+                }
             }
         }
-
         return Redirect::route('customers.show', $request->address_id);
 
     }
