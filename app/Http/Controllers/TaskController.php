@@ -318,6 +318,8 @@ class TaskController extends Controller
         if ($request->skyline) {
             $customer = Customer::find($request->customer_id);
             $address = Address::find($request->address_id);
+            $customerUser = User::find($customer->user_id);
+            strpos($customerUser->email, '.') != false ? $email = '$customerUser->email' : $email = 'Email has not been recorded';
 //            Notification::route('vonage', '14806226441')->notify(new GenericNotification("KPS Pools has a job for you.
             Notification::route('vonage', '14803387305')->notify(new GenericNotification("KPS Pools has a job for you.
 =====================
@@ -326,6 +328,7 @@ $request->description
 Customer Info::
 $customer->first_name $customer->last_name
 $customer->phone_number
+$email
 $address->address_line_1 $address->city $address->zip
 =====================
 Please reach out to Shawn for any questions at 14807034902"));
