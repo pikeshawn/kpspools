@@ -341,6 +341,10 @@ Route::middleware(['auth:sanctum', 'verified', 'serviceman'])->group(function ()
         [RouteController::class, 'store'])
         ->name('store');
 
+    Route::post('/tasks/updateReconciledTaskStatuses',
+        [TaskController::class, 'updateReconciledTaskStatuses'])
+        ->name('updateReconciledTaskStatuses');
+
 
     Route::post('/registerLink',
         [RegisterController::class, 'registerLink'])

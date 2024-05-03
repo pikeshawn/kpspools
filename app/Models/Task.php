@@ -12,6 +12,7 @@ class Task extends Model
     use HasFactory;
 
     protected $guarded = [];
+    public $tsStatusArray;
 
     public function customer()
     {

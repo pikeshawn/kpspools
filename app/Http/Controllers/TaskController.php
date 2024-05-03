@@ -54,6 +54,64 @@ class TaskController extends Controller
 
     }
 
+    public function updateReconciledTaskStatuses(Request $request)
+    {
+        self::processReconciledTask($request->taskId, $request->taskStatuses['created'], 'created');
+        self::processReconciledTask($request->taskId, $request->taskStatuses['approved'], 'approved');
+        self::processReconciledTask($request->taskId, $request->taskStatuses['pickedUp'], 'pickedUp');
+        self::processReconciledTask($request->taskId, $request->taskStatuses['completed'], 'completed');
+        self::processReconciledTask($request->taskId, $request->taskStatuses['remove'], 'remove');
+        self::processReconciledTask($request->taskId, $request->taskStatuses['diy'], 'diy');
+        self::processReconciledTask($request->taskId, $request->taskStatuses['denied'], 'denied');
+        self::processReconciledTask($request->taskId, $request->taskStatuses['invoiced'], 'invoiced');
+        self::processReconciledTask($request->taskId, $request->taskStatuses['paid'], 'paid');
+    }
+
+    public function processReconciledTask($taskId,$taskStatusExists, $taskStatus)
+    {
+
+        $taskStatuses = TaskStatus::where('task_id', $taskId)->get();
+        if ($taskStatusExists) {
+            $exists = false;
+            foreach ($taskStatuses as $status) {
+                if ($status->status === $taskStatus) {
+                    $exists = true;
+                }
+            }
+
+            $carbonDate = Carbon::now();
+            $mysqlDate = $carbonDate->format('Y-m-d');
+
+            if (!$exists) {
+                $ts = new TaskStatus(
+                    [
+                        'task_id' => $taskId,
+                        'status' => $taskStatus,
+                        'status_date' => $mysqlDate,
+                        'created_at' => $mysqlDate,
+                        'status_creator' => 2,
+                    ]
+                );
+                $ts->save();
+            }
+
+            $task = Task::find($taskId);
+            $task->status = $taskStatus;
+            $task->save();
+
+        } else {
+//            if created exists then remove it from the database
+            foreach ($taskStatuses as $status) {
+                if ($status->status === $taskStatus) {
+                    $statusId = $status->id;
+                    $status = TaskStatus::find($statusId);
+                    $status->delete();
+                }
+            }
+        }
+
+    }
+
     public function reconcile()
     {
 
@@ -61,20 +119,99 @@ class TaskController extends Controller
 //        ->orderBy('customer_id')  // Order by customer_id
 //        ->get();
 
-        $tasks = Task::select(
-            'id', 'customer_id', 'assigned', 'created_at',
-            'description', 'status', 'type', 'price', 'address_id'
-        )  // Selecting specific fields from tasks
-        ->with([
-            'task_statuses',  // Selecting specific fields from task statuses
-            'customer:id,first_name,last_name',             // Selecting specific fields from customers
-            'address:id,address_line_1',             // Selecting specific fields from customers
-        ])
-            ->orderBy('customer_id')
-            ->get();
+//        $tasks = Task::select(
+//            'id', 'customer_id', 'assigned', 'created_at',
+//            'description', 'status', 'type', 'price', 'address_id'
+//        )  // Selecting specific fields from tasks
+//        ->with([
+//            'task_statuses',  // Selecting specific fields from task statuses
+//            'customer:id,first_name,last_name',             // Selecting specific fields from customers
+//            'address:id,address_line_1',             // Selecting specific fields from customers
+//        ])
+//            ->orderBy('customer_id')
+//            ->get();
+
+//        $tasks = Task::select(
+//            'id', 'customer_id', 'assigned', 'created_at',
+//            'description', 'status', 'type', 'price', 'address_id'
+//        )  // Selecting specific fields from tasks
+//        ->with([
+//            'task_statuses',  // Selecting specific fields from task statuses
+//            'customer:id,first_name,last_name',             // Selecting specific fields from customers
+//            'address:id,address_line_1',             // Selecting specific fields from customers
+//        ])
+//            ->orderBy('customer_id')
+//            ->get();
+
+
+        $tasks = Task::select(['id', 'customer_id', 'assigned', 'created_at', 'description', 'status', 'type', 'price', 'address_id'])->orderBy('customer_id')->get();
+
+        $tsks = [];
+
+        $t = [];
+
+        foreach ($tasks as $task) {
+            $customer = Customer::find($task->customer_id);
+            $address = Address::find($task->address_id);
+            $task_statuses = TaskStatus::where('task_id', $task->id)->get();
+
+            $t['id'] = $task->id;
+            $t['customer_id'] = $task->customer_id;
+            $t['created_at'] = $task->created_at;
+            $t['description'] = $task->description;
+            $t['assigned'] = $task->assigned;
+            $t['status'] = $task->status;
+            $t['type'] = $task->type;
+            $t['price'] = $task->price;
+            $t['address_id'] = $task->address_id;
+
+            $c['id'] = $customer->id;
+            $c['first_name'] = $customer->first_name;
+            $c['last_name'] = $customer->last_name;
+
+            $a['id'] = $address->id;
+            $a['address_line_1'] = $address->address_line_1;
+
+
+            $tsArray = [
+                'created' => false,
+                'approved' => false,
+                'pickedUp' => false,
+                'completed' => false,
+                'remove' => false,
+                'diy' => false,
+                'denied' => false,
+                'invoiced' => false,
+                'paid' => false,
+            ];
+
+            foreach ($task_statuses as $status) {
+                if ($status->status === 'created') $tsArray['created'] = true;
+                if ($status->status === 'approved') $tsArray['approved'] = true;
+                if ($status->status === 'pickedUp') $tsArray['pickedUp'] = true;
+                if ($status->status === 'completed') $tsArray['completed'] = true;
+                if ($status->status === 'remove') $tsArray['remove'] = true;
+                if ($status->status === 'diy') $tsArray['diy'] = true;
+                if ($status->status === 'denied') $tsArray['denied'] = true;
+                if ($status->status === 'invoiced') $tsArray['invoiced'] = true;
+                if ($status->status === 'paid') $tsArray['paid'] = true;
+            }
+
+            array_push($t, $tsArray);
+            array_push($t, $c);
+            array_push($t, $a);
+            array_push($tsks, $t);
+
+            $t = [];
+            $c = [];
+            $a = [];
+        }
+
+//        dd($tsks);
+
 
         return Inertia::render('Task/Reconcile', [
-            'tasks' => $tasks
+            'tasks' => $tsks
         ]);
 
     }
@@ -355,7 +492,7 @@ $address->address_line_1 $address->city $address->zip
 Please reach out to Shawn for any questions at 14807034902"
             ));
 //            Notification::route('vonage', '14807034902')->notify(new GenericNotification("Sundance has been notified. They can be reached at:
-Notification::route('vonage', $customer->phone_number)->notify(new GenericNotification("Sundance has been notified. They can be reached at:
+            Notification::route('vonage', $customer->phone_number)->notify(new GenericNotification("Sundance has been notified. They can be reached at:
 =====================
 Dennis Salazar
 Sundance Pool Tile Cleaning
