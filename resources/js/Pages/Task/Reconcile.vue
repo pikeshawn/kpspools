@@ -17,23 +17,32 @@
                         <input type="text" v-model="task.price" @blur="updatePrice(task.id, $event.target.value)">
                     </div>
                     <div class="mt-1 flex items-center gap-x-2 text-xs leading-5 text-gray-500">
-<!--                        <div class="whitespace-nowrap">-->
-<!--                            <p>-->
-<!--                                <label for="">TODO</label>-->
-<!--                                <input type="radio"-->
-<!--                                       v-model="task.type === 'todo'">-->
-<!--                            </p>-->
-<!--                            <p>-->
-<!--                                <label for="">Repair</label>-->
-<!--                                <input type="radio"-->
-<!--                                       v-model="task.type === 'repair'">-->
-<!--                            </p>-->
-<!--                            <p>-->
-<!--                                <label for="">Part</label>-->
-<!--                                <input type="radio"-->
-<!--                                       v-model="task.type === 'part'">-->
-<!--                            </p>-->
-<!--                        </div>-->
+                        <!--                        <div class="whitespace-nowrap">-->
+                        <!--                            <p>-->
+                        <!--                                <label for="">TODO</label>-->
+                        <!--                                <input type="radio"-->
+                        <!--                                       v-model="task.type === 'todo'">-->
+                        <!--                            </p>-->
+                        <!--                            <p>-->
+                        <!--                                <label for="">Repair</label>-->
+                        <!--                                <input type="radio"-->
+                        <!--                                       v-model="task.type === 'repair'">-->
+                        <!--                            </p>-->
+                        <!--                            <p>-->
+                        <!--                                <label for="">Part</label>-->
+                        <!--                                <input type="radio"-->
+                        <!--                                       v-model="task.type === 'part'">-->
+                        <!--                            </p>-->
+                        <!--                        </div>-->
+
+
+                        <p class="'rounded-md whitespace-nowrap mt-0.5 px-1.5 py-0.5 text-xs font-medium ring-1 ring-inset']">
+                            {{ task.id }}</p>
+
+                        <p class="'rounded-md whitespace-nowrap mt-0.5 px-1.5 py-0.5 text-xs font-medium ring-1 ring-inset']">
+                            {{ task.type }}</p>
+                        <!--                          Due on <time :datetime="project.dueDateTime">{{ task.created_at }}</time>-->
+
 
                         <p class="whitespace-nowrap">
                             Created
