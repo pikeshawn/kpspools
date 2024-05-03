@@ -209,6 +209,12 @@ class TaskController extends Controller
 
 //        dd($tsks);
 
+        //        dd($tsks);
+
+        usort($tsks, function($a, $b){
+            return $a[1]['last_name'] <=> $b[1]['last_name'];
+        });
+
 
         return Inertia::render('Task/Reconcile', [
             'tasks' => $tsks

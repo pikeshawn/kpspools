@@ -14,6 +14,7 @@
                         <p class="text-sm font-semibold leading-6 text-gray-900">{{ task.description }}</p>
                         <p class="'rounded-md whitespace-nowrap mt-0.5 px-1.5 py-0.5 text-xs font-medium ring-1 ring-inset']">
                             {{ task.status }}</p>
+                        <input type="text" v-model="task.price" @blur="updatePrice(task.id, $event.target.value)">
                     </div>
                     <div class="mt-1 flex items-center gap-x-2 text-xs leading-5 text-gray-500">
                         <p class="whitespace-nowrap">
@@ -264,6 +265,18 @@ export default {
         this.updateCount();
     },
     methods: {
+        updatePrice(taskId, taskPrice){
+            this.$inertia.post('/task/updatePrice', {'task_id': taskId, 'price': taskPrice}, {
+                onSuccess: () => {
+                    // Handle the success response
+                    // e.g., show a success message
+                },
+                onError: (errors) => {
+                    // Handle the error response
+                    // e.g., display validation errors
+                }
+            });
+        },
         checkStatus(statuses, specificStatus) {
             for (const [key, value] of Object.entries(statuses)) {
                 if (key === specificStatus && value) {
