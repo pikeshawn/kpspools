@@ -164,6 +164,7 @@ class TaskController extends Controller
             $t['type'] = $task->type;
             $t['price'] = $task->price;
             $t['address_id'] = $task->address_id;
+            $t['deleted'] = false;
 
             $c['id'] = $customer->id;
             $c['first_name'] = $customer->first_name;
@@ -356,7 +357,7 @@ class TaskController extends Controller
     public function deleteItem(Request $request)
     {
 
-        $task = null;
+//        dd($request->task_id);
 
         if ($request->task_id) {
             $task = Task::find($request->task_id);

@@ -17,6 +17,24 @@
                         <input type="text" v-model="task.price" @blur="updatePrice(task.id, $event.target.value)">
                     </div>
                     <div class="mt-1 flex items-center gap-x-2 text-xs leading-5 text-gray-500">
+<!--                        <div class="whitespace-nowrap">-->
+<!--                            <p>-->
+<!--                                <label for="">TODO</label>-->
+<!--                                <input type="radio"-->
+<!--                                       v-model="task.type === 'todo'">-->
+<!--                            </p>-->
+<!--                            <p>-->
+<!--                                <label for="">Repair</label>-->
+<!--                                <input type="radio"-->
+<!--                                       v-model="task.type === 'repair'">-->
+<!--                            </p>-->
+<!--                            <p>-->
+<!--                                <label for="">Part</label>-->
+<!--                                <input type="radio"-->
+<!--                                       v-model="task.type === 'part'">-->
+<!--                            </p>-->
+<!--                        </div>-->
+
                         <p class="whitespace-nowrap">
                             Created
                             <time :datetime="task.created_at">{{ task.created_at }}</time>
@@ -90,6 +108,41 @@
                           focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                               method="post" as="button" :data="{'taskStatuses': task[0], 'taskId': task.id}">reconcile
                         </Link>
+
+
+                        <button @click="deleteItem(task)"
+                                class="mt-4 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm
+                                text-sm font-medium rounded-md text-white bg-red-600 hover:bg-red-700
+                                focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
+                            Delete
+                        </button>
+
+                        <div v-if="task.deleted" class="rounded-md bg-red-50 p-4">
+                            <div class="flex">
+                                <div class="flex-shrink-0">
+                                    <XCircleIcon class="h-5 w-5 text-red-400" aria-hidden="true"/>
+                                </div>
+                                <div class="ml-3">
+                                    <h3 class="text-sm font-medium text-red-800">You are about to delete this item.
+                                        Do you
+                                        wish to continue</h3>
+                                    <div class="flex justify-around mt-2 text-sm text-red-700">
+                                        <button @click="doTheDeletion(task.id)"
+                                                class="mt-4 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm
+                                text-sm font-medium rounded-md text-white bg-red-600 hover:bg-red-700
+                                focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
+                                            Yes
+                                        </button>
+                                        <button @click="cancelDeletion(task)"
+                                                class="mt-4 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm
+                                text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700
+                                focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                                            No
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
 
 
                         <!--                        <div>-->
@@ -265,7 +318,16 @@ export default {
         this.updateCount();
     },
     methods: {
-        updatePrice(taskId, taskPrice){
+        deleteItem(task) {
+            task.deleted = true;
+        },
+        cancelDeletion(task) {
+            task.deleted = false;
+        },
+        doTheDeletion(taskId) {
+            Inertia.post('/task/deleteItem', {"task_id": taskId})
+        },
+        updatePrice(taskId, taskPrice) {
             this.$inertia.post('/task/updatePrice', {'task_id': taskId, 'price': taskPrice}, {
                 onSuccess: () => {
                     // Handle the success response
