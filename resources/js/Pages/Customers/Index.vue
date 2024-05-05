@@ -643,7 +643,7 @@ export default {
                 return response.json(); // Parse the JSON in the response
             })
                 .then(data => {
-                    console.log('Success:', data); // Handle the success case
+                    // console.log('Success:', data); // Handle the success case
                     this.dailyCustomers = data
                 })
                 .catch((error) => {

@@ -61,26 +61,48 @@ class Customer extends Model
 
 //        dd('allCustomers');
 
-        $customers = Customer::select(
-            'customers.first_name',
-            'customers.last_name',
-            'addresses.order',
-            'customers.id',
-            'addresses.service_day',
-            'addresses.assigned_serviceman',
-            'customers.phone_number',
-            'addresses.community_gate_code',
-            'addresses.address_line_1',
-            'addresses.city',
-            'addresses.zip',
-            'addresses.id as addressId'
-        )
-            ->join('addresses', 'customers.id', '=', 'addresses.customer_id')
-            ->where('addresses.active', 1)
-            ->where('addresses.sold', 0)
-            ->where('addresses.service_day', $dayOfWeek)
-            ->orderByDesc('addresses.order')
-            ->get();
+       if ($dayOfWeek === 'All') {
+           $customers = Customer::select(
+               'customers.first_name',
+               'customers.last_name',
+               'addresses.order',
+               'customers.id',
+               'addresses.service_day',
+               'addresses.assigned_serviceman',
+               'customers.phone_number',
+               'addresses.community_gate_code',
+               'addresses.address_line_1',
+               'addresses.city',
+               'addresses.zip',
+               'addresses.id as addressId'
+           )
+               ->join('addresses', 'customers.id', '=', 'addresses.customer_id')
+               ->where('addresses.active', 1)
+               ->where('addresses.sold', 0)
+               ->orderByDesc('addresses.order')
+               ->get();
+       } else {
+           $customers = Customer::select(
+               'customers.first_name',
+               'customers.last_name',
+               'addresses.order',
+               'customers.id',
+               'addresses.service_day',
+               'addresses.assigned_serviceman',
+               'customers.phone_number',
+               'addresses.community_gate_code',
+               'addresses.address_line_1',
+               'addresses.city',
+               'addresses.zip',
+               'addresses.id as addressId'
+           )
+               ->join('addresses', 'customers.id', '=', 'addresses.customer_id')
+               ->where('addresses.active', 1)
+               ->where('addresses.sold', 0)
+               ->where('addresses.service_day', $dayOfWeek)
+               ->orderByDesc('addresses.order')
+               ->get();
+       }
 
         foreach ($customers as $customer) {
             $customer->newServicemanId = null;
@@ -105,7 +127,12 @@ class Customer extends Model
 //            ->where('serviceman_id', Auth::user()
 //                ->getAuthIdentifier())->orderBy('service_day')->orderBy('order')->get();
 
-        $addresses = Address::where('serviceman_id', Auth::user()->id)->where('service_day', $dayOfWeek)->get();
+        if ($dayOfWeek === 'All') {
+            $addresses = Address::where('serviceman_id', Auth::user()->id)->get();
+        } else {
+            $addresses = Address::where('serviceman_id', Auth::user()->id)->where('service_day', $dayOfWeek)->get();
+        }
+
 
 //                    dd($addresses);
 
