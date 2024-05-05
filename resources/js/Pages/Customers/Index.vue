@@ -623,6 +623,7 @@ export default {
 
 
             console.debug(day)
+            this.dailyCustomers = null;
 
             // Inertia.post('/customers/getNames', {'name': name})
             console.log(this.csrfToken); // Use this token in your component
