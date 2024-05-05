@@ -56,7 +56,7 @@ class Customer extends Model
         return DB::select('select sum(tabs_whole_mine) as tabs from service_stops where customer_id = ' . $this->id);
     }
 
-    public static function allCustomers()
+    public static function allCustomers($dayOfWeek)
     {
 
 //        dd('allCustomers');
@@ -78,6 +78,7 @@ class Customer extends Model
             ->join('addresses', 'customers.id', '=', 'addresses.customer_id')
             ->where('addresses.active', 1)
             ->where('addresses.sold', 0)
+            ->where('addresses.service_day', $dayOfWeek)
             ->orderByDesc('addresses.order')
             ->get();
 
@@ -89,7 +90,7 @@ class Customer extends Model
         return self::completedCustomers($customers);
     }
 
-    public static function allCustomersTiedToUser()
+    public static function allCustomersTiedToUser($dayOfWeek)
     {
 
 //        dd('allCustomersTiedToUser');
@@ -104,7 +105,7 @@ class Customer extends Model
 //            ->where('serviceman_id', Auth::user()
 //                ->getAuthIdentifier())->orderBy('service_day')->orderBy('order')->get();
 
-        $addresses = Address::where('serviceman_id', Auth::user()->id)->get();
+        $addresses = Address::where('serviceman_id', Auth::user()->id)->where('service_day', $dayOfWeek)->get();
 
 //                    dd($addresses);
 

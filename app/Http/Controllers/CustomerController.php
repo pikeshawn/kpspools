@@ -17,6 +17,7 @@ use Inertia\Inertia;
 use Inertia\Response;
 use Illuminate\Support\Facades\Notification;
 use App\Traits\Passwordless;
+use Carbon\Carbon;
 
 class CustomerController extends Controller
 {
@@ -30,10 +31,19 @@ class CustomerController extends Controller
     {
 //        dd('index');
 
+        // Get the current date and time
+        $currentDateTime = Carbon::now();
+
+// Get the day of the week (0 for Sunday, 1 for Monday, ..., 6 for Saturday)
+        $dayOfWeek = $currentDateTime->dayOfWeek;
+
+        $dayOfWeekText = $currentDateTime->format('l');
+
+
         if (User::isAdmin()) {
-            $customers = Customer::allCustomers();
+            $customers = Customer::allCustomers($dayOfWeekText);
         } else {
-            $customers = Customer::allCustomersTiedToUser();
+            $customers = Customer::allCustomersTiedToUser($dayOfWeekText);
         }
 
         $servicemen = User::where('type', 'serviceman')->orderBy('name', 'asc')->where('active', 1)->get();
@@ -42,6 +52,26 @@ class CustomerController extends Controller
             'customers' => $customers,
             'servicemen' => $servicemen,
         ]);
+    }
+
+    public function getCustomersForDay(Request $request)
+    {
+//        dd($day);
+
+        if (User::isAdmin()) {
+            $customers = Customer::allCustomers(ucfirst($request->day));
+        } else {
+            $customers = Customer::allCustomersTiedToUser(ucfirst($request->day));
+        }
+
+//        $servicemen = User::where('type', 'serviceman')->orderBy('name', 'asc')->where('active', 1)->get();
+
+        return $customers;
+
+//        return Inertia::render('Customers/Index', [
+//            'customers' => $customers,
+//            'servicemen' => $servicemen,
+//        ]);
     }
 
     public function getNames(Request $request)
@@ -333,9 +363,6 @@ class CustomerController extends Controller
         $address = Address::find($request->addressId);
         $customer = Customer::find($address->customer_id);
 
-        $address->active = $request->active;
-        $customer->active = $request->active;
-
         if ($request->active){
             $address->serviceman_id = '2';
             $address->service_day = 'Saturday';
@@ -343,6 +370,11 @@ class CustomerController extends Controller
             $customer->serviceman_id = '2';
             $customer->service_day = 'Saturday';
             $customer->assigned_serviceman = 'Shawn';
+            $address->active = true;
+            $customer->active = true;
+        } else {
+            $address->active = false;
+            $customer->active = false;
         }
 
         $address->save();

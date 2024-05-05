@@ -209,7 +209,7 @@
         <nav class="h-full overflow-y-auto" aria-label="Directory">
             <!--      <div v-for="row in customers" :key="row.id" class="relative">-->
             <div v-show="monday">
-                <div v-for="row in sortedRoute('Monday')" :key="row.id" class="relative">
+                <div v-for="row in dailyCustomers" :key="row.id" class="relative">
                     <Link :href="route('customers.show', row.addressId)"
                           class="sticky top-0 z-10 border-y border-b-gray-200 border-t-gray-100 bg-gray-50 px-3 py-2 text-sm font-semibold leading-6 text-gray-900"
                           :class="row.completed ? 'completed' : 'notCompleted'"
@@ -255,7 +255,7 @@
             </div>
 
             <div v-show="tuesday">
-                <div v-for="row in sortedRoute('Tuesday')" :key="row.id" class="relative">
+                <div v-for="row in dailyCustomers" :key="row.id" class="relative">
                     <Link :href="route('customers.show', row.addressId)"
                           class="sticky top-0 z-10 border-y border-b-gray-200 border-t-gray-100 bg-gray-50 px-3 py-2 text-sm font-semibold leading-6 text-gray-900"
                           :class="row.completed ? 'completed' : 'notCompleted'"
@@ -300,7 +300,7 @@
             </div>
 
             <div v-show="wednesday">
-                <div v-for="row in sortedRoute('Wednesday')" :key="row.id" class="relative">
+                <div v-for="row in dailyCustomers" :key="row.id" class="relative">
                     <Link :href="route('customers.show', row.addressId)"
                           class="sticky top-0 z-10 border-y border-b-gray-200 border-t-gray-100 bg-gray-50 px-3 py-2 text-sm font-semibold leading-6 text-gray-900"
                           :class="row.completed ? 'completed' : 'notCompleted'"
@@ -345,7 +345,7 @@
             </div>
 
             <div v-show="thursday">
-                <div v-for="row in sortedRoute('Thursday')" :key="row.id" class="relative">
+                <div v-for="row in dailyCustomers" :key="row.id" class="relative">
                     <Link :href="route('customers.show', row.addressId)"
                           class="sticky top-0 z-10 border-y border-b-gray-200 border-t-gray-100 bg-gray-50 px-3 py-2 text-sm font-semibold leading-6 text-gray-900"
                           :class="row.completed ? 'completed' : 'notCompleted'"
@@ -390,7 +390,7 @@
             </div>
 
             <div v-show="friday">
-                <div v-for="row in sortedRoute('Friday')" :key="row.id" class="relative">
+                <div v-for="row in dailyCustomers" :key="row.id" class="relative">
                     <Link :href="route('customers.show', row.addressId)"
                           class="sticky top-0 z-10 border-y border-b-gray-200 border-t-gray-100 bg-gray-50 px-3 py-2 text-sm font-semibold leading-6 text-gray-900"
                           :class="row.completed ? 'completed' : 'notCompleted'"
@@ -435,7 +435,7 @@
             </div>
 
             <div v-show="saturday">
-                <div v-for="row in sortedRoute('Saturday')" :key="row.id" class="relative">
+                <div v-for="row in dailyCustomers" :key="row.id" class="relative">
                     <Link :href="route('customers.show', row.addressId)"
                           class="sticky top-0 z-10 border-y border-b-gray-200 border-t-gray-100 bg-gray-50 px-3 py-2 text-sm font-semibold leading-6 text-gray-900"
                           :class="row.completed ? 'completed' : 'notCompleted'"
@@ -542,6 +542,7 @@ export default {
     },
     data() {
         return {
+            dailyCustomers: null,
             csrfToken: null,
             dbNames: [],
             liquidChlorine: null,
@@ -612,6 +613,44 @@ export default {
 
     },
     methods: {
+
+        getCustomersForDay(day){
+            // Perform the POST request
+
+            // this.$inertia.get('/customers/getCustomersForDay/' + day);
+
+            // Inertia.get('/customers/getCustomersForDay/' + day)
+
+
+            console.debug(day)
+
+            // Inertia.post('/customers/getNames', {'name': name})
+            console.log(this.csrfToken); // Use this token in your component
+            fetch('/customers/getCustomersForDay/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json', // Specify the content type
+                    'X-CSRF-TOKEN': this.csrfToken
+                },
+                // Include CSRF token
+                body: JSON.stringify({'day': day})
+            }).then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                // console.log(response.json()) // Parse the JSON in the response
+                return response.json(); // Parse the JSON in the response
+            })
+                .then(data => {
+                    console.log('Success:', data); // Handle the success case
+                    this.dailyCustomers = data
+                })
+                .catch((error) => {
+                    console.error('Error:', error); // Handle errors
+                });
+
+        },
+
         getCustomers(name) {
 
             console.debug(name)
@@ -641,21 +680,6 @@ export default {
                     console.error('Error:', error); // Handle errors
                 });
 
-
-            // const promise = Inertia.post('/customers/getNames', {'name': name})
-            //
-            // promise.then(response => {
-            //     // Handle the response data here
-            //     // const $element = document.getElementById('response')
-            //     // $element.innerHTML = this.response;
-            //
-            //     console.log(response)
-            //
-            // }).catch(error => {
-            //     // Handle any errors that occurred during the request
-            //     console.error(error);
-            // });
-
         },
         sortedRoute(day) {
 
@@ -679,6 +703,8 @@ export default {
             ]
         },
         showRoute(day) {
+            this.getCustomersForDay(day)
+
             if (day === 'all') {
                 this.monday = true;
                 this.tuesday = true;

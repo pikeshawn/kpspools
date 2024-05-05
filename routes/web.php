@@ -159,6 +159,10 @@ Route::middleware(['auth:sanctum', 'verified', 'serviceman'])->group(function ()
         [CustomerController::class, 'index'])
         ->name('customers');
 
+    Route::post('/customers/getCustomersForDay/',
+        [CustomerController::class, 'getCustomersForDay'])
+        ->name('getCustomersForDay');
+
     Route::get('/registrationLink',
         [ProspectiveController::class, 'registrationLink'])
         ->name('prospective.registrationLink');
