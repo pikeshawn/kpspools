@@ -164,6 +164,13 @@ class Customer extends Model
 
 
         }
+
+        $sortKey = 'order';
+
+        usort($customerCollection, function ($a, $b) use ($sortKey) {
+            return $a[$sortKey] <=> $b[$sortKey];  // Spaceship operator for simplicity
+        });
+
         return $customerCollection;
     }
 
