@@ -331,15 +331,15 @@
 
 
         <div class="mb-4 bg-gray-900 px-6 py-24 sm:py-8 lg:px-8">
-            <div class="mx-auto max-w-2xl text-center">
-                <h2 class="text-4xl font-bold tracking-tight text-white">
+            <div class="mx-auto max-w-2xl">
+                <h2 class="text-2xl font-bold tracking-tight text-white text-center">
                     General Notes
                 </h2>
                 <div>
                     <div class="mt-6 border-t border-white/10"></div>
                     <ul class="mt-2">
                         <li class="text-sm font-medium leading-6 text-white" v-for="note in generalNotes" :key="note.id">
-                            {{ note.note }}
+                           - {{ note.note }}
                         </li>
                     </ul>
                     <button style="margin-top: 2rem;"
@@ -651,6 +651,7 @@ export default {
                 }.bind(this))
                 .then(function (data) {
                     this.generalNotes = data; // Access the Vue instance here
+                    this.newNote = null;
                 }.bind(this))
                 .catch(function (error) {
                     console.error('Error:', error); // Handle errors
