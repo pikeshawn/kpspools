@@ -144,7 +144,12 @@ class TaskController extends Controller
 //            ->get();
 
 
-        $tasks = Task::select(['id', 'customer_id', 'assigned', 'created_at', 'description', 'status', 'type', 'price', 'address_id'])->orderBy('customer_id')->get();
+        $tasks = Task::select(['id', 'customer_id', 'assigned', 'created_at', 'description', 'status', 'type', 'price', 'address_id'])
+            ->where('status', 'approved')
+            ->orWhere('status', 'pickedUp')
+            ->orWhere('status', 'created')
+            ->orderBy('customer_id')
+            ->get();
 
         $tsks = [];
 
@@ -373,6 +378,14 @@ class TaskController extends Controller
             $ts->delete();
         }
 
+    }
+
+    public function repairPage()
+    {
+        $tasks = Task::where('status', 'approved')->get();
+        return Inertia::render('Task/RepairPage', [
+           'tasks' => $tasks
+        ]);
     }
 
     public function updatePrice(Request $request)

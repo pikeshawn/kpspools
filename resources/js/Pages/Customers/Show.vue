@@ -330,6 +330,21 @@
         <!--        <pre>{{ tasks }}</pre>-->
 
 
+        <div class="bg-gray-900 px-6 py-24 sm:py-8 lg:px-8">
+            <div class="mx-auto max-w-2xl text-center">
+                <h2 class="text-4xl font-bold tracking-tight text-white">
+                    General Notes
+                </h2>
+                <div>
+                    <div class="mt-6 border-t border-white/10"></div>
+                    <ul class="mt-2">
+                        <li class="text-sm font-medium leading-6 text-white" v-for="note in notes" :key="note.id">{{ note.note }}</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+
 <!--        <Combobox as="div" v-model="selectedPerson" style="margin-bottom: 2rem;">-->
 <!--            <ComboboxLabel v-if="selectedPerson" class="block text-sm font-medium leading-6 text-gray-900">-->
 <!--                {{ selectedPerson.first_name }} {{ selectedPerson.last_name }} - {{ selectedPerson.address_line_1 }}-->

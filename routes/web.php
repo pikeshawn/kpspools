@@ -269,6 +269,10 @@ Route::middleware(['auth:sanctum', 'verified', 'serviceman'])->group(function ()
         [TaskController::class, 'display'])
         ->name('tasks.display');
 
+    Route::get('/tasks/repairPage',
+        [TaskController::class, 'repairPage'])
+        ->name('tasks.repairPage');
+
     Route::post('/task/store',
         [TaskController::class, 'store'])
         ->name('task.store');

@@ -48,9 +48,9 @@ class RouteController extends Controller
         }
 
         if (User::isAdmin()) {
-            $customers = Customer::allCustomers();
+            $customers = Customer::allCustomers($request->service_day);
         } else {
-            $customers = Customer::allCustomersTiedToUser();
+            $customers = Customer::allCustomersTiedToUser($request->service_day);
         }
         return Inertia::render('Customers/Index', [
             'customers' => $customers,
