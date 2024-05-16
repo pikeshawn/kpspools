@@ -330,7 +330,7 @@
         <!--        <pre>{{ tasks }}</pre>-->
 
 
-        <div class="bg-gray-900 px-6 py-24 sm:py-8 lg:px-8">
+        <div class="mb-4 bg-gray-900 px-6 py-24 sm:py-8 lg:px-8">
             <div class="mx-auto max-w-2xl text-center">
                 <h2 class="text-4xl font-bold tracking-tight text-white">
                     General Notes
@@ -338,51 +338,82 @@
                 <div>
                     <div class="mt-6 border-t border-white/10"></div>
                     <ul class="mt-2">
-                        <li class="text-sm font-medium leading-6 text-white" v-for="note in notes" :key="note.id">{{ note.note }}</li>
+                        <li class="text-sm font-medium leading-6 text-white" v-for="note in generalNotes" :key="note.id">
+                            {{ note.note }}
+                        </li>
                     </ul>
+                    <button style="margin-top: 2rem;"
+                            type="button" @click="showNewNote = !showNewNote"
+                            class="rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
+                        Add Note
+                    </button>
                 </div>
             </div>
         </div>
 
 
-<!--        <Combobox as="div" v-model="selectedPerson" style="margin-bottom: 2rem;">-->
-<!--            <ComboboxLabel v-if="selectedPerson" class="block text-sm font-medium leading-6 text-gray-900">-->
-<!--                {{ selectedPerson.first_name }} {{ selectedPerson.last_name }} - {{ selectedPerson.address_line_1 }}-->
-<!--            </ComboboxLabel>-->
-<!--            <div class="relative mt-2">-->
-<!--                &lt;!&ndash;              @change="query = $event.target.value" :display-value="person && (person?.first_name + ' ' + person?.last_name) !== undefined ? '' : person.first_name + ' ' + person.last_name"/>&ndash;&gt;-->
-<!--                &lt;!&ndash;              @change="query = $event.target.value" :display-value="(person) {if(person?.first_name !== undefined && person?.last_name !== undefined){ return ''} else {return person.first_name + ' ' + person.last_name}}"/>&ndash;&gt;-->
-<!--                <ComboboxInput-->
-<!--                    class="w-full rounded-md border-0 bg-white py-1.5 pl-3 pr-10 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"-->
-<!--                    @change="query = $event.target.value" :display-value="(person) => person?.last_name"/>-->
-<!--                <ComboboxButton-->
-<!--                    class="absolute inset-y-0 right-0 flex items-center rounded-r-md px-2 focus:outline-none">-->
-<!--                    <ChevronUpDownIcon class="h-5 w-5 text-gray-400" aria-hidden="true"/>-->
-<!--                </ComboboxButton>-->
+        <div v-show="showNewNote" class="mt-2 mb-2 lex flex-col col-span-2">
+            <label
+                class="block text-sm font-medium text-gray-700"
+                for="notes">New Note</label>
+            <textarea
+                class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                name="notes" id="notes" cols="30" rows="10" v-model="newNote">
+                                    </textarea>
+            <div class="flex justify-between">
+                <button style="margin-top: 2rem;"
+                        type="button" @click="showNewNote = false"
+                        class="rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
+                    Cancel
+                </button>
 
-<!--                <ComboboxOptions v-if="filteredPeople.length > 0"-->
-<!--                                 class="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">-->
-<!--                    <ComboboxOption v-for="person in filteredPeople" :key="person.id" :value="person" as="template"-->
-<!--                                    v-slot="{ active, selected }">-->
-<!--                        <li :class="['relative cursor-default select-none py-2 pl-8 pr-4', active ? 'bg-indigo-600 text-white' : 'text-gray-900']">-->
-<!--            <span :class="['block truncate', selected && 'font-semibold']">-->
-<!--              {{ person.first_name }} {{ person.last_name }} - {{ person.address_line_1 }}-->
-<!--            </span>-->
+                <button style="margin-top: 2rem;"
+                        type="button" @click="addNote()"
+                        class="rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
+                    Add
+                </button>
+            </div>
+        </div>
 
-<!--                            <span v-if="selected"-->
-<!--                                  :class="['absolute inset-y-0 left-0 flex items-center pl-1.5', active ? 'text-white' : 'text-indigo-600']">-->
-<!--              <CheckIcon class="h-5 w-5" aria-hidden="true"/>-->
-<!--            </span>-->
-<!--                        </li>-->
-<!--                    </ComboboxOption>-->
-<!--                </ComboboxOptions>-->
-<!--            </div>-->
-<!--            <button type="button"-->
-<!--                    class="-ml-px relative inline-flex items-center px-4 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:z-10 focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500"-->
-<!--                    @click="goToCustomer(selectedPerson.addressId)"-->
-<!--            >Go-->
-<!--            </button>-->
-<!--        </Combobox>-->
+
+        <!--        <Combobox as="div" v-model="selectedPerson" style="margin-bottom: 2rem;">-->
+        <!--            <ComboboxLabel v-if="selectedPerson" class="block text-sm font-medium leading-6 text-gray-900">-->
+        <!--                {{ selectedPerson.first_name }} {{ selectedPerson.last_name }} - {{ selectedPerson.address_line_1 }}-->
+        <!--            </ComboboxLabel>-->
+        <!--            <div class="relative mt-2">-->
+        <!--                &lt;!&ndash;              @change="query = $event.target.value" :display-value="person && (person?.first_name + ' ' + person?.last_name) !== undefined ? '' : person.first_name + ' ' + person.last_name"/>&ndash;&gt;-->
+        <!--                &lt;!&ndash;              @change="query = $event.target.value" :display-value="(person) {if(person?.first_name !== undefined && person?.last_name !== undefined){ return ''} else {return person.first_name + ' ' + person.last_name}}"/>&ndash;&gt;-->
+        <!--                <ComboboxInput-->
+        <!--                    class="w-full rounded-md border-0 bg-white py-1.5 pl-3 pr-10 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"-->
+        <!--                    @change="query = $event.target.value" :display-value="(person) => person?.last_name"/>-->
+        <!--                <ComboboxButton-->
+        <!--                    class="absolute inset-y-0 right-0 flex items-center rounded-r-md px-2 focus:outline-none">-->
+        <!--                    <ChevronUpDownIcon class="h-5 w-5 text-gray-400" aria-hidden="true"/>-->
+        <!--                </ComboboxButton>-->
+
+        <!--                <ComboboxOptions v-if="filteredPeople.length > 0"-->
+        <!--                                 class="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">-->
+        <!--                    <ComboboxOption v-for="person in filteredPeople" :key="person.id" :value="person" as="template"-->
+        <!--                                    v-slot="{ active, selected }">-->
+        <!--                        <li :class="['relative cursor-default select-none py-2 pl-8 pr-4', active ? 'bg-indigo-600 text-white' : 'text-gray-900']">-->
+        <!--            <span :class="['block truncate', selected && 'font-semibold']">-->
+        <!--              {{ person.first_name }} {{ person.last_name }} - {{ person.address_line_1 }}-->
+        <!--            </span>-->
+
+        <!--                            <span v-if="selected"-->
+        <!--                                  :class="['absolute inset-y-0 left-0 flex items-center pl-1.5', active ? 'text-white' : 'text-indigo-600']">-->
+        <!--              <CheckIcon class="h-5 w-5" aria-hidden="true"/>-->
+        <!--            </span>-->
+        <!--                        </li>-->
+        <!--                    </ComboboxOption>-->
+        <!--                </ComboboxOptions>-->
+        <!--            </div>-->
+        <!--            <button type="button"-->
+        <!--                    class="-ml-px relative inline-flex items-center px-4 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:z-10 focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500"-->
+        <!--                    @click="goToCustomer(selectedPerson.addressId)"-->
+        <!--            >Go-->
+        <!--            </button>-->
+        <!--        </Combobox>-->
 
 
         <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
@@ -457,7 +488,7 @@
         </div>
 
         <div style="margin-top: 1rem;">
-            <div v-for="note in notes" :key="note.id" class="relative inline-flex items-center px-4 py-2 rounded-l-md bg-white text-sm font-medium
+            <div v-for="note in generalNotes" :key="note.id" class="relative inline-flex items-center px-4 py-2 rounded-l-md bg-white text-sm font-medium
                 text-gray-700 hover:bg-gray-50 focus:z-10 focus:outline-none focus:ring-1 focus:ring-indigo-500
                 focus:border-indigo-500">
                 <div
@@ -543,6 +574,8 @@ export default {
     },
     mounted() {
         this.updateCount();
+        this.generalNotes = this.notes;
+        this.csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
         this.active = this.address.active;
     },
     beforeUpdate() {
@@ -553,6 +586,10 @@ export default {
     },
     data() {
         return {
+            generalNotes: null,
+            csrfToken: null,
+            showNewNote: false,
+            newNote: null,
             showTab: 'PickedUp',
             myTab: 'Ready To Complete',
             active: null,
@@ -576,7 +613,7 @@ export default {
     props: {
         customer: Object,
         // customers: Array,
-        notes: String,
+        notes: Array,
         address: String,
         user: String,
         tasks: Array,
@@ -584,6 +621,43 @@ export default {
         completedTasks: Array
     },
     methods: {
+        addNote() {
+            // Inertia.post('/general/store', {
+            //     'note': this.newNote,
+            //     'addressId': this.address.id,
+            //     'customerId': this.customer.id
+            // });
+
+
+            // Inertia.post('/customers/getNames', {'name': name})
+            console.log(this.csrfToken); // Use this token in your component
+            fetch('/general/store', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': this.csrfToken // Specify the content type and include CSRF token
+                },
+                body: JSON.stringify({
+                    'note': this.newNote,
+                    'addressId': this.address.id,
+                    'customerId': this.customer.id
+                })
+            })
+                .then(function (response) {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json(); // Parse the JSON in the response
+                }.bind(this))
+                .then(function (data) {
+                    this.generalNotes = data; // Access the Vue instance here
+                }.bind(this))
+                .catch(function (error) {
+                    console.error('Error:', error); // Handle errors
+                }.bind(this));
+
+
+        },
         addressId(address) {
             if (Array.isArray(address)) {
                 return address[0];
@@ -591,8 +665,8 @@ export default {
                 return address;
             }
         },
-        changeActiveStatus(){
-          this.active = !this.active;
+        changeActiveStatus() {
+            this.active = !this.active;
 
             this.$inertia.post('/customers/changeActiveStatus', {'addressId': this.address.id, 'active': this.active}, {
                 onSuccess: () => {

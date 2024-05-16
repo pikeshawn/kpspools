@@ -127,16 +127,24 @@ class CustomerController extends Controller
         ]);
     }
 
-    public function store_note(Request $request): RedirectResponse
+    public function store_note(Request $request)
     {
-        $note = GeneralNote::firstOrCreate([
-            'customer_id' => $request->customer_id,
-            'note' => $request->note,
+        GeneralNote::firstOrCreate([
+            'customer_id' => $request->customerId,
+            'address_id' => $request->addressId,
+            'note' => $request->note
         ]);
 
-        $customer = Customer::find($request->customer_id);
+        $notes = GeneralNote::where('address_id', $request->addressId)->get();
 
-        return Redirect::route('general.notes', $customer->id);
+        return \response()->json($notes);
+
+//        $customer = Customer::find($request->customer_id);
+
+//        return Redirect::route('general.notes', $customer->id);
+
+
+
     }
 
     /**
