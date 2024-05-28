@@ -594,8 +594,13 @@ Please reach out to Shawn for any questions at 14807034902"));
 //                TODO:: associate the correct scp item with the task
 
 //                if ($taskItem->isEmpty()) {
+
+                if (!is_null($request->price)) {
                     $task->price = $request->price * 1.38 * $request->quantity;
                     $task->save();
+                }
+
+
 //                }
 //                else {
 //                    $task->price = $taskItem[0]->price * $request->quantity;
