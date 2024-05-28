@@ -38,7 +38,8 @@
                                               focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                         style="padding: 1rem; background: white"
                     >
-                        {{ task.description }} || {{ task.price }}
+                        <div>{{ task.description }}</div>
+                        <div>SCP Price {{ task.price }}</div>
                     </button>
 
 

@@ -598,9 +598,9 @@ Please reach out to Shawn for any questions at 14807034902"));
                 } else {
                     $task->price = $taskItem[0]->price;
                     $task->save();
-                    $customer = Customer::where('id', $task->customer_id)->get();
-                    $message = "Please Reply\n==================\n\nKPS Pools needs to inform you about a necessary repair for your pool:\n\n" . $task->description . " for $" . $task->price . "\n\nWould you like for us to complete this for you?\n\nY$task->count for Yes\nN$task->count for No\n\nYou may also reach out to Shawn at 480.703.4902 or 480.622.6441. If you have any questions";
-                    self::sendforApproval($task, $customer[0]->phone_number, $message);
+//                    $customer = Customer::where('id', $task->customer_id)->get();
+//                    $message = "Please Reply\n==================\n\nKPS Pools needs to inform you about a necessary repair for your pool:\n\n" . $task->description . " for $" . $task->price . "\n\nWould you like for us to complete this for you?\n\nY$task->count for Yes\nN$task->count for No\n\nYou may also reach out to Shawn at 480.703.4902 or 480.622.6441. If you have any questions";
+//                    self::sendforApproval($task, $customer[0]->phone_number, $message);
                 }
             }
 
