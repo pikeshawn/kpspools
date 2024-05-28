@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Customer;
 use App\Models\Address;
+use App\Models\ScpInvoiceItem;
 use App\Models\Task;
 use App\Models\User;
 use App\Models\TaskStatus;
@@ -67,7 +68,7 @@ class TaskController extends Controller
         self::processReconciledTask($request->taskId, $request->taskStatuses['paid'], 'paid');
     }
 
-    public function processReconciledTask($taskId,$taskStatusExists, $taskStatus)
+    public function processReconciledTask($taskId, $taskStatusExists, $taskStatus)
     {
 
         $taskStatuses = TaskStatus::where('task_id', $taskId)->get();
@@ -217,7 +218,7 @@ class TaskController extends Controller
 
         //        dd($tsks);
 
-        usort($tsks, function($a, $b){
+        usort($tsks, function ($a, $b) {
             return $a[1]['last_name'] <=> $b[1]['last_name'];
         });
 
@@ -304,6 +305,36 @@ class TaskController extends Controller
         $task->save();
     }
 
+
+
+
+    public function getTaskItems(Request $request)
+    {
+        $scpItems = ScpInvoiceItem::select(['scp_invoice_item.description', 'scp_invoice_item.cost', 'scp_invoice_item.created_at'])
+            ->join(DB::raw('(SELECT description, MAX(created_at) as latest_created_at FROM scp_invoice_item GROUP BY description) as latest_items'),
+                function ($join) {
+                $join->on('scp_invoice_item.description', '=', 'latest_items.description')
+                    ->on('scp_invoice_item.created_at', '=', 'latest_items.latest_created_at');
+            })
+            ->where('scp_invoice_item.description', 'like', "%$request->name%")
+            ->orderBy('scp_invoice_item.created_at', 'desc')
+            ->get();
+
+        $items = [];
+
+        foreach ($scpItems as $item) {
+            $i = [
+                'description' => $item->description,
+                'price' => $item->cost,
+                'type' => 'scpItem'
+            ];
+            $items[] = $i;
+        }
+
+        return $items;
+    }
+
+
     public function changeStatus(Request $request)
     {
 //        dd($request);
@@ -384,7 +415,7 @@ class TaskController extends Controller
     {
         $tasks = Task::where('status', 'approved')->get();
         return Inertia::render('Task/RepairPage', [
-           'tasks' => $tasks
+            'tasks' => $tasks
         ]);
     }
 
@@ -521,21 +552,20 @@ Sundance Pool Tile Cleaning
 Please reach out to Shawn for any questions at 14807034902"));
         } else {
             //      get all data
-//        dd($request);
+//            dd($request);
 //        dd($request->todoAssignee);
 
             if (is_null($request->type)) {
                 $request->type = 'part';
             }
 
+
 //      add to db with first or create
 //        - add task to db
-            $task = self::createTask($request);
-
-//        - add status to status table
-            self::addTaskStatus($task, 'created',);
 
             if ($request->type == 'todo') {
+                $task = self::createTask($request);
+                self::addTaskStatus($task, 'created',);
                 self::addStatus($task, 'pickedUp');
                 self::addTaskStatus($task, 'pickedUp',);
                 $task->assigned = $request->todoAssignee;
@@ -547,7 +577,35 @@ Please reach out to Shawn for any questions at 14807034902"));
                         "You were assigned a Task::\n$customer->first_name $customer->last_name\n$request->description\n" . env('APP_URL') . "/customers/show/" . $request->address_id
                     ));
                 }
+            } else {
+//            Is there a task in the task table with this description?
+//            If so then get the price
+
+                $taskItem = Task::where('description', $request->description)
+                    ->orderBy('created_at', 'desc')
+                    ->get();
+                $task = self::createTask($request);
+
+                self::addTaskStatus($task, 'created',);
+
+
+//                TODO:: should reflect past price for the specific customer
+//                TODO:: should reflect paid prices because those are prices that customers have approved
+
+                if ($taskItem->isEmpty()) {
+                    $task->price = $request->price * 1.38;
+                    $task->save();
+                } else {
+                    $task->price = $taskItem[0]->price;
+                    $task->save();
+                    $customer = Customer::where('id', $task->customer_id)->get();
+                    $message = "Please Reply\n==================\n\nKPS Pools needs to inform you about a necessary repair for your pool:\n\n" . $task->description . " for $" . $task->price . "\n\nWould you like for us to complete this for you?\n\nY$task->count for Yes\nN$task->count for No\n\nYou may also reach out to Shawn at 480.703.4902 or 480.622.6441. If you have any questions";
+                    self::sendforApproval($task, $customer[0]->phone_number, $message);
+                }
             }
+
+
+
         }
         return Redirect::route('customers.show', $request->address_id);
 

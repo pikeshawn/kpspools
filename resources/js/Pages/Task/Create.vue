@@ -4,13 +4,50 @@
     >
         <div class="mt-7 sm:col-span-4">
             <div class="sm:col-span-3">
-                <label for="task-description"
-                       class="block text-sm font-medium leading-6 text-gray-900">Description</label>
+<!--                <div class="mt-2">-->
+                <!--                    <input type="text" name="description" id="task-description" autocomplete="given-name"-->
+<!--                           v-model="form.description"-->
+<!--                           class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"/>-->
+<!--                </div>-->
+
                 <div class="mt-2">
-                    <input type="text" name="description" id="task-description" autocomplete="given-name"
-                           v-model="form.description"
-                           class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"/>
+                    <label for="task-description"
+                           class="block text-sm font-medium leading-6 text-gray-900">Description</label>
+                    <input @input="getTasks($event.target.value)" v-model="form.description" type="text" name="text"
+                           id="task-description"
+                           style="padding: 1rem; margin-top: 1rem;"
+                           class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                           placeholder="Description"/>
+                    <label for="quantity"
+                           class="mt-2 block text-sm font-medium leading-6 text-gray-900">Quantity</label>
+                    <input
+                        id="quantity"
+                        v-model="form.quantity"
+                        type="number"
+                        style="padding: 1rem; margin-top: 1rem;"
+                        class="block w-1/2 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                    >
                 </div>
+
+
+                <div v-for="task in form.taskItems" :key="task.id">
+                    <button
+                        @click="setTask(task)"
+                        class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm
+                                              ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2
+                                              focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                        style="padding: 1rem; background: white"
+                    >
+                        {{ task.description }} || {{ task.price }}
+                    </button>
+
+
+                    <!--                    <li @click="setTask(task)">-->
+                    <!--                        {{ task.description }}-->
+                    <!--                    </li>-->
+                </div>
+
+
             </div>
         </div>
 
@@ -111,7 +148,9 @@ export default {
         tasks: Array
     },
     data() {
-        return {}
+        return {
+            csrfToken: null
+        }
     },
     remember: 'form',
     setup() {
@@ -119,6 +158,13 @@ export default {
             address_id: '',
             customer_id: '',
             description: '',
+            source: '',
+            price: '',
+            taskItems: null,
+            quantity: 1,
+            selectedTask: null,
+            name: null,
+            selectedTaskDescription: null,
             type: '',
             skyline: false,
             sundance: false,
@@ -131,9 +177,9 @@ export default {
 
         function store(customerId, userId, addressId, destination = '') {
 
-            if (destination === 'skyline'){
+            if (destination === 'skyline') {
                 this.form.skyline = true;
-            } else if (destination === 'sundance'){
+            } else if (destination === 'sundance') {
                 this.form.sundance = true;
             }
 
@@ -147,9 +193,53 @@ export default {
 
     },
     mounted() {
-        this.form.todoAssignee = this.user.id
+        this.form.todoAssignee = this.user.id;
+        this.csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
     },
-    methods: {},
+    methods: {
+
+        setTask(task) {
+            console.log(task)
+            this.form.selectedTask = task
+            this.form.description = task.description
+            this.form.price = task.price
+            this.form.source = task.source
+            this.form.taskItems = null
+        },
+
+        getTasks(name) {
+
+            console.debug(name)
+            // debugger;
+
+            this.form.name = name
+
+            // Inertia.post('/customers/getNames', {'name': name})
+            console.log(this.csrfToken); // Use this token in your component
+            fetch('/task/getTaskItems', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json', // Specify the content type
+                    'X-CSRF-TOKEN': this.csrfToken
+                },
+                // Include CSRF token
+                body: JSON.stringify({'name': this.form.name})
+            }).then(function (response) {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json(); // Parse the JSON in the response
+            }.bind(this))
+                .then(function (data) {
+                    this.form.taskItems = data; // Access the Vue instance here
+                }.bind(this))
+                .catch(function (error) {
+                    console.error('Error:', error); // Handle errors
+                }.bind(this));
+
+        },
+
+    },
     computed: {
         errorClass() {
             return this.errors.timeIn ? 'text-red-600' : ''

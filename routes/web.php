@@ -277,6 +277,10 @@ Route::middleware(['auth:sanctum', 'verified', 'serviceman'])->group(function ()
         [TaskController::class, 'store'])
         ->name('task.store');
 
+    Route::post('/task/getTaskItems',
+        [TaskController::class, 'getTaskItems'])
+        ->name('task.getTaskItems');
+
     Route::post('/task/pickedUp',
         [TaskController::class, 'pickedUp'])
         ->name('task.pickedUp');
