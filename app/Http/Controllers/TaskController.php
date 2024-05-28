@@ -635,9 +635,7 @@ Please reach out to Shawn for any questions at 14807034902"));
 
 //        dd($request);
 
-        $tasks = Task::where('customer_id', $request->customer_id)->get();
-
-        return Task::firstOrCreate([
+        $task = Task::firstOrCreate([
             'address_id' => $request->address_id,
             'customer_id' => $request->customer_id,
             'description' => $request->description,
@@ -645,8 +643,17 @@ Please reach out to Shawn for any questions at 14807034902"));
             'type' => $request->type,
             'price' => 0,
             'status' => 'created',
-            'count' => $tasks->count() + 1
+            'count' => 0
         ]);
+
+        $tasks = Task::where('customer_id', $request->customer_id)
+            ->orderBy('count', 'desc')
+            ->get();
+
+        $task->count = $tasks[0]->count + 1;
+        $task->save();
+
+        return $task;
     }
 
     private function addTaskStatus($task, $status, $statusDate = null)
