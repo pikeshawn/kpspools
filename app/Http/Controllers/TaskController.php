@@ -581,9 +581,9 @@ Please reach out to Shawn for any questions at 14807034902"));
 //            Is there a task in the task table with this description?
 //            If so then get the price
 
-                $taskItem = Task::where('description', $request->description)
-                    ->orderBy('created_at', 'desc')
-                    ->get();
+//                $taskItem = Task::where('description', $request->description)
+//                    ->orderBy('created_at', 'desc')
+//                    ->get();
                 $task = self::createTask($request);
 
                 self::addTaskStatus($task, 'created',);
@@ -591,17 +591,19 @@ Please reach out to Shawn for any questions at 14807034902"));
 
 //                TODO:: should reflect past price for the specific customer
 //                TODO:: should reflect paid prices because those are prices that customers have approved
+//                TODO:: associate the correct scp item with the task
 
-                if ($taskItem->isEmpty()) {
-                    $task->price = $request->price * 1.38;
+//                if ($taskItem->isEmpty()) {
+                    $task->price = $request->price * 1.38 * $request->quantity;
                     $task->save();
-                } else {
-                    $task->price = $taskItem[0]->price;
-                    $task->save();
+//                }
+//                else {
+//                    $task->price = $taskItem[0]->price * $request->quantity;
+//                    $task->save();
 //                    $customer = Customer::where('id', $task->customer_id)->get();
 //                    $message = "Please Reply\n==================\n\nKPS Pools needs to inform you about a necessary repair for your pool:\n\n" . $task->description . " for $" . $task->price . "\n\nWould you like for us to complete this for you?\n\nY$task->count for Yes\nN$task->count for No\n\nYou may also reach out to Shawn at 480.703.4902 or 480.622.6441. If you have any questions";
 //                    self::sendforApproval($task, $customer[0]->phone_number, $message);
-                }
+//                }
             }
 
 
