@@ -614,6 +614,8 @@ export default {
             this.friday = true;
         }
 
+        this.dailyCustomers = this.customers;
+
 
     },
     methods: {
