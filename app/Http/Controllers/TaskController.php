@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Customer;
 use App\Models\Address;
 use App\Models\ScpInvoiceItem;
+use App\Models\Subcontractor;
 use App\Models\Task;
 use App\Models\User;
 use App\Models\TaskStatus;
@@ -147,10 +148,29 @@ class TaskController extends Controller
 
         $tasks = Task::select(['id', 'customer_id', 'assigned', 'created_at', 'description', 'status', 'type', 'price', 'address_id'])
             ->where('status', 'approved')
-            ->orWhere('status', 'pickedUp')
-            ->orWhere('status', 'created')
-            ->orderBy('customer_id')
+            ->where('created_at', '>', '2024-05-01 00:00:00')
             ->get();
+//
+//        $tasks = Task::select(['id', 'customer_id', 'assigned', 'created_at', 'description', 'status', 'type', 'price', 'address_id'])
+//            ->where('created_at', '>', '2024-05-01 00:00:00')
+//            ->get();
+
+//        $tasks = Task::select(['id', 'customer_id', 'assigned', 'created_at', 'description', 'status', 'type', 'price', 'address_id'])
+//            ->where('customer_id', 130)
+//            ->get();
+
+//        $tasks = Task::select(['id', 'customer_id', 'assigned', 'created_at', 'description', 'status', 'type', 'price', 'address_id'])
+//            ->where(function ($query) {
+//                $query->where('status', 'approved')
+//                    ->orWhere('status', 'pickedUp')
+//                    ->orWhere('status', 'created');
+//            })->where(function ($query) {
+//                $query->where('type', 'part')
+//                    ->orWhere('type', 'repair');
+//            })
+//            ->where('created_at', '>', '2024-05-01 00:00:00')
+//            ->orderBy('customer_id')
+//            ->get();
 
         $tsks = [];
 
@@ -490,10 +510,17 @@ class TaskController extends Controller
 //        dd($customer->id);
 
         $customer = Customer::find($address->customer_id);
+        $subs = Subcontractor::select(['company_name'])->get();
+
+        $subcontractors = [null];
+        foreach ($subs as $sub){
+            $subcontractors[] = $sub->company_name;
+        }
 
         return Inertia::render('Task/Create', [
             'addressId' => $address->id,
             'customerId' => $address->customer_id,
+            'subcontractors' => $subcontractors,
             'customer' => $customer,
             'customerName' => $customer->last_name,
             'users' => $users,
@@ -503,13 +530,15 @@ class TaskController extends Controller
     public function store(Request $request): RedirectResponse
     {
 
-        if ($request->skyline) {
+        $subcontractor = Subcontractor::where('company_name', $request->subcontractor)->first();
+
+        if (!is_null($subcontractor)) {
             $customer = Customer::find($request->customer_id);
             $address = Address::find($request->address_id);
             $customerUser = User::find($customer->user_id);
-            strpos($customerUser->email, '.') != false ? $email = '$customerUser->email' : $email = 'Email has not been recorded';
+            strpos($customerUser->email, '.') != false ? $email = $customerUser->email : $email = 'Email has not been recorded';
 //            Notification::route('vonage', '14806226441')->notify(new GenericNotification("KPS Pools has a job for you.
-            Notification::route('vonage', '14803387305')->notify(new GenericNotification("KPS Pools has a job for you.
+            Notification::route('vonage', $subcontractor->phone_number)->notify(new GenericNotification("KPS Pools has a job for you.
 =====================
 $request->description
 =====================
@@ -523,45 +552,17 @@ Please reach out to Shawn for any questions at 14807034902"));
 //            Notification::route('vonage', '14807034902')->notify(new GenericNotification("Skyline has been notified. They can be reached at:
             Notification::route('vonage', $customer->phone_number)->notify(new GenericNotification("Skyline has been notified. They can be reached at:
 =====================
-Jason Lecouq
-Skyline Pools and Spas
-14803387305
+$subcontractor->contact_name
+$subcontractor->company_name
+$subcontractor->phone_number
 =====================
 Please reach out to Shawn for any questions at 14807034902"));
-        } else if ($request->sundance) {
-            $request->description = 'Tile Clean';
-            $customer = Customer::find($request->customer_id);
-            $address = Address::find($request->address_id);
-//            Notification::route('vonage', '14806226441')->notify(new GenericNotification(
-            Notification::route('vonage', '16026974483')->notify(new GenericNotification("KPS Pools has a tile clean for you.
-=====================
-Customer Info::
-$customer->first_name $customer->last_name
-$customer->phone_number
-$address->address_line_1 $address->city $address->zip
-=====================
-Please reach out to Shawn for any questions at 14807034902"
-            ));
-//            Notification::route('vonage', '14807034902')->notify(new GenericNotification("Sundance has been notified. They can be reached at:
-            Notification::route('vonage', $customer->phone_number)->notify(new GenericNotification("Sundance has been notified. They can be reached at:
-=====================
-Dennis Salazar
-Sundance Pool Tile Cleaning
-16026974483
-=====================
-Please reach out to Shawn for any questions at 14807034902"));
+
         } else {
-            //      get all data
-//            dd($request);
-//        dd($request->todoAssignee);
 
             if (is_null($request->type)) {
                 $request->type = 'part';
             }
-
-
-//      add to db with first or create
-//        - add task to db
 
             if ($request->type == 'todo') {
                 $task = self::createTask($request);
@@ -578,12 +579,6 @@ Please reach out to Shawn for any questions at 14807034902"));
                     ));
                 }
             } else {
-//            Is there a task in the task table with this description?
-//            If so then get the price
-
-//                $taskItem = Task::where('description', $request->description)
-//                    ->orderBy('created_at', 'desc')
-//                    ->get();
                 $task = self::createTask($request);
 
                 self::addTaskStatus($task, 'created',);
@@ -599,19 +594,7 @@ Please reach out to Shawn for any questions at 14807034902"));
                     $task->price = $request->price * 1.38 * $request->quantity;
                     $task->save();
                 }
-
-
-//                }
-//                else {
-//                    $task->price = $taskItem[0]->price * $request->quantity;
-//                    $task->save();
-//                    $customer = Customer::where('id', $task->customer_id)->get();
-//                    $message = "Please Reply\n==================\n\nKPS Pools needs to inform you about a necessary repair for your pool:\n\n" . $task->description . " for $" . $task->price . "\n\nWould you like for us to complete this for you?\n\nY$task->count for Yes\nN$task->count for No\n\nYou may also reach out to Shawn at 480.703.4902 or 480.622.6441. If you have any questions";
-//                    self::sendforApproval($task, $customer[0]->phone_number, $message);
-//                }
             }
-
-
 
         }
         return Redirect::route('customers.show', $request->address_id);

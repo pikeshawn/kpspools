@@ -47,28 +47,26 @@
                     <!--                        {{ task.description }}-->
                     <!--                    </li>-->
                 </div>
-
-
             </div>
         </div>
 
         <fieldset>
             <div class="mt-6 space-y-6" style="width: 100%">
-                <div class="flex items-center justify-between">
+                <div class="flex flex-col">
                     <div class="flex items-center gap-x-3">
                         <input id="todo" name="type" type="radio" v-model="form.type" value="todo"
                                class="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600"/>
-                        <label for="todo" class="block text-sm font-medium leading-6 text-gray-900">To Do</label>
+                        <label for="todo" class="block text-sm font-medium leading-6 text-gray-900"><span class="font-bold text-2xl">To Do</span> - Select this for non-billable items.</label>
                     </div>
                     <div class="flex items-center gap-x-3">
                         <input id="repair" name="type" type="radio" v-model="form.type" value="repair"
                                class="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600"/>
-                        <label for="repair" class="block text-sm font-medium leading-6 text-gray-900">Repair</label>
+                        <label for="repair" class="block text-sm font-medium leading-6 text-gray-900"><span class="font-bold text-2xl">Repair</span> - Billable item that takes more than 15 minutes of labor</label>
                     </div>
                     <div class="flex items-center gap-x-3">
                         <input id="part" name="type" type="radio" v-model="form.type" value="part"
                                class="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600"/>
-                        <label for="part" class="block text-sm font-medium leading-6 text-gray-900">Part</label>
+                        <label for="part" class="block text-sm font-medium leading-6 text-gray-900"><span class="font-bold text-2xl">Part</span> - Billable item that takes less than 15 minutes of labor</label>
                     </div>
                 </div>
             </div>
@@ -84,19 +82,26 @@
                 Add Task
             </button>
 
-            <button type="submit"
-                    v-if="user.is_admin"
-                    @click="store(customerId, user.id, addressId, 'skyline')"
-                    class="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
-                Send To Skyline
-            </button>
+            <div
+                v-if="user.is_admin"
+            >
+                <div class="col-span-1">
+                    <label for="subs" class="block text-sm font-medium text-gray-700">Subs</label>
+                    <select id="subs" name="subs"
+                            v-model="form.subcontractor"
+                            class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                        <option v-for="option in subcontractors">{{ option }}
+                        </option>
+                    </select>
+                </div>
 
-            <button type="submit"
-                    v-if="user.is_admin"
-                    @click="store(customerId, user.id, addressId, 'sundance')"
-                    class="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
-                Send To Sundance Tile
-            </button>
+                <button type="submit"
+                        @click="form.subcontractor = null"
+                        class="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
+                    Cancel Sending To Sub
+                </button>
+
+            </div>
         </div>
         <div v-if="form.type === 'todo' && user.is_admin === 1" class="py-6">
             <div>
@@ -141,6 +146,7 @@ export default {
     },
     props: {
         addressId: String,
+        subcontractors: Array,
         customerId: String,
         customer: String,
         customerName: String,
@@ -161,14 +167,13 @@ export default {
             description: '',
             source: '',
             price: '',
+            subcontractor: null,
             taskItems: null,
             quantity: 1,
             selectedTask: null,
             name: null,
             selectedTaskDescription: null,
             type: '',
-            skyline: false,
-            sundance: false,
             todoAssignee: null,
             approval: false,
             approvedDate: null,
@@ -177,12 +182,6 @@ export default {
         const errors = reactive({})
 
         function store(customerId, userId, addressId, destination = '') {
-
-            if (destination === 'skyline') {
-                this.form.skyline = true;
-            } else if (destination === 'sundance') {
-                this.form.sundance = true;
-            }
 
             this.form.address_id = addressId
             this.form.customer_id = customerId
