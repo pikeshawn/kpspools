@@ -374,6 +374,14 @@ Route::post('/chat/response',
     [ChatController::class, 'chatResponse'])
     ->name('chat.response');
 
+Route::get('/chat/response',
+    [ChatController::class, 'chat'])
+    ->name('chat');
+
+Route::get('/chat/question/{chat}',
+    [ChatController::class, 'chatQuestion'])
+    ->name('chat.question');
+
 Route::get('/chat',
     [ChatController::class, 'chat'])
     ->name('chat');

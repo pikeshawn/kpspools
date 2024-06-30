@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Inertia\Inertia;
 use GuzzleHttp\Client;
+use App\Models\Chat;
 
 class ChatController extends Controller
 {
@@ -14,28 +15,65 @@ class ChatController extends Controller
     public function chatResponse(Request $request)
     {
 
-//        dd($request);
+     $m = self::getMessage($request);
 
-//        $m = "<title>Steps to Replace Sand in a Sand Filter</title></head><body>  <h1>Steps to Replace Sand in a Sand Filter</h1>  <ol>    <li>Turn off the pool pump and close the valves to stop the flow of water.</li>    <li>Release the pressure in the filter system by opening the air relief valve.</li>    <li>Remove the filter cover or lid by following the manufacturer's instructions.</li>    <li>Use a pool filter sand scoop or a small bucket to carefully remove the old filter sand from the filter tank.</li>    <li>Inspect the filter laterals or fingers for any damage and replace them if necessary.</li>    <li>Thoroughly clean the inside of the filter tank using a hose or pressure washer if needed.</li>    <li>Prepare the new filter sand by following the manufacturer's instructions regarding the type and quantity of sand required.</li>    <li>Pour the new filter sand into the filter tank, making sure to distribute it evenly and not damage the laterals.</li>    <li>Reinstall the filter cover or lid securely.</li>    <li>Open the air relief valve briefly to release any trapped air, then close it.</li>    <li>Open the valves and turn on the pool pump to resume normal filtration.</li>    <li>Check for any leaks or unusual noises, and make necessary adjustments if required.</li>    <li>Regularly backwash the filter to remove any impurities and keep it functioning optimally.</li>";
-
-        $m = self::getMessage($request);
-
-//        dd($m);
-
-        return Inertia::render('Chat/Index', [
+        return Inertia::render('Chat/Response', [
             'response' => $m
         ]);
-
-//        return Inertia::
-//        return response()->json(['message' => $response->getBody()->getContents()]);
     }
 
     public function chat()
     {
-        return Inertia::render('Chat/Index');
+        $chats = Chat::all(['id', 'question', 'user_id']);
+
+        return Inertia::render('Chat/Index', [
+            'chat' => $chats
+        ]);
+    }
+
+    public function chatQuestion(Chat $chat)
+    {
+        return Inertia::render('Chat/Question', [
+            'chat' => $chat
+        ]);
     }
 
     private function getMessage($request)
+    {
+        $message = self::getContent($request);
+
+        $m = self::processMessage($message);
+
+        self::saveResponse($request, $m);
+
+        return str_replace("\n", "", $m);
+
+    }
+
+    private function processMessage($message)
+    {
+        $m = $message['choices'][0]['message']['content'];
+        $startTag = strpos($m, "html");
+
+        if($startTag){
+            $endTag = strpos($m, "</html>");
+            $stringLength = strlen($m);
+            return substr($m, $startTag + 4, $stringLength-$startTag-($stringLength-($endTag+7)));
+        }
+
+        return $m;
+    }
+
+    private function saveResponse($request, $m)
+    {
+        Chat::firstOrCreate([
+            'question' => $request->message,
+            'answer' => $m,
+            'user_id' => $request->user
+        ]);
+    }
+
+    private function getContent($request)
     {
         $client = new Client();
 
@@ -55,14 +93,12 @@ class ChatController extends Controller
                         'content' => $request->message
                     ]
                 ],
-                'model' => 'gpt-3.5-turbo',
+                'model' => 'gpt-4-turbo',
                 "temperature" => 0.7
             ]
         ]);
 
-        $message = json_decode($response->getBody()->getContents(), true);
-
-        $m = $message['choices'][0]['message']['content'];
-        return str_replace("\n", "", $m);
+        return json_decode($response->getBody()->getContents(), true);
     }
+
 }
