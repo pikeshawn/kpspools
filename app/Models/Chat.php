@@ -9,5 +9,5 @@ class Chat extends Model
 {
     use HasFactory;
     protected $guarded = [];
-    protected $table = 'Chat';
+    protected $table = 'chat';
 }
