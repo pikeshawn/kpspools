@@ -146,38 +146,101 @@ class TaskController extends Controller
 //            ->get();
 
 
-        $tasks = Task::select(['id', 'customer_id', 'assigned', 'created_at', 'description', 'status', 'type', 'price', 'address_id'])
-            ->where('status', 'approved')
-            ->where('created_at', '>', '2024-05-01 00:00:00')
-            ->get();
-//
+//        STATUS === APPROVED
+//        ==============================
 //        $tasks = Task::select(['id', 'customer_id', 'assigned', 'created_at', 'description', 'status', 'type', 'price', 'address_id'])
+//            ->where('status', 'approved')
 //            ->where('created_at', '>', '2024-05-01 00:00:00')
 //            ->get();
 
+
+//        ALL TASKS IN THE CURRENT MONTH
+//        ==============================
 //        $tasks = Task::select(['id', 'customer_id', 'assigned', 'created_at', 'description', 'status', 'type', 'price', 'address_id'])
-//            ->where('customer_id', 130)
+//            ->where('created_at', '>', '2024-06-01 00:00:00')
+//            ->where('status', '<>', 'denied')
 //            ->get();
 
+
+//        ALL TASKS FOR A SPECIFIC CUSTOMER
+//        ==============================
+        $tasks = Task::select(['id', 'customer_id', 'assigned', 'created_at', 'description', 'status', 'type', 'price', 'address_id'])
+            ->where('customer_id', 278)
+            ->get();
+
+//        ALL PARTS AND REPAIRS THAT HAVE BEEN PICKED UP, APPROVED, OR CREATED
+//        ==============================
 //        $tasks = Task::select(['id', 'customer_id', 'assigned', 'created_at', 'description', 'status', 'type', 'price', 'address_id'])
 //            ->where(function ($query) {
 //                $query->where('status', 'approved')
 //                    ->orWhere('status', 'pickedUp')
-//                    ->orWhere('status', 'created');
+//                    ->orWhere('status', 'created')
+//                    ->orWhere('status', 'completed');
 //            })->where(function ($query) {
 //                $query->where('type', 'part')
 //                    ->orWhere('type', 'repair');
 //            })
-//            ->where('created_at', '>', '2024-05-01 00:00:00')
+//            ->where('created_at', '>', '2024-01-01 00:00:00')
 //            ->orderBy('customer_id')
 //            ->get();
 
-        $tsks = [];
+//        $names = [];
+//        $tasksWithAttributes = self::getTasksFromSpecificCustomersByLastName($tasks, $names);
+
+        $tasksWithAttributes = self::getTasksAsAnArray($tasks);
+
+
+//        dd($tsks);
+
+        //        dd($tsks);
+
+        usort($tasksWithAttributes, function ($a, $b) {
+            return $a[1]['last_name'] <=> $b[1]['last_name'];
+        });
+
+
+        return Inertia::render('Task/Reconcile', [
+            'tasks' => $tasksWithAttributes
+        ]);
+
+    }
+
+    public function index()
+    {
+
+        $tasks = Task::allIncompleteTasks();
+
+        return Inertia::render('Task/Index', [
+            'tasks' => $tasks,
+        ]);
+    }
+
+    public function tasksNeedsApproval()
+    {
+
+//        dd(Auth::user());
+
+//        dd(User::isAdmin());
+
+//            dd('isAdmin');
+        $tasks = Task::allCreatedTasks();
+
+//        return $tasks;
+
+        return Inertia::render('Task/NeedsApproval', [
+            'tasks' => $tasks,
+        ]);
+    }
+
+    private function getTasksAsAnArray($tasks)
+    {
+        $tasksWithAttributes = [];
 
         $t = [];
 
         foreach ($tasks as $task) {
             $customer = Customer::find($task->customer_id);
+
             $address = Address::find($task->address_id);
             $task_statuses = TaskStatus::where('task_id', $task->id)->get();
 
@@ -227,53 +290,88 @@ class TaskController extends Controller
             array_push($t, $tsArray);
             array_push($t, $c);
             array_push($t, $a);
-            array_push($tsks, $t);
+            array_push($tasksWithAttributes, $t);
 
             $t = [];
             $c = [];
             $a = [];
+
         }
 
-//        dd($tsks);
-
-        //        dd($tsks);
-
-        usort($tsks, function ($a, $b) {
-            return $a[1]['last_name'] <=> $b[1]['last_name'];
-        });
-
-
-        return Inertia::render('Task/Reconcile', [
-            'tasks' => $tsks
-        ]);
-
+        return $tasksWithAttributes;
     }
 
-    public function index()
+    public function getTasksFromSpecificCustomersByLastName($tasks, $names)
     {
+        $tsks = [];
 
-        $tasks = Task::allIncompleteTasks();
+        $t = [];
 
-        return Inertia::render('Task/Index', [
-            'tasks' => $tasks,
-        ]);
-    }
+        foreach ($tasks as $task) {
+            $customer = Customer::find($task->customer_id);
 
-    public function tasksNeedsApproval()
-    {
+            foreach ($names as $name) {
+                if ($customer->last_name === $name) {
+                    $address = Address::find($task->address_id);
+                    $task_statuses = TaskStatus::where('task_id', $task->id)->get();
 
-//        dd(Auth::user());
+                    $t['id'] = $task->id;
+                    $t['customer_id'] = $task->customer_id;
+                    $t['created_at'] = $task->created_at;
+                    $t['description'] = $task->description;
+                    $t['assigned'] = $task->assigned;
+                    $t['status'] = $task->status;
+                    $t['type'] = $task->type;
+                    $t['price'] = $task->price;
+                    $t['address_id'] = $task->address_id;
+                    $t['deleted'] = false;
 
-//        dd(User::isAdmin());
+                    $c['id'] = $customer->id;
+                    $c['first_name'] = $customer->first_name;
+                    $c['last_name'] = $customer->last_name;
 
-//            dd('isAdmin');
-        $tasks = Task::allCreatedTasks();
+                    $a['id'] = $address->id;
+                    $a['address_line_1'] = $address->address_line_1;
 
-//        return $tasks;
 
-        return Inertia::render('Task/NeedsApproval', [
-            'tasks' => $tasks,
-        ]);
+                    $tsArray = [
+                        'created' => false,
+                        'approved' => false,
+                        'pickedUp' => false,
+                        'completed' => false,
+                        'remove' => false,
+                        'diy' => false,
+                        'denied' => false,
+                        'invoiced' => false,
+                        'paid' => false,
+                    ];
+
+                    foreach ($task_statuses as $status) {
+                        if ($status->status === 'created') $tsArray['created'] = true;
+                        if ($status->status === 'approved') $tsArray['approved'] = true;
+                        if ($status->status === 'pickedUp') $tsArray['pickedUp'] = true;
+                        if ($status->status === 'completed') $tsArray['completed'] = true;
+                        if ($status->status === 'remove') $tsArray['remove'] = true;
+                        if ($status->status === 'diy') $tsArray['diy'] = true;
+                        if ($status->status === 'denied') $tsArray['denied'] = true;
+                        if ($status->status === 'invoiced') $tsArray['invoiced'] = true;
+                        if ($status->status === 'paid') $tsArray['paid'] = true;
+                    }
+
+                    array_push($t, $tsArray);
+                    array_push($t, $c);
+                    array_push($t, $a);
+                    array_push($tsks, $t);
+
+                    $t = [];
+                    $c = [];
+                    $a = [];
+                }
+            }
+        }
+
+        return $tsks;
+
     }
 
     public function customerTasks(Request $request)
@@ -326,16 +424,14 @@ class TaskController extends Controller
     }
 
 
-
-
     public function getTaskItems(Request $request)
     {
         $scpItems = ScpInvoiceItem::select(['scp_invoice_item.description', 'scp_invoice_item.cost', 'scp_invoice_item.created_at'])
             ->join(DB::raw('(SELECT description, MAX(created_at) as latest_created_at FROM scp_invoice_item GROUP BY description) as latest_items'),
                 function ($join) {
-                $join->on('scp_invoice_item.description', '=', 'latest_items.description')
-                    ->on('scp_invoice_item.created_at', '=', 'latest_items.latest_created_at');
-            })
+                    $join->on('scp_invoice_item.description', '=', 'latest_items.description')
+                        ->on('scp_invoice_item.created_at', '=', 'latest_items.latest_created_at');
+                })
             ->where('scp_invoice_item.description', 'like', "%$request->name%")
             ->orderBy('scp_invoice_item.created_at', 'desc')
             ->get();
@@ -513,7 +609,7 @@ class TaskController extends Controller
         $subs = Subcontractor::select(['company_name'])->get();
 
         $subcontractors = [null];
-        foreach ($subs as $sub){
+        foreach ($subs as $sub) {
             $subcontractors[] = $sub->company_name;
         }
 
