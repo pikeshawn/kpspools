@@ -118,6 +118,11 @@ export default {
                     id: 9,
                     name: "Task Reconciliation",
                     route: "task.reconcile"
+                },
+                {
+                    id: 10,
+                    name: "Initiate Bid And Tasks",
+                    route: "initiate.index"
                 }
             ]
         }

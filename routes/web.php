@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\TaskController;
+use App\Http\Controllers\InitiateBidController;
 use App\Http\Controllers\ProfitController;
 use App\Http\Controllers\TestingController;
 use App\Http\Controllers\TransferController;
@@ -43,8 +44,6 @@ Route::get('/', function () {
 });
 
 
-
-
 Route::get('/checkout', function (Request $request) {
     $stripePriceId = 'price_1OXQCUIX4qnobbHhnwwNN3HA';
 
@@ -60,7 +59,6 @@ Route::view('checkout.success', '')->name('checkout-success');
 Route::view('checkout.cancel', '')->name('checkout-cancel');
 
 
-
 Route::get('/subscription-checkout', function (Request $request) {
     return $request->user()
         ->newSubscription('Monthly Plan', 'plan_H2RFj9S6eeEeq3')
@@ -74,9 +72,6 @@ Route::get('/subscription-checkout', function (Request $request) {
 
 //Route::view('checkout.success', '')->name('checkout-success');
 //Route::view('checkout.cancel', '')->name('checkout-cancel');
-
-
-
 
 
 Route::middleware(['auth:sanctum', 'verified', 'serviceman'])->get('/dashboard', function () {
@@ -133,6 +128,15 @@ Route::middleware(['auth:sanctum', 'verified', 'serviceman'])->group(function ()
     Route::get('/admin', function () {
         return Inertia::render('Admin/Index');
     })->name('admin.links');
+
+    Route::get('/initiate',
+        [InitiateBidController::class, 'index'])->name('initiate.index');;
+
+    Route::get('/initiate/{Customer}',
+        [InitiateBidController::class, 'customer'])->name('initiate.customer');
+
+    Route::post('sendBid',
+        [InitiateBidController::class, 'sendBid'])->name('initiate.sendBid');;
 
     Route::get('/profit',
         [ProfitController::class, 'index'])->name('profit.index');
