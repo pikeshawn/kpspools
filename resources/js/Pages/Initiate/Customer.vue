@@ -139,19 +139,19 @@ export default {
                 tasks: [
                     {
                         id: 1,
-                        name: 'Monthly Service May',
-                        price: 15,
-                        qty: 1,
+                        name: null,
+                        price: null,
+                        qty: null,
                     }, {
                         id: 2,
-                        name: 'Monthly Service June',
-                        price: 130,
-                        qty: 1,
+                        name: null,
+                        price: null,
+                        qty: null,
                     }, {
                         id: 3,
-                        name: 'Monthly Service July',
-                        price: 130,
-                        qty: 1,
+                        name: null,
+                        price: null,
+                        qty: null,
                     }, {
                         id: 4,
                         name: null,
