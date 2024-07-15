@@ -42,7 +42,7 @@ class InitiateBidController extends Controller
     public function sendBid(Request $request)
     {
 
-        dd($request);
+//        dd($request);
 
         $initiatedBid = self::initiateBid($request->customer);
 
