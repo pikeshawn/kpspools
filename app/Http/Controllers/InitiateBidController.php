@@ -42,6 +42,8 @@ class InitiateBidController extends Controller
     public function sendBid(Request $request)
     {
 
+        dd($request);
+
         $initiatedBid = self::initiateBid($request->customer);
 
         $initiatedBidJSON = json_decode($initiatedBid);
@@ -132,7 +134,7 @@ class InitiateBidController extends Controller
                 'item_id' => null,
                 'invStartDate' => '',
                 'jobId' => $jobId,
-                'qty' => 1,
+                'qty' => $task['qty'],
                 'qtyOnHand' => '0',
                 'qtyUnit' => '',
                 'qtyUnitErrorMessage' => '',
