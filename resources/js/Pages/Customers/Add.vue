@@ -11,8 +11,8 @@
             </div>
 
 
-<!--            <pre>{{ prospective }}</pre>-->
-<!--            <pre>{{ address }}</pre>-->
+            <!--            <pre>{{ prospective }}</pre>-->
+            <!--            <pre>{{ address }}</pre>-->
 
 
             <div class="py-6 mx-auto max-w-2xl text-center">
@@ -189,6 +189,34 @@
                           focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                           method="post" as="button" :data="customer">Add Customer
                     </Link>
+
+
+                    <div class="mt-2 sm:col-span-2">
+                        <label class="block text-sm font-semibold leading-6 text-gray-900">Initiate Bid</label>
+                        <div class="mt-2.5">
+                            <input type="checkbox" v-model="customer.initiateBid" id="initiateBid" class="mr-2">
+                            <label for="initiateBid" class="text-sm text-gray-600">Check to initiate a bid</label>
+                        </div>
+                    </div>
+
+                    <div id="app" class="p-6">
+                        <div class="sm:col-span-2">
+                            <label class="block text-sm font-semibold leading-6 text-gray-900">Tasks</label>
+                            <div v-for="(task, index) in customer.tasks" :key="index" class="mt-4">
+                                <input v-model="task.description" placeholder="Description"
+                                       class="block w-full rounded-md border-0 px-3.5 py-2 mb-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"/>
+                                <input v-model="task.price" type="number" placeholder="Price"
+                                       class="block w-full rounded-md border-0 px-3.5 py-2 mb-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"/>
+                                <input v-model="task.quantity" type="number" placeholder="Quantity"
+                                       class="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"/>
+                            </div>
+                        </div>
+
+
+                    </div>
+
+                    <!--                <pre>{{ customer.tasks }}</pre>-->
+
                 </div>
             </div>
         </div>
@@ -236,7 +264,11 @@ export default {
                 chemsIncluded: 1,
                 gateCode: "",
                 phoneNumber: "",
-                notes: ""
+                notes: "",
+                initiateBid: false,
+                tasks: [
+                    {description: "Monthly Service", price: 110, quantity: 1}
+                ],
             },
             chemsIncluded: [
                 {id: 'yes', title: 1},
@@ -312,6 +344,84 @@ export default {
         this.customer.phoneNumber = this.prospective.phone_number;
     },
     methods: {
+        // addTaskContainers(){
+        //     const taskContainer = document.getElementById('taskContainer');
+        //
+        //     // Create task wrapper div
+        //     const taskDiv = document.createElement('div');
+        //     taskDiv.className = 'mt-4';
+        //
+        //     const randomInt = getRandomInt(1, 100);
+        //     console.log(randomInt); // e.g., 42
+        //
+        //     // Create description input
+        //     const descriptionInput = document.createElement('input');
+        //     descriptionInput.type = 'text';
+        //     descriptionInput.id = 'description' + randomInt;
+        //     descriptionInput.placeholder = 'Description';
+        //     descriptionInput.className = 'block w-full rounded-md border-0 px-3.5 py-2 mb-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6';
+        //
+        //     // Create price input
+        //     const priceInput = document.createElement('input');
+        //     priceInput.type = 'number';
+        //     priceInput.id = 'price' + randomInt;
+        //     priceInput.placeholder = 'Price';
+        //     priceInput.className = 'block w-full rounded-md border-0 px-3.5 py-2 mb-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6';
+        //
+        //     // Create quantity input
+        //     const quantityInput = document.createElement('input');
+        //     quantityInput.type = 'number';
+        //     quantityInput.id = 'quantity' + randomInt;
+        //     quantityInput.placeholder = 'Quantity';
+        //     quantityInput.className = 'block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6';
+        //
+        //     // Create remove button
+        //     const removeButton = document.createElement('button');
+        //     removeButton.type = 'button';
+        //     removeButton.className = 'mt-2 inline-flex items-center px-4 py-2 bg-red-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-red-500 focus:outline-none focus:border-red-700 focus:ring ring-red-300 disabled:opacity-25 transition ease-in-out duration-150';
+        //     removeButton.textContent = 'Remove Task';
+        //
+        //     // Create remove button
+        //     const addButton = document.createElement('button');
+        //     addButton.type = 'button';
+        //     addButton.setAttribute('v-click')
+        //     addButton.className = 'mt-2 inline-flex items-center px-4 py-2 bg-red-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-red-500 focus:outline-none focus:border-red-700 focus:ring ring-red-300 disabled:opacity-25 transition ease-in-out duration-150';
+        //     addButton.textContent = 'Remove Task';
+        //
+        //     // Remove task on button click
+        //     removeButton.addEventListener('click', function() {
+        //         taskContainer.removeChild(taskDiv);
+        //     });
+        //
+        //     // Append inputs and button to taskDiv
+        //     taskDiv.appendChild(descriptionInput);
+        //     taskDiv.appendChild(priceInput);
+        //     taskDiv.appendChild(quantityInput);
+        //     taskDiv.appendChild(removeButton);
+        //
+        //     // Append taskDiv to taskContainer
+        //     taskContainer.appendChild(taskDiv);
+        //
+        // },
+        addTask() {
+            console.log('another task');
+            console.log(this.customer.tasks);
+            this.customer.tasks.push({description: "", price: 0, quantity: 1});
+        },
+        addTaskContainer() {
+            this.customer.tasks.push({description: "", price: 0, quantity: 1});
+        },
+        updateTask(index) {
+            const task = this.customer.tasks[index];
+            if (!task.description) {
+                this.customer.tasks.splice(index, 1);
+            }
+        },
+        removeTask(index) {
+            console.log('remove me')
+            console.log(this.customer.tasks);
+            this.customer.tasks.splice(index, 1);
+        },
         addCustomer() {
             // Perform the POST request
             this.$inertia.post('/customers/store', this.customer, {

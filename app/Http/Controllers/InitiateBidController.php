@@ -62,14 +62,14 @@ class InitiateBidController extends Controller
 
     }
 
-    private function updateCustomerTable($jemmson_id, $kpsPoolsCustomerId)
+    public function updateCustomerTable($jemmson_id, $kpsPoolsCustomerId)
     {
         $customer = Customer::find($kpsPoolsCustomerId);
         $customer->jemmson_id = $jemmson_id;
         $customer->save();
     }
 
-    private function submitBid($jobId, $customer_id)
+    public function submitBid($jobId, $customer_id)
     {
         $client = new Client();
 
@@ -89,20 +89,29 @@ class InitiateBidController extends Controller
         $response->getBody()->getContents();
     }
 
-    private function addTasks($tasks, $jobId, $customer_id, $startDate)
+    public function addTasks($tasks, $jobId, $customer_id, $startDate)
     {
 
-//        dd($tasks[3]['name']);
+//        dd($tasks);
+
 
         foreach ($tasks as $task) {
             if (isset($task['name'])) {
                 self::addTask($task, $jobId, $customer_id, $startDate);
             }
+            if (isset($task['description'])) {
+                self::addTask($task, $jobId, $customer_id, $startDate);
+            }
         }
     }
 
-    private function addTask($task, $jobId, $customer_id, $startDate)
+    public function addTask($task, $jobId, $customer_id, $startDate)
     {
+
+//        dd($task['qty']);
+
+        isset($task['qty']) ? $quantity = $task['qty'] : $quantity = $task['quantity'];
+        isset($task['name']) ? $name = $task['name'] : $name = $task['description'];
 
         $client = new Client();
 
@@ -134,7 +143,7 @@ class InitiateBidController extends Controller
                 'item_id' => null,
                 'invStartDate' => '',
                 'jobId' => $jobId,
-                'qty' => $task['qty'],
+                'qty' => $quantity,
                 'qtyOnHand' => '0',
                 'qtyUnit' => '',
                 'qtyUnitErrorMessage' => '',
@@ -146,7 +155,7 @@ class InitiateBidController extends Controller
                 'taskExists' => '',
                 'taskId' => null,
                 'taskPrice' => $task['price'],
-                'taskName' => $task['name'],
+                'taskName' => $name,
                 'trackQtyOnHand' => true,
                 'type' => 'Inventory',
                 'updateBasePrice' => false,
@@ -164,8 +173,14 @@ class InitiateBidController extends Controller
 
     }
 
-    private function initiateBid($customer)
+    public function initiateBid($customer)
     {
+
+//        dd($customer);
+
+        isset($customer['phone_number']) ? $phone = $customer['phone_number'] : $phone = $customer['phoneNumber'];
+        isset($customer['first_name']) ? $firstName = $customer['first_name'] : $firstName = $customer['firstName'];
+        isset($customer['last_name']) ? $lastName = $customer['last_name'] : $lastName = $customer['lastName'];
 
         $client = new Client();
 
@@ -175,12 +190,12 @@ class InitiateBidController extends Controller
                 'Accept' => 'application/json',
             ],
             'json' => [
-                'customerName' => $customer['first_name'] . " " . $customer['last_name'],
+                'customerName' => $firstName . " " . $lastName,
                 'email' => '',
-                'firstName' => $customer['first_name'],
-                'lastName' => $customer['last_name'],
-                'jobName' => $customer['first_name'] . "-" . $customer['last_name'] . "-initial-" . rand(1, 1000),
-                'phone' => self::formatPhoneNumber($customer['phone_number']),
+                'firstName' => $firstName,
+                'lastName' => $lastName,
+                'jobName' => $firstName . "-" . $lastName . "-initial-" . rand(1, 1000),
+                'phone' => self::formatPhoneNumber($phone),
                 'quickbooks_id' => '',
                 'isMobile' => true,
                 'id' => '',
