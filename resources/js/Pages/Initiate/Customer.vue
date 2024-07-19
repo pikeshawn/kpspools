@@ -29,6 +29,20 @@
                             No
                         </dd>
                     </div>
+<!--                    <pre>{{ completedTasks }}</pre>-->
+                    <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                        <dt class="text-sm font-medium leading-6 text-gray-900">Completed Tasks</dt>
+                        <br>
+                        <dd v-for="ct in completedTasks" :key="ct.id" class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
+                            {{ ct.created_at }}
+                        </dd>
+                        <dd v-for="ct in completedTasks" :key="ct.id" class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
+                            {{ ct.description }}
+                        </dd>
+                        <dd v-for="ct in completedTasks" :key="ct.id" class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
+                            {{ ct.price }}
+                        </dd>
+                    </div>
                     <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
                         <dt class="text-sm font-medium leading-6 text-gray-900">Stops</dt>
                         <br>
@@ -36,17 +50,6 @@
                             {{ ss.created_at }} {{ ss.service_type }} {{ ss.user_id }}
                         </dd>
                     </div>
-<!--                    <div class="mt-16 flex justify-center">-->
-<!--                        <RadioGroup v-model="form.paymentOption" class="grid grid-cols-2 gap-x-1 rounded-full p-1 text-center text-xs font-semibold leading-5 ring-1 ring-inset ring-gray-200">-->
-<!--                            <RadioGroupLabel class="sr-only">Payment frequency</RadioGroupLabel>-->
-<!--                            <RadioGroupOption as="template" v-for="option in paymentOptions.option" :key="option.value" :value="option" v-slot="{ checked }">-->
-<!--                                <div :class="[checked ? 'bg-indigo-600 text-white' : 'text-gray-500', 'cursor-pointer rounded-full px-2.5 py-1']">-->
-<!--                                    <span>{{ option.label }}</span>-->
-<!--                                </div>-->
-<!--                            </RadioGroupOption>-->
-<!--                        </RadioGroup>-->
-<!--                    </div>-->
-
                     <div class="relative flex items-start">
                         <div class="flex h-6 items-center">
                             <input v-model="form.initiateBid" id="comments" aria-describedby="comments-description"
@@ -118,6 +121,7 @@ export default {
     props: {
         customer: Array,
         serviceStops: Array,
+        completedTasks: Array,
         user: String
     },
     data() {

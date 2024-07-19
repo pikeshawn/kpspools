@@ -6,6 +6,7 @@ use App\Models\ServiceStop;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use App\Models\Customer;
+use App\Models\Task;
 use GuzzleHttp\Client;
 use Carbon\Carbon;
 
@@ -32,10 +33,13 @@ class InitiateBidController extends Controller
 
         $customer = Customer::find($id);
         $serviceStops = ServiceStop::where('customer_id', $customer->id)->get();
+        $completedTasks = Task::where('customer_id', $customer->id)
+            ->where('status', 'completed')->get();
 
         return Inertia::render('Initiate/Customer', [
             'customer' => $customer,
             'serviceStops' => $serviceStops,
+            'completedTasks' => $completedTasks
         ]);
     }
 
