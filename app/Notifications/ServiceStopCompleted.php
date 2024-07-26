@@ -79,6 +79,8 @@ class ServiceStopCompleted extends Notification
      */
     public function toVonage($notifiable): VonageMessage
     {
+
+
         $vacuum = $this->correctValue($this->service_stop->vacuum);
         $brush = $this->correctValue($this->service_stop->brush);
         $empty_baskets = $this->correctValue($this->service_stop->empty_baskets);
@@ -87,28 +89,35 @@ class ServiceStopCompleted extends Notification
         $chlorineLevel = $this->service_stop->chlorine_level;
         $chlorineLevel > 5 ? $chlorineLevel = 5.0 : $chlorineLevel = $this->service_stop->chlorine_level;
 
-        $text = "Jemmson:\n" . $this->customer->first_name . ' ' .
-            $this->customer->last_name . ' your pool has been completed by '
-            . Auth::user()->name . " from KPS Pools\n" .
-            'address:    ' . $this->address->address_line_1 . "\n" .
-            'time in:     ' . $this->service_stop->time_in . "\n" .
-            'time out:   ' . $this->service_stop->time_out . "\n" .
-            'pH:                ' . $this->service_stop->ph_level . "\n" .
-            'chlorine:        ' . $chlorineLevel . "\n" .
-            'tabs:              ' . $this->service_stop->tabs_whole_mine . "\n" .
-            'liquid chlorine:   ' . $this->service_stop->liquid_chlorine . " gallon(s)\n" .
-            'acid:              ' . $this->service_stop->liquid_acid . " gallon(s)\n" .
-            'vacuum:         ' . $vacuum . "\n" .
-            'brush:            ' . $brush . "\n" .
-            'emptied baskets:   ' . $empty_baskets . "\n" .
-            'backwash:      ' . $backwash;
-
-        if ($this->service_stop->salt_level !== 'not checked') {
-            $text = $text . "\nsalt level: " . $this->service_stop->salt_level . "\n";
-        }
-
         if ($this->isAdmin) {
-            $text = $text . "\nnotes: " . $this->service_stop->notes . "\n";
+            $text = $this->customer->first_name . ' ' . $this->customer->last_name
+                . "\nhttps://kpspools.com/customers/show/" . $this->address->id
+                . "\nhttps://kpspools.com/service_stops/" . $this->address->id
+                . "\nwas completed by " . Auth::user()->name;
+        } else {
+            $text = "Jemmson:\n" . $this->customer->first_name . ' ' .
+                $this->customer->last_name . ' your pool has been completed by '
+                . Auth::user()->name . " from KPS Pools\n" .
+                'address:    ' . $this->address->address_line_1 . "\n" .
+                'time in:     ' . $this->service_stop->time_in . "\n" .
+                'time out:   ' . $this->service_stop->time_out . "\n" .
+                'pH:                ' . $this->service_stop->ph_level . "\n" .
+                'chlorine:        ' . $chlorineLevel . "\n" .
+                'tabs:              ' . $this->service_stop->tabs_whole_mine . "\n" .
+                'liquid chlorine:   ' . $this->service_stop->liquid_chlorine . " gallon(s)\n" .
+                'acid:              ' . $this->service_stop->liquid_acid . " gallon(s)\n" .
+                'vacuum:         ' . $vacuum . "\n" .
+                'brush:            ' . $brush . "\n" .
+                'emptied baskets:   ' . $empty_baskets . "\n" .
+                'backwash:      ' . $backwash;
+
+            if ($this->service_stop->salt_level !== 'not checked') {
+                $text = $text . "\nsalt level: " . $this->service_stop->salt_level . "\n";
+            }
+
+            if ($this->isAdmin) {
+                $text = $text . "\nnotes: " . $this->service_stop->notes . "\n";
+            }
         }
 
         return (new VonageMessage)
