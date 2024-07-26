@@ -166,7 +166,6 @@
                                         <input
                                             id="timeIn"
                                             type="datetime-local" v-model="form.timeIn">
-                                        <div class="mt-2" v-if="form.timeIn">{{ saveTimeIn }}</div>
                                     </div>
 
                                     <div class="flex flex-col">
@@ -174,7 +173,6 @@
                                         <input
                                             id="timeOut"
                                             type="datetime-local" v-model="form.timeOut">
-                                        <div class="mt-2" v-if="form.timeOut">{{ saveTimeOut }}</div>
                                     </div>
 
 
@@ -210,7 +208,6 @@
                                                     {{ option }}
                                                 </option>
                                             </select>
-                                            <div class="mt-2" v-if="form.chlorine_level">{{ form.chlorine_level }}</div>
                                         </div>
 
                                         <div v-if="form.checkedChems"></div>
@@ -224,7 +221,6 @@
                                                     {{ option }}
                                                 </option>
                                             </select>
-                                            <div class="mt-2" v-if="form.ph_level">{{ form.ph_level }}</div>
                                         </div>
                                     </div>
 
@@ -243,7 +239,6 @@
                                                 {{ option }}
                                             </option>
                                         </select>
-                                        <div class="mt-2" v-if="form.chlorine_level">{{ form.chlorine_level }}</div>
                                     </div>
                                     <div
                                         v-if="form.service_type !== 'Repair' &&
@@ -258,7 +253,6 @@
                                                 {{ option }}
                                             </option>
                                         </select>
-                                        <div class="mt-2" v-if="form.ph_level">{{ form.ph_level }}</div>
                                     </div>
 
                                     <div>
@@ -272,7 +266,6 @@
                                         '11','12','13','14','15','16','17','18','19','20']">{{ option }}
                                                 </option>
                                             </select>
-                                            <div class="mt-2" v-if="form.tabsWholeMine">{{ form.tabsWholeMine }}</div>
                                         </div>
                                     </div>
 
@@ -287,10 +280,6 @@
                                         '11','12','13','14','15','16','17','18','19','20']">{{ option }}
                                                 </option>
                                             </select>
-                                            <div class="mt-2" v-if="form.tabsWholeTheirs">{{
-                                                    form.tabsWholeTheirs
-                                                }}
-                                            </div>
                                         </div>
                                     </div>
 
@@ -311,7 +300,6 @@
                                                            ]">{{ option }}
                                                 </option>
                                             </select>
-                                            <div class="mt-2" v-if="form.liquidChlorine">{{ form.liquidChlorine }}</div>
                                         </div>
                                     </div>
 
@@ -328,7 +316,6 @@
                                                            ]">{{ option }}
                                                 </option>
                                             </select>
-                                            <div class="mt-2" v-if="form.acid">{{ form.acid }}</div>
                                         </div>
                                     </div>
 
@@ -341,7 +328,6 @@
                                                     class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
                                                 <option v-for="option in saltRange">{{ option }}</option>
                                             </select>
-                                            <div class="mt-2" v-if="form.salt_level">{{ form.salt_level }}</div>
                                         </div>
                                     </div>
 
@@ -355,10 +341,6 @@
                                                     class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
                                                 <option v-for="option in powderChlorineRange">{{ option }}</option>
                                             </select>
-                                            <div class="mt-2" v-if="form.powder_chlorine">{{
-                                                    form.powder_chlorine
-                                                }}
-                                            </div>
                                         </div>
                                     </div>
 
@@ -371,10 +353,6 @@
                                                     class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
                                                 <option v-for="option in ['de', 'cartridge', 'sand']">{{ option }}</option>
                                             </select>
-                                            <div class="mt-2" v-if="form.filter_type">{{
-                                                    form.filter_type
-                                                }}
-                                            </div>
                                         </div>
                                     </div>
 
@@ -399,10 +377,6 @@
                                                     100
                                                 ]">{{ option }}</option>
                                             </select>
-                                            <div class="mt-2" v-if="form.cya">{{
-                                                    form.cya
-                                                }}
-                                            </div>
                                         </div>
                                     </div>
 
