@@ -283,6 +283,9 @@ class ServiceStopController extends Controller
 
         }
 
+
+//        dd($request);
+
         return ServiceStop::firstOrCreate([
             'customer_id' => $request->id,
             'address_id' => $address->id,
@@ -306,6 +309,8 @@ class ServiceStopController extends Controller
             'notes' => $request->notes,
             'salt_level' => $request->salt_level,
             'service_type' => $request->service_type,
+            'super_black_algaecide' => $request->super_black_algaecide,
+            'no_phos' => $request->no_phos,
             'user_id' => Auth::user()->id,
         ]);
 

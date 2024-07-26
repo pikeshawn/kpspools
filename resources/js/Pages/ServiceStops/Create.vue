@@ -344,6 +344,39 @@
                                         </div>
                                     </div>
 
+
+                                    <div>
+                                        <div class="col-span-1">
+                                            <label for="powder_chlorine"
+                                                   class="block text-sm font-medium text-gray-700">Super Black Algeacide (oz)</label>
+                                            <input
+                                                id="quantity"
+                                                v-model="form.super_black_algaecide"
+                                                type="number"
+                                                class="block w-1/2 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                            >
+                                        </div>
+                                    </div>
+
+
+                                    <div>
+                                        <div class="col-span-1">
+                                            <label for="powder_chlorine"
+                                                   class="block text-sm font-medium text-gray-700">No Phos (oz)</label>
+                                            <input
+                                                id="quantity"
+                                                v-model="form.no_phos"
+                                                type="number"
+                                                class="block w-1/2 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                            >
+                                        </div>
+                                    </div>
+
+
+
+
+
+
                                     <div>
                                         <div class="col-span-1">
                                             <label for="powder_chlorine"
@@ -600,6 +633,8 @@ export default {
             ph_level: null,
             salt_level: 'not checked',
             powder_chlorine: '0',
+            super_black_algaecide: '0',
+            no_phos: '0',
             tabsCrushedMine: '0',
             tabsCrushedTheirs: '0',
             tabsWholeMine: '0',
