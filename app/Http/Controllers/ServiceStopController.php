@@ -238,26 +238,18 @@ class ServiceStopController extends Controller
     private function createServiceStop($request, $address, $phLevel, $chlorineLevel, $start, $end)
     {
 
-        if ($request->filter_type) {
+        $f = Filter::where('customer_id', $request->id)->where('address_id', $address->id)->get();
 
-            $f = Filter::where('customer_id', $request->id)->where('address_id', $address->id)->get();
-            if ($f->isEmpty()) {
-                Filter::firstOrCreate([
-                    'customer_id' => $request->id,
-                    'address_id' => $address->id,
-                    'type' => $request->filter_type
-                ]);
-            } else {
-                if ($f[0]->filter_type != $request->filter_type) {
-                    $filter = new Filter([
-                        'customer_id' => $request->id,
-                        'address_id' => $address->id,
-                        'type' => $request->filter_type
-                    ]);
-                    $filter->save();
-                }
-            }
-
+        if ($f->isEmpty() && !is_null($request->filter_type)) {
+            Filter::firstOrCreate([
+                'customer_id' => $request->id,
+                'address_id' => $address->id,
+                'type' => $request->filter_type
+            ]);
+        } else if ($f[0]->filter_type != $request->filter_type) {
+            $filter = Filter::where('address_id', $address->id)->first();
+            $filter->type = $request->filter_type;
+            $filter->save();
         }
 
         if ($request->cya) {
