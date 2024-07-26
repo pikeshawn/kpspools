@@ -231,7 +231,7 @@ class ServiceStopController extends Controller
         ));
 
         Notification::route('vonage', '14806226441')->notify(new GenericNotification(
-            "A Missed Service message was sent by $user->name to " . $customer->first_name . " " . $customer->last_name
+            "A Missed Service message was sent by $user->name to " . $customer->first_name . " " . $customer->last_name . " REASON:: " . $servicestop->notes
         ));
     }
 
