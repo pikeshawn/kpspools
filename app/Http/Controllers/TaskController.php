@@ -764,6 +764,8 @@ class TaskController extends Controller
     public function store(Request $request): RedirectResponse
     {
 
+//        dd($request);
+
         $subcontractor = Subcontractor::where('company_name', $request->subcontractor)->first();
 
         if (!is_null($subcontractor)) {
@@ -784,7 +786,7 @@ $address->address_line_1 $address->city $address->zip
 =====================
 Please reach out to Shawn for any questions at 14807034902"));
 //            Notification::route('vonage', '14807034902')->notify(new GenericNotification("Skyline has been notified. They can be reached at:
-            Notification::route('vonage', $customer->phone_number)->notify(new GenericNotification("Skyline has been notified. They can be reached at:
+            Notification::route('vonage', $customer->phone_number)->notify(new GenericNotification($subcontractor->company_name . " has been notified. They can be reached at:
 =====================
 $subcontractor->contact_name
 $subcontractor->company_name
