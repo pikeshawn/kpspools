@@ -64,7 +64,7 @@
                                             {{ item.phone_number }}
                                         </label>
                                     </div>
-                                    <Link :href="route('customers.show', item.customer_id)"
+                                    <Link :href="route('customers.show', item.address_id)"
                                           class="sticky top-0 z-10 border-y border-b-blue-500 border-t-blue-400 bg-blue-200 px-3 py-2 text-sm font-semibold leading-6 text-gray-900"
                                           method="get" as="button">
                                         <label class="block text-sm font-medium leading-6 text-gray-900">Customer Page</label>
@@ -206,7 +206,7 @@
                                             {{ item.phone_number }}
                                         </label>
                                     </div>
-                                    <Link :href="route('customers.show', item.customer_id)"
+                                    <Link :href="route('customers.show', item.address_id)"
                                           class="sticky top-0 z-10 border-y border-b-blue-500 border-t-blue-400 bg-blue-200 px-3 py-2 text-sm font-semibold leading-6 text-gray-900"
                                           method="get" as="button">
                                         <label class="block text-sm font-medium leading-6 text-gray-900">Customer Page</label>
@@ -349,7 +349,7 @@
                                             {{ item.phone_number }}
                                         </label>
                                     </div>
-                                    <Link :href="route('customers.show', item.customer_id)"
+                                    <Link :href="route('customers.show', item.address_id)"
                                           class="sticky top-0 z-10 border-y border-b-blue-500 border-t-blue-400 bg-blue-200 px-3 py-2 text-sm font-semibold leading-6 text-gray-900"
                                           method="get" as="button">
                                         <label class="block text-sm font-medium leading-6 text-gray-900">Customer Page</label>
@@ -491,7 +491,7 @@
                                             {{ item.phone_number }}
                                         </label>
                                     </div>
-                                    <Link :href="route('customers.show', item.customer_id)"
+                                    <Link :href="route('customers.show', item.address_id)"
                                           class="sticky top-0 z-10 border-y border-b-blue-500 border-t-blue-400 bg-blue-200 px-3 py-2 text-sm font-semibold leading-6 text-gray-900"
                                           method="get" as="button">
                                         <label class="block text-sm font-medium leading-6 text-gray-900">Customer Page</label>
@@ -645,6 +645,7 @@ export default {
     },
     props: {
         tasks: Array,
+        servicemen: Array,
         user: String
     },
     data() {
@@ -659,36 +660,7 @@ export default {
                 {name: 'Denied', href: '#denied', current: false, count: 0},
                 {name: 'DIY', href: '#diy', current: false, count: 0},
             ],
-            servicemen: [
-                {
-                    id: 2,
-                    name: 'Shawn',
-                },
-                {
-                    id: 3,
-                    name: 'Jeremiah',
-                },
-                {
-                    id: 4,
-                    name: 'Reid',
-                },
-                {
-                    id: 5,
-                    name: 'Zach',
-                },
-                {
-                    id: 6,
-                    name: 'Phillip',
-                },
-                {
-                    id: 8,
-                    name: 'Joel',
-                },
-                {
-                    id: 10,
-                    name: 'Blake',
-                }
-            ],
+            servicemen: this.servicemen,
             status: [
                 {
                     id: 1,

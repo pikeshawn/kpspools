@@ -269,6 +269,14 @@ Route::middleware(['auth:sanctum', 'verified', 'serviceman'])->group(function ()
         [TaskController::class, 'create'])
         ->name('task.create');
 
+    Route::get('/tasks/reconcile',
+        [TaskController::class, 'reconcileCreatedTasks'])
+        ->name('reconcile.created');
+
+    Route::get('/tasks/pickedUp',
+        [TaskController::class, 'reconcilePickedUpTasks'])
+        ->name('reconcile.pickedUp');
+
     Route::get('/tasks/display',
         [TaskController::class, 'display'])
         ->name('tasks.display');
@@ -317,6 +325,10 @@ Route::middleware(['auth:sanctum', 'verified', 'serviceman'])->group(function ()
         [TaskController::class, 'changeStatus'])
         ->name('task.changeStatus');
 
+    Route::post('/task/changeType',
+        [TaskController::class, 'changeType'])
+        ->name('task.changeType');
+
     Route::post('/task/changeDescription',
         [TaskController::class, 'changeDescription'])
         ->name('task.changeDescription');
@@ -328,6 +340,14 @@ Route::middleware(['auth:sanctum', 'verified', 'serviceman'])->group(function ()
     Route::post('/task/deleteItem',
         [TaskController::class, 'deleteItem'])
         ->name('task.deleteItem');
+
+    Route::post('/task/deleteItemFromReconcile',
+        [TaskController::class, 'deleteItemFromReconcile'])
+        ->name('task.deleteItemFromReconcile');
+
+    Route::post('/task/requestApprovalFromReconcile',
+        [TaskController::class, 'requestApprovalFromReconcile'])
+        ->name('task.requestApprovalFromReconcile');
 
     Route::post('/task/notCompleted',
         [TaskController::class, 'notCompleted'])

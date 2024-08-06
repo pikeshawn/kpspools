@@ -114,6 +114,60 @@ class TaskController extends Controller
 
     }
 
+    public function reconcilePickedUpTasks()
+    {
+        $tasks = Task::select(
+            ['id', 'customer_id', 'assigned',
+                'created_at', 'description', 'status', 'sent',
+                'type', 'price', 'address_id'])
+            ->where('status', 'pickedUp')
+            ->where('created_at', '>', '2024-05-01 00:00:00')
+            ->get();
+
+        foreach ($tasks as $task) {
+            $customer = Customer::find($task->customer_id);
+            $taskAssignedServiceman = User::find($task->assigned);
+            $task->name = $taskAssignedServiceman->name;
+            $task->first_name = $customer->first_name;
+            $task->last_name = $customer->last_name;
+            $task->phone_number = $customer->phone_number;
+        }
+
+        $servicemen = User::where('active', 1)->where('type', 'serviceman')->get();
+
+        return Inertia::render('Task/ReconcilePickedUp', [
+            'tasks' => $tasks,
+            'servicemen' => $servicemen
+        ]);
+    }
+
+    public function reconcileCreatedTasks()
+    {
+        $tasks = Task::select(
+            ['id', 'customer_id', 'assigned',
+                'created_at', 'description', 'status', 'sent',
+                'type', 'price', 'address_id'])
+            ->where('status', 'created')
+            ->where('created_at', '>', '2024-05-01 00:00:00')
+            ->get();
+
+        foreach ($tasks as $task) {
+            $customer = Customer::find($task->customer_id);
+            $taskAssignedServiceman = User::find($task->assigned);
+            $task->name = $taskAssignedServiceman->name;
+            $task->first_name = $customer->first_name;
+            $task->last_name = $customer->last_name;
+            $task->phone_number = $customer->phone_number;
+        }
+
+        $servicemen = User::where('active', 1)->where('type', 'serviceman')->get();
+
+        return Inertia::render('Task/ReconcileCreated', [
+            'tasks' => $tasks,
+            'servicemen' => $servicemen
+        ]);
+    }
+
     public function reconcile()
     {
 
@@ -148,10 +202,10 @@ class TaskController extends Controller
 
 //        STATUS === APPROVED
 //        ==============================
-//        $tasks = Task::select(['id', 'customer_id', 'assigned', 'created_at', 'description', 'status', 'type', 'price', 'address_id'])
-//            ->where('status', 'approved')
-//            ->where('created_at', '>', '2024-05-01 00:00:00')
-//            ->get();
+        $tasks = Task::select(['id', 'customer_id', 'assigned', 'created_at', 'description', 'status', 'type', 'price', 'address_id'])
+            ->where('status', 'approved')
+            ->where('created_at', '>', '2024-05-01 00:00:00')
+            ->get();
 
 
 //        ALL TASKS IN THE CURRENT MONTH
@@ -164,9 +218,9 @@ class TaskController extends Controller
 
 //        ALL TASKS FOR A SPECIFIC CUSTOMER
 //        ==============================
-        $tasks = Task::select(['id', 'customer_id', 'assigned', 'created_at', 'description', 'status', 'type', 'price', 'address_id'])
-            ->where('customer_id', 278)
-            ->get();
+//        $tasks = Task::select(['id', 'customer_id', 'assigned', 'created_at', 'description', 'status', 'type', 'price', 'address_id'])
+//            ->where('customer_id', 278)
+//            ->get();
 
 //        ALL PARTS AND REPAIRS THAT HAVE BEEN PICKED UP, APPROVED, OR CREATED
 //        ==============================
@@ -377,19 +431,14 @@ class TaskController extends Controller
     public function customerTasks(Request $request)
     {
 
-//        dd($request->customerId);
+        is_null($request->addressId['id']) ? $address = $request->id : $address = $request->addressId['id'];
 
-//        dd(Auth::user());
-
-//        dd(User::isAdmin());
-
-//            dd('isAdmin');
-        $tasks = Task::allCustomerCreatedTasks($request->customerId);
-
-//        return $tasks;
+        $tasks = Task::allCustomerCreatedTasks($request->customerId, $address);
+        $servicemen = User::where('active', 1)->where('type', 'serviceman')->get();
 
         return Inertia::render('Task/CustomerNeedsApproval', [
             'tasks' => $tasks,
+            'servicemen' => $servicemen
         ]);
     }
 
@@ -408,6 +457,29 @@ class TaskController extends Controller
         return Inertia::render('Task/RepairsAndPartsList', [
             'tasks' => $tasks,
         ]);
+    }
+
+    public function requestApprovalFromReconcile(Request $request)
+    {
+        self::getApprovalFromReconcile(
+            $request["id"],
+            $request["price"],
+            $request["description"],
+            $request["phone_number"]
+        );
+    }
+
+    private function getApprovalFromReconcile($task_id, $price, $description, $phone_number)
+    {
+        $task = Task::find($task_id);
+
+        //        send for approval if the task has not been verbally approved
+        $message = "Please Reply\n==================\n\nKPS Pools needs to inform you about a necessary repair for your pool:\n\n" . $description . " for $" . $price . "\n\nWould you like for us to complete this for you?\n\nY$task->count for Yes\nN$task->count for No\n\nYou may also reach out to Shawn at 480.703.4902 or 480.622.6441. If you have any questions";
+
+        self::sendforApproval($task, $phone_number, $message);
+
+        $task->sent = true;
+        $task->save();
     }
 
     public function requestApproval(Request $request)
@@ -465,10 +537,31 @@ class TaskController extends Controller
         self::addTaskStatus($task, $request->status);
     }
 
-    public function changeDescription(Request $request)
+    public function changeType(Request $request)
     {
 //        dd($request);
-        $task = Task::find($request->task_id);
+//        dd($request->id);
+
+        is_null($request->task_id) ? $taskId = $request->id : $taskId = $request->task_id;
+
+        $task = Task::find($taskId);
+
+        if ($task === null) {
+            $task = Task::find($request->id);
+        }
+
+        $task->type = $request->type;
+        $task->save();
+    }
+
+    public function changeDescription(Request $request)
+    {
+//        dd($request->task_id);
+//        dd($request->id);
+
+        is_null($request->task_id) ? $taskId = $request->id : $taskId = $request->task_id;
+
+        $task = Task::find($taskId);
         $task->description = $request->description;
         $task->save();
         self::addTaskStatus($task, $request->status);
@@ -488,15 +581,42 @@ class TaskController extends Controller
         }
     }
 
+    private function assignServicemanFromReconcile()
+    {
+//        "id" => 602
+//      "customer_id" => 302
+//      "assigned" => "Shawn"
+//      "created_at" => "2024-05-09T10:14:35.000000Z"
+//      "description" => "Replace skimmer baskets"
+//      "status" => "created"
+//      "sent" => 1
+//      "type" => "part"
+//      "price" => 1000
+//      "address_id" => 303
+//      "name" => "Jeremiah"
+//      "first_name" => "Mike"
+//      "last_name" => "Sherman"
+//      "phone_number" => "14807034902"
+    }
+
     public function assignServiceman(Request $request)
     {
 //        dd($request);
+//        is_null();
+
+
+
         $user = User::where('name', $request->assigned)->get();
 //        dd($user[0]->id);
 
         $customer = Customer::find($request->customer_id);
 
-        $task = Task::find($request->task_id);
+        is_null($request->task_id) ? $taskId = $request['id'] : $taskId = $request->task_id;
+
+//        dd($taskId);
+
+        $task = Task::find($taskId);
+
         $task->assigned = $user[0]->id;
         $task->save();
         if (Auth::user()->getAuthIdentifier() !== $user[0]->id) {
@@ -506,11 +626,26 @@ class TaskController extends Controller
         }
     }
 
+    private function deleteTheTask($taskId)
+    {
+        $task = Task::find($taskId);
+
+        $task->delete();
+
+        $taskStatuses = TaskStatus::where('task_id', $taskId)->get();
+
+        foreach ($taskStatuses as $ts) {
+            $ts->delete();
+        }
+    }
+
+    public function deleteItemFromReconcile(Request $request)
+    {
+        self::deleteTheTask($request->task_id["id"]);
+    }
+
     public function deleteItem(Request $request)
     {
-
-//        dd($request->task_id);
-
         if ($request->task_id) {
             $task = Task::find($request->task_id);
         } else if ($request->id) {
@@ -538,7 +673,10 @@ class TaskController extends Controller
     public function updatePrice(Request $request)
     {
 //        dd($request);
-        $task = Task::find($request->task_id);
+
+        is_null($request->task_id) ? $taskId = $request->id : $taskId = $request->task_id;
+
+        $task = Task::find($taskId);
         $task->price = $request->price;
         $task->save();
     }

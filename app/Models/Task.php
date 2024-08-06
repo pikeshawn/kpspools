@@ -103,9 +103,9 @@ class Task extends Model
                     $task->status === 'denied' ||
                     $task->status === 'diy'
                 ) {
-
                     $cust = [];
                     $cust['customer_id'] = $customer->id;
+                    $cust['address_id'] = $task->address_id;
                     $cust['phone_number'] = $customer->phone_number;
                     $cust['task_id'] = $task->id;
                     $cust['first_name'] = $customer->first_name;
@@ -135,27 +135,34 @@ class Task extends Model
         return collect($tasks);
     }
 
-    static public function allCustomerCreatedTasks($customerId): Collection
+    static public function allCustomerCreatedTasks($customerId, $addressId): Collection
     {
         $tasks = [];
 
-        $customerWithTasks = Customer::whereHas('tasks', function ($query) use ($customerId) {
-            $query->where('customer_id', $customerId);
-        })->with('tasks')->get();
-
-        foreach ($customerWithTasks as $customer) {
-            $custTasks = Task::where('customer_id', $customer->id)->get();
+//        $customerWithTasks = Customer::whereHas('tasks', function ($query) use ($customerId, $addressId) {
+//            $query->where('customer_id', $customerId)->where('address_id', $addressId);
+//        })->with('tasks')->get();
 
 
-            foreach ($custTasks as $task) {
+        $allTasks = Task::where('address_id', $addressId)->get();
+        $customer = Customer::find($customerId);
+
+
+//        dd($allTasks);
+
+//        foreach ($allTasks as $specificTask) {
+//            $custTasks = Task::where('customer_id', $customer->id)->get();
+
+
+            foreach ($allTasks as $task) {
                 if ($task->status === 'created' ||
                     $task->status === 'approved' ||
                     $task->status === 'denied' ||
                     $task->status === 'diy'
                 ) {
-
                     $cust = [];
-                    $cust['customer_id'] = $customer->id;
+                    $cust['customer_id'] = $task->customer_id;
+                    $cust['address_id'] = $addressId;
                     $cust['phone_number'] = $customer->phone_number;
                     $cust['task_id'] = $task->id;
                     $cust['first_name'] = $customer->first_name;
@@ -180,7 +187,7 @@ class Task extends Model
                     array_push($tasks, $cust);
                 }
             }
-        }
+//        }
 
         return collect($tasks);
     }
