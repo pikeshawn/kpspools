@@ -148,6 +148,7 @@ class TaskController extends Controller
                 'created_at', 'description', 'status', 'sent',
                 'type', 'price', 'address_id'])
             ->where('status', 'created')
+            ->where('assigned', 3)
             ->where('created_at', '>', '2024-05-01 00:00:00')
             ->get();
 
@@ -203,10 +204,26 @@ class TaskController extends Controller
 //        STATUS === APPROVED
 //        ==============================
         $tasks = Task::select(['id', 'customer_id', 'assigned', 'created_at', 'description', 'status', 'type', 'price', 'address_id'])
-            ->where('status', 'approved')
-            ->where('created_at', '>', '2024-05-01 00:00:00')
+
+//            ======= All tasks that have been created but have not been sent for approval ====
+//            ->where('status', 'created')
+//            ->where('sent', 0)
+
+//            ======= All tasks that have been created and sent for approval but have not been responded too =====
+//            ======= Need to call these people =====
+            ->where('status', 'created')
+            ->where('sent', 1)
+
+//            ======= All completed tasks so that I dont bill for something that has been paid for already
+//            ->where('status', 'completed')
+//            ->where('type', '<>', 'todo')
+
+
             ->get();
 
+//        dd($tasks);
+
+//        ->where('created_at', '>', '2024-05-01 00:00:00')
 
 //        ALL TASKS IN THE CURRENT MONTH
 //        ==============================
@@ -605,7 +622,6 @@ class TaskController extends Controller
 //        is_null();
 
 
-
         $user = User::where('name', $request->assigned)->get();
 //        dd($user[0]->id);
 
@@ -785,14 +801,18 @@ $email
 $address->address_line_1 $address->city $address->zip
 =====================
 Please reach out to Shawn for any questions at 14807034902"));
+
+            if ($subcontractor->company_name !== 'Edge Water Pools LLC') {
+
 //            Notification::route('vonage', '14807034902')->notify(new GenericNotification("Skyline has been notified. They can be reached at:
-            Notification::route('vonage', $customer->phone_number)->notify(new GenericNotification($subcontractor->company_name . " has been notified. They can be reached at:
+                Notification::route('vonage', $customer->phone_number)->notify(new GenericNotification($subcontractor->company_name . " has been notified. They can be reached at:
 =====================
 $subcontractor->contact_name
 $subcontractor->company_name
 $subcontractor->phone_number
 =====================
 Please reach out to Shawn for any questions at 14807034902"));
+            }
 
         } else {
 

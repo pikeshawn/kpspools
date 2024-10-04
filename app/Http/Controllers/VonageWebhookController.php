@@ -26,7 +26,12 @@ class VonageWebhookController extends Controller
 
     public function inbound(Request $request): JsonResponse
     {
+
+
+//        Notification::route('vonage', $request['msisdn'])->notify(new GenericNotification($request['msisdn']));
+
 //        log::debug('phone number:: ' . $request['msisdn']);
+        log::debug($request);
         $customer = Customer::where('phone_number', $request['msisdn'])->first();
         if ($customer) {
             $this->customer = $customer;

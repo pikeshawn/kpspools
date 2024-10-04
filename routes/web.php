@@ -270,8 +270,12 @@ Route::middleware(['auth:sanctum', 'verified', 'serviceman'])->group(function ()
         ->name('task.create');
 
     Route::get('/tasks/reconcile',
-        [TaskController::class, 'reconcileCreatedTasks'])
+        [TaskController::class, 'reconcile'])
         ->name('reconcile.created');
+
+//    Route::get('/tasks/reconcile',
+//        [TaskController::class, 'reconcileCreatedTasks'])
+//        ->name('reconcile.created');
 
     Route::get('/tasks/pickedUp',
         [TaskController::class, 'reconcilePickedUpTasks'])

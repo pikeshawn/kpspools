@@ -59,57 +59,63 @@ class Customer extends Model
     public static function allCustomers($dayOfWeek)
     {
 
-//        dd('allCustomers');
+//        dd('allCustomersTiedToUser');
 
-       if ($dayOfWeek === 'All') {
-           $customers = Customer::select(
-               'customers.first_name',
-               'customers.last_name',
-               'addresses.order',
-               'customers.id',
-               'addresses.service_day',
-               'addresses.assigned_serviceman',
-               'customers.phone_number',
-               'addresses.community_gate_code',
-               'addresses.address_line_1',
-               'addresses.city',
-               'addresses.zip',
-               'addresses.id as addressId'
-           )
-               ->join('addresses', 'customers.id', '=', 'addresses.customer_id')
-               ->where('addresses.active', 1)
-               ->where('addresses.sold', 0)
-               ->orderByDesc('addresses.order')
-               ->get();
-       } else {
-           $customers = Customer::select(
-               'customers.first_name',
-               'customers.last_name',
-               'addresses.order',
-               'customers.id',
-               'addresses.service_day',
-               'addresses.assigned_serviceman',
-               'customers.phone_number',
-               'addresses.community_gate_code',
-               'addresses.address_line_1',
-               'addresses.city',
-               'addresses.zip',
-               'addresses.id as addressId'
-           )
-               ->join('addresses', 'customers.id', '=', 'addresses.customer_id')
-               ->where('addresses.active', 1)
-               ->where('addresses.sold', 0)
-               ->where('addresses.service_day', $dayOfWeek)
-               ->orderByDesc('addresses.order')
-               ->get();
-       }
 
-        foreach ($customers as $customer) {
-            $customer->newServicemanId = null;
-            $customer->needsBackwash = self::needsBackwash($customer['addressId'], Filter::getFilter($customer['addressId']));
+        $servicemanId = Auth::user()->id;
+
+//        dd($servicemanId);
+
+
+//        $customers = Customer::select(['assigned_serviceman', 'phone_number', 'id', 'first_name', 'last_name', 'order', 'service_day'])
+//            ->where('serviceman_id', Auth::user()
+//                ->getAuthIdentifier())->orderBy('service_day')->orderBy('order')->get();
+
+        if ($dayOfWeek === 'All') {
+            $addresses = Address::where('active', 1)->where('sold', 0)->get();
+        } else {
+            $addresses = Address::where('active', 1)->where('sold', 0)->where('service_day', $dayOfWeek)->get();
         }
 
-        return self::completedCustomers($customers);
+
+//                    dd($addresses);
+
+        $customerCollection = [];
+
+        foreach ($addresses as $address) {
+
+            $customerArray = [];
+
+            $customer = Customer::where('id', $address->customer_id)->first();
+            $user = User::find($address->serviceman_id);
+
+            $customerArray['first_name'] = $customer->first_name;
+            $customerArray['last_name'] = $customer->last_name;
+            $customerArray['order'] = $address->order;
+            $customerArray['id'] = $customer->id;
+            $customerArray['service_day'] = $address->service_day;
+            $customerArray['assigned_serviceman'] = $user->name;
+            $customerArray['phone_number'] = $customer->phone_number;
+            $customerArray['community_gate_code'] = $address->community_gate_code;
+            $customerArray['address_line_1'] = $address->address_line_1;
+            $customerArray['city'] = $address->city;
+            $customerArray['zip'] = $address->zip;
+            $customerArray['addressId'] = $address->id;
+            $customerArray['completed'] = self::completedCustomer($address->id);
+            $customerArray['needsBackwash'] = self::needsBackwash($address->id, Filter::getFilter($address->id));
+
+            $customerCollection[] = $customerArray;
+
+
+        }
+
+        $sortKey = 'order';
+
+        usort($customerCollection, function ($a, $b) use ($sortKey) {
+            return $a[$sortKey] <=> $b[$sortKey];  // Spaceship operator for simplicity
+        });
+
+        return $customerCollection;
     }
 
     public static function allCustomersTiedToUser($dayOfWeek)
@@ -243,7 +249,7 @@ class Customer extends Model
 
 //                dd();
 
-                if($address->id === 63) {
+                if ($address->id === 63) {
 //                    dd($stops);
                 }
 
@@ -254,7 +260,6 @@ class Customer extends Model
                     $customer->completed = true;
                 }
             }
-
 
 
         }
