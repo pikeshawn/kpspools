@@ -5,6 +5,8 @@ namespace App\Console;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 use App\Console\Commands\RunOneTimeScript;
+use App\Console\Commands\HolidayBilling;
+use App\Console\Commands\PaymentReminder;
 
 class Kernel extends ConsoleKernel
 {
@@ -16,6 +18,8 @@ class Kernel extends ConsoleKernel
     protected $commands = [
         //
         RunOneTimeScript::class,
+        PaymentReminder::class,
+        HolidayBilling::class,
     ];
 
     /**
@@ -23,7 +27,8 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule): void
     {
-        // $schedule->command('inspire')->hourly();
+        $schedule->command('app:payment-reminder')->weekdays()->at('08:00');
+
     }
 
     /**

@@ -32,6 +32,11 @@ class User extends Authenticatable
         return $this->hasMany(PasswordlessToken::class);
     }
 
+    public function paychecks()
+    {
+        return $this->hasMany(Paycheck::class);
+    }
+
     public function appointment()
     {
         return $this->hasOne(Appointment::class);

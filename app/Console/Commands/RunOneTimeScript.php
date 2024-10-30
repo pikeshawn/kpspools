@@ -34,13 +34,13 @@ class RunOneTimeScript extends Command
      */
     public function handle()
     {
-        self::syncCustomersAndAddressTable();
-        self::associateTasksWithServiceman();
+//        self::syncCustomersAndAddressTable();
+//        self::associateTasksWithServiceman();
 
 
 //        self::importingInvoices();
 //        self::setCorrectCountForTasks();
-//        self::pullCostDataPerCustomerStoreInACSVile();
+        self::pullCostDataPerCustomerStoreInACSVile();
     }
 
     public function pullCostDataPerCustomerStoreInACSVile()
@@ -100,6 +100,8 @@ class RunOneTimeScript extends Command
                 $query->where('created_at', '>=', $oneYearAgo);
             }, '>=', 48)
             ->get();
+
+//        number of months that we have had the account
 
         $csvData = [];
         foreach ($addresses as $address) {
@@ -186,7 +188,7 @@ class RunOneTimeScript extends Command
 
     private function generateCSV(array $data)
     {
-        $filename = storage_path('customer_costs.csv');
+        $filename = storage_path("app/customer_costs.csv");
         $handle = fopen($filename, 'w');
         fputcsv($handle, array_keys($data[0]));
 
