@@ -21343,7 +21343,7 @@ var __default__ = {
       this.dailyCustomers = null;
 
       // Inertia.post('/customers/getNames', {'name': name})
-      console.log(this.csrfToken); // Use this token in your component
+      // console.log(this.csrfToken); // Use this token in your component
       fetch('/customers/getCustomersForDay/', {
         method: 'POST',
         headers: {

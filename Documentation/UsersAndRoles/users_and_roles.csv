@@ -1,0 +1,9 @@
+Users and Roles
+
+Users
+1. Setup User Roles
+2. Setup User Permissions
+3. Assign permissions to a role
+4. protect routes with certain roles
+5. protect methods with certain permissions
+6. send to the front end user, with roles and permissions for the page
