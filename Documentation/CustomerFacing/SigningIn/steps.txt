@@ -1,0 +1,29 @@
+Overview Steps
+    Preparation
+        1. customers have login username and password initially
+        2. sent a text to log into the application with a URL
+        3. customer clicks link to go to the application
+    Logging in
+        1. put in the username and password
+        2. sign terms of service for site
+        3. sing terms of use for company
+        3. sign privacy policy
+        4. billing setup if needed
+            1. try and set this up with existing stripe information from jemmson
+        5. update their password
+    Route to the dashboard
+        1. can view history of service stops
+        2. have a settings page
+            1. profile
+        3. report a problem
+        4. view service tech information
+        5. pay bill
+        6. see past invoices
+        7. terms of service
+        8. Rate Plans
+            1. change
+            2. read about it what each are
+        9. Holiday terms
+        10. Cancel
+        11. View company reviews
+        12. See current jobs

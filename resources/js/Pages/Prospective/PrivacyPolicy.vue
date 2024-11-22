@@ -271,7 +271,7 @@ export default {
   },
   methods: {
     next() {
-      Inertia.post('/privacy', {'privacy': this.accept})
+      Inertia.post('/customer/privacy', {'privacy': this.accept})
     }
   }
 }

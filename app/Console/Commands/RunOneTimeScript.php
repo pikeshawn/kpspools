@@ -90,15 +90,19 @@ class RunOneTimeScript extends Command
         $customers = Customer::whereHas('addresses', function ($query) {
             $query->where('active', true)->where('chemicals_included', true)->where('sold', false);
         })
-            ->whereHas('serviceStops', function ($query) use ($oneYearAgo) {
-                $query->where('created_at', '>=', $oneYearAgo);
-            }, '>=', 48)
+            ->whereHas('serviceStops', function ($query) {
+//                $query->where('created_at', '>=', $oneYearAgo);
+                $query->where('created_at', '>=', '2024-08-01 00:00:00')->where('created_at', '<', '2024-11-01 00:00:00');
+//            }, '>=', 48)
+            }, '>', 0)
             ->get();
 
-        $addresses = Address::where('active', true)->where('chemicals_included', true)->where('sold', false)
-            ->whereHas('serviceStops', function ($query) use ($oneYearAgo) {
-                $query->where('created_at', '>=', $oneYearAgo);
-            }, '>=', 48)
+        $addresses = Address::where('active', 1)->where('chemicals_included', 1)->where('sold', '<>', 1)
+            ->whereHas('serviceStops', function ($query) {
+//                $query->where('created_at', '>=', $oneYearAgo);
+                $query->where('time_in', '>=', '2024-08-01 00:00:00')->where('time_in', '<', '2024-11-01 00:00:00');
+//            }, '>=', 48)
+            }, '>', 0)
             ->get();
 
 //        number of months that we have had the account
@@ -110,7 +114,7 @@ class RunOneTimeScript extends Command
 
             // Fetch service stops for the customer within the last year
             $serviceStops = ServiceStop::where('address_id', $address->id)
-                ->whereBetween('created_at', [$oneYearAgo, $today])
+                ->whereBetween('time_in', ['2024-08-01 00:00:00', '2024-11-01 00:00:00'])
                 ->get();
 
             // Group service stops by service type
@@ -133,15 +137,18 @@ class RunOneTimeScript extends Command
                     $totalYearlyCost += $totalCost;
                     $serviceTypeCosts[$type] += $totalCost;
 
-                    $createdAt = Carbon::parse($stop->created_at);
-                    if ($createdAt->month >= 5 && $createdAt->month <= 7 && $createdAt->year == $today->year) {
-                        $totalThreeMonthsCost += $totalCost;
-                    }
+//                    $createdAt = Carbon::parse($stop->created_at);
+//                    if ($createdAt->month >= 5 && $createdAt->month <= 7 && $createdAt->year == $today->year) {
+//                        $totalThreeMonthsCost += $totalCost;
+//                    }
+
+                    $totalThreeMonthsCost = 0;
                 }
             }
 
             if ($totalYearlyCost > 0) {
-                $multiplier = $totalThreeMonthsCost / $totalYearlyCost;
+//                $multiplier = $totalThreeMonthsCost / $totalYearlyCost;
+                $multiplier = 0;
 
                 $planPrice = $address->plan_price;
 
@@ -182,7 +189,7 @@ class RunOneTimeScript extends Command
         }
 
         $this->generateCSV($csvData);
-        $this->info('Customer costs calculated and CSV generated successfully.');
+//        $this->info('Customer costs calculated and CSV generated successfully.');
 
     }
 
@@ -193,6 +200,11 @@ class RunOneTimeScript extends Command
         fputcsv($handle, array_keys($data[0]));
 
         foreach ($data as $row) {
+
+            if ($row["Customer Name"] === 'Porter Shumway') {
+                echo "last row";
+            }
+
             fputcsv($handle, $row);
         }
 

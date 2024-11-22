@@ -249,8 +249,8 @@
 </template>
 <script>
 import SimpleTable from "../Shared/SimpleTable";
-import JetLabel from '@/Jetstream/Label'
-import JetCheckbox from '@/Jetstream/Checkbox'
+import JetLabel from '@/Jetstream/Label';
+import JetCheckbox from '@/Jetstream/Checkbox';
 import Layout from "../Shared/Layout";
 import {Inertia} from "@inertiajs/inertia";
 
@@ -271,7 +271,7 @@ export default {
   },
   methods: {
     next() {
-      Inertia.post('/terms', {'terms': this.accept})
+      Inertia.post('/customer/terms', {'terms': this.accept})
     }
   }
 }

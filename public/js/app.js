@@ -23211,7 +23211,7 @@ __webpack_require__.r(__webpack_exports__);
   },
   methods: {
     next: function next() {
-      _inertiajs_inertia__WEBPACK_IMPORTED_MODULE_4__.Inertia.post('/terms', {
+      _inertiajs_inertia__WEBPACK_IMPORTED_MODULE_4__.Inertia.post('/customer/terms', {
         'terms': this.accept
       });
     }
@@ -23258,7 +23258,7 @@ __webpack_require__.r(__webpack_exports__);
   },
   methods: {
     next: function next() {
-      _inertiajs_inertia__WEBPACK_IMPORTED_MODULE_4__.Inertia.post('/privacy', {
+      _inertiajs_inertia__WEBPACK_IMPORTED_MODULE_4__.Inertia.post('/customer/privacy', {
         'privacy': this.accept
       });
     }
