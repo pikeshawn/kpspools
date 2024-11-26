@@ -1,0 +1,186 @@
+jemmson_id,first_name,last_name,filter_type,api_response
+33,Carlos,Estrada,cartridge,none
+106,CHARLES,APPS,cartridge,"filter clean","2024-10-01 19:23:52","filter clean","2024-10-15 16:11:42"
+90,Barry,Olson,de,none
+64,Rachel,McCollister,cartridge,none
+54,Darlys,Bentz,de,"filter clean","2023-09-03 22:44:59"
+65,Ben,Pickett,cartridge,"filter clean","2023-05-04 23:57:52"
+98,Jim,Rast,cartridge,"filter clean","2022-03-10 21:42:32","filter clean","2023-04-06 03:06:16"
+94,Jennifer,Shelley,de,"filter clean","2022-05-09 01:30:51","filter clean","2024-05-05 20:16:55"
+75,John,Soldo,de,"filter clean","2023-02-05 20:25:34","filter clean","2024-05-05 20:16:52","filter clean","2024-05-05 20:16:52"
+88,Brian,Waddell,de,"filter clean","2022-02-07 22:14:05","filter clean","2024-03-05 19:08:49"
+68,David,Ahler,cartridge,none
+86,Cory,Nenaber,cartridge,none
+58,Laurence,Jager,cartridge,"filter clean","2022-05-09 01:15:07"
+71,Norbert,Juist,de,"filter clean","2022-08-09 20:09:03"
+83,Hanh,Nguyen,cartridge,"filter clean","2022-08-09 14:56:29","filter clean","2024-03-17 18:41:51"
+85,Bill,Huber,cartridge,none
+78,Tim,Palacio,cartridge,"filter clean","2022-05-09 00:10:04","filter clean","2023-05-04 23:57:52","filter clean","2024-10-15 16:21:17"
+61,Gregory,Geisler,cartridge,"filter clean","2024-08-05 00:31:06"
+101,Dennis,Schwesinger,de,none
+102,Karon,Martin,de,"filter clean","2023-07-07 02:34:20","filter clean","2024-07-03 22:02:04"
+111,CHRISTOPHER,LANING,cartridge,none
+124,Brian,Gay,cartridge,none
+128,Tomer,Erfat,de,"filter clean","2023-12-04 14:42:16"
+4,Shawn,Test,cartridge,"filter clean fns plus 60","2020-12-27 20:22:35","filter clean","2023-05-04 12:30:47","filter clean","2023-05-04 12:33:48","filter clean","2023-05-04 12:37:18","filter clean","2023-05-26 14:48:35","filter clean","2023-06-02 20:24:59","filter clean","2024-01-19 18:05:32","filter clean","2024-05-05 20:09:14","filter clean","2024-06-03 00:30:02","filter clean","2024-08-05 00:07:06","filter clean","2024-08-05 00:10:41","filter clean","2024-09-01 17:29:49","filter clean","2024-10-01 19:08:13","filter clean","2024-11-04 14:36:06"
+138,Shelka,Sachdeva,cartridge,none
+134,Dana,Mcalear,cartridge,none
+142,Trisha,Zilles,de,"filter clean","2023-05-09 02:37:43","filter clean","2024-02-01 22:29:12"
+136,Erik,Reginald,de,none
+130,David,Diggs,de,"filter clean","2023-05-05 15:25:59","filter clean","2023-12-04 14:42:18"
+131,Anthony,Dolan,cartridge,"filter clean","2024-04-03 00:58:28"
+135,Stella,Nelson,cartridge,"filter clean","2024-01-16 22:51:56"
+137,Bradlee,Reginald,de,none
+148,Deanna,Conn,de,"filter clean","2024-02-25 23:35:01"
+152,Yash,Chaudhry,cartridge,none
+155,Nathan,Stowell,de,none
+156,AJ,Boutin,cartridge,none
+157,George,Seto,de,none
+28,Pierre,Mattouk,cartridge,"filter clean","2020-10-10 14:10:23"
+159,Kerrigan,Goebelle,de,none
+160,Kamlesh,Porwal,de,none
+161,John,Briant,cartridge,none
+162,David,Barela,de,none
+163,Ryan,Grefsheim,de,none
+145,Adrian,Baker,de,"filter clean","2023-05-20 01:55:20","filter clean fns plus 48","2023-05-20 01:56:43"
+147,Vaughn,Williams,de,"filter clean","2023-05-20 19:24:22","filter clean","2024-11-12 16:00:43"
+169,Richard,Stoller,de,"filter clean","2023-10-18 23:52:41"
+170,Jeffrey,Mullins,de,none
+171,Steve,Herrada,cartridge,"filter clean","2024-03-13 23:07:39"
+191,Gene,TORRISI,de,none
+187,Fernando,Romero,cartridge,"filter clean","2024-02-26 17:41:38"
+174,Craig,Owens,de,"filter clean","2023-06-12 00:05:57"
+175,Wes,Prochniewski,cartridge,none
+190,Annette,Burnett,cartridge,"filter clean","2024-05-05 20:17:13"
+180,Leon,Benz,cartridge,none
+189,Whitney,Olson,de,none
+185,Barry,Luff,cartridge,none
+186,Jaime,McCollister,cartridge,none
+255,Chris,Conley,de,"filter clean","2024-06-03 01:12:33","filter clean","2024-07-03 22:02:25"
+246,Katie,Webb,cartridge,none
+252,Joan,Buell,cartridge,"filter clean","2024-08-05 00:31:35"
+231,William,Michel,de,none
+253,Lisa,Capriotti,cartridge,none
+256,"Tami & Allan",Fuller,cartridge,"filter clean","2024-02-25 23:32:41"
+268,Ron,Zobel,cartridge,none
+265,Justin,Schudel,de,"filter clean","2023-10-01 20:58:50","filter clean","2023-10-01 20:58:51","filter clean","2023-11-06 01:26:31","filter clean","2023-11-06 01:26:31","filter clean for hazelton","2024-10-01 19:24:28"
+194,Dwight,Fullwood,cartridge,none
+250,Manish,Bakshi,cartridge,none
+257,Erol,Germain-Gomuc,de,none
+195,Ulysses,Navarrete,de,"filter clean","2024-02-27 22:39:29"
+263,Sonia,Moreno,de,none
+244,Wade,Vaughn,cartridge,none
+251,Emmanuel,BUABENG,cartridge,none
+227,Diane,Lizniak,cartridge,none
+198,Nathan,Glidden,cartridge,none
+216,Sallie,"De La Cerda",de,"filter clean","2024-02-25 23:24:41"
+247,Justin,Weir,cartridge,none
+225,Andrew,Leon,de,"filter clean and new manifold","2024-10-01 19:24:17"
+220,Richard,Imburgia,de,none
+245,Kerri,Wagner,de,none
+224,Pam,Rimel,cartridge,none
+273,Yoshi,Sukkha,cartridge,none
+274,"Carol Dawn",Davies,cartridge,"filter clean","2024-03-12 17:00:51","filter clean","2024-04-03 00:58:58"
+205,Debbie,Castro,de,none
+270,Sean,Jun,cartridge,"filter clean","2024-02-25 23:29:14"
+283,Joe,Grijalva,cartridge,"filter clean","2024-02-25 23:21:23"
+271,Jessica,Norris,de,none
+291,Lynne,Antonczak,cartridge,none
+292,Brandon,Moles,cartridge,"filter clean","2024-07-03 22:02:32"
+323,Joe,Bowers,cartridge,none
+328,Anita,Kadikar,cartridge,"filter clean","2024-05-05 20:29:05"
+346,Raj,Vij,de,none
+319,Susan,Li,de,none
+330,Jon,Haug,cartridge,"filter clean","2024-04-03 00:59:08"
+334,Narinder,Parasher,de,"filter clean","2024-03-17 16:28:38","filter clean","2024-04-03 00:59:09"
+349,Thomas,Fisher,cartridge,"filter clean","2024-02-26 19:47:14"
+352,Jason,Bickford,cartridge,none
+359,Jeff,Tomasello,cartridge,none
+357,Bob,Speetzen,cartridge,none
+361,David,Zbiegien,cartridge,none
+368,Brent,Tregaskes,cartridge,none
+365,Shane,Xu,cartridge,none
+367,Jim,Lykke,de,"filter clean","2024-10-01 19:24:45","filter clean","2024-10-15 16:23:01"
+370,Susan,Dodd,de,none
+371,Susan,Babers,de,none
+374,Alisa,Johnson,cartridge,none
+376,Nagra,Kuldeep,cartridge,none
+373,Curtis,Smith,de,"filter clean","2024-03-11 22:34:21"
+375,Monica,Segoviano,de,none
+380,Fred,Tregaskes,cartridge,none
+378,Holly,Blissit,cartridge,none
+402,Vincent,Rector,cartridge,"filter clean","2024-05-05 22:22:40"
+401,Corinna,Bennett,cartridge,none
+395,Darin,Edwards,cartridge,none
+394,"Tina and Tony",Williams,cartridge,none
+400,Jessica,Wong,de,none
+396,Shannon,Frarey,cartridge,none
+393,Debby,Riggs,cartridge,"filter clean","2024-05-05 21:34:21"
+399,Steve,Razo,de,none
+390,Ed,Masiah,cartridge,"filter clean","2024-06-03 01:16:54","filter clean","2024-06-03 01:16:54","filter clean","2024-06-03 01:16:55","filter clean","2024-07-03 22:02:45"
+385,Jason,Agresta,cartridge,none
+387,Robert,Bozelli,cartridge,none
+383,Dina,Faramelli,de,"filter clean","2024-11-12 15:22:41"
+388,Tony,Dallio,cartridge,none
+392,Kyle,Rice,cartridge,none
+386,GUEORGUI,BAHTCHEVANOV,cartridge,none
+389,Mike,Harrison,de,none
+423,Mike,Sutter,cartridge,none
+409,Steve,Patience,cartridge,none
+419,Deepak,Gopal,cartridge,none
+406,Sean,Larusso,de,none
+439,Cat,McCready,cartridge,none
+405,Gary,Campbell,cartridge,"filter clean","2024-09-01 17:38:52"
+413,WIlson,Berkey,cartridge,none
+415,Pushkar,Mulay,de,none
+412,Trent,Tacey,de,none
+404,NANDAKUMAR,PALANISAMY,de,"filter clean","2024-05-17 00:23:42"
+411,Robert,Sypult,cartridge,none
+421,Bryan,Schmitt,cartridge,none
+416,Jeff,Phillipe,de,none
+424,Bob,Wickens,cartridge,none
+427,Chuck,Murphy,de,none
+443,David,Pierce,de,none
+462,Patrick,Kennedy,cartridge,none
+444,Emily,Case,cartridge,none
+466,Cooper,Singh,cartridge,none
+445,Thomas,Hensel,de,none
+446,Janille,Viernas,cartridge,none
+447,Ali,Unver,cartridge,none
+464,Paul,Hellinga,cartridge,none
+454,Kimberly,DOUGLAS,de,none
+426,Patricia,Sullivan,cartridge,none
+467,Rashmi,Aleti,cartridge,none
+448,Menoj,Bharani,cartridge,none
+452,Zeid,Abuwandi,cartridge,none
+478,Ty,Leeks,de,none
+477,Michelle,Pepe,cartridge,none
+455,Ron,Masi,cartridge,none
+458,Larry,Rowles,cartridge,none
+479,Sujatha,Kongara,cartridge,none
+449,Keegan,Cox,cartridge,none
+450,STEPHANIE,RINARD,cartridge,none
+451,Veronica,Murray,cartridge,none
+457,Victor,Roselli,cartridge,none
+468,David,Warren,cartridge,none
+430,Srini,Krishnamoorthy,cartridge,none
+417,Leigh,Lytwynec,cartridge,none
+459,Adrian,Aguilar,cartridge,none
+476,Ryan,Le,cartridge,none
+482,Michael,Crucitt,cartridge,none
+485,Yudel,Rodriguez,de,none
+486,Nicole,Hawkins,cartridge,none
+487,Dustin,Stevens,de,none
+490,Mike,Perez,de,none
+489,Zane,Coombs,cartridge,none
+491,Tanner,Luster,cartridge,none
+495,Khalid,Taiba,de,none
+493,Liz,Chew,cartridge,none
+494,Daniel,Cercone,cartridge,none
+498,Porter,Shumway,cartridge,none
+497,Joseph,Green,de,none
+496,Michael,Jung,cartridge,none
+499,Kanaan,Abow,cartridge,none
+500,Hana,Latif,cartridge,none
+501,James,Jaworski,cartridge,none
+503,Ryan,Edwards,cartridge,none

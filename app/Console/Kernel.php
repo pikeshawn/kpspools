@@ -7,6 +7,7 @@ use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 use App\Console\Commands\RunOneTimeScript;
 use App\Console\Commands\HolidayBilling;
 use App\Console\Commands\PaymentReminder;
+use App\Console\Commands\DetermineFilterCleans;
 
 class Kernel extends ConsoleKernel
 {
@@ -20,6 +21,7 @@ class Kernel extends ConsoleKernel
         RunOneTimeScript::class,
         PaymentReminder::class,
         HolidayBilling::class,
+        DetermineFilterCleans::class,
     ];
 
     /**
