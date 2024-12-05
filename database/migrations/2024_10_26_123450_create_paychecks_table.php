@@ -16,6 +16,7 @@ return new class extends Migration
             $table->integer('user_id');
             $table->integer('pay_amount');
             $table->string('description')->nullable();
+            $table->string('type')->nullable();
             $table->dateTime('payment_date');
             $table->string('payment_method');
             $table->timestamps();
