@@ -123,6 +123,9 @@ Route::middleware(['auth:sanctum', 'verified', 'customer', 'subscribed'])->group
     Route::get('/privacy',
         [CustomerFacingController::class, 'privacy'])->name('privacy');
 
+    Route::get('/customer/facing/serviceStops', [CustomerFacingController::class, 'serviceStops'])->name('customer.serviceStops');
+    Route::get('/customers/facing/serviceStop', [CustomerFacingController::class, 'serviceStop'])->name('customer.serviceStop');
+
 });
 
 Route::middleware(['auth:sanctum', 'verified', 'serviceman'])->group(function () {

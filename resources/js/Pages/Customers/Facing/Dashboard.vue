@@ -3,6 +3,20 @@
         title="Customer Facing Dashboard"
         :user="user"
     >
+        <h1>Layout</h1>
+        <ol style="margin-left: 2rem">
+            <li>link to chat with pool guy or me - they have a question on what they see they can reach out within the
+                app
+            </li>
+        </ol>
+
+        <br>
+        <br>
+        <br>
+        <button @click="getServiceStops()">Service Stops</button>
+        <br>
+        <br>
+        <br>
 
         <h1>Service Stop History</h1>
         <h1>Settings Page</h1>
@@ -47,6 +61,7 @@ import {
     ComboboxOption,
     ComboboxOptions,
 } from '@headlessui/vue'
+import Button from "../../../Jetstream/Button.vue";
 
 const props = defineProps({
     user: Object
@@ -69,7 +84,11 @@ export default {
     },
     mounted() {
     },
-    methods: {},
+    methods: {
+        getServiceStops() {
+            Inertia.get('/customer/facing/serviceStops')
+        },
+    },
     props: {
         user: Object
     }

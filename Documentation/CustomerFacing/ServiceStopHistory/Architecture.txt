@@ -1,0 +1,123 @@
+Purpose
+    Overview of the architecture of a customer seeing their service stop history
+
+UI Page
+    Name - ServiceStops
+    styling
+        - bootstrap
+    location - resources/js/Customers/facing/ServiceStops
+    type - Vue Compnent
+    security - must only see service stops from specific customer
+    props
+        customer model - JSON
+        serviceStops - JSON - all serviceStops related to the customer
+        poolGuys - JSON - all pool guys that have worked on the route
+        assignedPoolTech - current pool guy assigned to the customer
+    template
+            - header section
+                - show total service stops all year
+                    - @model = totalServiceStops
+                - average ph level
+                    - @model = averagePh
+                - average chlorine level
+                    - @model = averageChlorineLevel
+                - number of backwashes
+                    - @model = totalNumberOfBackwashes
+                - styling
+                    - card
+                    - mobile friendly
+            - layout component
+                - props
+                    - page name
+                    - Chat Id = assignedPoolTech.id
+            - show a line that has basic information and then a details button
+                - styling
+                    - card for each line
+                    - centered
+                    - 80% of the page
+                - List of service stops
+                    - each line will show a service stop
+                        - data in each line -
+                            time_in = serviceStops.time_in,
+                            time_out = serviceStops.time_out,
+                            chlorine_level, = serviceStops.chlorine_level,
+                            php_level, = serviceStops.php_level,
+                            details link - @click="getDetails(serviceStops.id, contact, assignedPoolTech.id)"
+    data
+        - totalServiceStops
+        - averagePh
+        - averageChlorineLevel
+        - totalNumberOfBackwashes
+    computed
+        totalServiceStops
+            - use serviceStops property to count the total number of serviceStops with type equals "Service Stop"
+        averagePh
+            - use serviceStops property to average out the pH values
+    methods
+        getDetails(serviceStops.id, contact, assignedPoolGuy.id)
+            - Inertia link
+                - Verb - Get
+                - Data - serviceStops.id, contact, assignedPoolGuy.id
+                - Location - /customers/facing/serviceStop
+
+
+Link Locations
+    1. on the sidebar
+    2. on the dashboard
+    3. functionality
+        - Inertia Vue Link
+            - Verb - GET
+            - Type - Inertia request
+            - location - /customer/facing/serviceStops
+        - web.php
+            - Url - /customer/facing/serviceStops
+                - Verb - Get
+                - Controller - CustomerFacingController
+                - Method - ServiceStops
+            - Url - /customers/facing/serviceStop
+                - Verb - Get
+                - Controller - CustomerFacingController
+                - Method - ServiceStop
+
+        - CustomerFacingController
+            - Methods
+                - ServiceStops
+                    - functionality
+                        - get all serviceStops select user_id, time_in, time_out, chlorine_level, ph_level, id from service_stops table where customer_id = authorized user id
+                        - cycle through service stop that was returned
+                            - add a contact column to each service stop
+                                - if user_id that is at each service stop is still active
+                                    - how to find if active
+                                        - get pool guy info where users.id = service_stops.user_id
+                                    - if active column = true
+                                        - pull user info from users table and store it in a pool guy array
+                                            - store it in the array only if the user is not already in there
+                                        - new contact column = user_id
+                                    - if active column = false
+                                        - new contact column = 2
+                        - get customer info based on auth user
+                        - get each pool guy data from users table where id = service_stops.user_id
+                            - if pool guy is inactive then
+                    - Inertia Response
+                        - customer info
+                        - service stop info
+                        - pool guy array of pool guys associated with the service stops for the customer
+                        - assigned pool guy info
+                        - Location
+                            - Customer/Facing/ServiceStops
+
+                - ServiceStop
+                        - functionality
+                            - request data
+                                - serviceStopsId, contact, assignedPoolGuy.id
+                            - get specific serviceStop select * from service_stops table where id = serviceStopsId
+                            - get assigned pool guy info from users table where id = assignedPoolGuy.id
+                        - Inertia Response
+                            - customer info
+                            - service stop info
+                            - contact
+                            - assigned pool guy info
+                            - Location
+                                - Customer/Facing/ServiceStops
+
+
