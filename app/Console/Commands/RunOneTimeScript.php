@@ -38,9 +38,9 @@ class RunOneTimeScript extends Command
 //        self::associateTasksWithServiceman();
 
 
-//        self::importingInvoices();
+        self::importingInvoices();
 //        self::setCorrectCountForTasks();
-        self::pullCostDataPerCustomerStoreInACSVile();
+//        self::pullCostDataPerCustomerStoreInACSVile();
     }
 
     public function pullCostDataPerCustomerStoreInACSVile()
@@ -90,22 +90,16 @@ class RunOneTimeScript extends Command
         $customers = Customer::whereHas('addresses', function ($query) {
             $query->where('active', true)->where('chemicals_included', true)->where('sold', false);
         })
-            ->whereHas('serviceStops', function ($query) {
-//                $query->where('created_at', '>=', $oneYearAgo);
-                $query->where('created_at', '>=', '2024-08-01 00:00:00')->where('created_at', '<', '2024-11-01 00:00:00');
-//            }, '>=', 48)
-            }, '>', 0)
+            ->whereHas('serviceStops', function ($query) use ($oneYearAgo) {
+                $query->where('created_at', '>=', $oneYearAgo);
+            }, '>=', 48)
             ->get();
 
-        $addresses = Address::where('active', 1)->where('chemicals_included', 1)->where('sold', '<>', 1)
-            ->whereHas('serviceStops', function ($query) {
-//                $query->where('created_at', '>=', $oneYearAgo);
-                $query->where('time_in', '>=', '2024-08-01 00:00:00')->where('time_in', '<', '2024-11-01 00:00:00');
-//            }, '>=', 48)
-            }, '>', 0)
+        $addresses = Address::where('active', true)->where('chemicals_included', true)->where('sold', false)
+            ->whereHas('serviceStops', function ($query) use ($oneYearAgo) {
+                $query->where('created_at', '>=', $oneYearAgo);
+            }, '>=', 48)
             ->get();
-
-//        number of months that we have had the account
 
         $csvData = [];
         foreach ($addresses as $address) {
@@ -114,7 +108,7 @@ class RunOneTimeScript extends Command
 
             // Fetch service stops for the customer within the last year
             $serviceStops = ServiceStop::where('address_id', $address->id)
-                ->whereBetween('time_in', ['2024-08-01 00:00:00', '2024-11-01 00:00:00'])
+                ->whereBetween('created_at', [$oneYearAgo, $today])
                 ->get();
 
             // Group service stops by service type
@@ -137,18 +131,15 @@ class RunOneTimeScript extends Command
                     $totalYearlyCost += $totalCost;
                     $serviceTypeCosts[$type] += $totalCost;
 
-//                    $createdAt = Carbon::parse($stop->created_at);
-//                    if ($createdAt->month >= 5 && $createdAt->month <= 7 && $createdAt->year == $today->year) {
-//                        $totalThreeMonthsCost += $totalCost;
-//                    }
-
-                    $totalThreeMonthsCost = 0;
+                    $createdAt = Carbon::parse($stop->created_at);
+                    if ($createdAt->month >= 5 && $createdAt->month <= 7 && $createdAt->year == $today->year) {
+                        $totalThreeMonthsCost += $totalCost;
+                    }
                 }
             }
 
             if ($totalYearlyCost > 0) {
-//                $multiplier = $totalThreeMonthsCost / $totalYearlyCost;
-                $multiplier = 0;
+                $multiplier = $totalThreeMonthsCost / $totalYearlyCost;
 
                 $planPrice = $address->plan_price;
 
@@ -189,22 +180,17 @@ class RunOneTimeScript extends Command
         }
 
         $this->generateCSV($csvData);
-//        $this->info('Customer costs calculated and CSV generated successfully.');
+        $this->info('Customer costs calculated and CSV generated successfully.');
 
     }
 
     private function generateCSV(array $data)
     {
-        $filename = storage_path("app/customer_costs.csv");
+        $filename = storage_path('customer_costs.csv');
         $handle = fopen($filename, 'w');
         fputcsv($handle, array_keys($data[0]));
 
         foreach ($data as $row) {
-
-            if ($row["Customer Name"] === 'Porter Shumway') {
-                echo "last row";
-            }
-
             fputcsv($handle, $row);
         }
 
@@ -358,7 +344,11 @@ class RunOneTimeScript extends Command
 //            'InvoiceHistory_102292_From_2024-06-20_To_2024-07-21.csv',
 //            'InvoiceHistory_102292_From_2024-07-21_To_2024-08-03.csv',
 //            'InvoiceHistory_102292_From_2024-08-04_To_2024-08-31.csv'.
-            'InvoiceHistory_102292_From_2024-09-01_To_2024-09-26.csv'
+//            'InvoiceHistory_102292_From_2024-09-01_To_2024-09-26.csv'
+//            'InvoiceHistory_102292_From_2024-09-27_To_2024-10-28.csv',
+//            'InvoiceHistory_102292_From_2024-10-28_To_2024-10-31.csv'
+//            'InvoiceHistory_102292_From_2024-11-01_To_2024-11-10.csv'
+            'InvoiceHistory_102292_From_2024-11-11_To_2024-11-30.csv'
         ];
 
         foreach ($fileName as $file) {
