@@ -1,0 +1,20 @@
+Method
+    Purpose
+        to initiate payment reminders to each customer that has a past due bill
+    Name
+        handle
+    Input
+        none
+    Return
+        Boolean - task was completed
+    Logic
+        1. Cycle through each customer in the customers table that is active and pull
+            1. jemmson_id
+            2. payment_type
+            3. autopay
+            4. date_to_run_card
+            5. terms
+        2. For each customer
+            1. submit an api request to jemmson
+                1. self::submit($jemmson_id, $paymentType, $autopay, $dateToRunCard, $terms)
+                2. return success or failure

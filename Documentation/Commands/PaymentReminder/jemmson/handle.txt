@@ -1,0 +1,174 @@
+Method
+    Purpose
+        to send a payment reminder to each customer with a past due bill
+    Name
+        handle
+    Input
+        none
+    Return
+        Boolean - task was completed
+    Logic
+        1. pull all job ids associated with the customer
+            1. Jobs table using the id column where customer_id = $customer_id
+        2. cycle through each one and get only jobs where the job_statuses do not have a status of paid
+            1. pull statuses from job_statuses where job_id = $jobId
+            2. return true if plucking a status from job_statuses table a value = 'paid'
+        3. if all jobs_statuses for each job have the status of paid as one of the statuses then exit the method
+            1. return false if no job_id has a status of paid in the job_statuses table
+        4. for each jobIds that do not have a status of paid
+            1. if customer has a terms that = end -> $terms = 'end'
+                1. if it has been 5 days or later after the billing date then send a reminder
+                    1. get first token from user_tokens table with the job_id column = $jobId
+                    2. $generatedLink of env('APP_URL')/login/customer/{$jobId}/{$token}
+                    3. example = https://jemmson.com/login/customer/4707/beAnrUMqPHyphBrF
+                    4. send notification with this message:
+                        $message = "Hello $user->first_name,
+
+                        PAST DUE BILL:
+
+                        Please take care of this at your earliest convenience to ensure uninterrupted service.
+
+                        Invoice Name: $job->job_name
+                        Billed on: $job->created_at
+
+                        You can conveniently make the payment by using the following link:
+
+                        $generatedLink
+
+                        If you have any concerns or believe there might be an error, please feel free to reach out to Shawn at 480-703-4902 or 480-622-6441."                                                                                                                    If you have any concerns or believe there might be an error, please feel free to reach out to Shawn at 480-703-4902 or 480-622-6441.
+                    5. Notification::route('vonage', $customer->phone_number)->notify(new GenericNotification($message));
+                2. if autopay = true
+                    1. if day of month = day and current day of month is that day or then return the $generatedLink
+                    2. if null = auto make the payment
+                3. if payment_type = cash then send the cash message
+                    1. message = 'Our records indicate a past due bill. If you have paid then you can remove this message by going to the link provided and mark your application as paid'
+            2. if customer has terms = begin
+                1. get first token from user_tokens table with the job_id column = $jobId
+                2. $generatedLink = env('APP_URL')/login/customer/{$jobId}/{$token}
+                2. if it has been 20 days or 25 days after billing date then send a gentle reminder
+                    $message = "Hello $user->first_name,
+
+                                Just a quick reminder of your outstanding bill. Taking a moment to settle it would greatly contribute to maintaining the high-quality service you've come to expect from us.
+
+                                Invoice Name: $job->job_name
+                                Billed on: $job->created_at
+
+                                You can conveniently make the payment by using the following link:
+
+                                $generatedLink
+
+                                If you have any concerns or believe there might be an error, please feel free to reach out to Shawn at 480-703-4902 or 480-622-6441."                                                                                                                    If you have any concerns or believe there might be an error, please feel free to reach out to Shawn at 480-703-4902 or 480-622-6441.
+                3. if it has been 31 days or later after billing date then send a past due message
+                    $message = "Hello $user->first_name,
+
+                                PAST DUE BILL:
+
+                                Please take care of this at your earliest convenience to ensure uninterrupted service.
+
+                                Invoice Name: $job->job_name
+                                Billed on: $job->created_at
+
+                                You can conveniently make the payment by using the following link:
+
+                                $generatedLink
+
+                                If you have any concerns or believe there might be an error, please feel free to reach out to Shawn at 480-703-4902 or 480-622-6441."                                                                                                                    If you have any concerns or believe there might be an error, please feel free to reach out to Shawn at 480-703-4902 or 480-622-6441.
+                4. if payment_type = cash then send the cash message
+                   1. message = 'Our records indicate a past due bill. If you have paid then you can remove this message by going to the link provided and mark your application as paid by using the $generatedLink'
+                5. if autopay = true
+                   1. if day of month = day and current day of month is that day or then return the $generatedLink
+                   2. if null = auto make the payment
+
+
+Requirements Document: Payment Reminder System
+
+Purpose
+
+This system is designed to automate payment reminders for customers with past-due bills. Based on customer preferences and payment terms, it will send appropriately timed reminders, handle automatic payments if enabled, and notify customers via SMS or other configured notification channels.
+
+Functional Requirements
+
+1. Retrieve Jobs for Customer
+
+	•	Requirement: The system should retrieve all jobs associated with a customer using the customer’s unique identifier (customer_id).
+	•	Source: Jobs table, filtering on customer_id.
+
+2. Filter Jobs by Payment Status
+
+	•	Requirement: For each retrieved job, check its statuses in the JobStatus table.
+	•	Criteria:
+	•	Skip any jobs marked as “paid.”
+	•	If all jobs for the customer are marked as “paid,” end the process and return true.
+	•	Source: JobStatus table, using job_id as a reference.
+
+3. Reminder Generation and Notification
+
+	•	Reminder Conditions:
+	•	Based on terms and daysSinceBilling (days since the bill was created).
+	•	For each job that is not paid:
+	•	End-of-Term Customers:
+	•	If the customer’s term is “end” and at least 5 days have passed since the billing date:
+	•	For customers paying with cash, send a cash payment reminder.
+	•	For non-cash payments, send a past due reminder.
+	•	Beginning-of-Term Customers:
+	•	If the term is “begin” and the billing date is at least 20 days prior, send a gentle reminder.
+	•	If the billing date is at least 31 days prior, send a past due reminder.
+	•	Notification Message Content:
+	•	Gentle Reminder: Encourages payment to maintain quality service.
+	•	Past Due Reminder: Urges immediate payment to avoid service interruption.
+	•	Cash Payment Reminder: Notifies customers of a past due bill and provides a link to mark as paid.
+	•	Generated Links:
+	•	Retrieve the token for the job from UserToken table.
+	•	Generate a unique URL in the format:
+
+$generatedLink = env('APP_URL') . "/login/customer/{$jobId}/{$token}";
+
+
+
+4. Autopay Processing
+
+	•	Requirement: If autopay is enabled for a customer, automatically process the payment on the scheduled billing date.
+	•	Criteria:
+	•	The payment should be attempted if the day of the month matches the billing date day.
+	•	Logging:
+	•	Log autopay actions, recording successful transactions and any issues encountered.
+
+Non-Functional Requirements
+
+	1.	Logging:
+	•	The system should log all actions and statuses, including user details and the results of notifications, to facilitate debugging and auditing.
+	•	For each notification, log the customer_id, job details, notification type, and days since billing.
+	2.	Reliability:
+	•	The system should be robust and handle network or API failures by retrying notifications where possible.
+	3.	Scalability:
+	•	This system should support processing multiple customers and jobs concurrently without performance degradation.
+	4.	Security:
+	•	Ensure customer and job details are protected, particularly payment information if autopayments are processed.
+
+Dependencies and Interfaces
+
+	1.	Models and Tables:
+	•	User, Customer, Job, JobStatus, UserToken.
+	2.	External Notifications:
+	•	Uses GenericNotification class for sending messages. Configured to route via Nexmo/Vonage or other channels.
+	3.	Environment Variables:
+	•	APP_URL: Base URL for generating links.
+
+Testing and Validation
+
+	1.	Unit Tests:
+	•	Validate retrieval of jobs and statuses.
+	•	Test for accurate filtering of paid/unpaid statuses.
+	2.	Integration Tests:
+	•	Ensure reminders are sent correctly based on terms and billing days.
+	•	Test autopay logic for handling scheduled payments.
+	3.	End-to-End Tests:
+	•	Verify entire process flow for customers with different terms (begin or end) and payment types (cash vs. other).
+
+Assumptions
+
+	•	All customers have valid entries in the Job, JobStatus, and UserToken tables.
+	•	Each job has a valid billing date (created_at), and notifications are sent only if tokens exist.
+	•	Autopay is attempted based on billingDate in the context of the customer’s terms and payment_type.
+
+This requirements document provides a clear overview of how the system should operate, covering the workflow, functional steps, and testing needs to ensure a smooth implementation. Let me know if further details or changes are needed!

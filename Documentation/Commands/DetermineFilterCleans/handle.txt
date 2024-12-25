@@ -1,0 +1,34 @@
+Method
+    Purpose
+        to determine the number of filter cleans
+    Name
+        handle
+    Input
+        none
+    Return
+        Boolean - task was completed
+    Logic
+        1. Capture all the filter cleans
+            1. get the jemmson ID from all customers that have DE or Cartridge filters
+                1. All customers that have active addresses and have not been sold
+                    1. customers table
+                        1. columns
+                            1. first_name
+                            2. last_name
+                            3. jemmson_id
+                            4. id
+                    2. addresses table
+                        1. columns
+                            1. active is true
+                            2. sold is not 1
+                            3. customer_id = customers.id
+                    3. filters table
+                        1. address_id = addresses.id
+                        2. type
+            2. If filters.type = cartridge or de then store the customers.jemmson_id in an array
+            3. for each jemmson_id in array
+                1. make an api call to jemmson
+                    1. self::submit()
+                2. write the response to filters.csv
+
+

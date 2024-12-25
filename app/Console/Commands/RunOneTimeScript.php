@@ -34,11 +34,11 @@ class RunOneTimeScript extends Command
      */
     public function handle()
     {
-        self::syncCustomersAndAddressTable();
-        self::associateTasksWithServiceman();
+//        self::syncCustomersAndAddressTable();
+//        self::associateTasksWithServiceman();
 
 
-//        self::importingInvoices();
+        self::importingInvoices();
 //        self::setCorrectCountForTasks();
 //        self::pullCostDataPerCustomerStoreInACSVile();
     }
@@ -344,7 +344,11 @@ class RunOneTimeScript extends Command
 //            'InvoiceHistory_102292_From_2024-06-20_To_2024-07-21.csv',
 //            'InvoiceHistory_102292_From_2024-07-21_To_2024-08-03.csv',
 //            'InvoiceHistory_102292_From_2024-08-04_To_2024-08-31.csv'.
-            'InvoiceHistory_102292_From_2024-09-01_To_2024-09-26.csv'
+//            'InvoiceHistory_102292_From_2024-09-01_To_2024-09-26.csv'
+//            'InvoiceHistory_102292_From_2024-09-27_To_2024-10-28.csv',
+//            'InvoiceHistory_102292_From_2024-10-28_To_2024-10-31.csv'
+//            'InvoiceHistory_102292_From_2024-11-01_To_2024-11-10.csv'
+            'InvoiceHistory_102292_From_2024-11-11_To_2024-11-30.csv'
         ];
 
         foreach ($fileName as $file) {

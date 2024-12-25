@@ -1,0 +1,16 @@
+Method
+    Purpose
+        to determine the total number of pools that have cleaned by labor and then calculate what has not been paid for the year
+    Name
+        handle
+    Input
+        none
+    Return
+        Boolean - task was completed
+    Logic
+        1. Get the total service stops that were completed by users 3, 6, 13
+            1. service_stops table where user_id = 3, 6, and 13
+        2. Get the total payments in the paychecks table by that user where description is servicework
+            1. ((Figure how many pools they cleaned for the year * 20) -
+                subtract the number of pools that I have paid them for the year) / 2
+

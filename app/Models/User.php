@@ -11,6 +11,7 @@ use Laravel\Fortify\TwoFactorAuthenticatable;
 use Laravel\Jetstream\HasProfilePhoto;
 use Laravel\Sanctum\HasApiTokens;
 Use Laravel\Cashier\Billable;
+use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable
 {
@@ -20,6 +21,7 @@ class User extends Authenticatable
     use Notifiable;
     use TwoFactorAuthenticatable;
     use Billable;
+    use HasRoles;
 
 
     public function customer()
@@ -30,6 +32,11 @@ class User extends Authenticatable
     public function tokens()
     {
         return $this->hasMany(PasswordlessToken::class);
+    }
+
+    public function paychecks()
+    {
+        return $this->hasMany(Paycheck::class);
     }
 
     public function appointment()

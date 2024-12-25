@@ -1,0 +1,113 @@
+
+
+
+
+
+
+
+
+1. Customer is flat rate for every month
+    1. addresses table -> plan_duration = monthly
+2. Pull all addresses from addresses table where
+    1. address is active => active column = 1
+    2. plan_duration column = monthly
+    3. sold column does not = 1
+3. Customer table maps to address table -> customer_id column
+4. check # of services in a month. if 5 then add that to the free week variable. record the last week date.
+    1. for each address
+        1. count all service stops starting for each month in 2024
+            1. service_stops table where
+                1. address_id = $addresses->id
+                2. service_type = 'Service Stop'
+            2. if service stop count is greater than 4 then add 1 to $freeWeeks variable
+            3. once finished then record the $freeWeeks variable in the csv file
+    2. If $freeWeeks variable =
+            1. 0 then $novemberPrice = November plan_price * .05 and $decemberPrice = December plan_price * .5
+            2. 1 then $novemberPrice = November plan_price * .75 and $decemberPrice = December plan_price * .5
+            3. 2 then $novemberPrice = November plan_price * .75 and $decemberPrice = December plan_price * .75
+            4. 3 then $novemberPrice = November plan_price * .75 and $decemberPrice = December plan_price * 1
+            5. 4 or Greater then $novemberPrice = November plan_price * 1 and $decemberPrice = December plan_price * 1
+
+
+3. figure start date
+    1. for each address
+        1. count all service stops starting from 1/1/2024 to 11/1/2024
+            1. service_stops table where
+                1. address_id = $addresses->id
+                2. service_type = 'Service Stop'
+            2. (Count the number of weeks in the year from the week of the first date that is on or after 1/1/2024)
+                - (self::weeksBasedOnFourWeekMonth())
+                    2. If result =
+                        1. 0 then $novemberPrice = November plan_price * .05 and $decemberPrice = December plan_price * .5
+                        2. 1 then $novemberPrice = November plan_price * .75 and $decemberPrice = December plan_price * .5
+                        3. 2 then $novemberPrice = November plan_price * .75 and $decemberPrice = December plan_price * .75
+                        4. 3 then $novemberPrice = November plan_price * .75 and $decemberPrice = December plan_price * 1
+                        5. 4 or Greater then $novemberPrice = November plan_price * 1 and $decemberPrice = December plan_price * 1
+            3. Create a csv file with columns of
+                1. Headers -> 'Address Id', First Name, Last Name, Address, Plan Price, November Price, December Price, Free Weeks
+                2. $customer->first_name, $customer->last_name, $address->plan_price, $novemberPrice, $decemberPrice, $freeWeeks
+
+
+weeksBasedOnFourWeekMonth
+1. Number of weeks first month
+2. if # of services in that month is > than 4 then count it as 4 then
+    1. add (4 * the number of months up to 11/1)
+2. Examples
+    1. So if start date is say 2/15/2024 then
+        1. count the number of service weeks in February
+        2. there are 8 months from March to April so
+            1. 8 * 4 = 32
+        3. $total = 32 + + (number of service weeks in March) = 35 weeks
+    2. if start date is say 3/20/2024 then
+        1. count the number of service weeks in March
+        2. there are 7 months from March to April so
+            1. 7 * 4 = 28
+        3. $total = 28 + (number of service weeks in March) = 30 weeks
+    3. if start date is say 4/2/2024 then
+        1. count the number of service weeks in March
+            1. since this count is = 5 then simply count the number of weeks at 4
+        2. there are 6 months from March to April so
+            1. 6 * 4 = 24
+        3. $total = 24 + (number of service weeks in March) = 28 weeks
+
+
+1. get service weeks
+    1. $firstServiceDate = first service date in year
+        1. for each address from the addresses table where active = true and sold is not null
+        2. service_stops table where address_id = address.id
+    2. $weekInYear = get week in year it is
+    3. $serviceWeeks = (44 - $weekInYear) + 1
+2. Billed Weeks
+    1. $weeksInFirstMonth =
+        1. # of serviceStops in first month
+            1. if count >= 4 then result is 4
+            2. if less then result = count
+    2. $billedWeeks = $weeksInFirstMonth + # of remaining months through October * 4
+3. $unBilledWeeks = $serviceWeeks - $billedWeeks
+
+
+1. check # of services in a month. if 5 then add that to the free week variable. record the last week date.
+2. go through each address based upon sold does not equal 1 and active equals 1 in address
+3. go through each month of the year
+    1. count service_stops for the address for that month.
+    2. if service stop count is greater than 4 then add 1 to $freeWeeks variable
+    3. once finished then record the $freeWeeks variable in the csv file
+
+
+
+Paying my guys
+1. go through current employees
+2. (count total # of services completed for the year * 20) - total paid for year = how much I owe them
+    1. some of the guys have recorded more than one service per week
+        1. like a missed service and then an actual service
+        2. there is a total expected per week - once a week - # of weeks since started
+        3. total # of services recorded
+        4. should be equal if not then flag it
+    2. I should have a table for paychecks with guys
+        1. paychecks
+            1. id
+            2. user_id
+            3. pay_amount
+            4. description
+            5. payment_date
+            6. payment_method

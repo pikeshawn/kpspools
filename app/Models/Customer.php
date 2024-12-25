@@ -267,6 +267,22 @@ class Customer extends Model
         return $customers;
     }
 
+    public static function saveTerms($user)
+    {
+        $user->terms_and_conditions = true;
+        $date = Carbon::now();
+        $user->terms_accepted_date = $date->toDateTimeString();
+        $user->save();
+    }
+
+    public static function savePrivacyPolicy($user)
+    {
+        $user->privacy_policy = true;
+        $date = Carbon::now();
+        $user->privacy_policy_accepted_date = $date->toDateTimeString();
+        $user->save();
+    }
+
     public static function completedCustomer($id)
     {
         $now = Carbon::now();

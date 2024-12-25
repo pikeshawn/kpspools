@@ -248,6 +248,8 @@ class CustomerController extends Controller
                 app('App\Http\Controllers\InitiateBidController')->updateCustomerTable($initiatedBidJSON->job->customer_id, $customer->id);
             }
 
+            $user->assignRole('customer');
+
             return Redirect::route('customers')->with('success', 'Customer and address stored successfully');
         }
 

@@ -206,13 +206,16 @@ class TaskController extends Controller
         $tasks = Task::select(['id', 'customer_id', 'assigned', 'created_at', 'description', 'status', 'type', 'price', 'address_id'])
 
 //            ======= All tasks that have been created but have not been sent for approval ====
-//            ->where('status', 'created')
+            ->where('status', 'completed')
+//            ->where('assigned', 10)
+            ->where('updated_at', '<>', '2024-10-01 00:00:00')
+            ->where('type', '<>', 'todo')
 //            ->where('sent', 0)
 
 //            ======= All tasks that have been created and sent for approval but have not been responded too =====
 //            ======= Need to call these people =====
-            ->where('status', 'created')
-            ->where('sent', 1)
+//            ->where('status', 'created')
+//            ->where('sent', 1)
 
 //            ======= All completed tasks so that I dont bill for something that has been paid for already
 //            ->where('status', 'completed')
