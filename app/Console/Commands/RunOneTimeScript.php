@@ -348,7 +348,8 @@ class RunOneTimeScript extends Command
 //            'InvoiceHistory_102292_From_2024-09-27_To_2024-10-28.csv',
 //            'InvoiceHistory_102292_From_2024-10-28_To_2024-10-31.csv'
 //            'InvoiceHistory_102292_From_2024-11-01_To_2024-11-10.csv'
-            'InvoiceHistory_102292_From_2024-11-11_To_2024-11-30.csv'
+//            'InvoiceHistory_102292_From_2024-11-11_To_2024-11-30.csv',
+            'InvoiceHistory_102292_From_2024-12-01_To_2024-12-31.csv'
         ];
 
         foreach ($fileName as $file) {
@@ -500,6 +501,6 @@ class RunOneTimeScript extends Command
 
     private function getInvoiceFile($fileName)
     {
-        return @fopen('/home/forge/kpspools.com/storage/files/invoices/' . $fileName, 'r+');
+        return @fopen('/home/forge/kpspools.com/storage/files/' . $fileName, 'r+');
     }
 }
