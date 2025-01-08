@@ -29,8 +29,8 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule): void
     {
-        $schedule->command('app:payment-reminder')->weekdays()->at('08:00');
-
+//        $schedule->command('app:payment-reminder')->weekdays()->at('08:00');
+        $schedule->command('app:task-approval-reminder')->wednesdays()->at('10:00');
     }
 
     /**

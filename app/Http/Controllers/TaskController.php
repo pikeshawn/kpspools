@@ -932,7 +932,7 @@ Please reach out to Shawn for any questions at 14807034902"));
         return $taskStatus;
     }
 
-    private function sendforApproval($task, $phoneNumber, $message = null)
+    public function sendforApproval($task, $phoneNumber, $message = null)
     {
 //        send notification to customer if new part or repair
 //          - create new notification
