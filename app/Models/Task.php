@@ -53,7 +53,8 @@ class Task extends Model
             $cust['task_id'] = $approved->id;
             $cust['first_name'] = $customer->first_name;
             $cust['last_name'] = $customer->last_name;
-            $cust['description'] = $approved->description . " - " . $approved->scp_id;
+            $cust['description'] = $approved->description;
+            $cust['scp_id'] = $approved->scp_id;
             $cust['type'] = $approved->type;
             $cust['assigned'] = $approved->assigned;
             $cust['status'] = $approved->status;
