@@ -84,6 +84,17 @@
                                     </div>
                                 </div>
                                 <div class="py-2">
+                                    <label for="scp_id" class="block text-sm font-medium leading-6 text-gray-900">Product Number</label>
+                                    <div class="mt-2">
+                                        <input type="text" name="scp_id" id="scp_id"
+                                               @blur="changeProductNumber(item)"
+                                               class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1
+                                       ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset
+                                       focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                               v-model="item.scp_id"/>
+                                    </div>
+                                </div>
+                                <div class="py-2">
                                     <div class="flex justify-between">
                                         <label for="price"
                                                class="block text-sm font-medium leading-6 text-gray-900">Price</label>
@@ -771,6 +782,9 @@ export default {
         },
         changeDescription(item) {
             Inertia.post('/task/changeDescription', item)
+        },
+        changeProductNumber(item) {
+            Inertia.post('/task/changeProductNumber', item)
         },
         deleteItem(item) {
             item.deleted = true;

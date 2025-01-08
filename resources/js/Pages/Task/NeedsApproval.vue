@@ -67,7 +67,8 @@
                                     <Link :href="route('customers.show', item.address_id)"
                                           class="sticky top-0 z-10 border-y border-b-blue-500 border-t-blue-400 bg-blue-200 px-3 py-2 text-sm font-semibold leading-6 text-gray-900"
                                           method="get" as="button">
-                                        <label class="block text-sm font-medium leading-6 text-gray-900">Customer Page</label>
+                                        <label class="block text-sm font-medium leading-6 text-gray-900">Customer
+                                            Page</label>
                                     </Link>
                                     <h3 class="text-base font-semibold leading-6 text-gray-900">{{ item.name }}</h3>
                                     <h3 class="text-base font-semibold leading-6 text-gray-900">{{ item.status }}</h3>
@@ -81,6 +82,18 @@
                                        ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset
                                        focus:ring-indigo-600 sm:text-sm sm:leading-6"
                                                v-model="item.description"/>
+                                    </div>
+                                    <div class="mt-2">
+                                        <label for="scp_id" class="block text-sm font-medium leading-6 text-gray-900">Product
+                                            Number</label>
+                                        <div class="mt-2">
+                                            <input type="text" name="scp_id" id="scp_id"
+                                                   @blur="changeProductNumber(item)"
+                                                   class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1
+                                       ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset
+                                       focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                                   v-model="item.scp_id"/>
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="py-2">
@@ -209,7 +222,8 @@
                                     <Link :href="route('customers.show', item.address_id)"
                                           class="sticky top-0 z-10 border-y border-b-blue-500 border-t-blue-400 bg-blue-200 px-3 py-2 text-sm font-semibold leading-6 text-gray-900"
                                           method="get" as="button">
-                                        <label class="block text-sm font-medium leading-6 text-gray-900">Customer Page</label>
+                                        <label class="block text-sm font-medium leading-6 text-gray-900">Customer
+                                            Page</label>
                                     </Link>
                                     <h3 class="text-base font-semibold leading-6 text-gray-900">{{ item.name }}</h3>
                                     <h3 class="text-base font-semibold leading-6 text-gray-900">{{ item.status }}</h3>
@@ -352,7 +366,8 @@
                                     <Link :href="route('customers.show', item.address_id)"
                                           class="sticky top-0 z-10 border-y border-b-blue-500 border-t-blue-400 bg-blue-200 px-3 py-2 text-sm font-semibold leading-6 text-gray-900"
                                           method="get" as="button">
-                                        <label class="block text-sm font-medium leading-6 text-gray-900">Customer Page</label>
+                                        <label class="block text-sm font-medium leading-6 text-gray-900">Customer
+                                            Page</label>
                                     </Link>
                                     <h3 class="text-base font-semibold leading-6 text-gray-900">{{ item.name }}</h3>
                                     <h3 class="text-base font-semibold leading-6 text-gray-900">{{ item.status }}</h3>
@@ -494,7 +509,8 @@
                                     <Link :href="route('customers.show', item.address_id)"
                                           class="sticky top-0 z-10 border-y border-b-blue-500 border-t-blue-400 bg-blue-200 px-3 py-2 text-sm font-semibold leading-6 text-gray-900"
                                           method="get" as="button">
-                                        <label class="block text-sm font-medium leading-6 text-gray-900">Customer Page</label>
+                                        <label class="block text-sm font-medium leading-6 text-gray-900">Customer
+                                            Page</label>
                                     </Link>
                                     <h3 class="text-base font-semibold leading-6 text-gray-900">{{ item.name }}</h3>
                                     <h3 class="text-base font-semibold leading-6 text-gray-900">{{ item.status }}</h3>
@@ -617,7 +633,7 @@
             </div>
 
         </div>
-<!--        <pre>{{ tasks }}</pre>-->
+        <!--        <pre>{{ tasks }}</pre>-->
 
         <!--        Section for Pool Guy users users  -->
 
@@ -771,6 +787,9 @@ export default {
         },
         changeDescription(item) {
             Inertia.post('/task/changeDescription', item)
+        },
+        changeProductNumber(item) {
+            Inertia.post('/task/changeProductNumber', item)
         },
         deleteItem(item) {
             item.deleted = true;

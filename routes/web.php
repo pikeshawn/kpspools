@@ -343,6 +343,10 @@ Route::middleware(['auth:sanctum', 'verified', 'serviceman'])->group(function ()
         [TaskController::class, 'changeDescription'])
         ->name('task.changeDescription');
 
+    Route::post('/task/changeProductNumber',
+        [TaskController::class, 'changeProductNumber'])
+        ->name('task.changeProductNumber');
+
     Route::get('/task/reconcile',
         [TaskController::class, 'reconcile'])
         ->name('task.reconcile');

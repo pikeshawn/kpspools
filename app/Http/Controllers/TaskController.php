@@ -518,7 +518,7 @@ class TaskController extends Controller
 
     public function getTaskItems(Request $request)
     {
-        $scpItems = ScpInvoiceItem::select(['scp_invoice_item.description', 'scp_invoice_item.cost', 'scp_invoice_item.created_at'])
+        $scpItems = ScpInvoiceItem::select(['scp_invoice_item.description', 'scp_invoice_item.cost', 'scp_invoice_item.created_at', 'scp_invoice_item.product_number'])
             ->join(DB::raw('(SELECT description, MAX(created_at) as latest_created_at FROM scp_invoice_item GROUP BY description) as latest_items'),
                 function ($join) {
                     $join->on('scp_invoice_item.description', '=', 'latest_items.description')
@@ -534,6 +534,7 @@ class TaskController extends Controller
             $i = [
                 'description' => $item->description,
                 'price' => $item->cost,
+                'product_number' => $item->product_number,
                 'type' => 'scpItem'
             ];
             $items[] = $i;
@@ -585,6 +586,20 @@ class TaskController extends Controller
         $task->description = $request->description;
         $task->save();
         self::addTaskStatus($task, $request->status);
+    }
+
+    public function changeProductNumber(Request $request)
+    {
+
+//        dd($request->task_id);
+//        dd($request->id);
+        if (!is_null($request->scp_id)) {
+            is_null($request->task_id) ? $taskId = $request->id : $taskId = $request->task_id;
+            $task = Task::find($taskId);
+            $task->scp_id = $request->scp_id;
+            $task->save();
+            self::addTaskStatus($task, $request->status);
+        }
     }
 
     public function approveItem(Request $request)
@@ -879,6 +894,7 @@ Please reach out to Shawn for any questions at 14807034902"));
 
         $task = Task::firstOrCreate([
             'address_id' => $request->address_id,
+            'scp_id' => $request->product_number,
             'customer_id' => $request->customer_id,
             'description' => $request->description,
             'assigned' => $request->assigned,

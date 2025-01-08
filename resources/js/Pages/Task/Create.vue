@@ -39,6 +39,7 @@
                         style="padding: 1rem; background: white"
                     >
                         <div>{{ task.description }}</div>
+                        <div>{{ task.product_number }}</div>
                         <div>SCP Price {{ task.price }}</div>
                     </button>
 
@@ -167,6 +168,7 @@ export default {
             description: '',
             source: '',
             price: '',
+            product_number: '',
             subcontractor: null,
             taskItems: null,
             quantity: 1,
@@ -202,6 +204,7 @@ export default {
             console.log(task)
             this.form.selectedTask = task
             this.form.description = task.description
+            this.form.product_number = task.product_number
             this.form.price = task.price
             this.form.source = task.source
             this.form.taskItems = null

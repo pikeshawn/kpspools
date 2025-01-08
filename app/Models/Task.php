@@ -31,36 +31,38 @@ class Task extends Model
 
     static public function allIncompleteTasks()
     {
+
+//        I want all tasks that are assigned to the authenticated user
+//        this means that the tasks come from the task table where the status is approved
+
         $tasks = [];
-        $customers = Customer::with(['tasks' => function ($query) {
-            $query->where('status', '<>', 'completed')
-                ->where('type', '<>', 'todo');
-        }])->get();
-        foreach ($customers as $customer) {
-            $custTasks = Task::where('customer_id', $customer->id)->get();
 
-            foreach ($custTasks as $task) {
+        $approvedTasks = Task::where('assigned', Auth::user()->getAuthIdentifier())
+            ->where(function ($query) {
+                $query->where('status', 'approved')
+                    ->orWhere('status', 'pickedUp');
+            })
+            ->get();
 
-                if ($task->assigned === Auth::user()->id) {
-                    $cust = [];
-                    $cust['customer_id'] = $customer->id;
-                    $cust['task_id'] = $task->id;
-                    $cust['first_name'] = $customer->first_name;
-                    $cust['last_name'] = $customer->last_name;
-                    $cust['description'] = $task->description;
-                    $cust['type'] = $task->type;
-                    $cust['assigned'] = $task->assigned;
-                    $cust['status'] = $task->status;
-                    $cust['pickedUp'] = false;
-                    array_push($tasks, $cust);
-                }
+        foreach ($approvedTasks as $approved){
 
-            }
+            $customer = Customer::find($approved->customer_id);
+
+            $cust = [];
+            $cust['customer_id'] = $customer->id;
+            $cust['task_id'] = $approved->id;
+            $cust['first_name'] = $customer->first_name;
+            $cust['last_name'] = $customer->last_name;
+            $cust['description'] = $approved->description . " - " . $approved->scp_id;
+            $cust['type'] = $approved->type;
+            $cust['assigned'] = $approved->assigned;
+            $cust['status'] = $approved->status;
+            $cust['pickedUp'] = false;
+            array_push($tasks, $cust);
+
         }
 
         $allTasks = collect($tasks);
-
-//        dd($allTasks);
 
         return $allTasks;
     }
@@ -170,6 +172,7 @@ class Task extends Model
                 $cust['description'] = $task->description;
                 $cust['type'] = $task->type;
                 $cust['status'] = $task->status;
+                $cust['scp_id'] = $task->scp_id;
                 $cust['assigned'] = $task->assigned;
                 $cust['price'] = $task->price;
                 $cust['deleted'] = false;
