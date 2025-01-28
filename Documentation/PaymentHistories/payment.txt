@@ -1,0 +1,49 @@
+Method
+    Purpose
+        go through each customer and pull their payment histories
+    Name
+        handle
+    Input
+        none
+    Return
+        Boolean - task was completed
+    Logic
+        1. Create a csv file of PaymentHistory.csv
+        2. Add a header row of Name, Billed Date, Billed Amount, Payment Date, Payment Amount
+        3. Have an array of address Ids
+        4. cycle through Ids
+            1. pull the customer_id from the addresses table using addresses.id
+            2. use the customer_id value to pull these fields from the customer table
+                1. jemmson_id
+                2. first_name
+                3. last_name
+            3. create a row in the paymentHistory.csv file with
+                first_name last_name
+            4. submit an api request to jemmson
+                1. self::submit($jemmson_id)
+                2. return JSON Array
+                    1. Each row billedDate, billedAmount, datePaid, paidAmount
+            5. cycle through the JSON Array
+                1. add row for each entry in the paymentHistory.csv file like this
+                    1. row->billedDate,row->billedAmount,row->datePaid,row->paidAmount
+        5. Jemmson Logic
+            1. receives an id from KPS Pools -> $request->jemmsonId
+            2. use this id to pull columns created_at and bid_price from jobs table where deleted_at is null with
+                created_at column from oldest to newest as an array
+            3. use id to pull customer_stripe_id from users table as a single data point
+            4. use customer_stripe_id equal to the customer_id to pull values created_at, event_payload columns
+                from the stripe_events table
+                and to sort created_at column from oldest to newest as an array of values
+            5. cycle through the stripeEvents array and for each row in array create an entry in an associative array like this
+                1. array name -> paid
+                2. datePaid => stripeEvents->created_at, paidAmount => getPaidAmount(stripeEvents->event_payload)
+            6. getPaidAmount method
+                1. input -> JSON object
+                2. logic -> // Decode JSON to PHP associative array
+                            $responseArray = json_decode($eventPayload, true);
+
+                            // Access data.object.amount
+                            return $responseArray['data']['object']['amount'];
+            7. cycle through the jobs array and create an associative array of
+                billedDate => jobs[n]->created_at, billedAmount => jobs[n]->bid_price, datePaid => paid[n]->created_at, paidAmount => paid[n]->paidAmount
+            8. return JSON to KPS Pools

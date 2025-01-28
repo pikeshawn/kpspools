@@ -349,7 +349,8 @@ class RunOneTimeScript extends Command
 //            'InvoiceHistory_102292_From_2024-10-28_To_2024-10-31.csv'
 //            'InvoiceHistory_102292_From_2024-11-01_To_2024-11-10.csv'
 //            'InvoiceHistory_102292_From_2024-11-11_To_2024-11-30.csv',
-            'InvoiceHistory_102292_From_2024-12-01_To_2024-12-31.csv'
+//            'InvoiceHistory_102292_From_2024-12-01_To_2024-12-31.csv',
+            'InvoiceHistory_102292_From_2025-01-01_To_2025-01-25.csv'
         ];
 
         foreach ($fileName as $file) {

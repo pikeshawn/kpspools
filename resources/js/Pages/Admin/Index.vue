@@ -123,6 +123,11 @@ export default {
                     id: 10,
                     name: "Initiate Bid And Tasks",
                     route: "initiate.index"
+                },
+                {
+                    id: 11,
+                    name: "Unpaid Invoices",
+                    route: "billing.unpaid"
                 }
             ]
         }

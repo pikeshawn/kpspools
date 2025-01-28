@@ -17,6 +17,7 @@ use App\Http\Controllers\SummaryController;
 use App\Http\Controllers\VonageWebhookController;
 use App\Http\Controllers\RouteController;
 use App\Http\Controllers\ProspectiveController;
+use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\PasswordlessController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
@@ -130,6 +131,13 @@ Route::middleware(['auth:sanctum', 'verified', 'customer', 'subscribed'])->group
 
 Route::middleware(['auth:sanctum', 'verified', 'serviceman'])->group(function () {
 
+    Route::get('/payment/history/{customer}',
+        [PaymentController::class, 'index'])
+        ->name('payment.history');
+
+    Route::get('/billing/unpaid',
+        [BillingController::class, 'unpaid'])
+        ->name('billing.unpaid');
 
     Route::get('/admin', function () {
         return Inertia::render('Admin/Index');
