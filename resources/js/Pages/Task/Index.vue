@@ -1,6 +1,7 @@
 <template>
     <layout
         :user="user"
+        :addressId="currentUrl"
     >
 
         <!--        Section for Admin users  -->
@@ -251,6 +252,9 @@ export default {
     computed: {
         errorClass() {
             return this.errors.timeIn ? 'text-red-600' : ''
+        },
+        currentUrl() {
+            return window.location.href.replace(/\/$/, "").split("/").pop() // Gets the relative path
         },
         approvedTasks() {
             let approved = [];

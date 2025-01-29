@@ -2,6 +2,7 @@
     <layout
         title="Summary"
         :user="user"
+        :addressId="currentUrl"
     >
 <!--        <h1 class="text-lg font-medium leading-6 text-gray-900 mb-4 capitalize font-bold text-4xl">{{ totalTabPrice }}</h1>-->
 
@@ -41,6 +42,11 @@ export default {
     name: 'CustomerSummary',
     components: {
         Layout
+    },
+    computed: {
+        currentUrl() {
+            return window.location.href.replace(/\/$/, "").split("/").pop() // Gets the relative path
+        }
     },
     data() {
         return {

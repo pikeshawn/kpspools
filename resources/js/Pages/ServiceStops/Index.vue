@@ -2,6 +2,7 @@
     <layout
         title="Service Stops"
         :user="user"
+        :addressId="address.id"
     >
 
         <inertia-link

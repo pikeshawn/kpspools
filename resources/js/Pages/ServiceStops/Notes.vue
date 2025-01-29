@@ -2,6 +2,7 @@
     <layout
         title="Service Stops Notes"
         :user="user"
+        :addressId="currentUrl"
     >
 
         <h1>{{ customer_name }}</h1>
@@ -51,6 +52,9 @@ export default {
         user: Object
     },
     computed: {
+        currentUrl() {
+            return window.location.href.replace(/\/$/, "").split("/").pop() // Gets the relative path
+        },
         noNullNotes(){
             let notes = []
 

@@ -2,6 +2,7 @@
     <layout
         :user="user"
     >
+        <!--        :addressId="currentUrl"-->
 
         <!--        Section for Admin users  -->
 
@@ -803,6 +804,9 @@ export default {
         }
     },
     computed: {
+        // currentUrl() {
+        //     return window.location.href.replace(/\/$/, "").split("/").pop() // Gets the relative path
+        // },
         errorClass() {
             return this.errors.timeIn ? 'text-red-600' : ''
         },

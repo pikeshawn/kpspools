@@ -1,6 +1,7 @@
 <template>
     <layout
         :user="user"
+        :addressId="currentUrl"
     >
         <div>
             <div class="px-4 sm:px-0">
@@ -184,7 +185,11 @@ export default {
             Inertia.post('/sendBid', this.form);
         }
     },
-    computed: {}
+    computed: {
+        currentUrl() {
+            return window.location.href.replace(/\/$/, "").split("/").pop() // Gets the relative path
+        }
+    }
 }
 </script>
 

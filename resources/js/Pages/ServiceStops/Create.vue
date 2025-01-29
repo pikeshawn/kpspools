@@ -1,6 +1,7 @@
 <template>
     <layout
         :user="user"
+        :addressId="address.id"
     >
 
         <!--    <pre>{{ address }}</pre>-->

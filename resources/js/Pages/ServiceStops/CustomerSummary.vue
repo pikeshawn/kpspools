@@ -3,6 +3,9 @@
         title="Service Stops"
         :user="user"
     >
+
+        <pre>Current Url :: {{ currentUrl }}</pre>
+
         <h1 class="text-lg font-medium leading-6 text-gray-900 mb-4 capitalize font-bold text-4xl">{{
                 customer_name
             }}</h1>
@@ -20,6 +23,11 @@ export default {
     components: {
         SimpleTable,
         Layout
+    },
+    computed: {
+        currentUrl() {
+            return window.location.href.replace(/\/$/, "").split("/").pop() // Gets the relative path
+        }
     },
     data() {
         return {

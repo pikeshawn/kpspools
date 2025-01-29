@@ -1,8 +1,8 @@
 <template>
     <layout
         :user="user"
+        :addressId="currentUrl"
     >
-
         <div class="p-4">
             <table class="min-w-full border border-gray-300 rounded-lg">
                 <thead class="bg-gray-100">
@@ -61,7 +61,13 @@ export default {
     data() {
         return {
             showRoute: false,
-            selectedRoute: []
+            selectedRoute: [],
+            fullUrl: window.location.href
+        }
+    },
+    computed: {
+        currentUrl() {
+            return window.location.href.replace(/\/$/, "").split("/").pop() // Gets the relative path
         }
     },
     mounted() {
@@ -82,8 +88,7 @@ export default {
         store() {
             Inertia.post('/route/store', this.selectedRoute)
         }
-    },
-    computed: {}
+    }
 }
 </script>
 

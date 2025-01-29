@@ -1,6 +1,7 @@
 <template>
     <layout
         :user="user"
+        :addressId="addressId"
     >
         <div class="mt-7 sm:col-span-4">
             <div class="sm:col-span-3">

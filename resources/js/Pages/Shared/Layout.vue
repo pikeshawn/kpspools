@@ -257,6 +257,101 @@
                         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-12">
                             <h1 class="text-2xl font-semibold text-gray-900">{{ title }}</h1>
                         </div>
+
+                        <TransitionRoot as="template" :show="open">
+                            <Dialog as="div" class="relative z-10" @close="open = false">
+                                <TransitionChild as="template" enter="ease-out duration-300" enter-from="opacity-0"
+                                                 enter-to="opacity-100" leave="ease-in duration-200" leave-from="opacity-100"
+                                                 leave-to="opacity-0">
+                                    <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"/>
+                                </TransitionChild>
+
+                                <div class="fixed inset-0 z-10 w-screen overflow-y-auto">
+                                    <div class="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
+                                        <TransitionChild as="template" enter="ease-out duration-300"
+                                                         enter-from="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+                                                         enter-to="opacity-100 translate-y-0 sm:scale-100" leave="ease-in duration-200"
+                                                         leave-from="opacity-100 translate-y-0 sm:scale-100"
+                                                         leave-to="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95">
+                                            <DialogPanel
+                                                style="width: 100%;"
+                                                class="absolute top-0"
+                                            >
+                                                <div>
+
+
+                                                    <div class="mt-2">
+                                                        <input @input="getCustomers($event.target.value)" type="text" name="text"
+                                                               id="text"
+                                                               style="padding: 1rem; margin-top: 1rem;"
+                                                               class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm
+                                               ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2
+                                               focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                                               placeholder="type customer last name"/>
+                                                    </div>
+
+                                                    <div v-for="name in dbNames" :key="name.id">
+                                                        <Link :href="route('customers.show', name.addressId)"
+                                                              class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm
+                                              ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2
+                                              focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                                              style="padding: 1rem; background: white"
+                                                        >
+                                                            <div>
+                                                                {{ name.first_name }} {{ name.last_name }} - {{ name.address_line_1}}
+                                                            </div>
+                                                        </Link>
+                                                    </div>
+
+
+                                                    <!--                                    <div-->
+                                                    <!--                                        class="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-green-100">-->
+                                                    <!--                                        <CheckIcon class="h-6 w-6 text-green-600" aria-hidden="true"/>-->
+                                                    <!--                                    </div>-->
+                                                    <!--                                    <div class="mt-3 text-center sm:mt-5">-->
+                                                    <!--                                        <DialogTitle as="h3" class="text-base font-semibold leading-6 text-gray-900">-->
+                                                    <!--                                            Payment successful-->
+                                                    <!--                                        </DialogTitle>-->
+                                                    <!--                                        <div class="mt-2">-->
+                                                    <!--                                            <p class="text-sm text-gray-500">Lorem ipsum dolor sit amet consectetur-->
+                                                    <!--                                                adipisicing elit. Consequatur amet labore.</p>-->
+                                                    <!--                                        </div>-->
+                                                    <!--                                    </div>-->
+                                                    <!--                                </div>-->
+                                                    <!--                                <div class="mt-5 sm:mt-6">-->
+                                                    <!--                                    <button type="button"-->
+                                                    <!--                                            class="inline-flex w-full justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"-->
+                                                    <!--                                            @click="open = false">Go back to dashboard-->
+                                                    <!--                                    </button>-->
+                                                </div>
+                                            </DialogPanel>
+                                        </TransitionChild>
+                                    </div>
+                                </div>
+                            </Dialog>
+                        </TransitionRoot>
+
+                        <div class="flex justify-around" style="margin-bottom: 1rem">
+                            <div class="flex" style="margin-bottom: 1rem">
+                                <button @click="open = !open" type="button" class="items-center justify-center rounded-lg lg:ml-8" style="margin-right: 1rem;">Search
+                                    Customers
+                                </button>
+                                <svg class="h-6 w-6 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                                </svg>
+                            </div>
+
+                            <Link v-if="addressId" :href="route('customers.show', addressId)"
+                                  class="sticky top-0 z-10 border-y border-b-blue-500 border-t-blue-400 bg-blue-200 px-3 py-2 text-sm font-semibold leading-6 text-gray-900"
+                                  method="get" as="button">
+                                <label class="block text-sm font-medium leading-6 text-gray-900">Customer
+                                    Page</label>
+                            </Link>
+
+                        </div>
+
+
+
                         <div class="max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
                             <slot></slot>
                         </div>
@@ -269,7 +364,7 @@
 
 <script>
 import {ref} from 'vue'
-import {Dialog, DialogOverlay, TransitionChild, TransitionRoot} from '@headlessui/vue'
+import {Dialog, DialogOverlay, DialogPanel, Transition, TransitionChild, TransitionRoot} from '@headlessui/vue'
 import {Link} from '@inertiajs/inertia-vue3'
 import {
     CalendarIcon,
@@ -294,21 +389,64 @@ const navigation = [
 export default {
     props: {
         title: String,
+        addressId: String,
         user: String,
         background: String
     },
     components: {
+        DialogPanel,
         Dialog,
         DialogOverlay,
         TransitionChild,
         TransitionRoot,
         Link,
     },
+    data() {
+      return {
+          dbNames: [],
+          open: false,
+          csrfToken: null
+      }
+    },
+    mounted() {
+        this.csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+    },
     methods: {
+
         showRoute() {},
         logout() {
             this.$inertia.post(route('logout'));
-        }
+        },
+        getCustomers(name) {
+
+            console.debug(name)
+
+            // Inertia.post('/customers/getNames', {'name': name})
+            console.log(this.csrfToken); // Use this token in your component
+            fetch('/customers/getNames', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json', // Specify the content type
+                    'X-CSRF-TOKEN': this.csrfToken
+                },
+                // Include CSRF token
+                body: JSON.stringify({'name': name})
+            }).then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                // console.log(response.json()) // Parse the JSON in the response
+                return response.json(); // Parse the JSON in the response
+            })
+                .then(data => {
+                    console.log('Success:', data); // Handle the success case
+                    this.dbNames = data
+                })
+                .catch((error) => {
+                    console.error('Error:', error); // Handle errors
+                });
+
+        },
     },
     setup() {
         const sidebarOpen = ref(false)
