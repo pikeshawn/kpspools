@@ -60,6 +60,13 @@
                             <span class="font-medium">Invoice:</span> {{ row.invoiceNumber }}
                         </div>
                         <div>
+                            <!-- Copy Button -->
+                            <button
+                                @click="copyToClipboard(row.link)"
+                                class="px-4 py-2 bg-blue-500 text-black rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-300"
+                            >
+                                Copy Link
+                            </button>
                             <a
                                 :href="row.link"
                                 class="text-blue-600 hover:underline"
@@ -103,7 +110,8 @@ export default {
     data() {
         return {
             showRoute: false,
-            selectedRoute: []
+            selectedRoute: [],
+            copied: false
         }
     },
     mounted() {
@@ -113,6 +121,27 @@ export default {
     updated() {
     },
     methods: {
+        copyToClipboard(link) {
+            // Create a temporary input element
+            const tempInput = document.createElement("input");
+            tempInput.value = link;
+            document.body.appendChild(tempInput);
+
+            // Select and copy the input value
+            tempInput.select();
+            document.execCommand("copy");
+
+            // Remove the temporary input element
+            document.body.removeChild(tempInput);
+
+            // Update feedback state
+            this.copied = true;
+
+            // Reset feedback after 2 seconds
+            setTimeout(() => {
+                this.copied = false;
+            }, 2000);
+        },
         formatCurrency(amount) {
             if (!amount) return "-";
             return `$`+amount;
