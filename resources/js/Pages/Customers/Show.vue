@@ -442,7 +442,7 @@
             <inertia-link
                 v-if="user.is_admin"
                 class="relative inline-flex items-center px-4 py-2 rounded-l-md bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:z-10 focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500"
-                :href="route('initiate.customer', customer.id)"
+                :href="route('initiate.customer', address.id)"
             >
                 <div
                     class="relative flex items-center space-x-3 rounded-lg bg-white px-6 py-5 focus-within:ring-2 focus-within:ring-indigo-500 focus-within:ring-offset-2 hover:border-gray-400">
@@ -479,7 +479,7 @@
             </inertia-link>
             <inertia-link
                 class="relative inline-flex items-center px-4 py-2 rounded-l-md bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:z-10 focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500"
-                :href="route('summary', customer.id)"
+                :href="route('summary', address.id)"
             >
                 <div
                     class="relative flex items-center space-x-3 rounded-lg bg-white px-6 py-5 focus-within:ring-2 focus-within:ring-indigo-500 focus-within:ring-offset-2 hover:border-gray-400">
@@ -490,7 +490,7 @@
             </inertia-link>
             <inertia-link
                 class="relative inline-flex items-center px-4 py-2 rounded-l-md bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:z-10 focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500"
-                :href="route('service_stops.notes', customer.id)"
+                :href="route('service_stops.notes', address.id)"
             >
                 <div
                     class="relative flex items-center space-x-3 rounded-lg bg-white px-6 py-5 focus-within:ring-2 focus-within:ring-indigo-500 focus-within:ring-offset-2 hover:border-gray-400">
@@ -502,7 +502,7 @@
             <inertia-link
                 v-if="user.is_admin"
                 class="relative inline-flex items-center px-4 py-2 rounded-l-md bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:z-10 focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500"
-                :href="route('payment.history', customer.id)"
+                :href="route('payment.history', address.id)"
             >
                 <div
                     class="relative flex items-center space-x-3 rounded-lg bg-white px-6 py-5 focus-within:ring-2 focus-within:ring-indigo-500 focus-within:ring-offset-2 hover:border-gray-400">

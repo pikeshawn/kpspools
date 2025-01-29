@@ -54,6 +54,7 @@ export default {
     computed: {
         currentUrl() {
             return window.location.href.replace(/\/$/, "").split("/").pop() // Gets the relative path
+            // return 442
         },
         noNullNotes(){
             let notes = []

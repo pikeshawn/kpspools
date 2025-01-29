@@ -30,7 +30,6 @@ class InitiateBidController extends Controller
 
     public function customer($id)
     {
-
         $customer = Customer::find($id);
         $serviceStops = ServiceStop::where('customer_id', $customer->id)->get();
         $completedTasks = Task::where('customer_id', $customer->id)
@@ -39,6 +38,7 @@ class InitiateBidController extends Controller
         return Inertia::render('Initiate/Customer', [
             'customer' => $customer,
             'serviceStops' => $serviceStops,
+            'addressId' => $id,
             'completedTasks' => $completedTasks
         ]);
     }

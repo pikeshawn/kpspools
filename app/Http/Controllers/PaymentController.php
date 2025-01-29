@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Address;
 use GuzzleHttp\Client;
 use Illuminate\Http\Request;
 use App\Models\Customer;
@@ -16,8 +17,10 @@ class PaymentController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function index(Customer $customer): Response
+    public function index(Address $address): Response
     {
+
+        $customer = Customer::find($address->customer_id);
 
         $response = self::submitToJemmson($customer->jemmson_id);
         $jsonResponse = json_decode($response);

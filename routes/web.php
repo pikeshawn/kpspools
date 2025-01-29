@@ -131,7 +131,7 @@ Route::middleware(['auth:sanctum', 'verified', 'customer', 'subscribed'])->group
 
 Route::middleware(['auth:sanctum', 'verified', 'serviceman'])->group(function () {
 
-    Route::get('/payment/history/{customer}',
+    Route::get('/payment/history/{address}',
         [PaymentController::class, 'index'])
         ->name('payment.history');
 
@@ -146,7 +146,7 @@ Route::middleware(['auth:sanctum', 'verified', 'serviceman'])->group(function ()
     Route::get('/initiate',
         [InitiateBidController::class, 'index'])->name('initiate.index');;
 
-    Route::get('/initiate/{Customer}',
+    Route::get('/initiate/{Address}',
         [InitiateBidController::class, 'customer'])->name('initiate.customer');
 
     Route::post('sendBid',
@@ -217,7 +217,7 @@ Route::middleware(['auth:sanctum', 'verified', 'serviceman'])->group(function ()
         [ServiceStopController::class, 'index'])
         ->name('service_stops');
 
-    Route::get('/summary/{customer}',
+    Route::get('/summary/{address}',
         [SummaryController::class, 'customerSummary'])
         ->name('summary');
 
@@ -225,7 +225,7 @@ Route::middleware(['auth:sanctum', 'verified', 'serviceman'])->group(function ()
         [ServiceStopController::class, 'create'])
         ->name('service_stops.create');
 
-    Route::get('/service_stops/notes/{customer}',
+    Route::get('/service_stops/notes/{address}',
         [ServiceStopController::class, 'notes'])
         ->name('service_stops.notes');
 

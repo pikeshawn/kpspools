@@ -458,7 +458,8 @@ class TaskController extends Controller
 
         return Inertia::render('Task/CustomerNeedsApproval', [
             'tasks' => $tasks,
-            'servicemen' => $servicemen
+            'servicemen' => $servicemen,
+            'addressId' => $request->addressId['id']
         ]);
     }
 

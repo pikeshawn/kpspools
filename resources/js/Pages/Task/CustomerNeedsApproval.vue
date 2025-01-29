@@ -1,12 +1,10 @@
 <template>
     <layout
         :user="user"
+        :address-id="addressId"
     >
-        <!--        :addressId="currentUrl"-->
 
         <!--        Section for Admin users  -->
-
-
         <div v-if="user.is_admin === 1">
             <div>
                 <div class="sm:hidden">
@@ -658,7 +656,8 @@ export default {
     props: {
         tasks: Array,
         servicemen: Array,
-        user: String
+        user: String,
+        addressId: String
     },
     data() {
         return {

@@ -22,9 +22,11 @@ class SummaryController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function customerSummary(Customer $customer): Response
+    public function customerSummary(Address $address): Response
     {
         //
+
+        $customer = Customer::find($address->customer_id);
 
         return Inertia::render('Summary/customer', [
             'customer_name' => $customer->first_name.' '.$customer->last_name,

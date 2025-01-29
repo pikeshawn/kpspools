@@ -175,8 +175,11 @@ class ServiceStopController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function notes(Customer $customer): Response
+    public function notes(Address $address): Response
     {
+
+        $customer = Customer::find($address->customer_id);
+
         $notes = DB::select('select id, updated_at,
             notes, service_type from service_stops where customer_id = ' . $customer->id . ' order by updated_at DESC');
 
