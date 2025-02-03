@@ -1,0 +1,33 @@
+1. I need to assign all things bought from SCP to a task that was added to the system. this means going into
+ the SCP invoices for the month and seeing who has created the invoice and then looking at the tasks
+ that were assigned to that person and seeing if the match a task. This means I need each invoice row to have a
+ name next to the row and a task description and price. I need to be able to mark it as completed or in inventory.
+ I should have the task in the database associated with an invoice task row. This should be another column in invoice
+ items with the task id which can be null.
+
+2. If a task has been completed and invoiced then I need to mark it as paid.
+
+3. I need to go through my schedule in Notes and make sure there is a task associated to each thing that I
+ completed.
+
+4. I need to talk to my guys and make sure all tasks that have been completed have been marked as complete
+
+5. I need to go through the notes section in service stops and make sure that a task has been assigned to
+ each note that says a task was created
+
+Statuses
+1. Created:
+    - has it been completed
+    - does it have approval
+    - was their an item associated to it
+
+2. Created and sent
+    - has it been approved verbally
+    - has it been completed
+
+3. Approved
+    - has it been completed
+
+4. Completed
+    - has it been invoiced already
+

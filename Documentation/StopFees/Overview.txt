@@ -1,0 +1,62 @@
+I need to create functionality that charges for service fees. the issue is that I want to charge for trips that make sense
+versus trips where it seems like the price for what I am charging for the trip and the thing to replace doesnt make the
+product extraordinarily expensive. I think that I should have as much of my guys be able to diagnose and evaluate as possible
+to avoid the service fee when I can.
+
+Things that I will have to do to institute this policy
+1. Send out a text detailing the issue or through email.
+    - explain that the service fee will be applied to any jobs that they approve which would eliminate the service fee
+    - explain that I will have my guys diagnose as much as possible to avoid the trip
+    - maybe have some approval from customers to go out to the job
+    - that we reserve the right to charge the card on file once job is done or job is denied and we charge for the trip
+2. add this to a new customer terms of service
+
+
+Functionality
+1. Problem is reported by customer
+    2. Ask whether they would like for us to check it out and then remind them of the service fee and the bill of it
+        1. Yes
+            - Create a task
+            - Mark service call
+            - Schedule
+            - Go to job
+            - Report cost of job
+            - Wants us to fix it
+                - yes, fix it
+                    - Service fee applied to job or just not charged
+                - no don't fix it
+                    - Charge service fee
+        2. No
+            - dont do anything
+2. Problem reported by service tech
+    1. creates a task
+    2. marks if a service call is needed
+        1. texts customer of the issue
+        2. asks customer if they would like for us to do a service call
+            1. yes
+                1. status - job has been created
+                2. service fee is approved
+                3. after service fee is approved
+                    1. if job is approved - mark service fee as waived
+                    2. if job denied or put job on hold -
+                        1. create an invoice
+                        2. charge card on file for service fee
+            2. no
+                1. status - job is denied
+    3. service guy can mark service call is approved at task creation
+        1. sets the service fee as approved
+            1. status - job has been created
+            2. service fee is approved
+            3. after service fee is approved
+                1. if job is approved - mark service fee as waived
+                2. if job denied or put job on hold -
+                    1. create an invoice
+                    2. charge card on file for service fee
+            4. if on hold
+                1. charge for service fee
+                2. job status - on hold
+                3. if approve job - deduct service fee cost from job cost
+    4. can mark task as approved at task creation
+        1. waives the service call fee
+
+
