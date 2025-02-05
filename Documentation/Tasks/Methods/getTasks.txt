@@ -1,0 +1,35 @@
+name = getTasks
+overview - need to pull tasks from the a few tables based up the input received
+input - #parameters: array:4 [▼
+              "sub" => "3"
+              "subName" => "Jeremiah"
+              "status" => "created"
+              "startDate" => "2025-02-04"
+              "endDate" => "2025-02-05"
+            ]
+logic -
+    1. create a task array where
+        - name = subName
+        - id = sub
+    2. pull all tasks from the tasks table where columns
+        assigned = sub,
+        status = status,
+        updated_at is > startDate and < endDate
+    3. add results to the created array
+    4. for each task that is pulled back
+        - pull all statuses from the task_statuses table where column task_id = task.id
+        - pull back id, customer_id, address_line_1, city, zip from the addresses table where
+            the addresses.id = task.address_id
+        - pull back first_name, last_name from customers table where the customer.id = addresses.customer_id
+            - add the name to the customer array
+                - in the format "first_name last_name"
+            - add the address to the customer array
+                - in format of "address_line_1, city zip"
+            - add the link to the customer array like this
+                - in format - env("APP_URL") . "/customers/show/" . address.id
+        - create a sub array and add it to the task array
+            - beenPaid => task.subPaid
+            - rate => task.rate
+
+
+

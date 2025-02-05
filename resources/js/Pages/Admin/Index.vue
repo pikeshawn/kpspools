@@ -128,6 +128,10 @@ export default {
                     id: 11,
                     name: "Unpaid Invoices",
                     route: "billing.unpaid"
+                },{
+                    id: 12,
+                    name: "Sub Tasks",
+                    route: "sub.tasks"
                 }
             ]
         }

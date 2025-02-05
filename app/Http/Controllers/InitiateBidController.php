@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Address;
 use App\Models\ServiceStop;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -30,7 +31,9 @@ class InitiateBidController extends Controller
 
     public function customer($id)
     {
-        $customer = Customer::find($id);
+
+        $address = Address::find($id);
+        $customer = Customer::find($address->customer_id);
         $serviceStops = ServiceStop::where('customer_id', $customer->id)->get();
         $completedTasks = Task::where('customer_id', $customer->id)
             ->where('status', 'completed')->get();

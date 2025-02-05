@@ -287,6 +287,14 @@ Route::middleware(['auth:sanctum', 'verified', 'serviceman'])->group(function ()
         [TaskController::class, 'reconcile'])
         ->name('reconcile.created');
 
+    Route::get('/tasks/subTasks',
+        [TaskController::class, 'subTasks'])
+        ->name('sub.tasks');
+
+    Route::post('/tasks/getTasks',
+        [TaskController::class, 'getTasks'])
+        ->name('sub.getTasks');
+
 //    Route::get('/tasks/reconcile',
 //        [TaskController::class, 'reconcileCreatedTasks'])
 //        ->name('reconcile.created');

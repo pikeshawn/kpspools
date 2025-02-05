@@ -1,0 +1,333 @@
+- need to know
+    - did he pay for the parts out of pocket
+    - what is his rate for the job
+    - have I paid him for the job done
+    - has the customer been billed?
+    - has the customer paid for the job
+
+
+
+- name - SubTasks
+- type - vue page
+- page can only be seen if the user = "isAdmin"
+- need a selector on top to choose between these options
+    - particular sub => from subs property and `all` option for every sub
+    - date range of tasks => dateTime property
+    - particular task status from statuses property and `all` option for every status
+- summary section on top that will have
+    - how much I owe all tasks that have been selected
+        - total for all tasks that are subtasks[i].tasks[i].sub.beenPaid = false
+    - how much I owe all unpaid tasks
+        - from property totalUnPaidTasks
+- initial load of page
+    - statuses property
+        - all current statuses from the database
+        - input => [
+            "created",
+            "approved",
+            "completed",
+            "diy",
+            "denied"
+        ]
+    - subs property - Array
+        - all currently active subs
+        - input => [
+            {
+                "name": "Jeremiah",
+                "id": 3
+            },
+            {
+                "name": "Blake",
+                "id": 4
+            },
+            {
+                "name": "Alex",
+                "id": 5
+            },
+        ]
+- page load does not have input initially loaded
+- selection criteria pulls back the data set as an inertia get request with data
+    - input from server after submitting the selection - json
+        {
+          "subTasks": [
+            {
+              "name": "Jeremiah",
+              "id": 3,
+              "tasks": [
+                {
+                  "id": 1441,
+                  "description": "task 1",
+                  "status": "completed",
+                  "type": "part",
+                  "price": 234.00,
+                  "quantity": 5,
+                  "approvalSent": false,
+                  "created_at": "2024-12-19 14:36:10",
+                  "updated_at": "2024-12-19 14:36:10",
+                  "statuses": [
+                    {
+                      "status": "created",
+                      "status_creator": "Jenny",
+                      "status_date": "2024-12-19 14:36:10",
+                      "created_at": "2024-12-19 14:36:10",
+                      "updated_at": "2024-12-19 14:36:10"
+                    }
+                  ],
+                  "sub": {
+                    "beenPaid": false,
+                    "rate": 123.00
+                  },
+                  "customer": {
+                    "address": "123 main st",
+                    "name": "Jenny Smith",
+                    "link": "https://kpspools.com/customers/show/185"
+                  }
+                },
+                {
+                  "id": 1441,
+                  "description": "task 1",
+                  "status": "completed",
+                  "type": "part",
+                  "price": 234.00,
+                  "quantity": 5,
+                  "approvalSent": false,
+                  "created_at": "2024-12-19 14:36:10",
+                  "updated_at": "2024-12-19 14:36:10",
+                  "statuses": [
+                    {
+                      "status": "created",
+                      "status_creator": "Jenny",
+                      "status_date": "2024-12-19 14:36:10",
+                      "created_at": "2024-12-19 14:36:10",
+                      "updated_at": "2024-12-19 14:36:10"
+                    }
+                  ],
+                  "sub": {
+                    "beenPaid": false,
+                    "rate": 123.00
+                  },
+                  "customer": {
+                    "address": "123 main st",
+                    "name": "Jenny Smith",
+                    "link": "https://kpspools.com/customers/show/185"
+                  }
+                },
+                {
+                  "id": 1441,
+                  "description": "task 1",
+                  "status": "completed",
+                  "type": "part",
+                  "price": 234.00,
+                  "quantity": 5,
+                  "approvalSent": false,
+                  "created_at": "2024-12-19 14:36:10",
+                  "updated_at": "2024-12-19 14:36:10",
+                  "statuses": [
+                    {
+                      "status": "created",
+                      "status_creator": "Jenny",
+                      "status_date": "2024-12-19 14:36:10",
+                      "created_at": "2024-12-19 14:36:10",
+                      "updated_at": "2024-12-19 14:36:10"
+                    }
+                  ],
+                  "sub": {
+                    "beenPaid": false,
+                    "rate": 123.00
+                  },
+                  "customer": {
+                    "address": "123 main st",
+                    "name": "Jenny Smith",
+                    "link": "https://kpspools.com/customers/show/185"
+                  }
+                }
+              ]
+            },{
+              "name": "Blake",
+              "id": 4,
+              "tasks": [
+                {
+                  "id": 1441,
+                  "description": "task 1",
+                  "status": "completed",
+                  "type": "part",
+                  "price": 234.00,
+                  "quantity": 5,
+                  "approvalSent": false,
+                  "created_at": "2024-12-19 14:36:10",
+                  "updated_at": "2024-12-19 14:36:10",
+                  "statuses": [
+                    {
+                      "status": "created",
+                      "status_creator": "Jenny",
+                      "status_date": "2024-12-19 14:36:10",
+                      "created_at": "2024-12-19 14:36:10",
+                      "updated_at": "2024-12-19 14:36:10"
+                    }
+                  ],
+                  "sub": {
+                    "beenPaid": false,
+                    "rate": 123.00
+                  },
+                  "customer": {
+                    "address": "123 main st",
+                    "name": "Jenny Smith",
+                    "link": "https://kpspools.com/customers/show/185"
+                  }
+                },
+                {
+                  "id": 1441,
+                  "description": "task 1",
+                  "status": "completed",
+                  "type": "part",
+                  "price": 234.00,
+                  "quantity": 5,
+                  "approvalSent": false,
+                  "created_at": "2024-12-19 14:36:10",
+                  "updated_at": "2024-12-19 14:36:10",
+                  "statuses": [
+                    {
+                      "status": "created",
+                      "status_creator": "Jenny",
+                      "status_date": "2024-12-19 14:36:10",
+                      "created_at": "2024-12-19 14:36:10",
+                      "updated_at": "2024-12-19 14:36:10"
+                    }
+                  ],
+                  "sub": {
+                    "beenPaid": false,
+                    "rate": 123.00
+                  },
+                  "customer": {
+                    "address": "123 main st",
+                    "name": "Jenny Smith",
+                    "link": "https://kpspools.com/customers/show/185"
+                  }
+                },
+                {
+                  "id": 1441,
+                  "description": "task 1",
+                  "status": "completed",
+                  "type": "part",
+                  "price": 234.00,
+                  "quantity": 5,
+                  "approvalSent": false,
+                  "created_at": "2024-12-19 14:36:10",
+                  "updated_at": "2024-12-19 14:36:10",
+                  "statuses": [
+                    {
+                      "status": "created",
+                      "status_creator": "Jenny",
+                      "status_date": "2024-12-19 14:36:10",
+                      "created_at": "2024-12-19 14:36:10",
+                      "updated_at": "2024-12-19 14:36:10"
+                    }
+                  ],
+                  "sub": {
+                    "beenPaid": false,
+                    "rate": 123.00
+                  },
+                  "customer": {
+                    "address": "123 main st",
+                    "name": "Jenny Smith",
+                    "link": "https://kpspools.com/customers/show/185"
+                  }
+                }
+              ]
+            },{
+              "name": "Alex",
+              "id": 5,
+              "tasks": [
+                {
+                  "id": 1441,
+                  "description": "task 1",
+                  "status": "completed",
+                  "type": "part",
+                  "price": 234.00,
+                  "quantity": 5,
+                  "approvalSent": false,
+                  "created_at": "2024-12-19 14:36:10",
+                  "updated_at": "2024-12-19 14:36:10",
+                  "statuses": [
+                    {
+                      "status": "created",
+                      "status_creator": "Jenny",
+                      "status_date": "2024-12-19 14:36:10",
+                      "created_at": "2024-12-19 14:36:10",
+                      "updated_at": "2024-12-19 14:36:10"
+                    }
+                  ],
+                  "sub": {
+                    "beenPaid": false,
+                    "rate": 123.00
+                  },
+                  "customer": {
+                    "address": "123 main st",
+                    "name": "Jenny Smith",
+                    "link": "https://kpspools.com/customers/show/185"
+                  }
+                },
+                {
+                  "id": 1441,
+                  "description": "task 1",
+                  "status": "completed",
+                  "type": "part",
+                  "price": 234.00,
+                  "quantity": 5,
+                  "approvalSent": false,
+                  "created_at": "2024-12-19 14:36:10",
+                  "updated_at": "2024-12-19 14:36:10",
+                  "statuses": [
+                    {
+                      "status": "created",
+                      "status_creator": "Jenny",
+                      "status_date": "2024-12-19 14:36:10",
+                      "created_at": "2024-12-19 14:36:10",
+                      "updated_at": "2024-12-19 14:36:10"
+                    }
+                  ],
+                  "sub": {
+                    "beenPaid": false,
+                    "rate": 123.00
+                  },
+                  "customer": {
+                    "address": "123 main st",
+                    "name": "Jenny Smith",
+                    "link": "https://kpspools.com/customers/show/185"
+                  }
+                },
+                {
+                  "id": 1441,
+                  "description": "task 1",
+                  "status": "completed",
+                  "type": "part",
+                  "price": 234.00,
+                  "quantity": 5,
+                  "approvalSent": false,
+                  "created_at": "2024-12-19 14:36:10",
+                  "updated_at": "2024-12-19 14:36:10",
+                  "statuses": [
+                    {
+                      "status": "created",
+                      "status_creator": "Jenny",
+                      "status_date": "2024-12-19 14:36:10",
+                      "created_at": "2024-12-19 14:36:10",
+                      "updated_at": "2024-12-19 14:36:10"
+                    }
+                  ],
+                  "sub": {
+                    "beenPaid": false,
+                    "rate": 123.00
+                  },
+                  "customer": {
+                    "address": "123 main st",
+                    "name": "Jenny Smith",
+                    "link": "https://kpspools.com/customers/show/185"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+
+

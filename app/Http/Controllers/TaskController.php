@@ -25,6 +25,106 @@ use function PHPUnit\Framework\isNull;
 class TaskController extends Controller
 {
 
+    public function getTasks(Request $request)
+    {
+//        dd($request);
+
+        // Extract input parameters
+        $sub = $request->input('sub');
+        $subName = $request->input('subName');
+        $status = $request->input('status');
+        $startDate = $request->input('startDate');
+        $endDate = $request->input('endDate');
+
+        // Initialize the task array
+        $taskArray = [
+            "name" => $subName,
+            "id" => $sub,
+            "tasks" => []
+        ];
+
+        // Fetch tasks from the tasks table based on the filters
+        $tasks = DB::table('tasks')
+            ->where('assigned', $sub)
+            ->where('status', $status)
+            ->whereBetween('updated_at', [$startDate, $endDate])
+            ->get();
+
+        // Loop through each task and retrieve related data
+        foreach ($tasks as $task) {
+            // Fetch statuses related to the task
+            $statuses = DB::table('task_statuses')
+                ->where('task_id', $task->id)
+                ->select('status', 'status_creator', 'status_date', 'created_at', 'updated_at')
+                ->get();
+
+            // Fetch address information
+            $address = DB::table('addresses')
+                ->where('id', $task->address_id)
+                ->select('id', 'customer_id', 'address_line_1', 'city', 'zip')
+                ->first();
+
+            // Fetch customer information
+            $customer = null;
+            if ($address) {
+                $customerData = DB::table('customers')
+                    ->where('id', $address->customer_id)
+                    ->select('first_name', 'last_name')
+                    ->first();
+
+                if ($customerData) {
+                    $customer = [
+                        "name" => $customerData->first_name . " " . $customerData->last_name,
+                        "address" => "{$address->address_line_1}, {$address->city} {$address->zip}",
+                        "link" => env("APP_URL") . "/customers/show/" . $address->id
+                    ];
+                }
+            }
+
+            // Create sub array
+            $subData = [
+                "beenPaid" => $task->been_paid,
+                "rate" => $task->rate
+            ];
+
+            // Add task to task array
+            $taskArray["tasks"][] = [
+                "id" => $task->id,
+                "description" => $task->description,
+                "status" => $task->status,
+                "type" => $task->type,
+                "price" => $task->price,
+                "quantity" => $task->quantity,
+                "approvalSent" => $task->sent,
+                "created_at" => $task->created_at,
+                "updated_at" => $task->updated_at,
+                "statuses" => $statuses,
+                "sub" => $subData,
+                "customer" => $customer
+            ];
+        }
+
+//        dd($taskArray);
+
+        // Return the task array as JSON
+//        return response()->json(["subTasks" => [$taskArray]]);
+        return $taskArray;
+    }
+
+    public function subTasks()
+    {
+
+//        $statuses = [];
+
+        $subs = User::where('type', 'serviceman')->where('active', true)->get();
+
+        return Inertia::render('Task/SubTasks', [
+            'statuses' => ["created", "approved", "completed", "diy", "denied"],
+            'subs' => $subs
+        ]);
+
+
+    }
 
     public function display()
     {
