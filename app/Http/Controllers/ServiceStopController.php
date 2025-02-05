@@ -364,7 +364,10 @@ class ServiceStopController extends Controller
             } elseif ($cust->phone_number == '16029894584') {
                 Notification::route('vonage', '14806286607')
                     ->notify(new ServiceStopCompleted($serviceStop, $cust, $address, true));
-                if ($address->id === 33) {
+                // Get the current system date
+                $currentDate = Carbon::now();
+                $futureDate = Carbon::parse('2025-06-01'); // You can set any future date
+                if ($address->id === 34 && $currentDate->lessThan($futureDate)) {
                     Notification::route('vonage', '17202017174')
                         ->notify(new ServiceStopCompleted($serviceStop, $cust, $address, true));
                 }
