@@ -6,7 +6,14 @@
         <div class="min-h-screen flex items-center justify-center bg-gray-100">
             <div class="bg-white shadow-lg rounded-lg p-6 max-w-lg w-full">
 
-                <h2 class="text-2xl font-semibold text-gray-800 mb-4">Assign Task</h2>
+                <div class="flex justify-between">
+                    <h2 class="text-2xl font-semibold text-gray-800 mb-4">Assign Task</h2>
+                    <div>
+                        <h3 class="text font-semibold text-gray-800 mb-1">{{ customer.first_name }} {{ customer.last_name }}</h3>
+                        -------------
+                        <h3 class="text font-semibold text-gray-800 mb-1">{{ assignedServiceman }}</h3>
+                    </div>
+                </div>
 
                 <!-- Description Input -->
                 <div class="mb-4">
@@ -204,6 +211,7 @@ export default {
         customerId: String,
         customer: String,
         customerName: String,
+        assignedServiceman: String,
         tasks: Array
 
     },

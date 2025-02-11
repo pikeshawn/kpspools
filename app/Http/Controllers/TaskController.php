@@ -990,6 +990,7 @@ class TaskController extends Controller
         return Inertia::render('Task/Create', [
             'addressId' => $address->id,
             'customerId' => $address->customer_id,
+            'assignedServiceman' => $address->assigned_serviceman,
             'subcontractors' => $subcontractors,
             'customer' => $customer,
             'customerName' => $customer->last_name,
