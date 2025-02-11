@@ -1003,6 +1003,10 @@ class TaskController extends Controller
 
 //        dd('In Store Method');
 
+        if (is_null($request->repairRate)) {
+            $request->repairRate = 0;
+        }
+
         if (!is_null($request->description)) {
             DB::beginTransaction();
             try {

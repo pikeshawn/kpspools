@@ -7,9 +7,10 @@
             <div class="bg-white shadow-lg rounded-lg p-6 max-w-lg w-full">
 
                 <div class="flex justify-between">
-                    <h2 class="text-2xl font-semibold text-gray-800 mb-4">Assign Task</h2>
+                    <h2 class="text-2xl font-semibold text-gray-800 mb-4">Create Task</h2>
                     <div>
-                        <h3 class="text font-semibold text-gray-800 mb-1">{{ customer.first_name }} {{ customer.last_name }}</h3>
+                        <h3 class="text font-semibold text-gray-800 mb-1">{{ customer.first_name }}
+                            {{ customer.last_name }}</h3>
                         -------------
                         <h3 class="text font-semibold text-gray-800 mb-1">{{ assignedServiceman }}</h3>
                     </div>
@@ -222,13 +223,13 @@ export default {
                 address_id: '',
                 customer_id: '',
                 description: '',
-                jobRate: null,
+                jobRate: 0,
                 name: null,
-                price: '',
+                price: 0,
                 product_number: '',
                 quantity: 1,
-                initialRepairRate: null,
-                repairRate: null,
+                initialRepairRate: 0,
+                repairRate: 0,
                 selectedTask: null,
                 selectedTaskDescription: null,
                 serviceman: null,
@@ -252,7 +253,7 @@ export default {
             todoChecked: false,
             selectedServiceGuy: "",
             selectedCompany: "",
-            repairRate: "",
+            repairRate: 0,
             serviceGuys: [
                 {id: 1, name: "John Doe"},
                 {id: 2, name: "Jane Smith"},
@@ -272,7 +273,7 @@ export default {
     },
 
     watch: {
-        quantity(){
+        quantity() {
             this.adjustPrice();
         }
     },
@@ -300,6 +301,12 @@ export default {
         },
 
         submitTask() {
+
+            if (!this.form.repairRate) {
+                this.form.repairRate = 0;
+            }
+
+
             this.form.address_id = this.addressId
             this.form.customer_id = this.customerId
             this.form.assigned = this.user.id
@@ -324,6 +331,8 @@ export default {
             // debugger;
 
             this.form.name = name
+
+            // debugger
 
             if (!this.form.repairRate) {
                 if (this.form.initialRepairRate > 0) {
