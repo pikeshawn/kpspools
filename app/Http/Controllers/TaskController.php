@@ -1152,7 +1152,7 @@ class TaskController extends Controller
                     'status_date' => now()
                 ]);
                 $serviceman = User::find($request->serviceman);
-                $message = "An approved repair has been assigned to you:: $task->description. Name:: $customer->first_name $customer->last_name\n$address->address_line_1, $address->city AZ $address->zip\nPlease text or call Shawn if you have any questions";
+                $message = "An approved repair has been assigned to you:: $task->description.\n$customer->first_name $customer->last_name\n" . env('APP_URL') . "/customers/show/$address->id Please text or call Shawn if you have any questions";
                 $phoneNumber = $serviceman->phone_number;
                 Notification::route('vonage', $phoneNumber)->notify(new TaskApprovalNotification($message));
             } else {
