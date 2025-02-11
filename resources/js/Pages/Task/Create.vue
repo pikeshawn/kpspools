@@ -163,20 +163,14 @@
                                class="h-5 w-5 text-blue-600 border-gray-300 rounded">
                         <label class="ml-2 text-sm text-gray-700">Update Standard Rate</label>
                     </div>
+                </div>
 
-                    <!-- Buttons Section -->
-                    <div class="flex justify-end mt-6">
-                        <button @click="submitTask"
-                                class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition">
-                            Submit Task
-                        </button>
-                    </div>
-
-                    <div v-if="selectedCompany" class="mt-4 text-center">
-                        <button @click="removeCompanySelection" class="text-sm text-red-500 hover:underline">
-                            Cancel Sending to Other Company
-                        </button>
-                    </div>
+                <!-- Buttons Section -->
+                <div class="flex justify-end mt-6">
+                    <button @click="submitTask"
+                            class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition">
+                        Submit Task
+                    </button>
                 </div>
 
             </div>
@@ -366,8 +360,8 @@ export default {
             this.form.jobRate = this.form.jobRate.toFixed(2);
         },
 
-        removeCompanySelection() {
-            this.selectedCompany = "";
+        cancelCompany() {
+            this.form.subcontractor = null;
         }
     }
 }
