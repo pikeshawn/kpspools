@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Customer;
+use App\Models\UserJobRate;
+use App\Models\JobType;
 use App\Models\Address;
 use App\Models\ScpInvoiceItem;
 use App\Models\Subcontractor;
@@ -616,29 +618,131 @@ class TaskController extends Controller
         $task->save();
     }
 
+    public function getUserRate(Request $request)
+    {
+        // Validate the request parameters
+        $request->validate([
+            'serviceman' => 'required|integer',
+            'description' => 'required|string'
+        ]);
+
+        // Find job type ID based on description
+        $jobType = DB::table('job_types')
+            ->where('name', $request->description)
+            ->select('id')
+            ->first();
+
+        if (!$jobType) {
+            return response()->json(['message' => 'Job type not found', 'rate_paid' => 0], 404);
+        }
+
+        // Fetch the repair rate from user_job_rates
+        $rate = DB::table('user_job_rates')
+            ->where('job_type_id', $jobType->id)
+            ->where('user_id', $request->serviceman)
+            ->value('rate_paid');
+
+        return response()->json(['rate_paid' => $rate ?? 0]);
+    }
+
 
     public function getTaskItems(Request $request)
     {
-        $scpItems = ScpInvoiceItem::select(['scp_invoice_item.description', 'scp_invoice_item.cost', 'scp_invoice_item.created_at', 'scp_invoice_item.product_number'])
-            ->join(DB::raw('(SELECT description, MAX(created_at) as latest_created_at FROM scp_invoice_item GROUP BY description) as latest_items'),
-                function ($join) {
-                    $join->on('scp_invoice_item.description', '=', 'latest_items.description')
-                        ->on('scp_invoice_item.created_at', '=', 'latest_items.latest_created_at');
-                })
-            ->where('scp_invoice_item.description', 'like', "%$request->name%")
-            ->orderBy('scp_invoice_item.created_at', 'desc')
+        // Fetch SCP Invoice Items matching the description
+        $scpItems = ScpInvoiceItem::select([
+            'description',
+            'cost',
+            DB::raw('MAX(created_at) as latest_created_at'),
+            'product_number'
+        ])
+            ->whereRaw("LOWER(description) LIKE LOWER(?)", ["%{$request->name}%"])
+            ->groupBy('description', 'cost', 'product_number')
+            ->orderBy('latest_created_at', 'desc')
             ->get();
+
+        // Fetch Task Items matching the description
+        $tasks = DB::table('tasks')
+            ->select(['description', 'price'])
+            ->whereRaw("LOWER(description) LIKE LOWER(?)", ["%{$request->name}%"])
+            ->groupBy('description', 'price')
+            ->orderBy('description', 'asc')
+            ->get();
+
+        // Collect all descriptions for batch querying
+        $allDescriptions = $scpItems->pluck('description')->merge($tasks->pluck('description'))->unique();
+
+        // Fetch tasks in bulk for better performance
+        $taskRecords = Task::whereIn('description', $allDescriptions)
+            ->orderBy('created_at', 'desc')
+            ->get()
+            ->keyBy('description');
+
+        // Fetch job types in bulk
+        $jobTypes = JobType::whereIn('name', $allDescriptions)
+            ->get()
+            ->keyBy('name');
+
+        // Fetch rates in bulk for all job types
+        $jobTypeIds = $jobTypes->pluck('id');
+        $repairmanRates = UserJobRate::whereIn('job_type_id', $jobTypeIds)
+            ->where('user_id', $request->serviceman)
+            ->get()
+            ->keyBy('job_type_id');
 
         $items = [];
 
+        // Process SCP Items
         foreach ($scpItems as $item) {
-            $i = [
-                'description' => $item->description,
+            $description = $item->description;
+            $task = $taskRecords->get($description);
+            $jobType = $task ? $jobTypes->get($task->description) : null;
+
+            if (!is_null($jobType)) {
+                $jobTypeId = $jobType->id;
+            } else {
+                $jobTypeId = null;
+            }
+
+
+            $jobRate = $jobType ? $jobType->rate_charged : null;
+            $repairmanRate = $jobType && $repairmanRates->has($jobType->id) ? $repairmanRates[$jobType->id]->rate_paid : null;
+
+            $items[] = [
+                'jobTypeId' => $jobTypeId,
+                'description' => $description,
                 'price' => $item->cost,
                 'product_number' => $item->product_number,
+                'repairmanRate' => $repairmanRate,
+                'jobRate' => $jobRate,
                 'type' => 'scpItem'
             ];
-            $items[] = $i;
+        }
+
+        // Process Task Items
+        foreach ($tasks as $item) {
+            $description = $item->description;
+            $task = $taskRecords->get($description);
+            $jobType = $task ? $jobTypes->get($task->description) : null;
+
+            if (!is_null($jobType)) {
+                $jobTypeId = $jobType->id;
+            } else {
+                $jobTypeId = null;
+            }
+
+
+            $jobRate = $jobType ? $jobType->rate_charged : null;
+            $repairmanRate = $jobType && $repairmanRates->has($jobType->id) ? $repairmanRates[$jobType->id]->rate_paid : null;
+
+            $items[] = [
+                'jobTypeId' => $jobTypeId,
+                'description' => $description,
+                'price' => $item->price,
+                'product_number' => null,
+                'repairmanRate' => $repairmanRate,
+                'jobRate' => $jobRate,
+                'type' => 'taskItem'
+            ];
         }
 
         return $items;
@@ -869,22 +973,19 @@ class TaskController extends Controller
      */
     public function create(Address $address): Response
     {
-//        dd($address);
-
-//        $address = DB::select('Select * from addresses where customer_id = '
-//            . $customer->id);
-//
-        $users = User::select(['id', 'name'])->where('type', '=', 'serviceman')->where('active', '=', true)->get();
-
-//        dd($customer->id);
+        $users = User::select(['id', 'name'])
+            ->where('type', '=', 'serviceman')
+            ->where('active', '=', true)
+            ->orderBy('name', 'asc')
+            ->get();
 
         $customer = Customer::find($address->customer_id);
-        $subs = Subcontractor::select(['company_name'])->get();
+        $subcontractors = Subcontractor::select(['id', 'company_name'])->get();
 
-        $subcontractors = [null];
-        foreach ($subs as $sub) {
-            $subcontractors[] = $sub->company_name;
-        }
+//        $subcontractors = [null];
+//        foreach ($subs as $sub) {
+//            $subcontractors[] = $sub->company_name;
+//        }
 
         return Inertia::render('Task/Create', [
             'addressId' => $address->id,
@@ -896,10 +997,204 @@ class TaskController extends Controller
         ]);
     }
 
-    public function store(Request $request): RedirectResponse
+    public function store(Request $request)
     {
 
-//        dd($request);
+//        dd('In Store Method');
+
+        if (!is_null($request->description)) {
+            DB::beginTransaction();
+            try {
+                if ($request->subcontractor) {
+                    $this->handleSubcontractorTask($request);
+                } elseif ($request->toDo) {
+                    $this->handleTodoTask($request);
+                } else {
+                    $this->handleRepairTask($request);
+                }
+
+                $this->updateJobRates($request);
+                $this->updateServicemanRates($request);
+
+                DB::commit();
+
+                return Redirect::route('customers.show', $request->address_id)
+                    ->with('success', 'Task created and message was sent');
+            } catch (\Exception $e) {
+                DB::rollBack();
+                return Redirect::back()->withErrors('An error occurred: ' . $e->getMessage());
+            }
+        }
+    }
+
+    /**
+     * Handle subcontractor task creation and notifications.
+     */
+    private function handleSubcontractorTask(Request $request)
+    {
+        $task = Task::create([
+            'assigned' => $request->subcontractor,
+            'customer_id' => $request->customer_id,
+            'description' => $request->description,
+            'scp_id' => $request->product_number,
+            'status' => false,
+            'type' => 'referred',
+            'price' => 0,
+            'sent' => false,
+            'address_id' => $request->address_id,
+            'been_paid' => false,
+            'quantity' => 0,
+            'count' => 1,
+            'rate' => 0
+        ]);
+
+        TaskStatus::create([
+            'task_id' => $task->id,
+            'status' => 'referred',
+            'status_creator' => Auth::id(),
+            'status_date' => now()
+        ]);
+
+        $customer = Customer::findOrFail($request->customer_id);
+        $address = Address::findOrFail($request->address_id);
+        $customerUser = User::find($customer->user_id);
+        $subcontractor = Subcontractor::findOrFail($request->subcontractor);
+
+        $email = strpos($customerUser->email, '.') !== false ? $customerUser->email : 'Email not recorded';
+
+        $message = "KPS Pools has a job for you.\n=====================\n{$request->description}\n=====================\nCustomer Info::\n{$customer->first_name} {$customer->last_name}\n{$customer->phone_number}\n$email\n{$address->address_line_1}, {$address->city} {$address->zip}\n=====================\nPlease reach out to Shawn for any questions at 14807034902";
+
+        Notification::route('vonage', $subcontractor->phone_number)->notify(new GenericNotification($message));
+
+        Notification::route('vonage', $customer->phone_number)->notify(new GenericNotification("{$subcontractor->company_name} has been notified. They can be reached at:\n=====================\n{$subcontractor->contact_name}\n{$subcontractor->company_name}\n{$subcontractor->phone_number}\n=====================\nPlease reach out to Shawn for any questions at 14807034902"));
+    }
+
+
+    /**
+     * Handle internal task marked as 'todo'.
+     */
+    private function handleTodoTask(Request $request)
+    {
+        $task = Task::create([
+            'assigned' => $request->serviceman,
+            'customer_id' => $request->customer_id,
+            'description' => $request->description,
+            'scp_id' => $request->product_number,
+            'status' => 'pickedUp',
+            'type' => 'todo',
+            'price' => 0,
+            'sent' => false,
+            'address_id' => $request->address_id,
+            'been_paid' => false,
+            'quantity' => 0,
+            'count' => 1,
+            'rate' => 0
+        ]);
+
+        TaskStatus::insert([
+            ['task_id' => $task->id, 'status' => 'created', 'status_creator' => Auth::id(), 'status_date' => now()],
+            ['task_id' => $task->id, 'status' => 'pickedUp', 'status_creator' => Auth::id(), 'status_date' => now()]
+        ]);
+
+        $user = User::find($request->serviceman);
+        $customer = Customer::find($request->customer_id);
+
+        if (Auth::id() !== $user->id) {
+            Notification::route('vonage', $user->phone_number)->notify(new GenericNotification("You were assigned a Task::\n{$customer->first_name} {$customer->last_name}\n{$request->description}\n" . env('APP_URL') . "/customers/show/{$request->address_id}"));
+        }
+    }
+
+    /**
+     * Handle standard repair tasks.
+     */
+    private function handleRepairTask(Request $request)
+    {
+        $status = $request->verbalApproval ? 'approved' : 'created';
+
+        $task = Task::create([
+            'assigned' => $request->serviceman,
+            'customer_id' => $request->customer_id,
+            'description' => $request->description,
+            'scp_id' => $request->product_number,
+            'status' => $status,
+            'type' => 'repair',
+            'price' => $request->jobRate,
+            'sent' => false,
+            'address_id' => $request->address_id,
+            'been_paid' => false,
+            'count' => 1,
+            'quantity' => $request->quantity,
+            'rate' => $request->repairRate
+        ]);
+
+        TaskStatus::create([
+            'task_id' => $task->id,
+            'status' => 'created',
+            'status_creator' => Auth::id(),
+            'status_date' => now()
+        ]);
+
+        if (!is_null($request->jobRate) && $request->jobRate > 0) {
+            $customer = Customer::find($request->customer_id);
+            $address = Address::find($request->address_id);
+            if ($request->verbalApproval) {
+                TaskStatus::create([
+                    'task_id' => $task->id,
+                    'status' => 'approved',
+                    'status_creator' => Auth::id(),
+                    'status_date' => now()
+                ]);
+                $serviceman = User::find($request->serviceman);
+                $message = "An approved repair has been assigned to you:: $task->description. Name:: $customer->first_name $customer->last_name\n$address->address_line_1, $address->city AZ $address->zip\nPlease text or call Shawn if you have any questions";
+                $phoneNumber = $serviceman->phone_number;
+                Notification::route('vonage', $phoneNumber)->notify(new TaskApprovalNotification($message));
+            } else {
+                $message = "We wanted to notify you that your pool needs to have a repair done: {$task->description}. Please text or call Shawn to approve or deny the task at 480-703-4902.";
+                Notification::route('vonage', $customer->phone_number)->notify(new TaskApprovalNotification($message));
+            }
+            $task->sent = true;
+            $task->save();
+        }
+    }
+
+    private function updateJobRates(Request $request)
+    {
+        if ($request->jobRate) {
+            $jobType = JobType::updateOrCreate(
+                ['name' => $request->description],
+                ['rate_charged' => $request->jobRate]
+            );
+
+            if ($request->updateStandardRate) {
+                $jobType->update(['rate_charged' => $request->jobRate]);
+            }
+
+            if ($request->repairRate !== null) {
+                UserJobRate::updateOrCreate(
+                    ['user_id' => $request->serviceman, 'job_type_id' => $jobType->id],
+                    ['rate_paid' => $request->repairRate]
+                );
+            }
+        }
+    }
+
+    /**
+     * Update serviceman repair rate in user_job_rates table.
+     */
+    private function updateServicemanRates(Request $request)
+    {
+        if ($request->updateServicemanRepairRate && $request->repairRate !== null) {
+            UserJobRate::updateOrCreate(
+                ['user_id' => $request->serviceman, 'job_type_id' => $request->selectedTask['jobTypeId']],
+                ['rate_paid' => $request->repairRate]
+            );
+        }
+    }
+
+    public function storeBackup(Request $request): RedirectResponse
+    {
+
+        dd($request);
 
         $subcontractor = Subcontractor::where('company_name', $request->subcontractor)->first();
 

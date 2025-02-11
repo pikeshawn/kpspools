@@ -44,6 +44,12 @@ class User extends Authenticatable
         return $this->hasOne(Appointment::class);
     }
 
+    public function jobTypes()
+    {
+        return $this->belongsToMany(JobType::class, 'user_job_rates')
+            ->withTimestamps();
+    }
+
     /**
      * The attributes that are mass assignable.
      *

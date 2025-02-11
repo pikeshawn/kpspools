@@ -3,33 +3,19 @@
         :user="user"
         :addressId="addressId"
     >
-        <div class="mt-7 sm:col-span-4">
-            <div class="sm:col-span-3">
-<!--                <div class="mt-2">-->
-                <!--                    <input type="text" name="description" id="task-description" autocomplete="given-name"-->
-<!--                           v-model="form.description"-->
-<!--                           class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"/>-->
-<!--                </div>-->
+        <div class="min-h-screen flex items-center justify-center bg-gray-100">
+            <div class="bg-white shadow-lg rounded-lg p-6 max-w-lg w-full">
 
-                <div class="mt-2">
-                    <label for="task-description"
-                           class="block text-sm font-medium leading-6 text-gray-900">Description</label>
-                    <input @input="getTasks($event.target.value)" v-model="form.description" type="text" name="text"
-                           id="task-description"
-                           style="padding: 1rem; margin-top: 1rem;"
-                           class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                           placeholder="Description"/>
-                    <label for="quantity"
-                           class="mt-2 block text-sm font-medium leading-6 text-gray-900">Quantity</label>
+                <h2 class="text-2xl font-semibold text-gray-800 mb-4">Assign Task</h2>
+
+                <!-- Description Input -->
+                <div class="mb-4">
+                    <label class="block text-sm font-medium text-gray-700">Description</label>
                     <input
-                        id="quantity"
-                        v-model="form.quantity"
-                        type="number"
-                        style="padding: 1rem; margin-top: 1rem;"
-                        class="block w-1/2 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                    >
+                        @input="getTasks($event.target.value)" v-model="form.description" type="text" name="text"
+                        placeholder="Enter task details..."
+                        class="mt-1 w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-400 focus:outline-none">
                 </div>
-
 
                 <div v-for="task in form.taskItems" :key="task.id">
                     <button
@@ -39,9 +25,9 @@
                                               focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                         style="padding: 1rem; background: white"
                     >
-                        <div>{{ task.description }}</div>
-                        <div>{{ task.product_number }}</div>
-                        <div>SCP Price {{ task.price }}</div>
+                        <p>{{ task.description }}</p>
+                        <p>{{ task.product_number }}</p>
+                        <p>SCP Price {{ task.price }}</p>
                     </button>
 
 
@@ -49,80 +35,151 @@
                     <!--                        {{ task.description }}-->
                     <!--                    </li>-->
                 </div>
-            </div>
-        </div>
 
-        <fieldset>
-            <div class="mt-6 space-y-6" style="width: 100%">
-                <div class="flex flex-col">
-                    <div class="flex items-center gap-x-3">
-                        <input id="todo" name="type" type="radio" v-model="form.type" value="todo"
-                               class="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600"/>
-                        <label for="todo" class="block text-sm font-medium leading-6 text-gray-900"><span class="font-bold text-2xl">To Do</span> - Select this for non-billable items.</label>
-                    </div>
-                    <div class="flex items-center gap-x-3">
-                        <input id="repair" name="type" type="radio" v-model="form.type" value="repair"
-                               class="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600"/>
-                        <label for="repair" class="block text-sm font-medium leading-6 text-gray-900"><span class="font-bold text-2xl">Repair</span> - Billable item that takes more than 15 minutes of labor</label>
-                    </div>
-                    <div class="flex items-center gap-x-3">
-                        <input id="part" name="type" type="radio" v-model="form.type" value="part"
-                               class="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600"/>
-                        <label for="part" class="block text-sm font-medium leading-6 text-gray-900"><span class="font-bold text-2xl">Part</span> - Billable item that takes less than 15 minutes of labor</label>
-                    </div>
+                <!-- Quantity Input -->
+                <div class="mb-4">
+                    <label class="block text-sm font-medium text-gray-700">Quantity</label>
+                    <input
+                        v-model="quantity"
+                        type="number"
+                        min="1"
+                        placeholder="Enter quantity..."
+                        class="mt-1 w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-400 focus:outline-none">
                 </div>
-            </div>
-        </fieldset>
-        <div class="mt-6 flex items-center justify-around gap-x-6">
-            <button type="button"
-                    class="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
-                Cancel
-            </button>
-            <button type="submit"
-                    @click="store(customerId, user.id, addressId)"
-                    class="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
-                Add Task
-            </button>
 
-            <div
-                v-if="user.is_admin"
-            >
-                <div class="col-span-1">
-                    <label for="subs" class="block text-sm font-medium text-gray-700">Subs</label>
-                    <select id="subs" name="subs"
-                            v-model="form.subcontractor"
-                            class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-                        <option v-for="option in subcontractors">{{ option }}
+                <!-- Update Serviceman Repair Rate Checkbox -->
+                <div class="mb-4 flex items-center">
+                    <input v-model="form.verbalApproval" type="checkbox"
+                           class="h-5 w-5 text-blue-600 border-gray-300 rounded">
+                    <label class="ml-2 text-sm text-gray-700">Verbal Approval</label>
+                </div>
+
+                <!-- To-Do Checkbox -->
+                <div class="mb-4 flex items-center">
+                    <input v-model="form.toDo" type="checkbox" class="h-5 w-5 text-blue-600 border-gray-300 rounded">
+                    <label class="ml-2 text-sm text-gray-700">To-Do</label>
+                </div>
+
+                <!-- Assign to Service Guy Dropdown -->
+                <div class="mb-4">
+                    <label class="block text-sm font-medium text-gray-700">Assign to Service Guy</label>
+                    <select v-model="form.serviceman"
+                            class="mt-1 w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-400 focus:outline-none">
+                        <option value="" disabled>Select a person</option>
+                        <option v-for="guy in users" :key="guy.id" :value="guy.id">
+                            {{ guy.name }}
                         </option>
                     </select>
                 </div>
 
-                <button type="submit"
-                        @click="form.subcontractor = null"
-                        class="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
-                    Cancel Sending To Sub
-                </button>
+                <!-- Assign to Another Company Dropdown -->
+                <div class="mb-4">
+                    <label class="block text-sm font-medium text-gray-700">Assign to Another Company</label>
+                    <select v-model="form.subcontractor"
+                            class="mt-1 w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-400 focus:outline-none">
+                        <option value="" disabled>Select a company</option>
+                        <option v-for="company in subcontractors" :key="company.id" :value="company.id">
+                            {{ company.company_name }}
+                        </option>
+                    </select>
+                </div>
+
+                <div class="flex justify-end mt-6">
+                    <button @click="cancelCompany()"
+                            style="margin-bottom: 1rem"
+                            class="px-4 py-2 bg-red-100 text-gray-800 rounded-lg hover:bg-gray-400 transition">
+                        Cancel Company
+                    </button>
+                </div>
+
+                <div v-if="user.is_admin">
+
+                    <!-- Repair Rate Input -->
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium text-gray-700">Repair Rate</label>
+                        <input
+                            v-model="form.repairRate"
+                            type="number"
+                            step="0.01"
+                            min="0"
+                            placeholder="Enter serviceman repair rate..."
+                            class="mt-1 w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-400 focus:outline-none">
+                    </div>
+
+                    <!-- Percentage Buttons -->
+                    <div class="flex space-x-1" style="margin-bottom: 1rem;">
+                        <button
+                            v-for="percent in percentages"
+                            :key="percent"
+                            @click="applyPercentage(percent)"
+                            class="px-2 py-1 text-xs font-medium text-white bg-blue-500 rounded hover:bg-blue-600 transition"
+                        >
+                            +{{ percent }}%
+                        </button>
+                    </div>
+
+                    <!-- Update Serviceman Repair Rate Checkbox -->
+                    <div class="mb-4 flex items-center">
+                        <input v-model="form.updateServicemanRepairRate" type="checkbox"
+                               class="h-5 w-5 text-blue-600 border-gray-300 rounded">
+                        <label class="ml-2 text-sm text-gray-700">Update Repairman Rate</label>
+                    </div>
+
+                    <!-- Cost -->
+                    <div v-if="form.selectedTask" class="mb-4">
+                        <label class="block text-sm font-medium text-gray-700 flex justify-between">
+                            <div>Cost - Per Unit - Pre Tax</div>
+                            <div>$ {{ form.selectedTask.price }}</div>
+                        </label>
+                    </div>
+
+                    <!-- Repair Rate Input -->
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium text-gray-700">Job Rate</label>
+                        <input
+                            v-model="form.jobRate"
+                            type="number"
+                            step="0.01"
+                            min="0"
+                            placeholder="Enter job repair rate..."
+                            class="mt-1 w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-400 focus:outline-none">
+                    </div>
+
+                    <!-- Percentage Buttons -->
+                    <div class="flex space-x-1" style="margin-bottom: 1rem;">
+                        <button
+                            v-for="percent in percentages"
+                            :key="percent"
+                            @click="applyPercentageToJobRate(percent)"
+                            class="px-2 py-1 text-xs font-medium text-white bg-blue-500 rounded hover:bg-blue-600 transition"
+                        >
+                            +{{ percent }}%
+                        </button>
+                    </div>
+
+                    <!-- Update Standard Rate Checkbox -->
+                    <div class="mb-4 flex items-center">
+                        <input v-model="form.updateStandardRate" type="checkbox"
+                               class="h-5 w-5 text-blue-600 border-gray-300 rounded">
+                        <label class="ml-2 text-sm text-gray-700">Update Standard Rate</label>
+                    </div>
+
+                    <!-- Buttons Section -->
+                    <div class="flex justify-end mt-6">
+                        <button @click="submitTask"
+                                class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition">
+                            Submit Task
+                        </button>
+                    </div>
+
+                    <div v-if="selectedCompany" class="mt-4 text-center">
+                        <button @click="removeCompanySelection" class="text-sm text-red-500 hover:underline">
+                            Cancel Sending to Other Company
+                        </button>
+                    </div>
+                </div>
 
             </div>
-        </div>
-        <div v-if="form.type === 'todo' && user.is_admin === 1" class="py-6">
-            <div>
-                <label class="text-base font-semibold text-gray-900">Assign Todo</label>
-                <fieldset class="mt-4">
-                    <legend class="sr-only">Assign Task</legend>
-                    <div class="space-y-4">
-                        <div v-for="user in users" :key="user.id" class="flex items-center">
-                            <input :id="user.id" name="notification-method" type="radio" v-model="form.todoAssignee"
-                                   :value="user.id"
-                                   class="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600"/>
-                            <label :for="user.id" class="ml-3 block text-sm font-medium leading-6 text-gray-900">{{
-                                    user.name
-                                }}</label>
-                        </div>
-                    </div>
-                </fieldset>
-            </div>
-            <!--                <pre>{{ users }}</pre>-->
         </div>
     </layout>
 
@@ -138,7 +195,6 @@ import {reactive} from 'vue'
 import {Link} from '@inertiajs/inertia-vue3'
 
 export default {
-    name: "Create",
     components: {
         DropDown,
         LoadingButton,
@@ -147,68 +203,117 @@ export default {
         Toggle
     },
     props: {
-        addressId: String,
+        user: Array,
+        users: Array,
         subcontractors: Array,
+        addressId: String,
         customerId: String,
         customer: String,
         customerName: String,
-        user: String,
-        users: String,
         tasks: Array
+
     },
+
     data() {
         return {
-            csrfToken: null
-        }
-    },
-    remember: 'form',
-    setup() {
-        const form = reactive({
-            address_id: '',
-            customer_id: '',
-            description: '',
-            source: '',
-            price: '',
-            product_number: '',
-            subcontractor: null,
-            taskItems: null,
+            form: {
+                address_id: '',
+                customer_id: '',
+                description: '',
+                jobRate: null,
+                name: null,
+                price: '',
+                product_number: '',
+                quantity: 1,
+                initialRepairRate: null,
+                repairRate: null,
+                selectedTask: null,
+                selectedTaskDescription: null,
+                serviceman: 2,
+                source: '',
+                status: 'created',
+                subcontractor: null,
+                taskItems: null,
+                todoAssignee: null,
+                updateStandardRate: false,
+                verbalApproval: false,
+                toDo: false,
+                updateServicemanRepairRate: false
+            },
+
+
+            csrfToken: null,
+            percentages: [10, 20, 30, 40, 50], // Available percentage options
+
+            description: "",
             quantity: 1,
-            selectedTask: null,
-            name: null,
-            selectedTaskDescription: null,
-            type: '',
-            todoAssignee: null,
-            approval: false,
-            approvedDate: null,
-            status: 'created',
-        })
-        const errors = reactive({})
-
-        function store(customerId, userId, addressId, destination = '') {
-
-            this.form.address_id = addressId
-            this.form.customer_id = customerId
-            this.form.assigned = userId
-            Inertia.post('/task/store', form)
-        }
-
-        return {form, errors, store}
-
+            todoChecked: false,
+            selectedServiceGuy: "",
+            selectedCompany: "",
+            repairRate: "",
+            serviceGuys: [
+                {id: 1, name: "John Doe"},
+                {id: 2, name: "Jane Smith"},
+                {id: 3, name: "Mike Johnson"}
+            ],
+            companies: [
+                {id: 1, name: "RepairCo"},
+                {id: 2, name: "FixIt Services"},
+                {id: 3, name: "PoolPros Inc."}
+            ]
+        };
     },
+
     mounted() {
         this.form.todoAssignee = this.user.id;
         this.csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
     },
-    methods: {
 
-        setTask(task) {
-            console.log(task)
-            this.form.selectedTask = task
-            this.form.description = task.description
-            this.form.product_number = task.product_number
-            this.form.price = task.price
-            this.form.source = task.source
-            this.form.taskItems = null
+    watch: {
+        quantity(){
+            this.adjustPrice();
+        }
+    },
+
+    methods: {
+        applyPercentage(percent) {
+            if (this.form.repairRate || this.form.selectedTask.price) {
+                this.form.repairRate = parseFloat(this.form.repairRate);
+                this.form.selectedTask.price = parseFloat(this.form.selectedTask.price);
+                this.form.repairRate = this.form.selectedTask.price + (this.form.selectedTask.price * .08);
+                this.form.repairRate = this.form.repairRate * (percent / 100);
+                this.form.repairRate = this.form.repairRate.toFixed(2);
+            }
+        },
+
+        applyPercentageToJobRate(percent) {
+            if (this.form.jobRate || this.form.selectedTask.price) {
+                this.form.jobRate = parseFloat(this.form.jobRate);
+                this.form.selectedTask.price = parseFloat(this.form.selectedTask.price);
+                this.form.jobRate = this.form.selectedTask.price + (this.form.selectedTask.price * .08);
+                this.form.jobRate = this.form.jobRate * (1 + percent / 100) + this.form.repairRate;
+                this.form.jobRate = parseFloat(this.form.jobRate);
+                this.form.jobRate = this.form.jobRate.toFixed(2);
+            }
+        },
+
+        submitTask() {
+            this.form.address_id = this.addressId
+            this.form.customer_id = this.customerId
+            this.form.assigned = this.user.id
+            this.form.quantity = this.quantity
+            Inertia.post('/task/store', this.form)
+        },
+
+        adjustPrice() {
+
+            // debugger;
+
+            if (this.form.selectedTask) {
+                this.form.jobRate = this.form.selectedTask.price * this.quantity
+                this.form.jobRate = this.form.jobRate.toFixed(2);
+            }
+
         },
 
         getTasks(name) {
@@ -218,8 +323,13 @@ export default {
 
             this.form.name = name
 
+            if (!this.form.repairRate) {
+                if (this.form.initialRepairRate > 0) {
+                    this.form.repairRate = this.form.initialRepairRate
+                }
+            }
+
             // Inertia.post('/customers/getNames', {'name': name})
-            console.log(this.csrfToken); // Use this token in your component
             fetch('/task/getTaskItems', {
                 method: 'POST',
                 headers: {
@@ -227,7 +337,7 @@ export default {
                     'X-CSRF-TOKEN': this.csrfToken
                 },
                 // Include CSRF token
-                body: JSON.stringify({'name': this.form.name})
+                body: JSON.stringify({'name': this.form.name, 'serviceman': this.form.serviceman})
             }).then(function (response) {
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
@@ -243,10 +353,21 @@ export default {
 
         },
 
-    },
-    computed: {
-        errorClass() {
-            return this.errors.timeIn ? 'text-red-600' : ''
+        setTask(task) {
+            console.log(task)
+            this.form.selectedTask = task
+            this.form.description = task.description
+            this.form.product_number = task.product_number
+            this.form.price = task.price
+            this.form.repairRate = task.repairmanRate
+            this.form.jobRate = task.jobRate * this.form.quantity
+            this.form.source = task.source
+            this.form.taskItems = null
+            this.form.jobRate = this.form.jobRate.toFixed(2);
+        },
+
+        removeCompanySelection() {
+            this.selectedCompany = "";
         }
     }
 }

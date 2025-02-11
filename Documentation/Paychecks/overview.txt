@@ -1,0 +1,63 @@
+I want a feature where my pool guys can know about their paychecks.
+They should be able to see each time a pool is cleaned that their pay check increases by the labor rate.
+If 15 per pool then the paycheck is 15 more dollars.
+
+This requires
+- prior pools are zeroed out with the prior paychecks
+- Each pool assigned and completed is in an active state that needs to be paid.
+    Maybe a paycheck_payments table. Each time a pool is completed then paycheck_payments
+    table gets inserted a row with columns, serviceman, pay_rate, address_id, status
+- Status column is pending or paid
+-      - pending at time of completion
+-      - paid at time of paycheck
+
+Create a new page for paycheck with a link at the top for a serviceman user
+- current paycheck total, service, completed repair, pending repair
+- Pending repair - waiting on approval and completion
+    - Admin user
+        -
+- Completed repair - waiting on completion of item - this is what will be paid.
+
+When a task is entered by serviceman
+- Creation - look at task_rate table
+- This table will have columns
+
+1. Task is entered in add task
+    1. Admin user
+        1. Selects Add Task
+        2. Puts in description
+        3. Add Quantity or leave 1 as default
+        4. Repair - select repair or nothing - will be put down as a repair
+        - NEW 5. Select the person to assign it to
+        - NEW 6. Set the rate for the repair completion
+            1. auto-populated if the rate is associated with the drop down from a rate table
+            - NEW 2. Rate Table
+                1. Columns -> associated scp_number, repair_name, estimated_hours
+            - NEW 3. Calculated from (estimated_hours * env("service_rate")) * .7
+            - NEW 4. If no entry in table then default is $40
+        7. Hit add task
+            1. Task is added to the Tasks table
+            2. Based on assigned - paycheck_table will get an entry
+            3. payments table
+                1. columns - assigned, task_id, serviceman_pay_rate, status
+
+2. If Task Assignment is changed
+    1. change assigned in payments table
+    2. change assigned in tasks table
+3. If Task is deleted
+    1. delete entry in tasks table
+    2. delete entry in payments table
+
+
+
+task/create
+textbox - label - description
+textbox - label - quantity
+checkbox - todo - quantity
+dropdown - person to service guy assign task to
+dropdown - to assign to a different company
+textbox - label - repair rate
+button - cancel and go back
+button - submit the task
+button - cancel sending it to the other company - removes the selection
+

@@ -29,6 +29,11 @@ class Task extends Model
         return $this->hasMany(TaskStatus::class);
     }
 
+    public function subcontractor()
+    {
+        return $this->hasMany(Subcontractor::class);
+    }
+
     static public function allIncompleteTasks()
     {
 

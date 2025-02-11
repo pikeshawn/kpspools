@@ -1,0 +1,32 @@
+Repair Rate
+- this needs to come from the GetTaskItems method in the Task Controller
+- the getTaskItems method must pull the rate for from the rate table
+- if the rate table does not have an entry then the result is null
+- I need to cycle through the results and check the rates table
+- I need to pull from a Tasks table too and get items
+
+- I want to pull from the tasks table and get only distinct rows
+    that match a given input. I want to pull columns description, price, scp_id
+
+- I want to pull from the rates table - any item that matches
+    rates
+
+- I need a table that has the rates that I charge for a particular job. the rates for the job
+    are what I pay the serviceman and what I charge for the job itself.
+    - the servicemen are in the users table and each of them can have one rate per job
+    - this seems like a many to many table between the users table and the rates table.
+    the rate that I charge for a job is a one to one relationship for a job
+
+
+- For each item that is pulled back with the selection - I need to
+    look into the user_rates_table and see if there is an entry for
+    the selected service guy and a rate associated to the repair.
+    if there is not then it is null as it is returned.
+
+
+- I get the item that has a name in the description field
+- I use the name to look up the id the job_types table
+- I use the id in that table to look up the rate in the user job rates table
+
+
+

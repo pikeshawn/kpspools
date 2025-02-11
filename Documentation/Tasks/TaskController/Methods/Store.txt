@@ -1,0 +1,748 @@
+- on submit from this page
+    - if the item is not marked as a todo then it will be considered a repair
+        - add the item to the task table as a repair
+        - add the rate if the rate is not null
+        - if checkbox is marked to update the serviceman standard rate then update user_rates_table
+        - if checkbox is marked to update repair rate then update job_types table
+
+Logic
+- method name = store
+- input request object into the method =
+         "address_id" => 101
+          "customer_id" => 101
+          "description" => "FLOATING CHEMICAL FEEDER"
+          "jobRate" => "23.00"
+          "name" => "floatin"
+          "price" => "9.10"
+          "product_number" => "PSL-45-5005"
+          "quantity" => 1
+          "repairRate" => null
+          "selectedTask" => array:6 [▶]
+          "selectedTaskDescription" => null
+          "serviceman" => 2
+          "status" => "created"
+          "subcontractor" => 1
+          "taskItems" => null
+          "todoAssignee" => 2
+          "updateStandardRate" => false
+          "verbalApproval" => false
+          "toDo" => false
+          "updateServicemanRepairRate" => false
+
+- if assigned to a subcontractor then
+    - subcontractor logic
+- else assigned to someone internal
+    - if a todo
+        - todo logic
+    - else
+        - task logic
+
+
+
+- subcontractor logic
+    - add task to tasks table
+        - assigned = $request->subcontractor
+        - customer_id = $request->customer_id
+        - name = $request->description
+        - scp_id = $request->product_number
+        - status => false
+        - type => 'referred'
+        - price = 0
+        - sent = false
+        - address_id = $request->address_id
+        - been_paid = false
+        - quantity = 0
+        - rate = 0
+    - add task to task_statuses table
+        - status = 'referred'
+        - status_creator = Auth::user->id
+        - status_date = current local timestamp
+        - task_id = id from newly created row in the tasks table
+    - text message to subcontractor
+        - If the task is assigned to another company then I need to
+            - send a text message to the company about the repair
+                   $customer = Customer::find($request->customer_id);
+                   $address = Address::find($request->address_id);
+                   $customerUser = User::find($customer->user_id);
+                    - message will have the form
+                        "KPS Pools has a job for you.
+                        =====================
+                        $request->description
+                        =====================
+                        Customer Info::
+                        $customer->first_name $customer->last_name
+                        $customer->phone_number
+                        $customer->email
+                        $address->address_line_1 $address->city $address->zip
+                        =====================
+                        Please reach out to Shawn for any questions at 14807034902"));
+    - text customer the subcontractor info
+        -  Notification::route('vonage', $customer->phone_number)->notify(new GenericNotification($subcontractor->company_name . " has been notified. They can be reached at:
+              =====================
+              $subcontractor->contact_name
+              $subcontractor->company_name
+              $subcontractor->phone_number
+              =====================
+              Please reach out to Shawn for any questions at 14807034902"));
+
+- todo logic
+    - Create the task
+      - add task row to tasks table
+        - assigned = $request->serviceman
+        - customer_id = $request->customer_id
+        - name = $request->description
+        - scp_id = $request->product_number
+        - status => 'pickedUp'
+        - type = 'todo'
+        - price = 0
+        - sent = false
+        - address_id = $request->address_id
+        - been_paid = false
+        - quantity = 0
+        - rate = 0
+      - add row to task_statuses table
+          - status = 'created'
+          - status_creator = Auth::user->id
+          - status_date = current local timestamp
+          - task_id = id from newly created row in the tasks table
+      - add row to task_statuses table
+          - status = 'pickedUp'
+          - status_creator = Auth::user->id
+          - status_date = current local timestamp
+          - task_id = id from newly created row in the tasks table
+      - text the serviceman the task was assigned to
+        - if (Auth::user()->getAuthIdentifier() !== $user->id) {
+                  Notification::route('vonage', $user->phone_number)->notify(new GenericNotification(
+                      "You were assigned a Task::\n$customer->first_name $customer->last_name\n$request->description\n" . env('APP_URL') . "/customers/show/" . $request->address_id
+                  ));
+              }
+
+- task logic
+    - add a row to the tasks table
+        - assigned = $request->serviceman
+        - customer_id = $request->customer_id
+        - name = $request->description
+        - scp_id = $request->product_number
+        - status =>
+            if verbalApproval = true
+                status = 'approved'
+            else
+                status = 'created'
+        - type = 'repair'
+        - price = $request->jobRate
+        - sent = false
+        - address_id = $request->address_id
+        - been_paid = false
+        - quantity = $request->quantity
+        - rate = $request->repairRate
+    - add row to task_statuses table
+        - status = 'created'
+        - status_creator = Auth::user->id
+        - status_date = current local timestamp
+        - task_id = id from newly created row in the tasks table
+    - if $request->jobRate > 0 and not null then send approval and mark the task as sent
+        - if verbalApproval = true
+             - add row to task_statuses table
+                - status = 'approved'
+                - status_creator = Auth::user->id
+                - status_date = current local timestamp
+                - task_id = id from newly created row in the tasks table
+            - notify the assigned serviceman that an approved task has been created
+                - $serviceman = User::find($request->serviceman);
+                - $message = "An approved repair haas been assigned to you:: $task->description. Please text or call Shawn if you have any questions";
+                - $phoneNumber = $serviceman->phone_number
+                - Notification::route('vonage', $phoneNumber)->notify(new TaskApprovalNotification($message));
+        - else
+            - send out message to customer asking for approval of the item
+            - $message = "We wanted to notify you that your pool needs to have a repair done:: $task->description. Please text or call Shawn to approve or deny the task at 480-703-4902.";
+            - $phoneNumber = $customer->phone_number
+            - Notification::route('vonage', $phoneNumber)->notify(new TaskApprovalNotification($message));
+
+
+
+- check job_types table where id = $request->task_id
+    - if exists then check
+        - if $request->updateStandardRate = true
+            - update job_types table where id = $request->task_id
+                - rate_charged = $request->jobRate
+    - else add row to table
+        - name = $request->description
+        - rate_charged = $request->jobRate
+        - if $request->repairRate is not null
+            - add a row in the user_job_rates table
+                - user_id = $request->serviceman
+                - rate_paid = $request->repairRate
+                - job_type_id = $request->jobTypeId
+
+- check user_job_rates table where job_type_id = $request->jobTypeId
+    - if exists then check
+        - if $request->updateServicemanRepairRate = true
+            - update user_job_rates table where job_type_id = $request->jobTypeId
+                - user_id = $request->serviceman
+                - rate_paid = $request->repairRate
+
+
+- return ->
+    - "task created and message was sent" -> return
+    - Redirect::route('customers.show', $request->address_id);
+
+
+
+if there is no item in job_types or user_job_types for the repair then add the row
+    - for job_types table - this is for what KPS Pools charges the customer
+        - if name does not exist in the tasks table prior to the newly created task
+            - add a new row
+                - name = $request->name
+                - rate_charged = $request->jobRate
+
+
+if later I want to update the rate for the serviceman then I need to update the user_job_rates
+    - user_id
+    - job_type_id
+    - rate_paid
+
+
+
+
+todo - done - on the front end I have the task being pulled back with a jobRate if the jobRate exists from the jobRate table
+todo - done - if the jobRate does not exist but there is a price from the scp_item then I should be able to mark up that item
+todo - done - if the item has a price I should auto send out for approval of the task.
+todo - done - I should make the determination on the front end and then just pass in the jobRate
+todo - done - I also need on the front end that the checkbox for updating the standard rate is only available if the price came from the
+    user_rates_table
+todo - done -  The checkbox on the front end to update the standard repair rate should only be available if the rate came from
+    the job_types table
+todo - done - need row - SCP Cost
+todo - done - repairman rate - should have - button to up the cost by a certain amount like 10%, 20%, 30%
+todo - done - front end - when I select a service guy then I will have to pull the rate associated with the
+    - jobTaskId and the servicemanId
+    - if repair rate is null from the selection then it is null in the field
+    - if a value is put in for repair rate then the user_jobs_table gets a new row
+        - null from pull back
+        - task is created
+
+
+
+
+//        send notification to customer if new part or repair
+//          - create new notification
+        $repair = false;
+        $part = false;
+        $task->type == 'repair' ? $repair = true : $repair = false;
+        $task->type == 'part' ? $part = true : $part = false;
+
+        if ($message == null) {
+            if ($repair) {
+                $message = "We wanted to notify you that your pool needs to have a repair done:: $task->description. Please text or call Shawn to approve or deny the task at 480-703-4902.";
+            }
+
+            if ($part) {
+                $message = "We wanted to notify you that your pool needs a part:: $task->description. Please text or call Shawn to approve or deny the part at 480-703-4902.";
+            }
+        }
+
+//        TODO:: change number to make this dynamic to the customer
+        if ($repair || $part) {
+            Notification::route('vonage', $phoneNumber)
+                ->notify(new TaskApprovalNotification($message));
+        }
+
+
+
+
+
+
+
+
+
+- adding row to tasks table with these columns
+        - assigned =
+            if subcontractor is not null then
+                assigned = $request->subcontractor
+            else
+                assigned = $request->subcontractor
+        - customer_id = $request->customer_id
+        - name = $request->description
+        - scp_id = $request->product_number
+        - status =>
+            if verbalApproval = true
+                status = 'approved'
+            else
+                status = 'created'
+        - type =
+            if todo = true
+                type = todo
+            else
+                type = 'repair'
+        - price = $request->jobRate
+        - sent = false
+        - address_id = $request->address_id
+        - been_paid = false
+        - quantity = $request->quantity
+        - rate = $request->repairRate
+
+- updating the task_statuses table
+    - add row
+        - status = 'created'
+        - status_creator = Auth::user->id
+        - status_date = current local timestamp
+        - task_id = id from newly created row in the tasks table
+    - if $request->verbalApproval = true
+        - add row
+            - status = 'approved'
+            - status_creator = Auth::user->id
+            - status_date = current local timestamp
+            - task_id = id from newly created row in the tasks table
+
+- if $request->toDo = true
+    - Create the task
+        - add task row
+        - add row to task_statuses table
+            - status = 'created'
+            - status_creator = Auth::user->id
+            - status_date = current local timestamp
+            - task_id = id from newly created row in the tasks table
+        - add row to task_statuses table
+            - status = 'pickedUp'
+            - status_creator = Auth::user->id
+            - status_date = current local timestamp
+            - task_id = id from newly created row in the tasks table
+
+
+- send text messages
+    if $request->subcontractor is not null
+        - send message to repair company
+    else if $request->jobRate > 0
+        - send approval message to customer
+        - send me a notification that a repair task was created
+        - mark sent = true
+
+- message sent to subcontractor if it is not null
+    If the task is assigned to another company then I need to
+        - send a text message to the company about the repair
+               $customer = Customer::find($request->customer_id);
+               $address = Address::find($request->address_id);
+               $customerUser = User::find($customer->user_id);
+                - message will have the form
+                    "KPS Pools has a job for you.
+                    =====================
+                    $request->description
+                    =====================
+                    Customer Info::
+                    $customer->first_name $customer->last_name
+                    $customer->phone_number
+                    $customer->email
+                    $address->address_line_1 $address->city $address->zip
+                    =====================
+                    Please reach out to Shawn for any questions at 14807034902"));
+
+- message sent to
+
+
+
+
+
+if ($request->type == 'todo') {
+                $task = self::createTask($request);
+                self::addTaskStatus($task, 'created',);
+                self::addStatus($task, 'pickedUp');
+                self::addTaskStatus($task, 'pickedUp',);
+                $task->assigned = $request->todoAssignee;
+                $task->save();
+                $user = User::find($request->todoAssignee);
+                $customer = Customer::find($request->customer_id);
+                if (Auth::user()->getAuthIdentifier() !== $user->id) {
+                    Notification::route('vonage', $user->phone_number)->notify(new GenericNotification(
+                        "You were assigned a Task::\n$customer->first_name $customer->last_name\n$request->description\n" . env('APP_URL') . "/customers/show/" . $request->address_id
+                    ));
+                }
+            } else {
+                $task = self::createTask($request);
+
+                self::addTaskStatus($task, 'created',);
+
+
+//                TODO:: should reflect past price for the specific customer
+//                TODO:: should reflect paid prices because those are prices that customers have approved
+//                TODO:: associate the correct scp item with the task
+
+//                if ($taskItem->isEmpty()) {
+
+                if (!is_null($request->price)) {
+                    $task->price = $request->price * 1.38 * $request->quantity;
+                    $task->save();
+                }
+
+
+
+
+
+
+
+
+1. If Assign to another company is selected.
+
+2. If To-Do is selected
+
+3. If Update Repairman rate is selected
+
+4. If Update Standard Rate is selected
+
+
+<template>
+    <layout
+        :user="user"
+        :addressId="addressId"
+    >
+        <div class="min-h-screen flex items-center justify-center bg-gray-100">
+            <div class="bg-white shadow-lg rounded-lg p-6 max-w-lg w-full">
+
+                <h2 class="text-2xl font-semibold text-gray-800 mb-4">Assign Task</h2>
+
+                <!-- Description Input -->
+                <div class="mb-4">
+                    <label class="block text-sm font-medium text-gray-700">Description</label>
+                    <input
+                        @input="getTasks($event.target.value)" v-model="form.description" type="text" name="text"
+                        placeholder="Enter task details..."
+                        class="mt-1 w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-400 focus:outline-none">
+                </div>
+
+                <div v-for="task in form.taskItems" :key="task.id">
+                    <button
+                        @click="setTask(task)"
+                        class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm
+                                              ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2
+                                              focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                        style="padding: 1rem; background: white"
+                    >
+                        <p>{{ task.description }}</p>
+                        <p>{{ task.product_number }}</p>
+                        <p>SCP Price {{ task.price }}</p>
+                    </button>
+
+
+                    <!--                    <li @click="setTask(task)">-->
+                    <!--                        {{ task.description }}-->
+                    <!--                    </li>-->
+                </div>
+
+                <!-- Quantity Input -->
+                <div class="mb-4">
+                    <label class="block text-sm font-medium text-gray-700">Quantity</label>
+                    <input
+                        v-model="quantity"
+                        type="number"
+                        min="1"
+                        placeholder="Enter quantity..."
+                        class="mt-1 w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-400 focus:outline-none">
+                </div>
+
+                <!-- Update Serviceman Repair Rate Checkbox -->
+                <div class="mb-4 flex items-center">
+                    <input v-model="form.verbalApproval" type="checkbox" class="h-5 w-5 text-blue-600 border-gray-300 rounded">
+                    <label class="ml-2 text-sm text-gray-700">Verbal Approval</label>
+                </div>
+
+                <!-- To-Do Checkbox -->
+                <div class="mb-4 flex items-center">
+                    <input v-model="form.toDo" type="checkbox" class="h-5 w-5 text-blue-600 border-gray-300 rounded">
+                    <label class="ml-2 text-sm text-gray-700">To-Do</label>
+                </div>
+
+                <!-- Assign to Service Guy Dropdown -->
+                <div class="mb-4">
+                    <label class="block text-sm font-medium text-gray-700">Assign to Service Guy</label>
+                    <select v-model="form.serviceman"
+                            @change="fetchUserRate"
+                            class="mt-1 w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-400 focus:outline-none">
+                        <option value="" disabled>Select a person</option>
+                        <option v-for="guy in users" :key="guy.id" :value="guy.id">
+                            {{ guy.name }}
+                        </option>
+                    </select>
+                </div>
+
+                <!-- Assign to Another Company Dropdown -->
+                <div class="mb-4">
+                    <label class="block text-sm font-medium text-gray-700">Assign to Another Company</label>
+                    <select v-model="form.subcontractor"
+                            class="mt-1 w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-400 focus:outline-none">
+                        <option value="" disabled>Select a company</option>
+                        <option v-for="company in subcontractors" :key="company.id" :value="company.id">
+                            {{ company.company_name }}
+                        </option>
+                    </select>
+                </div>
+
+                <div class="flex justify-end mt-6">
+                    <button @click="cancelCompany()"
+                            style="margin-bottom: 1rem"
+                            class="px-4 py-2 bg-red-100 text-gray-800 rounded-lg hover:bg-gray-400 transition">
+                        Cancel Company
+                    </button>
+                </div>
+
+                <div v-if="user.is_admin">
+
+                    <!-- Repair Rate Input -->
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium text-gray-700">Repair Rate</label>
+                        <input
+                            v-model="form.repairRate"
+                            type="number"
+                            step="0.01"
+                            min="0"
+                            placeholder="Enter serviceman repair rate..."
+                            class="mt-1 w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-400 focus:outline-none">
+                    </div>
+
+                    <!-- Percentage Buttons -->
+                    <div class="flex space-x-1" style="margin-bottom: 1rem;">
+                        <button
+                            v-for="percent in percentages"
+                            :key="percent"
+                            @click="applyPercentage(percent)"
+                            class="px-2 py-1 text-xs font-medium text-white bg-blue-500 rounded hover:bg-blue-600 transition"
+                        >
+                            +{{ percent }}%
+                        </button>
+                    </div>
+
+                    <!-- Update Serviceman Repair Rate Checkbox -->
+                    <div class="mb-4 flex items-center">
+                        <input v-model="form.updateServicemanRepairRate" type="checkbox" class="h-5 w-5 text-blue-600 border-gray-300 rounded">
+                        <label class="ml-2 text-sm text-gray-700">Update Repairman Rate</label>
+                    </div>
+
+                    <!-- Cost -->
+                    <div v-if="form.selectedTask" class="mb-4">
+                        <label class="block text-sm font-medium text-gray-700 flex justify-between"><div>Cost - Per Unit - Pre Tax</div> <div>$ {{ form.selectedTask.price }}</div></label>
+                    </div>
+
+                    <!-- Repair Rate Input -->
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium text-gray-700">Job Rate</label>
+                        <input
+                            v-model="form.jobRate"
+                            type="number"
+                            step="0.01"
+                            min="0"
+                            placeholder="Enter job repair rate..."
+                            class="mt-1 w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-400 focus:outline-none">
+                    </div>
+
+                    <!-- Percentage Buttons -->
+                    <div class="flex space-x-1" style="margin-bottom: 1rem;">
+                        <button
+                            v-for="percent in percentages"
+                            :key="percent"
+                            @click="applyPercentageToJobRate(percent)"
+                            class="px-2 py-1 text-xs font-medium text-white bg-blue-500 rounded hover:bg-blue-600 transition"
+                        >
+                            +{{ percent }}%
+                        </button>
+                    </div>
+
+                    <!-- Update Standard Rate Checkbox -->
+                    <div class="mb-4 flex items-center">
+                        <input v-model="form.updateStandardRate" type="checkbox" class="h-5 w-5 text-blue-600 border-gray-300 rounded">
+                        <label class="ml-2 text-sm text-gray-700">Update Standard Rate</label>
+                    </div>
+
+                    <!-- Buttons Section -->
+                    <div class="flex justify-end mt-6">
+                        <button @click="submitTask"
+                                class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition">
+                            Submit Task
+                        </button>
+                    </div>
+
+                    <div v-if="selectedCompany" class="mt-4 text-center">
+                        <button @click="removeCompanySelection" class="text-sm text-red-500 hover:underline">
+                            Cancel Sending to Other Company
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </layout>
+
+</template>
+
+<script>
+import Layout from "../Shared/Layout";
+import DropDown from "../Shared/DropDown";
+import Toggle from "../Shared/Toggle";
+import LoadingButton from "../Shared/LoadingButton";
+import {Inertia} from '@inertiajs/inertia'
+import {reactive} from 'vue'
+import {Link} from '@inertiajs/inertia-vue3'
+
+export default {
+    components: {
+        DropDown,
+        LoadingButton,
+        Link,
+        Layout,
+        Toggle
+    },
+    props: {
+        user: Array,
+        users: Array,
+        subcontractors: Array,
+        addressId: String,
+        customerId: String,
+        customer: String,
+        customerName: String,
+        tasks: Array
+
+    },
+
+    data() {
+        return {
+            form: {
+                address_id: '',
+                customer_id: '',
+                description: '',
+                jobRate: null,
+                name: null,
+                price: '',
+                product_number: '',
+                quantity: 1,
+                initialRepairRate: null,
+                repairRate: null,
+                selectedTask: null,
+                selectedTaskDescription: null,
+                serviceman: 2,
+                source: '',
+                status: 'created',
+                subcontractor: null,
+                taskItems: null,
+                todoAssignee: null,
+                updateStandardRate: false,
+                verbalApproval: false,
+                toDo: false,
+                updateServicemanRepairRate: false
+            },
+
+
+            csrfToken: null,
+            percentages: [10, 20, 30, 40, 50], // Available percentage options
+
+
+            description: "",
+            quantity: 1,
+            todoChecked: false,
+            selectedServiceGuy: "",
+            selectedCompany: "",
+            repairRate: "",
+            serviceGuys: [
+                {id: 1, name: "John Doe"},
+                {id: 2, name: "Jane Smith"},
+                {id: 3, name: "Mike Johnson"}
+            ],
+            companies: [
+                {id: 1, name: "RepairCo"},
+                {id: 2, name: "FixIt Services"},
+                {id: 3, name: "PoolPros Inc."}
+            ]
+        };
+    },
+
+    mounted() {
+        this.form.todoAssignee = this.user.id;
+        this.csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+    },
+
+    methods: {
+        applyPercentage(percent) {
+            if (this.form.repairRate) {
+                this.form.repairRate = this.form.repairRate + (this.form.repairRate * .08);
+                this.form.repairRate = this.form.repairRate * (1 + percent / 100);
+            }
+        },
+
+        applyPercentageToJobRate(percent) {
+            if (this.form.jobRate) {
+                this.form.jobRate = this.form.jobRate + (this.form.jobRate * .08);
+                this.form.jobRate = this.form.jobRate * (1 + percent / 100);
+            }
+        },
+
+        getTasks(name) {
+
+            console.debug(name)
+            // debugger;
+
+            this.form.name = name
+
+            if (!this.form.repairRate) {
+                if (this.form.initialRepairRate > 0) {
+                    this.form.repairRate = this.form.initialRepairRate
+                }
+            }
+
+            // Inertia.post('/customers/getNames', {'name': name})
+            fetch('/task/getTaskItems', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json', // Specify the content type
+                    'X-CSRF-TOKEN': this.csrfToken
+                },
+                // Include CSRF token
+                body: JSON.stringify({'name': this.form.name, 'serviceman': this.form.serviceman})
+            }).then(function (response) {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json(); // Parse the JSON in the response
+            }.bind(this))
+                .then(function (data) {
+                    this.form.taskItems = data; // Access the Vue instance here
+                }.bind(this))
+                .catch(function (error) {
+                    console.error('Error:', error); // Handle errors
+                }.bind(this));
+
+        },
+
+        async fetchUserRate() {
+            if (!this.form.serviceman || !this.form.description) return;
+
+            try {
+                const response = await fetch(`/tasks/getUserRate?serviceman=${this.form.serviceman}&description=${this.form.description}`);
+                const data = await response.json();
+                this.form.repairRate = data.rate_paid || 0;
+            } catch (error) {
+                console.error("Error fetching user rate:", error);
+            }
+        },
+
+        setTask(task) {
+            console.log(task)
+            this.form.selectedTask = task
+            this.form.description = task.description
+            this.form.product_number = task.product_number
+            this.form.price = task.price
+            this.form.repairRate = task.repairmanRate
+            this.form.jobRate = task.jobRate
+            this.form.source = task.source
+            this.form.taskItems = null
+        },
+
+        removeCompanySelection() {
+            this.selectedCompany = "";
+        }
+    }
+}
+</script>
+
+<style scoped>
+
+</style>
+
+
+
+
