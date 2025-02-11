@@ -1128,6 +1128,12 @@ class TaskController extends Controller
             'rate' => $request->repairRate
         ]);
 
+        $tasks = Task::where('address_id', $request->address_id)
+            ->orderBy('count', 'desc')
+            ->get();
+        $task->count = $tasks[0]->count + 1;
+        $task->save();
+
         TaskStatus::create([
             'task_id' => $task->id,
             'status' => 'created',
@@ -1150,7 +1156,7 @@ class TaskController extends Controller
                 $phoneNumber = $serviceman->phone_number;
                 Notification::route('vonage', $phoneNumber)->notify(new TaskApprovalNotification($message));
             } else {
-                $message = "We wanted to notify you that your pool needs to have a repair done: {$task->description}. Please text or call Shawn to approve or deny the task at 480-703-4902.";
+                $message = "Please Reply\n==================\n\nKPS Pools needs to inform you about a necessary repair for your pool:\n\n" . $request->description . " for $" . $request->price . "\n\nWould you like for us to complete this for you?\n\nY$task->count for Yes\nN$task->count for No\n\nYou may also reach out to Shawn at 480.703.4902 or 480.622.6441. If you have any questions";
                 Notification::route('vonage', $customer->phone_number)->notify(new TaskApprovalNotification($message));
             }
             $task->sent = true;
