@@ -223,7 +223,7 @@ export default {
                 repairRate: null,
                 selectedTask: null,
                 selectedTaskDescription: null,
-                serviceman: 2,
+                serviceman: null,
                 source: '',
                 status: 'created',
                 subcontractor: null,
@@ -259,7 +259,7 @@ export default {
     },
 
     mounted() {
-        this.form.todoAssignee = this.user.id;
+        this.form.serviceman = this.user.id;
         this.csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
     },
 
