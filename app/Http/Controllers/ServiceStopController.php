@@ -196,6 +196,8 @@ class ServiceStopController extends Controller
     public function store(Request $request): RedirectResponse
     {
 
+//        dd($request);
+
         $address = Address::find($request->address);
         $phLevel = $request->ph_level ?? 0;
         $chlorineLevel = $request->chlorine_level ?? 100;
@@ -468,6 +470,8 @@ class ServiceStopController extends Controller
     public function destroy(ServiceStop $serviceStop)
     {
         $serviceStop->delete();
+
+        EmployeePayment::where('service_stop_id', $serviceStop->id)->delete();
 
         return \redirect()->route('customers');
     }
