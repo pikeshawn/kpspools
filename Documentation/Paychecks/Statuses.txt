@@ -1,0 +1,19 @@
+Service Calls
+- when a service call is completed then
+    - a pending amount will be inserted into the employee_payments table
+        - columns
+            - serviceman_id = id from users table required - integer
+            - service_stop_id = id from service_stops table - nullable
+            - rate = rate from employee_rate - float
+            - status =
+                - 'pending' on first entry
+                - 'paid' once paycheck is sent
+                - string
+                - default - 'pending'
+            - paycheck_id - from paychecks table
+                - entry on the friday payments
+            - task_id - nullable - integer
+    - when paycheck is sent then
+        - status = paid
+        - paycheck_id = payment row
+

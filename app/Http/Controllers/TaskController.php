@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Customer;
+use App\Models\EmployeePayment;
 use App\Models\UserJobRate;
 use App\Models\JobType;
 use App\Models\Address;
@@ -760,6 +761,14 @@ class TaskController extends Controller
 
         $task->status = $request->status;
         $task->save();
+
+        $customer = Customer::find($request->customer_id);
+        $address = Address::find($request->address_id);
+
+        if ($request->status === 'approved') {
+            Task::sendApprovalMessage($task, $customer, Auth::user()->phone_number, $address);
+        }
+
         self::addTaskStatus($task, $request->status);
     }
 
@@ -813,9 +822,13 @@ class TaskController extends Controller
 
         $task = Task::find($request->task_id);
 
+
         if ($request->approved) {
             self::addTaskStatus($task, 'approved');
             self::addStatus($task, 'approved');
+
+//            Task::sendApprovalMessage($task, $customer, Auth::user()->phone_number, $address);
+
         } else if (!$request->approved) {
             self::addStatus($task, 'created');
         }
@@ -940,6 +953,30 @@ class TaskController extends Controller
         $task = Task::find($request->id);
         self::addStatus($task, 'completed');
         self::addTaskStatus($task, 'completed');
+
+        // Get the authenticated user
+        $user = Auth::user();
+
+        // Ensure the user exists
+        if (!$user) {
+            return response()->json(['error' => 'Unauthorized'], 403);
+        }
+
+        // Insert record into employee_payments table
+        EmployeePayment::create([
+            'serviceman_id' => $user->id,
+            'service_stop_id' => null,
+            'paycheck_id' => null,
+            'task_id' => $task->id,
+            'rate' => $task->rate, // Fetching repair_rate from Users table
+            'status' => 'pending'
+        ]);
+
+        $customer = Customer::find($task->customer_id);
+        $address = Customer::find($task->address_id);
+        $assignee = Auth::user()->name;
+
+        Task::sendCompletedMessage($task, $customer, '14807034902', $address, $assignee);
 
     }
 
@@ -1156,9 +1193,8 @@ class TaskController extends Controller
                     'status_date' => now()
                 ]);
                 $serviceman = User::find($request->serviceman);
-                $message = "An approved repair has been assigned to you:: $task->description.\n$customer->first_name $customer->last_name\n" . env('APP_URL') . "/customers/show/$address->id Please text or call Shawn if you have any questions";
                 $phoneNumber = $serviceman->phone_number;
-                Notification::route('vonage', $phoneNumber)->notify(new TaskApprovalNotification($message));
+                Task::sendApprovalMessage($task, $customer, $phoneNumber, $address);
             } else {
                 $message = "Please Reply\n==================\n\nKPS Pools needs to inform you about a necessary repair for your pool:\n\n" . $request->description . " for $" . $request->price . "\n\nWould you like for us to complete this for you?\n\nY$task->count for Yes\nN$task->count for No\n\nYou may also reach out to Shawn at 480.703.4902 or 480.622.6441. If you have any questions";
                 Notification::route('vonage', $customer->phone_number)->notify(new TaskApprovalNotification($message));

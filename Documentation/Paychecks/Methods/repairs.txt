@@ -1,0 +1,23 @@
+logic -
+    - need to return a json response from employee_payments table that is of the form
+        - [
+             {
+                 "id": 25635,
+                 "customer_name": "John Smith",
+                 "date_service": "Date",
+                 "paid_amount": "45",
+                 "status": "pending"
+             },
+             {
+                 "id": 25635,
+                 "customer_name": "John Smith",
+                 "date_service": "Date",
+                 "paid_amount": "45",
+                 "status": "pending"
+             }
+          ]
+    - query should pull from the employee payments table
+        - id = employee_payments->task_id
+        - customer_name = customers->first_name customers.last_name where Customer::find(tasks->customer_id)
+        - date_service = tasks->created_at where task->id = employee_payments->task_id
+        - status = employee_payments->status

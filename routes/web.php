@@ -101,7 +101,6 @@ Route::middleware(['auth:sanctum', 'verified'])->get('/prospective/privacy',
 Route::middleware(['auth:sanctum', 'verified'])->get('/billing/setup',
     [BillingController::class, 'setup'])->name('setup');
 
-
 Route::get('/billing', function (Request $request) {
     return $request->user()->redirectToBillingPortal(route('dashboard'));
 })->middleware(['auth'])->name('subscribed');
@@ -134,6 +133,18 @@ Route::middleware(['auth:sanctum', 'verified', 'serviceman'])->group(function ()
     Route::get('/payment/history/{address}',
         [PaymentController::class, 'index'])
         ->name('payment.history');
+
+    Route::get('/payments/currentPaycheck',
+        [PaymentController::class, 'currentPaycheck'])
+        ->name('payments.currentPaycheck');
+
+    Route::get('/payments/serviceStops',
+        [PaymentController::class, 'serviceStops'])
+        ->name('payments.serviceStops');
+
+    Route::get('/payments/repairs',
+        [PaymentController::class, 'repairs'])
+        ->name('payments.repairs');
 
     Route::get('/billing/unpaid',
         [BillingController::class, 'unpaid'])

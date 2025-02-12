@@ -1,0 +1,65 @@
+Topics
+Company information
+    company: KPS POOLS LLC
+    address: 705 E Oxford Dr. Tempe AZ 85283
+    website: https://www.kpspools.com
+    been in business for 27 years
+
+What our service looks like
+    At KPS Pools, we take pride in delivering top quality pool maintenance to ensure your pool remains clean, balanced, and ready to enjoy. Our comprehensive service stop includes brushing the sides, checking and adding necessary chemicals, emptying all baskets, and vacuuming as needed—leaving your pool spotless after every visit. To keep you informed, our technician provides a detailed service report upon completion, including the time in and out, chemical levels, and tasks performed, so you always know exactly what was done. We stand by our work with a satisfaction guarantee—if your pool isn’t cleaned to your expectations, our technician will return to make it right. With KPS Pools, you can trust that your pool is in expert hands, ensuring hassle free maintenance and crystal clear water all year round.
+
+Vacation Billing at KPS Pools
+    At KPS Pools, we offer a straightforward and predictable billing system designed to provide clarity and consistency for our customers. Our monthly billing is based on a 4 week cycle, ensuring you receive reliable service at a fixed rate. In months that contain a 5th service week, we balance the extra billing over our scheduled vacation breaks—two weeks during Thanksgiving and two weeks over Christmas—so there are no surprise charges. For customers on a weekly billing plan, charges are simply based on the number of weeks serviced, meaning you are only billed for the weeks we perform maintenance. Our goal is to keep your pool care seamless and transparent while accommodating seasonal adjustments.
+
+
+Monthly Rate at KPS Pools
+    Our monthly billing is structured to provide consistent and predictable payments for our customers. Your total service cost is divided into a weekly rate, and you are billed at your price divided by four to reflect a standard four week month. In months with a 5th service week, any unbilled weeks are accounted for. If you decide to cancel service early, we reserve the right to charge for any outstanding 5th weeks to ensure all services rendered are covered. To keep things transparent, you’ll receive text notifications with billing updates, so you always know where you stand. Our goal is to make pool maintenance easy, predictable, and hassle free.
+
+
+Weekly Rate at KPS Pools
+    For customers who do not require year round service, we offer a flexible weekly rate designed primarily for seasonal pool care, such as during the summer months. This service starts at $110 per week, with chemicals not included in the base rate. By keeping chemicals separate, we ensure that you only pay for what your pool needs, based on seasonal conditions and water balance requirements. This option is ideal for those who need temporary or summer only maintenance while still receiving the high quality service KPS Pools is known for.
+
+Repairs & Service Stops at KPS Pools
+
+    At KPS Pools, we provide expert repair services to keep your pool equipment functioning at its best. Every repair visit includes a service stop fee, which acts as a credit toward the total repair cost if the work is approved. The service stop fee is $80 for jobs under $200 and $100 for jobs over $200, ensuring our technicians’ time and expertise are accounted for. This fee is charged at the time of the visit and automatically applied to the final repair cost.
+
+    The reason for this policy is simple: getting a skilled technician to your location has value. If you approve the repair, the fee is fully credited, so there’s no additional charge beyond the repair itself. If the repair cost is below the service fee, the minimum charge remains the service fee to cover the technician’s time.
+
+    We specialize in all types of equipment repairs, from pumps and filters to automation systems. However, for remodels or extensive renovations, we work with trusted partner companies to ensure the highest quality service. Our goal is to keep your pool running smoothly with transparent pricing and expert repairs you can trust.
+
+Seamless Communication at KPS Pools
+    At KPS Pools, we believe in keeping communication simple, direct, and efficient. That’s why we primarily communicate through text messaging. Whether it’s service updates, billing notifications, or repair approvals, you’ll receive all the important information right on your phone—no missed emails or phone calls. This ensures that you stay informed in real time and can easily reach us with any questions or requests. Our goal is to make pool maintenance as convenient and hassle free as possible.
+
+Billing & Payment Process at KPS Pools
+
+    At KPS Pools, we’ve designed a simple and secure billing process to make payments quick and hassle free. Billing occurs at the beginning of each month, and you’ll receive a text message with a payment link. Clicking the link will direct you to Jemmson, our payment processing platform.
+
+    How to Pay
+        1.	Click the payment link in your text message.
+        2.	Sign up for Jemmson (first time users).
+        3.	View your invoice and scroll to the bottom.
+        4.	Click Pay, enter your credit card details, and submit.
+        5.	Your card will be securely saved for future payments.
+
+    We use Stripe as our payment processor, ensuring secure transactions—your credit card information is never stored in the app.
+
+    For next month’s payment, the process is even faster:
+        •	You’ll receive a direct link to your invoice via text.
+        •	Click Pay, select your saved card, and confirm—payment done in seconds!
+        •	Auto pay is also available for complete convenience.
+
+    Billing Policies
+        •	Late Fees: A $10 late fee applies to payments over 30 days past due.
+        •	Card Authorization: By signing up, you grant permission for your card to be charged for recurring services.
+
+    We aim to keep billing transparent, secure, and effortless so you can focus on enjoying your pool!
+
+Route Changes & Notifications
+    At KPS Pools, we understand the importance of consistency in your pool service schedule. If there are any route changes, including a change in your service day or technician, we will notify you by text on Sunday afternoon. This ensures that you are always informed in advance and can plan accordingly. Our goal is to keep communication clear and reliable, so you always know when to expect your pool service.
+
+
+
+  Have a terms of service signed by the customer
+      permission to run the card
+          there is a 10 dollar late fee for any payments over 30 days from when it was billed
+          once a repair is completed

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Address;
 use App\Models\Cya;
 use App\Models\Customer;
+use App\Models\EmployeePayment;
 use App\Models\Filter;
 use App\Models\ServiceStop;
 use App\Models\Task;
@@ -372,6 +373,8 @@ class ServiceStopController extends Controller
                         ->notify(new ServiceStopCompleted($serviceStop, $cust, $address, true));
                 }
             }
+
+            EmployeePayment::logServiceStopPayment($serviceStop);
 
             Notification::route('vonage', '14806226441')
                 ->notify(new ServiceStopCompleted($serviceStop, $cust, $address, true));

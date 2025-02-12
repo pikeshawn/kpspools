@@ -1,0 +1,11 @@
+name = RepairPayment
+overview - when a repair is completed an entry will be made in the employee_payments table
+
+logic
+- when a repair is completed then an entry is made in the employee_payments table
+    - serviceman_id = Auth:id()
+    - service_stop_id = null
+    - paycheck_id = null
+    - task_id = $task->id
+    - rate = repair_rate value from the Users table of the authenticated user
+    - status = 'pending'

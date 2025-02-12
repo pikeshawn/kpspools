@@ -1,0 +1,61 @@
+Payments/Paychecks
+textbox - label - description
+textbox - label - quantity
+checkbox - todo - quantity
+dropdown - person to service guy assign task to
+dropdown - to assign to a different company
+textbox - label - repair rate
+button - cancel and go back
+button - submit the task
+button - cancel sending it to the other company - removes the selection
+
+
+In Vue and Tailwind I need
+- summary section with
+    - Header -> Service Stops and totalServiceStopAmount
+    - Header -> Repairs and totalRepairAmount
+    - Header -> Bucket and totalBucketAmount
+        - Should only be shown if totalBucketAmount > 0
+- Each part of the header should be a link that displays
+    a table of the Service Stops it is associated with
+    - Service Stops
+        - pulled back with Fetch
+        - verb - Get
+        - url - payments/serviceStops
+        - response -
+        - Table Header
+            - Customer Name
+            - Date Serviced
+            - rate
+            - status
+            - Link to Service Stop to edit
+      - Repairs
+          - pulled back with Fetch
+          - verb - Get
+          - url - payments/repairs
+          - response - [
+                           {
+                               "id": 25635,
+                               "customer_name": "John Smith",
+                               "date_service": "Date",
+                               "paid_amount": "45",
+                               "status": "pending"
+                           },
+                           {
+                               "id": 25635,
+                               "customer_name": "John Smith",
+                               "date_service": "Date",
+                               "paid_amount": "45",
+                               "status": "pending"
+                           }
+                        ]
+        - Table Header
+            - Customer Name
+            - Date Serviced
+            - Rate
+            - Status
+
+props
+    totalServiceStopAmount
+    totalRepairAmount
+    totalBucketAmount

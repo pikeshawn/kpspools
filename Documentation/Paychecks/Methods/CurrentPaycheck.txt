@@ -1,0 +1,17 @@
+name - currentPaycheck
+
+logic -
+    - need to pull the totalServiceStopAmount from employee_payments table
+        - select sum(rate) from employee_payments
+            where serviceman_id Auth::user->id
+                and status = 'pending'
+                and service_stop_id is not null
+    - need to pull the totalRepairAmount from employee_payments table
+        - select sum(rate) from employee_payments
+            where serviceman_id Auth::user->id
+                and status = 'pending'
+                and task_id is not null
+    - need to pull the totalBucketAmount from employee_payments table
+        - select sum(rate) from employee_payments
+            where serviceman_id Auth::user->id
+                and bucket_rate > 0

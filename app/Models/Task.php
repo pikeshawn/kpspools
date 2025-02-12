@@ -2,10 +2,12 @@
 
 namespace App\Models;
 
+use App\Notifications\TaskApprovalNotification;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Notification;
 
 class Task extends Model
 {
@@ -32,6 +34,18 @@ class Task extends Model
     public function subcontractor()
     {
         return $this->hasMany(Subcontractor::class);
+    }
+
+    public static function sendApprovalMessage($task, $customer, $phoneNumber, $address)
+    {
+        $message = "An approved repair has been assigned to you:: $task->description.\n$customer->first_name $customer->last_name\n" . env('APP_URL') . "/customers/show/$address->id Please text or call Shawn if you have any questions";
+        Notification::route('vonage', $phoneNumber)->notify(new TaskApprovalNotification($message));
+    }
+
+    public static function sendCompletedMessage($task, $customer, $phoneNumber, $address, $assigned)
+    {
+        $message = "A repair has been completed by $assigned, $task->description.\n$customer->first_name $customer->last_name\n" . env('APP_URL') . "/customers/show/$address->id";
+        Notification::route('vonage', $phoneNumber)->notify(new TaskApprovalNotification($message));
     }
 
     static public function allIncompleteTasks()

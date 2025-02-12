@@ -1,0 +1,11 @@
+name = ServiceStopPayment
+overview - when a service stop is completed an entry will be made in the employee_payments table
+
+logic
+- when a service stop is completed then an entry is made in the employee_payments table
+    - serviceman_id = Auth:id()
+    - service_stop_id = $serviceStop->id
+    - paycheck_id = null
+    - task_id = null
+    - rate = rate value from the Users table of the authenticated user
+    - status = 'pending'
