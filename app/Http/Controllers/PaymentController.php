@@ -44,11 +44,22 @@ class PaymentController extends Controller
 
         $servicemanId = Auth::user()->id;
 
+        $totalPendingServiceStops = EmployeePayment::where('serviceman_id', $servicemanId)
+            ->where('status', 'pending')
+            ->whereNotNull('service_stop_id')
+            ->count();
+
         // Total Service Stop Amount
         $totalServiceStopAmount = EmployeePayment::where('serviceman_id', $servicemanId)
             ->where('status', 'pending')
             ->whereNotNull('service_stop_id')
             ->sum('rate');
+
+        // Total Repair Amount
+        $totalPendingRepairs = EmployeePayment::where('serviceman_id', $servicemanId)
+            ->where('status', 'pending')
+            ->whereNotNull('task_id')
+            ->count();
 
         // Total Repair Amount
         $totalRepairAmount = EmployeePayment::where('serviceman_id', $servicemanId)
@@ -61,10 +72,18 @@ class PaymentController extends Controller
             ->where('bucket_rate', '>', 0)
             ->sum('bucket_rate');
 
+        // Total Bucket Amount
+        $totalNumberOfPoolsContributingToBucket = EmployeePayment::where('serviceman_id', $servicemanId)
+            ->where('bucket_rate', '>', 0)
+            ->count();
+
 
         return Inertia::render('Payments/Paychecks', [
+            'totalPendingServiceStops' => $totalPendingServiceStops,
             'totalServiceStopAmount' => $totalServiceStopAmount,
+            'totalPendingRepairs' => $totalPendingRepairs,
             'totalRepairAmount' => $totalRepairAmount,
+            'totalNumberOfPoolsContributingToBucket' => $totalNumberOfPoolsContributingToBucket,
             'totalBucketAmount' => $totalBucketAmount
         ]);
     }

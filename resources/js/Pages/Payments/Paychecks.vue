@@ -11,21 +11,21 @@
                 <!-- Service Stops -->
                 <div>
                     <button @click="toggleTable('serviceStops')" class="text-blue-600 hover:underline text-lg font-bold">
-                        Service Stops: ${{ totalServiceStopAmount }}
+                       {{ totalPendingServiceStops }} Service Stops = ${{ totalServiceStopAmount }}
                     </button>
                 </div>
 
                 <!-- Repairs -->
                 <div>
                     <button @click="toggleTable('repairs')" class="text-blue-600 hover:underline text-lg font-bold">
-                        Repairs: ${{ totalRepairAmount }}
+                        {{ totalPendingRepairs }} Repairs: ${{ totalRepairAmount }}
                     </button>
                 </div>
 
                 <!-- Bucket (Only if totalBucketAmount > 0) -->
                 <div v-if="totalBucketAmount > 0">
                     <button class="text-black-600 text-lg font-bold">
-                        Bucket: ${{ totalBucketAmount }}
+                        {{ totalNumberOfPoolsContributingToBucket }} Bucket: ${{ totalBucketAmount }}
                     </button>
                 </div>
             </div>
@@ -98,8 +98,11 @@ import {Link} from '@inertiajs/inertia-vue3'
 export default {
     name: 'CurrentPaycheck',
     props: {
+        totalPendingServiceStops: Number,
         totalServiceStopAmount: Number,
+        totalPendingRepairs: Number,
         totalRepairAmount: Number,
+        totalNumberOfPoolsContributingToBucket: Number,
         totalBucketAmount: Number,
     },
     components: {
