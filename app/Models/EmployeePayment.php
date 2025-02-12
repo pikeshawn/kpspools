@@ -23,12 +23,6 @@ class EmployeePayment extends Model
             $bucketRate = 0;
         }
 
-        if ($user->rate) {
-            $serviceRate = $user->service_rate;
-        } else {
-            $serviceRate = 0;
-        }
-
         // Insert record into employee_payments table
         EmployeePayment::create([
             'serviceman_id' => $user->id,
