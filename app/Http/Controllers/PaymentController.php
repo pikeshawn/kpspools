@@ -88,7 +88,7 @@ class PaymentController extends Controller
         ]);
     }
 
-    public function serviceStops()
+    public function serviceStops($column, $direction)
     {
 
         $servicemanId = Auth::user()->id;
@@ -115,10 +115,24 @@ class PaymentController extends Controller
                 ];
             });
 
-        return response()->json($employeePayments);
+        if ($column === 'name') {
+            if ($direction === 'asc') {
+                $employeePayments = $employeePayments->sortBy('customer_name');
+            } else {
+                $employeePayments = $employeePayments->sortByDesc('customer_name');
+            }
+        } else {
+            if ($direction === 'asc') {
+                $employeePayments = $employeePayments->sortBy('id');
+            } else {
+                $employeePayments = $employeePayments->sortByDesc('id');
+            }
+        }
+
+        return response()->json($employeePayments->values()->all());
     }
 
-    public function repairs()
+    public function repairs($column, $direction)
     {
         $servicemanId = Auth::user()->id;
 
@@ -143,7 +157,21 @@ class PaymentController extends Controller
                 ];
             });
 
-        return response()->json($employeePayments);
+        if ($column === 'name') {
+            if ($direction === 'asc') {
+                $employeePayments = $employeePayments->sortBy('customer_name');
+            } else {
+                $employeePayments = $employeePayments->sortByDesc('customer_name');
+            }
+        } else {
+            if ($direction === 'asc') {
+                $employeePayments = $employeePayments->sortBy('id');
+            } else {
+                $employeePayments = $employeePayments->sortByDesc('id');
+            }
+        }
+
+        return response()->json($employeePayments->values()->all());
     }
 
     private static function submitToJemmson($jemmsonId)

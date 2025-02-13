@@ -138,11 +138,11 @@ Route::middleware(['auth:sanctum', 'verified', 'serviceman'])->group(function ()
         [PaymentController::class, 'currentPaycheck'])
         ->name('payments.currentPaycheck');
 
-    Route::get('/payments/serviceStops',
+    Route::get('/payments/serviceStops/{column}/{direction}',
         [PaymentController::class, 'serviceStops'])
         ->name('payments.serviceStops');
 
-    Route::get('/payments/repairs',
+    Route::get('/payments/repairs/{column}/{direction}',
         [PaymentController::class, 'repairs'])
         ->name('payments.repairs');
 

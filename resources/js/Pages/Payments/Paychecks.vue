@@ -36,8 +36,14 @@
                 <table class="w-full border-collapse border border-gray-300">
                     <thead>
                     <tr class="bg-gray-100">
-                        <th class="border p-2">Customer Name</th>
-                        <th class="border p-2">Date Serviced</th>
+                        <th class="border p-3 cursor-pointer">
+                            Customer Name
+                            <div class="flex justify-around text-gray-50 text-sm mb-1"><div class="w-1/2 border-2" @click="fetchServiceStops('name', 'asc')">ASC</div><div class="w-1/2 border-2" @click="fetchServiceStops('name', 'desc')">DESC</div></div>
+                        </th>
+                        <th class="border p-3 cursor-pointer" @click="sortTable('date_service')">
+                            Date Serviced
+                            <div class="flex justify-around text-gray-50 text-sm mb-1"><div class="w-1/2 border-2" @click="fetchServiceStops('date', 'asc')">ASC</div><div class="w-1/2 border-2" @click="fetchServiceStops('date', 'desc')">DESC</div></div>
+                        </th>
                         <th class="border p-2">Rate</th>
                         <th class="border p-2">Status</th>
                         <th class="border p-2">Action</th>
@@ -63,8 +69,14 @@
                 <table class="w-full border-collapse border border-gray-300">
                     <thead>
                     <tr class="bg-gray-100">
-                        <th class="border p-2">Customer Name</th>
-                        <th class="border p-2">Date Serviced</th>
+                        <th class="border p-2">
+                            Customer Name
+                            <div class="flex justify-around text-gray-50 text-sm mb-1"><div class="w-1/2 border-2" @click="fetchRepairs('name', 'asc')">ASC</div><div class="w-1/2 border-2" @click="fetchRepairs('name', 'desc')">DESC</div></div>
+                        </th>
+                        <th class="border p-2">
+                            Date Serviced
+                            <div class="flex justify-around text-gray-50 text-sm mb-1"><div class="w-1/2 border-2" @click="fetchRepairs('date', 'asc')">ASC</div><div class="w-1/2 border-2" @click="fetchRepairs('date', 'desc')">DESC</div></div>
+                        </th>
                         <th class="border p-2">Rate</th>
                         <th class="border p-2">Status</th>
                     </tr>
@@ -113,20 +125,24 @@ export default {
             selectedTable: null,
             serviceStops: [],
             repairs: [],
+            sortColumn: 'date_service', // Default sorting column
+            sortDirection: 'desc', // Default sorting direction
         };
     },
     methods: {
-        async fetchServiceStops() {
+        async fetchServiceStops(column, direction) {
+            this.serviceStops = null
             try {
-                const response = await fetch("/payments/serviceStops");
+                const response = await fetch("/payments/serviceStops/" + column + "/" + direction);
                 this.serviceStops = await response.json();
             } catch (error) {
                 console.error("Error fetching Service Stops:", error);
             }
         },
-        async fetchRepairs() {
+
+        async fetchRepairs(column, direction) {
             try {
-                const response = await fetch("/payments/repairs");
+                const response = await fetch("/payments/repairs/" + column + "/" + direction);
                 this.repairs = await response.json();
             } catch (error) {
                 console.error("Error fetching Repairs:", error);
@@ -135,7 +151,7 @@ export default {
         toggleTable(table) {
             this.selectedTable = this.selectedTable === table ? null : table;
             if (table === "serviceStops" && this.serviceStops.length === 0) {
-                this.fetchServiceStops();
+                this.fetchServiceStops('name', 'desc');
             }
             if (table === "repairs" && this.repairs.length === 0) {
                 this.fetchRepairs();
