@@ -38,11 +38,11 @@
                     <tr class="bg-gray-100">
                         <th class="border p-3 cursor-pointer">
                             Customer Name
-                            <div class="flex justify-around text-gray-50 text-sm mb-1"><div class="w-1/2 border-2" @click="fetchServiceStops('name', 'asc')">ASC</div><div class="w-1/2 border-2" @click="fetchServiceStops('name', 'desc')">DESC</div></div>
+                            <div class="flex justify-around"><button @click="fetchServiceStops('name', 'asc')">🔼</button><button @click="fetchServiceStops('name', 'desc')">🔽</button></div>
                         </th>
                         <th class="border p-3 cursor-pointer" @click="sortTable('date_service')">
                             Date Serviced
-                            <div class="flex justify-around text-gray-50 text-sm mb-1"><div class="w-1/2 border-2" @click="fetchServiceStops('date', 'asc')">ASC</div><div class="w-1/2 border-2" @click="fetchServiceStops('date', 'desc')">DESC</div></div>
+                            <div class="flex justify-around"><button @click="fetchServiceStops('date', 'asc')">🔼</button><button @click="fetchServiceStops('date', 'desc')">🔽</button></div>
                         </th>
                         <th class="border p-2">Rate</th>
                         <th class="border p-2">Status</th>
@@ -71,11 +71,12 @@
                     <tr class="bg-gray-100">
                         <th class="border p-2">
                             Customer Name
-                            <div class="flex justify-around text-gray-50 text-sm mb-1"><div class="w-1/2 border-2" @click="fetchRepairs('name', 'asc')">ASC</div><div class="w-1/2 border-2" @click="fetchRepairs('name', 'desc')">DESC</div></div>
+<!--                            <div class="flex justify-around text-gray-50 text-sm mb-1"><div class="w-1/2 border-2" @click="fetchRepairs('name', 'asc')">ASC</div><div class="w-1/2 border-2" @click="fetchRepairs('name', 'desc')">DESC</div></div>-->
+                            <div class="flex justify-around"><div @click="fetchRepairs('name', 'asc')">🔼</div><div @click="fetchRepairs('name', 'desc')">🔽</div></div>
                         </th>
                         <th class="border p-2">
                             Date Serviced
-                            <div class="flex justify-around text-gray-50 text-sm mb-1"><div class="w-1/2 border-2" @click="fetchRepairs('date', 'asc')">ASC</div><div class="w-1/2 border-2" @click="fetchRepairs('date', 'desc')">DESC</div></div>
+                            <div class="flex justify-around"><div @click="fetchRepairs('date', 'asc')">🔼</div><div @click="fetchRepairs('date', 'desc')">🔽</div></div>
                         </th>
                         <th class="border p-2">Rate</th>
                         <th class="border p-2">Status</th>
@@ -106,6 +107,7 @@ import LoadingButton from "../Shared/LoadingButton";
 import {Inertia} from '@inertiajs/inertia'
 import {reactive} from 'vue'
 import {Link} from '@inertiajs/inertia-vue3'
+import Button from "../../Jetstream/Button.vue";
 
 export default {
     name: 'CurrentPaycheck',
@@ -118,6 +120,7 @@ export default {
         totalBucketAmount: Number,
     },
     components: {
+        Button,
         Layout
     },
     data() {
