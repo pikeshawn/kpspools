@@ -404,8 +404,13 @@ class TaskController extends Controller
 
 //        return $tasks;
 
-        return Inertia::render('Task/NeedsApproval', [
+//        TODO pull back address,
+
+        $servicemen = User::where('active', 1)->where('type', 'serviceman')->get();
+
+        return Inertia::render('Task/View', [
             'tasks' => $tasks,
+            'servicemen' => $servicemen
         ]);
     }
 
@@ -774,9 +779,6 @@ class TaskController extends Controller
 
     public function changeType(Request $request)
     {
-//        dd($request);
-//        dd($request->id);
-
         is_null($request->task_id) ? $taskId = $request->id : $taskId = $request->task_id;
 
         $task = Task::find($taskId);
@@ -786,6 +788,20 @@ class TaskController extends Controller
         }
 
         $task->type = $request->type;
+        $task->save();
+    }
+
+    public function changeSubRate(Request $request)
+    {
+        is_null($request->task_id) ? $taskId = $request->id : $taskId = $request->task_id;
+
+        $task = Task::find($taskId);
+
+        if ($task === null) {
+            $task = Task::find($request->id);
+        }
+
+        $task->rate = $request->sub_rate;
         $task->save();
     }
 
@@ -805,14 +821,13 @@ class TaskController extends Controller
     public function changeProductNumber(Request $request)
     {
 
-//        dd($request->task_id);
-//        dd($request->id);
-        if (!is_null($request->scp_id)) {
+        $request->product_number ? $scpId = $request->product_number : $scpId = $request->scp_id;
+
+        if ($scpId) {
             is_null($request->task_id) ? $taskId = $request->id : $taskId = $request->task_id;
             $task = Task::find($taskId);
-            $task->scp_id = $request->scp_id;
+            $task->scp_id = $scpId;
             $task->save();
-            self::addTaskStatus($task, $request->status);
         }
     }
 
@@ -858,8 +873,9 @@ class TaskController extends Controller
 //        is_null();
 
 
-        $user = User::where('name', $request->assigned)->get();
+        $user = User::find($request->assigned);
 //        dd($user[0]->id);
+
 
         $customer = Customer::find($request->customer_id);
 
@@ -869,10 +885,10 @@ class TaskController extends Controller
 
         $task = Task::find($taskId);
 
-        $task->assigned = $user[0]->id;
+        $task->assigned = $request->assigned;
         $task->save();
-        if (Auth::user()->getAuthIdentifier() !== $user[0]->id) {
-            Notification::route('vonage', $user[0]->phone_number)->notify(new GenericNotification(
+        if (Auth::user()->getAuthIdentifier() !== $user->id) {
+            Notification::route('vonage', $user->phone_number)->notify(new GenericNotification(
                 "You were assigned a Task::\n$customer->first_name $customer->last_name\n$request->description\n" . env('APP_URL') . "/customers/show/" . $task->address_id
             ));
         }

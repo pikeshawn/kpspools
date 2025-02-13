@@ -120,6 +120,9 @@ class Task extends Model
 
 
             foreach ($custTasks as $task) {
+
+                $address = Address::find($task->address_id);
+
                 if ($task->status === 'created' ||
                     $task->status === 'approved' ||
                     $task->status === 'denied' ||
@@ -128,8 +131,11 @@ class Task extends Model
                     $cust = [];
                     $cust['customer_id'] = $customer->id;
                     $cust['address_id'] = $task->address_id;
+                    $cust['address'] = $address->address_line_1 . " " . $address->city . " " . $address->zip;
                     $cust['phone_number'] = $customer->phone_number;
+                    $cust['product_number'] = $task->scp_id;
                     $cust['task_id'] = $task->id;
+                    $cust['sub_rate'] = $task->rate;
                     $cust['first_name'] = $customer->first_name;
                     $cust['last_name'] = $customer->last_name;
                     $cust['description'] = $task->description;

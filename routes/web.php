@@ -370,9 +370,17 @@ Route::middleware(['auth:sanctum', 'verified', 'serviceman'])->group(function ()
         [TaskController::class, 'changeType'])
         ->name('task.changeType');
 
+    Route::post('/task/changeSubRate',
+        [TaskController::class, 'changeSubRate'])
+        ->name('task.changeSubRate');
+
     Route::post('/task/changeDescription',
         [TaskController::class, 'changeDescription'])
         ->name('task.changeDescription');
+
+    Route::post('/task/changeType',
+        [TaskController::class, 'changeType'])
+        ->name('task.changeType');
 
     Route::post('/task/changeProductNumber',
         [TaskController::class, 'changeProductNumber'])

@@ -1,0 +1,109 @@
+Features
+- Serviceman
+    - see all tasks based upon
+        - status
+        - type
+        - date range
+
+- Admin
+    - see all tasks based upon
+        - serviceman name and status
+    - change status
+        - created
+          approved
+          pickedUp
+          completed
+          invoiced
+          paid
+          remove
+          denied
+          diy
+    - delete it
+    - ask for approval - if approval has not been done yet
+    - display
+        - description -> change
+        - product number -> change
+        - assigned -> change
+        - status -> change
+        - customer name -> no change
+        - phone number -> no change
+        - address -> no change
+        - current status -> no change
+        - type -> change
+        - link to customer page
+        - price -> change
+        - sub rate
+
+Task/View
+- Header
+    - mobile friendly buttons or selection where I can select
+        - customer
+        - all customers
+        - status
+            - status options are
+                - created
+                  approved
+                  pickedUp
+                  completed
+                  invoiced
+                  paid
+                  remove
+                  denied
+                  diy
+        - type
+            - options
+                - todo
+                - repair
+        - date range
+            - last month
+            - this year
+            - specific range
+- need rows
+    - description -> Input Box
+    - product number -> Input Box
+    - assigned -> Dropdown
+    - status -> Dropdown
+    - customer name -> Label
+    - phone number -> Label
+    - address -> Label
+    - current status -> Label
+    - type -> radio button with options todo, repair
+    - link to customer page -> button
+    - price -> Input Box
+    - sub rate -> Input Box
+
+Input JSON -
+    [
+        {
+            "id": "1",
+            "product_number": "123",
+            "assigned": "2",
+            "status": "created",
+            "customer_name": "john smith",
+            "phone_number": "1234567890",
+            "address": "123 main st",
+            "current_status": "created",
+            "type": "repair",
+            "link": "http://127.0.0.1:7000/customers/show/1",
+            "price": "100",
+            "sub_rate": "50",
+        },
+       {
+           "id": "2",
+           "product_number": "124",
+           "assigned": "3",
+           "status": "created",
+           "customer_name": "john smith",
+           "phone_number": "1234567890",
+           "address": "123 main st",
+           "current_status": "created",
+           "type": "repair",
+           "link": "http://127.0.0.1:7000/customers/show/1",
+           "price": "100",
+           "sub_rate": "50",
+       },
+    ]
+
+- have fetch methods for each of the dropdowns that update the field in the backend
+
+
