@@ -4,24 +4,84 @@
     >
         <div class="max-w-6xl mx-auto p-6 bg-white shadow-md rounded-lg">
             <!-- Header Section -->
-            <h2 class="text-2xl font-bold mb-4">Task/View</h2>
+            <h2 class="text-2xl font-bold mb-4">View Tasks</h2>
+
 
             <!-- Filter Section -->
+            <div class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm
+                                              ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2
+                                              focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                 style="padding: 1rem; background: white; margin-bottom: 1rem">
+                <h3 class="text-lg font-bold mb-2">Selected Content</h3>
+                <p class="text-sm text-gray-600">Name: {{ selected.name }}</p>
+                <p class="text-sm text-gray-600">Address: {{ selected.address }}</p>
+                <p class="text-sm text-gray-600">Status: {{ selectedStatus }}</p>
+                <p v-if="user.is_admin" class="text-sm text-gray-600">Serviceman: {{ selectedServiceman }}</p>
+                <p class="text-sm text-gray-600">Type: {{ selectedType }}</p>
+                <!--                <p class="text-sm text-gray-600">Date: {{ selectedDateRange }}</p>-->
+                <button @click="getTasksFromSelectedCriteria()"
+                        class="inline-block bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-700"
+                        style="margin-top: 1rem"
+                >
+                    <label class="block text-sm font-medium leading-6 text-white">Submit</label>
+                </button>
+            </div>
+
+
+            <div class="flex justify-around">
+                <!-- To-Do Checkbox -->
+                <div class="mb-4 flex items-center">
+                    <input v-model="allCustomers" type="checkbox"
+                           class="h-5 w-5 text-blue-600 border-gray-300 rounded">
+                    <label class="ml-2 text-sm text-gray-700">All Customers</label>
+                </div>
+
+                <!-- To-Do Checkbox -->
+                <div class="mb-4 flex items-center">
+                    <input v-model="allAddresses" type="checkbox"
+                           class="h-5 w-5 text-blue-600 border-gray-300 rounded">
+                    <label class="ml-2 text-sm text-gray-700">All Addresses</label>
+                </div>
+
+                <!-- To-Do Checkbox -->
+                <div class="mb-4 flex items-center">
+                    <input v-model="allStatuses" type="checkbox"
+                           class="h-5 w-5 text-blue-600 border-gray-300 rounded">
+                    <label class="ml-2 text-sm text-gray-700">All Statuses</label>
+                </div>
+
+                <!-- To-Do Checkbox -->
+                <div class="mb-4 flex items-center">
+                    <input v-model="allTypes" type="checkbox" class="h-5 w-5 text-blue-600 border-gray-300 rounded">
+                    <label class="ml-2 text-sm text-gray-700">All Types</label>
+                </div>
+
+                <!-- To-Do Checkbox -->
+                <div v-if="user.is_admin" class="mb-4 flex items-center">
+                    <input v-model="allServicemen" type="checkbox"
+                           class="h-5 w-5 text-blue-600 border-gray-300 rounded">
+                    <label class="ml-2 text-sm text-gray-700">All Servicemen</label>
+                </div>
+
+            </div>
+
+
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-                <!-- Customer Dropdown -->
-                <select v-model="selectedCustomer" @change="fetchTasks"
-                        class="p-2 border rounded-lg focus:ring focus:ring-blue-300">
-                    <option value="">All Customers</option>
-                    <option v-for="customer in customers" :key="customer.id" :value="customer.id">
-                        {{ customer.name }}
-                    </option>
-                </select>
 
                 <!-- Status Dropdown -->
                 <select v-model="selectedStatus" @change="fetchTasks"
                         class="p-2 border rounded-lg focus:ring focus:ring-blue-300">
-                    <option value="">All Statuses</option>
+                    <option value="all">Select Status</option>
                     <option v-for="status in statuses" :key="status" :value="status">{{ status }}</option>
+                </select>
+
+                <!-- Status Dropdown -->
+                <select
+                    v-if="user.is_admin"
+                    v-model="selectedServiceman" @change="fetchTasks"
+                    class="p-2 border rounded-lg focus:ring focus:ring-blue-300">
+                    <option value="all">Select Serviceman</option>
+                    <option v-for="guy in servicemen" :key="guy.id" :value="guy.id">{{ guy.name }}</option>
                 </select>
 
                 <!-- Type Dropdown -->
@@ -29,15 +89,47 @@
                         class="p-2 border rounded-lg focus:ring focus:ring-blue-300">
                     <option value="todo">Todo</option>
                     <option value="repair">Repair</option>
+                    <option value="part">Part</option>
                 </select>
 
-                <!-- Date Range -->
-                <select v-model="selectedDateRange" @change="fetchTasks"
-                        class="p-2 border rounded-lg focus:ring focus:ring-blue-300">
-                    <option value="last_month">Last Month</option>
-                    <option value="this_year">This Year</option>
-                    <option value="specific_range">Specific Range</option>
-                </select>
+                <!--                &lt;!&ndash; Date Range &ndash;&gt;-->
+                <!--                <select v-model="selectedDateRange" @change="fetchTasks"-->
+                <!--                        class="p-2 border rounded-lg focus:ring focus:ring-blue-300">-->
+                <!--                    <option value="last_month">Last Month</option>-->
+                <!--                    <option value="this_year">This Year</option>-->
+                <!--                    <option value="specific_range">Specific Range</option>-->
+                <!--                </select>-->
+                <!-- Description Input -->
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+                <div class="mb-4">
+                    <label class="block text-sm font-medium text-gray-700">Description</label>
+                    <input
+                        @input="getCustomer($event.target.value)" v-model="targetCustomer" type="text" name="text"
+                        placeholder="Enter customer last name..."
+                        class="mt-1 w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-400 focus:outline-none">
+                </div>
+
+            </div>
+
+            <div v-for="customer in targetCustomers" :key="customer.id"
+                style="margin-bottom: 1rem"
+            >
+                <button
+                    @click="setCustomer(customer)"
+                    class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm
+                                              ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2
+                                              focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                    style="padding: 1rem; background: white"
+                >
+                    <p>{{ customer.name }}</p>
+                    <p>{{ customer.address }}</p>
+                </button>
+
+
+                <!--                    <li @click="setTask(task)">-->
+                <!--                        {{ task.description }}-->
+                <!--                    </li>-->
             </div>
 
             <!-- Task Cards -->
@@ -86,7 +178,8 @@
                     <div
                         v-if="task.status === 'created' && task.sent === 0"
                         class="mt-4">
-                        <button @click="requestApproval(task)" class="inline-block bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-700">
+                        <button @click="requestApproval(task)"
+                                class="inline-block bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-700">
                             Send For Approval
                         </button>
                     </div>
@@ -111,16 +204,22 @@
                     </div>
 
                     <!-- Price & Sub Rate -->
-                    <div class="mt-3">
+                    <div v-if="user.is_admin" class="mt-3">
                         <label class="block font-medium">Price</label>
                         <input type="text" v-model="task.price" @blur="changePrice(task)"
                                class="w-full p-2 border rounded-lg focus:ring focus:ring-blue-300">
                     </div>
 
                     <div class="mt-3">
-                        <label class="block font-medium">Sub Rate</label>
-                        <input type="text" v-model="task.sub_rate" @blur="changeSubRate(task)"
-                               class="w-full p-2 border rounded-lg focus:ring focus:ring-blue-300">
+                        <div v-if="user.is_admin">
+                            <label class="block font-medium">Sub Rate</label>
+                            <input type="text" v-model="task.sub_rate" @blur="changeSubRate(task)"
+                                   class="w-full p-2 border rounded-lg focus:ring focus:ring-blue-300">
+                        </div>
+                        <div class="flex justify-between" v-else>
+                            <label class="block font-medium">Sub Rate</label>
+                            <label class="block font-medium">$ {{ task.sub_rate }}</label>
+                        </div>
                     </div>
 
 
@@ -171,7 +270,6 @@
                 </div>
 
 
-
             </div>
 
         </div>
@@ -199,20 +297,29 @@ export default {
         Toggle
     },
     props: {
-        tasks: Array,
+        customers: Array,
         servicemen: Array,
         user: String
     },
     data() {
         return {
-            customers: [],
-
+            selectedServiceman: "",
             statuses: ["created", "approved", "pickedUp", "completed", "invoiced", "paid", "remove", "denied", "diy"],
             users: [],
+            tasks: [],
             selectedCustomer: "",
-            selectedStatus: "",
+            allAddresses: true,
+            allCustomers: false,
+            allStatuses: false,
+            allTypes: false,
+            allServicemen: false,
+            selectedStatus: 'all',
             selectedType: "repair",
             selectedDateRange: "this_year",
+            selected: [],
+            csrfToken: null,
+            targetCustomer: '',
+            targetCustomers: []
         }
     },
     methods: {
@@ -252,6 +359,133 @@ export default {
         },
 
 
+        getCustomer(name) {
+
+            console.debug(name)
+            // debugger;
+
+            this.customer = name
+
+            // Inertia.post('/customers/getNames', {'name': name})
+            fetch('/customers/getCustomer', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json', // Specify the content type
+                    'X-CSRF-TOKEN': this.csrfToken
+                },
+                // Include CSRF token
+                body: JSON.stringify({'customer': this.targetCustomer})
+            }).then(function (response) {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json(); // Parse the JSON in the response
+            }.bind(this))
+                .then(function (data) {
+                    this.targetCustomers = data; // Access the Vue instance here
+                }.bind(this))
+                .catch(function (error) {
+                    console.error('Error:', error); // Handle errors
+                }.bind(this));
+
+        },
+
+        setCustomer(customer) {
+            this.targetCustomer = customer.name;
+            this.selected = customer;
+            this.targetCustomers = [];
+        },
+
+        getTasksFromSelectedCriteria() {
+
+            let input = {
+                'customer': 'all',
+                'address': 'all',
+                'address_id': null,
+                'customer_id': null,
+                'status': 'all',
+                'serviceman': 'all',
+                'type': 'all',
+                'active': 1,
+                'sold': 1
+            }
+
+            // debugger
+
+            if (this.selected.name) {
+                input.customer = this.selected.name;
+                input.address = this.selected.address;
+            }
+
+            if (this.selected.address) {
+                input.address_id = this.selected.addressId;
+                input.address = null
+            }
+
+            if (this.allAddresses) {
+                input.address = 'all';
+            }
+
+            if (this.selected.customerId) {
+                input.customer_id = this.selected.customerId;
+            }
+
+            if (this.selectedStatus) {
+                input.status = this.selectedStatus;
+            }
+
+            if (this.selectedServiceman) {
+                input.serviceman = this.selectedServiceman;
+            }
+
+            if (this.selectedType) {
+                input.type = this.selectedType;
+            }
+
+            if (this.allStatuses) {
+                input.status = 'all'
+            }
+
+            if (this.allCustomers) {
+                input.customer = 'all'
+            }
+
+            if (this.allAddresses) {
+                input.address = 'all'
+            }
+
+            if (this.allTypes) {
+                input.type = 'all'
+            }
+
+            if (this.allServicemen) {
+                input.serviceman = 'all'
+            }
+
+            // Inertia.post('/customers/getNames', {'name': name})
+            fetch('/tasks/getTasksFromSelectedCriteria', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json', // Specify the content type
+                    'X-CSRF-TOKEN': this.csrfToken
+                },
+                // Include CSRF token
+                body: JSON.stringify(input)
+            }).then(function (response) {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json(); // Parse the JSON in the response
+            }.bind(this))
+                .then(function (data) {
+                    this.tasks = data; // Access the Vue instance here
+                }.bind(this))
+                .catch(function (error) {
+                    console.error('Error:', error); // Handle errors
+                }.bind(this));
+
+        },
+
         async fetchTasks() {
             // Fetch tasks based on filters
             try {
@@ -284,8 +518,8 @@ export default {
             try {
                 await fetch(`/api/tasks/${id}`, {
                     method: "PUT",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ [field]: value }),
+                    headers: {"Content-Type": "application/json"},
+                    body: JSON.stringify({[field]: value}),
                 });
             } catch (error) {
                 console.error("Error updating task:", error);
@@ -293,9 +527,7 @@ export default {
         },
     },
     mounted() {
-        // this.fetchTasks();
-        // this.fetchCustomers();
-        // this.fetchUsers();
+        this.csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
     },
 }
 </script>

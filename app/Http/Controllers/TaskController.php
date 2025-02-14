@@ -28,6 +28,70 @@ use function PHPUnit\Framework\isNull;
 class TaskController extends Controller
 {
 
+    public function getTasksFromSelectedCriteria(Request $request)
+    {
+
+        if (!Auth::user()->is_admin) {
+            $request->serviceman = Auth::user()->id;
+        }
+
+        $query = Customer::join('addresses as a', 'customers.id', '=', 'a.customer_id')
+            ->join('tasks as t', 'customers.id', '=', 't.customer_id')
+            ->when($request->customer !== 'all', function ($q) use ($request) {
+                return $q->where('customers.id', $request->customer_id);
+            })
+            ->when($request->address !== 'all', function ($q) use ($request) {
+                return $q->where('a.id', $request->address_id);
+            })
+            ->when($request->status !== 'all', function ($q) use ($request) {
+                return $q->where('t.status', $request->status);
+            })
+            ->when($request->status === 'all', function ($q) use ($request) {
+                return $q->whereIn('t.status', ['created',
+                    'approved',
+                    'pickedUp',
+                    'completed']);
+            })
+            ->when($request->type !== 'all', function ($q) use ($request) {
+                if ($request->type === 'repair' || $request->type === 'part') {
+                    return $q->whereIn('t.type', ['repair', 'part']);
+                } else {
+                    return $q->where('t.type', 'todo');
+                }
+            })
+            ->when($request->serviceman !== 'all', function ($q) use ($request) {
+                return $q->where('t.assigned', $request->serviceman);
+            })
+            ->where('a.active', $request->active)
+            ->where('a.sold', '<>', $request->sold)
+            ->select([
+                'customers.id as customer_id',
+                'a.id as address_id',
+                DB::raw("CONCAT(a.address_line_1, ', ', a.city, ' ', a.zip) as address"),
+                'customers.phone_number',
+                't.scp_id as product_number',
+                't.id as task_id',
+                't.rate as sub_rate',
+                'customers.first_name',
+                'customers.last_name',
+                't.description',
+                't.type',
+                't.status',
+                't.assigned',
+                't.price',
+                't.sent',
+                DB::raw('false as deleted')
+            ]);
+
+//        dd($query);
+//        $sql = $query->toSql();
+//        dd($sql);
+// Execute the query
+        $tasks = $query->get();
+
+        return $tasks;
+    }
+
     public function getTasks(Request $request)
     {
 //        dd($request);
@@ -406,10 +470,20 @@ class TaskController extends Controller
 
 //        TODO pull back address,
 
-        $servicemen = User::where('active', 1)->where('type', 'serviceman')->get();
+        $servicemen = User::select(["id", "name"])->where('active', 1)->where('type', 'serviceman')->get();
+        $customers = Customer::select('customers.first_name', 'customers.last_name', 'customers.id')
+            ->join('addresses', 'addresses.customer_id', '=', 'customers.id')
+            ->where('addresses.active', 1)
+            ->where('addresses.sold', '<>', 1)
+            ->get();
+
+        foreach ($customers as $customer) {
+            $customer->name = $customer->first_name . " " . $customer->last_name;
+        }
 
         return Inertia::render('Task/View', [
             'tasks' => $tasks,
+            'customers' => $customers,
             'servicemen' => $servicemen
         ]);
     }

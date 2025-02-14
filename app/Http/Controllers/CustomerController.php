@@ -54,6 +54,21 @@ class CustomerController extends Controller
         ]);
     }
 
+    public function getCustomer(Request $request)
+    {
+
+        return Address::join('customers', 'customers.id', '=', 'addresses.customer_id')
+            ->where('customers.last_name', 'like', "%{$request->customer}%")
+            ->selectRaw("CONCAT(addresses.id) as addressId,
+                 CONCAT(customers.id) as customerId,
+                 CONCAT(customers.first_name, ' ', customers.last_name) as name,
+                 CONCAT(addresses.address_line_1, ', ', addresses.city, ' ', addresses.zip) as `address`")
+            ->get();
+
+
+//        return Customer::where('last_name', 'like', "%{$request->customer}%")->get();
+    }
+
     public function getCustomersForDay(Request $request)
     {
 //        dd($day);

@@ -192,6 +192,10 @@ Route::middleware(['auth:sanctum', 'verified', 'serviceman'])->group(function ()
         [CustomerController::class, 'getCustomersForDay'])
         ->name('getCustomersForDay');
 
+    Route::post('/customers/getCustomer',
+        [CustomerController::class, 'getCustomer'])
+        ->name('getCustomer');
+
     Route::get('/registrationLink',
         [ProspectiveController::class, 'registrationLink'])
         ->name('prospective.registrationLink');
@@ -305,6 +309,10 @@ Route::middleware(['auth:sanctum', 'verified', 'serviceman'])->group(function ()
     Route::post('/tasks/getTasks',
         [TaskController::class, 'getTasks'])
         ->name('sub.getTasks');
+
+    Route::post('/tasks/getTasksFromSelectedCriteria',
+        [TaskController::class, 'getTasksFromSelectedCriteria'])
+        ->name('tasks.getTasksFromSelectedCriteria');
 
     Route::get('/tasks/getUserRate',
         [TaskController::class, 'getUserRate'])

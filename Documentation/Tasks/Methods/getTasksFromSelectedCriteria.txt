@@ -1,0 +1,54 @@
+name = getTasksFromSelectedCriteria
+
+pulling tasks from the task table under these scenarios
+Status =
+    - specific status
+    - all statuses
+Serviceman =
+    - if admin -> Auth::user()->is_admin
+        - specific serviceman
+        - all servicemen
+    - else
+        - only Auth::user()
+type =
+    - specific type
+    - all types
+Customers
+    - specific customer
+    - all customers
+        - if admin
+            - all customers for all servicemen
+        - else
+            - should be all customers with tasks assigned to Auth::user
+
+
+return this object
+
+[
+    {
+        "customer_id": "",
+        "phone_number": "",
+        "first_name": "",
+        "last_name": "",
+
+
+        "address_id": "",
+        "address": "",
+
+
+        "product_number": "",
+        "task_id": "",
+        "sub_rate": "",
+        "description": "",
+        "type": "",
+        "status": "",
+        "assigned": "",
+        "price": "",
+        "deleted": false,
+        "pickedUp": false,
+        "sent": "",
+        "approved": ""
+
+        "name"
+    }
+]
