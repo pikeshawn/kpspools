@@ -69,7 +69,7 @@
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
 
                 <!-- Status Dropdown -->
-                <select v-model="selectedStatus" @change="fetchTasks"
+                <select v-model="selectedStatus"
                         class="p-2 border rounded-lg focus:ring focus:ring-blue-300">
                     <option value="all">Select Status</option>
                     <option v-for="status in statuses" :key="status" :value="status">{{ status }}</option>
@@ -78,14 +78,14 @@
                 <!-- Status Dropdown -->
                 <select
                     v-if="user.is_admin"
-                    v-model="selectedServiceman" @change="fetchTasks"
+                    v-model="selectedServiceman"
                     class="p-2 border rounded-lg focus:ring focus:ring-blue-300">
                     <option value="all">Select Serviceman</option>
                     <option v-for="guy in servicemen" :key="guy.id" :value="guy.id">{{ guy.name }}</option>
                 </select>
 
                 <!-- Type Dropdown -->
-                <select v-model="selectedType" @change="fetchTasks"
+                <select v-model="selectedType"
                         class="p-2 border rounded-lg focus:ring focus:ring-blue-300">
                     <option value="todo">Todo</option>
                     <option value="repair">Repair</option>
@@ -297,7 +297,6 @@ export default {
         Toggle
     },
     props: {
-        customers: Array,
         servicemen: Array,
         user: String
     },
@@ -356,6 +355,7 @@ export default {
         },
         doTheDeletion(item) {
             Inertia.post('/task/deleteItem', item)
+            this.getTasksFromSelectedCriteria()
         },
 
 
@@ -484,47 +484,7 @@ export default {
                     console.error('Error:', error); // Handle errors
                 }.bind(this));
 
-        },
-
-        async fetchTasks() {
-            // Fetch tasks based on filters
-            try {
-                const response = await fetch("/api/tasks");
-                this.tasks = await response.json();
-            } catch (error) {
-                console.error("Error fetching tasks:", error);
-            }
-        },
-        async fetchCustomers() {
-            // Fetch customers
-            try {
-                const response = await fetch("/api/customers");
-                this.customers = await response.json();
-            } catch (error) {
-                console.error("Error fetching customers:", error);
-            }
-        },
-        async fetchUsers() {
-            // Fetch assigned users (service technicians)
-            try {
-                const response = await fetch("/api/users");
-                this.users = await response.json();
-            } catch (error) {
-                console.error("Error fetching users:", error);
-            }
-        },
-        async updateTask(id, field, value) {
-            // Update task in the backend
-            try {
-                await fetch(`/api/tasks/${id}`, {
-                    method: "PUT",
-                    headers: {"Content-Type": "application/json"},
-                    body: JSON.stringify({[field]: value}),
-                });
-            } catch (error) {
-                console.error("Error updating task:", error);
-            }
-        },
+        }
     },
     mounted() {
         this.csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
