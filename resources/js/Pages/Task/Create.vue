@@ -24,6 +24,13 @@
                         placeholder="Enter task details..."
                         class="mt-1 w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-400 focus:outline-none">
                 </div>
+                <div class="flex justify-end mt-6">
+                    <button @click="form.description = ''"
+                            style="margin-bottom: 1rem"
+                            class="px-4 py-2 bg-red-100 text-gray-800 rounded-lg hover:bg-gray-400 transition">
+                        Clear Description
+                    </button>
+                </div>
 
                 <div v-for="task in form.taskItems" :key="task.id">
                     <button

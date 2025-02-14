@@ -12,13 +12,43 @@
                                               ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2
                                               focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                  style="padding: 1rem; background: white; margin-bottom: 1rem">
-                <h3 class="text-lg font-bold mb-2">Selected Content</h3>
-                <p class="text-sm text-gray-600">Name: {{ selected.name }}</p>
-                <p class="text-sm text-gray-600">Address: {{ selected.address }}</p>
-                <p class="text-sm text-gray-600">Status: {{ selectedStatus }}</p>
-                <p v-if="user.is_admin" class="text-sm text-gray-600">Serviceman: {{ selectedServiceman }}</p>
-                <p class="text-sm text-gray-600">Type: {{ selectedType }}</p>
-                <!--                <p class="text-sm text-gray-600">Date: {{ selectedDateRange }}</p>-->
+
+                <div class="flex justify-between">
+                    <div>
+                        <h3 class="text-lg font-bold mb-2">Selected Content</h3>
+                        <p class="text-sm text-gray-600">Name: {{ selected.name }}</p>
+                        <p class="text-sm text-gray-600">Address: {{ selected.address }}</p>
+                        <p class="text-sm text-gray-600">Status: {{ selectedStatus }}</p>
+                        <p v-if="user.is_admin" class="text-sm text-gray-600">Serviceman: {{ selectedServiceman }}</p>
+                        <p class="text-sm text-gray-600">Type: {{ selectedType }}</p>
+                        <!--                <p class="text-sm text-gray-600">Date: {{ selectedDateRange }}</p>-->
+                    </div>
+
+                    <div>
+                        <h3 class="text-lg font-bold mb-2">Status Totals</h3>
+                        <p class="text-sm text-gray-600">Created: {{ created }}</p>
+                        <p class="text-sm text-gray-600">Created And Sent: {{ createdAndSent }}</p>
+                        <p class="text-sm text-gray-600">Approved: {{ approved }}</p>
+                        <p class="text-sm text-gray-600">PickedUp: {{ pickedUp }}</p>
+                        <p class="text-sm text-gray-600">Completed: {{ completed }}</p>
+                        <p class="text-sm text-gray-600">Invoiced: {{ invoiced }}</p>
+                        <p class="text-sm text-gray-600">Paid: {{ paid }}</p>
+                        <p class="text-sm text-gray-600">Removed: {{ removed }}</p>
+                        <p class="text-sm text-gray-600">Denied: {{ denied }}</p>
+                        <p class="text-sm text-gray-600">DIY: {{ diy }}</p>
+                        <!--                <p class="text-sm text-gray-600">Date: {{ selectedDateRange }}</p>-->
+                    </div>
+
+                    <div>
+                        <h3 class="text-lg font-bold mb-2">Type Totals</h3>
+                        <p class="text-sm text-gray-600">Repair: {{ repair }}</p>
+                        <p class="text-sm text-gray-600">Part: {{ part }}</p>
+                        <p class="text-sm text-gray-600">Todo: {{ todo }}</p>
+                        <!--                <p class="text-sm text-gray-600">Date: {{ selectedDateRange }}</p>-->
+                    </div>
+
+                </div>
+
                 <button @click="getTasksFromSelectedCriteria()"
                         class="inline-block bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-700"
                         style="margin-top: 1rem"
@@ -28,41 +58,41 @@
             </div>
 
 
-            <div class="flex justify-around">
-                <!-- To-Do Checkbox -->
-                <div class="mb-4 flex items-center">
-                    <input v-model="allCustomers" type="checkbox"
-                           class="h-5 w-5 text-blue-600 border-gray-300 rounded">
-                    <label class="ml-2 text-sm text-gray-700">All Customers</label>
-                </div>
+            <div class="flex justify-between">
+                <div>
+                    <!-- To-Do Checkbox -->
+                    <div class="mb-4 flex items-center">
+                        <input v-model="allCustomers" type="checkbox"
+                               class="h-5 w-5 text-blue-600 border-gray-300 rounded">
+                        <label class="ml-2 text-sm text-gray-700">All Customers</label>
+                    </div>
 
-                <!-- To-Do Checkbox -->
-                <div class="mb-4 flex items-center">
-                    <input v-model="allAddresses" type="checkbox"
-                           class="h-5 w-5 text-blue-600 border-gray-300 rounded">
-                    <label class="ml-2 text-sm text-gray-700">All Addresses</label>
-                </div>
+                    <!-- To-Do Checkbox -->
+                    <div class="mb-4 flex items-center">
+                        <input v-model="allAddresses" type="checkbox"
+                               class="h-5 w-5 text-blue-600 border-gray-300 rounded">
+                        <label class="ml-2 text-sm text-gray-700">All Addresses</label>
+                    </div>
+                    <!-- To-Do Checkbox -->
+                    <div class="mb-4 flex items-center">
+                        <input v-model="allStatuses" type="checkbox"
+                               class="h-5 w-5 text-blue-600 border-gray-300 rounded">
+                        <label class="ml-2 text-sm text-gray-700">All Statuses</label>
+                    </div>
 
-                <!-- To-Do Checkbox -->
-                <div class="mb-4 flex items-center">
-                    <input v-model="allStatuses" type="checkbox"
-                           class="h-5 w-5 text-blue-600 border-gray-300 rounded">
-                    <label class="ml-2 text-sm text-gray-700">All Statuses</label>
-                </div>
+                    <!-- To-Do Checkbox -->
+                    <div class="mb-4 flex items-center">
+                        <input v-model="allTypes" type="checkbox" class="h-5 w-5 text-blue-600 border-gray-300 rounded">
+                        <label class="ml-2 text-sm text-gray-700">All Types</label>
+                    </div>
 
-                <!-- To-Do Checkbox -->
-                <div class="mb-4 flex items-center">
-                    <input v-model="allTypes" type="checkbox" class="h-5 w-5 text-blue-600 border-gray-300 rounded">
-                    <label class="ml-2 text-sm text-gray-700">All Types</label>
+                    <!-- To-Do Checkbox -->
+                    <div v-if="user.is_admin" class="mb-4 flex items-center">
+                        <input v-model="allServicemen" type="checkbox"
+                               class="h-5 w-5 text-blue-600 border-gray-300 rounded">
+                        <label class="ml-2 text-sm text-gray-700">All Servicemen</label>
+                    </div>
                 </div>
-
-                <!-- To-Do Checkbox -->
-                <div v-if="user.is_admin" class="mb-4 flex items-center">
-                    <input v-model="allServicemen" type="checkbox"
-                           class="h-5 w-5 text-blue-600 border-gray-300 rounded">
-                    <label class="ml-2 text-sm text-gray-700">All Servicemen</label>
-                </div>
-
             </div>
 
 
@@ -74,6 +104,20 @@
                     <option value="all">Select Status</option>
                     <option v-for="status in statuses" :key="status" :value="status">{{ status }}</option>
                 </select>
+
+                <div v-if="selectedStatus === 'created'">
+                    <!-- To-Do Checkbox -->
+                    <div class="mb-4 flex items-center">
+                        <input v-model="sentForApproval" type="checkbox" class="h-5 w-5 text-blue-600 border-gray-300 rounded">
+                        <label class="ml-2 text-sm text-gray-700">Sent For Approval</label>
+                    </div>
+
+                    <!-- To-Do Checkbox -->
+                    <div class="mb-4 flex items-center">
+                        <input v-model="sentForApprovalBoth" type="checkbox" class="h-5 w-5 text-blue-600 border-gray-300 rounded">
+                        <label class="ml-2 text-sm text-gray-700">Approval Status Doesn't Matter</label>
+                    </div>
+                </div>
 
                 <!-- Status Dropdown -->
                 <select
@@ -113,7 +157,7 @@
             </div>
 
             <div v-for="customer in targetCustomers" :key="customer.id"
-                style="margin-bottom: 1rem"
+                 style="margin-bottom: 1rem"
             >
                 <button
                     @click="setCustomer(customer)"
@@ -175,9 +219,12 @@
                         </select>
                     </div>
 
+
+
                     <div
-                        v-if="task.status === 'created' && task.sent === 0"
+                        v-if="task.status === 'created'"
                         class="mt-4">
+                        <label class="block font-medium text-green-900" v-if="task.sent === 1">Sent</label>
                         <button @click="requestApproval(task)"
                                 class="inline-block bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-700">
                             Send For Approval
@@ -297,8 +344,21 @@ export default {
         Toggle
     },
     props: {
+        user: Array,
         servicemen: Array,
-        user: String
+        created: String,
+        createdAndSent: Number,
+        approved: Number,
+        pickedUp: Number,
+        completed: Number,
+        invoiced: Number,
+        paid: Number,
+        removed: Number,
+        denied: Number,
+        diy: Number,
+        repair: Number,
+        part: Number,
+        todo: Number
     },
     data() {
         return {
@@ -307,6 +367,8 @@ export default {
             users: [],
             tasks: [],
             selectedCustomer: "",
+            sentForApproval: false,
+            sentForApprovalBoth: true,
             allAddresses: true,
             allCustomers: false,
             allStatuses: false,
@@ -406,11 +468,16 @@ export default {
                 'status': 'all',
                 'serviceman': 'all',
                 'type': 'all',
+                'sent': 'both',
                 'active': 1,
                 'sold': 1
             }
 
-            // debugger
+            if (!this.sentForApprovalBoth) {
+                input.sent = this.sentForApproval
+            } else {
+                input.sent = 'both'
+            }
 
             if (this.selected.name) {
                 input.customer = this.selected.name;

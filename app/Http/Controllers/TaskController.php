@@ -35,15 +35,6 @@ class TaskController extends Controller
             $request->serviceman = Auth::user()->id;
         }
 
-//        if all customers are selected
-//      if a specfic customer is selected
-//  if all statuses are selected
-// if a specfic status is selected
-//  if all
-
-//        $tasks = Task::where('assigned', $request->serviceman)
-//            ->where();
-
         $query = Task::when($request->customer !== 'all', function ($q) use ($request) {
                 return $q->where('customer_id', $request->customer_id);
             })
@@ -68,6 +59,9 @@ class TaskController extends Controller
             })
             ->when($request->serviceman !== 'all', function ($q) use ($request) {
                 return $q->where('assigned', $request->serviceman);
+            })
+            ->when($request->sent !== 'both', function ($q) use ($request) {
+                return $q->where('sent', $request->sent);
             })
             ->select([
                 'customer_id as customer_id',
@@ -465,8 +459,56 @@ class TaskController extends Controller
     {
         $servicemen = User::select(["id", "name"])->where('active', 1)->where('type', 'serviceman')->get();
 
+
+        if (Auth::user()->is_admin) {
+            $created = Task::where('status', 'created')->count();
+            $createdAndSent = Task::where('status', 'created')->where('sent', true)->count();
+            $approved = Task::where('status', 'approved')->count();
+            $pickedUp = Task::where('status', 'pickedUp')->count();
+            $completed = Task::where('status', 'completed')->count();
+            $invoiced = Task::where('status', 'invoiced')->count();
+            $paid = Task::where('status', 'paid')->count();
+            $removed = Task::where('status', 'removed')->count();
+            $denied = Task::where('status', 'denied')->count();
+            $diy = Task::where('status', 'diy')->count();
+            $repair = Task::where('type', 'repair')->count();
+            $todo = Task::where('type', 'todo')->count();
+            $part = Task::where('type', 'part')->count();
+        } else {
+            $loggedInUserId = Auth::user()->getAuthIdentifier();
+            $created = Task::where('status', 'created')->where('assigned', $loggedInUserId)->count();
+            $createdAndSent = Task::where('status', 'created')->where('assigned', $loggedInUserId)->where('sent', true)->count();
+            $approved = Task::where('status', 'approved')->where('assigned', $loggedInUserId)->count();
+            $pickedUp = Task::where('status', 'pickedUp')->where('assigned', $loggedInUserId)->count();
+            $completed = Task::where('status', 'completed')->where('assigned', $loggedInUserId)->count();
+            $invoiced = Task::where('status', 'invoiced')->where('assigned', $loggedInUserId)->count();
+            $paid = Task::where('status', 'paid')->where('assigned', $loggedInUserId)->count();
+            $removed = Task::where('status', 'removed')->where('assigned', $loggedInUserId)->count();
+            $denied = Task::where('status', 'denied')->where('assigned', $loggedInUserId)->count();
+            $diy = Task::where('status', 'diy')->where('assigned', $loggedInUserId)->count();
+            $repair = Task::where('type', 'repair')->where('assigned', $loggedInUserId)->count();
+            $todo = Task::where('type', 'todo')->where('assigned', $loggedInUserId)->count();
+            $part = Task::where('type', 'part')->where('assigned', $loggedInUserId)->count();
+        }
+
+
+
+
         return Inertia::render('Task/View', [
-            'servicemen' => $servicemen
+            'servicemen' => $servicemen,
+            'created' => $created,
+            'createdAndSent' => $createdAndSent,
+            'approved' => $approved,
+            'pickedUp' => $pickedUp,
+            'completed' => $completed,
+            'invoiced' => $invoiced,
+            'paid' => $paid,
+            'removed' => $removed,
+            'denied' => $denied,
+            'diy' => $diy,
+            'repair' => $repair,
+            'todo' => $todo,
+            'part' => $part,
         ]);
     }
 
