@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Address;
+use App\Models\User;
 use App\Models\TaskStatus;
 use App\Notifications\InboundMessageNotification;
 use App\Notifications\GenericNotification;
@@ -64,6 +66,10 @@ class VonageWebhookController extends Controller
         Log::debug('Customer Id:: ' . $this->customer->id);
         Log::debug('taskNumber:: ' . $this->taskNumber);
 
+        $customer = Customer::find($this->customer->id);
+        $address = Address::find($task->address_id);
+        $user = User::find($task->assigned);
+
         if ($task) {
             if (strtoupper($this->answer) == 'N') {
                 $task->status = 'denied';
@@ -71,6 +77,8 @@ class VonageWebhookController extends Controller
             } else if (strtoupper($this->answer) == 'Y') {
                 $task->status = 'approved';
                 Notification::route('vonage', $request['msisdn'])->notify(new GenericNotification('Thank you for response. We will get you scheduled and complete the work as soon as possible'));
+                Task::sendApprovalMessage($task, $customer, $user->phone_number, $address);
+                Task::sendApprovalMessage($task, $customer, '14807034902', $address);
             }
             $task->save();
             $date = Carbon::now();

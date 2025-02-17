@@ -25,7 +25,7 @@
                         class="mt-1 w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-400 focus:outline-none">
                 </div>
                 <div v-if="!form.toDo" class="flex justify-between items-center mb-3">
-                    <label class="block text-sm font-medium text-gray-700">Repair Rate: ${{ techRate() }}</label>
+                    <label class="block text-sm font-medium text-gray-700">Repair Rate: ${{ getSubRate() }}</label>
                     <div class="flex justify-end">
                         <button @click="form.description = ''; form.taskItems = '';"
                                 style="margin-bottom: 1rem"
@@ -95,11 +95,13 @@
                     <label class="ml-2 text-sm text-gray-700">To-Do</label>
                 </div>
 
-                <!-- To-Do Checkbox -->
-                <div class="mb-4 flex items-center">
-                    <input v-model="form.separateTrip" type="checkbox" class="h-5 w-5 text-blue-600 border-gray-300 rounded">
-                    <label class="ml-2 text-sm text-gray-700">Separate Trip</label>
-                </div>
+<!--                &lt;!&ndash; To-Do Checkbox &ndash;&gt;-->
+<!--                <div class="mb-4 flex items-center">-->
+<!--                    <input v-model="form.separateTrip"-->
+<!--                           @change="add()"-->
+<!--                           type="checkbox" class="h-5 w-5 text-blue-600 border-gray-300 rounded">-->
+<!--                    <label class="ml-2 text-sm text-gray-700">Separate Trip</label>-->
+<!--                </div>-->
 
                 <!-- Assign to Service Guy Dropdown -->
                 <div class="mb-4">
@@ -469,6 +471,16 @@ export default {
                 this.form.taskItems = null
             }
 
+        },
+
+        getSubRate(){
+          if (this.form.selectedTask && this.form.selectedTask.type) {
+              if (this.form.selectedTask.type === 'scpItem') {
+                  return this.techRate();
+              } else {
+                  return this.form.repairRate
+              }
+          }
         },
 
         setJobRate(price, quantity) {
