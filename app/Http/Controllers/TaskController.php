@@ -872,6 +872,14 @@ class TaskController extends Controller
 
         $task->rate = $request->sub_rate;
         $task->save();
+
+        $ep = EmployeePayment::where('task_id', $request->task_id)->first();
+
+        if (!is_null($ep)) {
+            $ep->rate = $request->sub_rate;
+            $ep->save();
+        }
+
     }
 
     public function changeDescription(Request $request)
