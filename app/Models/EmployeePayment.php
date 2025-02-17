@@ -29,7 +29,7 @@ class EmployeePayment extends Model
             'service_stop_id' => $serviceStop->id,
             'paycheck_id' => null,
             'task_id' => null,
-            'rate' => $serviceRate, // Fetching rate from Users table
+            'rate' => $user->service_rate, // Fetching rate from Users table
             'bucket_rate' => $bucketRate, // Fetching rate from Users table
             'status' => 'pending'
         ]);
