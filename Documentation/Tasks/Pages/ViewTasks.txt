@@ -106,4 +106,33 @@ Input JSON -
 
 - have fetch methods for each of the dropdowns that update the field in the backend
 
-
+Change Status
+    - Created
+        - if the status being changed is to created then
+            - I need to check if the entry exists already in the employee payments table
+                - task_id
+                - serviceman_id
+                - rate
+            - If it exists and the rate has not changed then do nothing
+            - else add the row
+    - Assigned changes
+        - if assigned changes
+            - Update the task table
+                - get the task by the task_id then change the assigned
+                - look in the user_job_rates table and look for the rate based upon
+                    - job_type_id
+                    - user_id
+                    - then update the task with the adjusted user rate
+                        - tasks.rate = user_job_rates.rate_paid
+            - Update the employee payments table
+                - employee_payments.servicemanId = newId
+                - employee_payments.rate = rate from user_job_rates table
+    - Completed
+            - if the status being changed is to completed then
+                - I need to add the entry to the user_job_rates table
+                - I need to update the task table as well
+                - Add status in task_statuses table
+    - Deleted
+            - if the status being changed is to completed then
+                - I need to add the entry to the user_job_rates table
+                - I need to update the task table as well

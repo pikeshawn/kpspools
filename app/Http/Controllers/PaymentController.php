@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use App\Models\Address;
 use App\Models\Task;
 use App\Models\EmployeePayment;
@@ -42,7 +43,26 @@ class PaymentController extends Controller
     public function currentPaycheck(): Response
     {
 
-        $servicemanId = Auth::user()->id;
+        if (Auth::user()->is_admin) {
+            $servicemen = User::select(['id', 'name'])->where('type', 'serviceman')->where('active', 1)->get();
+        } else {
+            $servicemen = User::select(['id', 'name'])->where('type', 'serviceman')->where('id', Auth::user()->id)->where('active', 1)->get();
+        }
+
+        $totalPayments = [];
+
+        foreach($servicemen as $serviceman) {
+            array_push($totalPayments, self::currentPayments($serviceman->id, $serviceman->name));
+        }
+
+        return Inertia::render('Payments/Paychecks', [
+            'totalPayments' => $totalPayments
+        ]);
+    }
+
+    public function currentPayments($servicemanId, $servicemanName)
+    {
+
 
         $totalPendingServiceStops = EmployeePayment::where('serviceman_id', $servicemanId)
             ->where('status', 'pending')
@@ -77,24 +97,23 @@ class PaymentController extends Controller
             ->where('bucket_rate', '>', 0)
             ->count();
 
-
-        return Inertia::render('Payments/Paychecks', [
+        return [
             'totalPendingServiceStops' => $totalPendingServiceStops,
             'totalServiceStopAmount' => $totalServiceStopAmount,
             'totalPendingRepairs' => $totalPendingRepairs,
             'totalRepairAmount' => $totalRepairAmount,
             'totalNumberOfPoolsContributingToBucket' => $totalNumberOfPoolsContributingToBucket,
-            'totalBucketAmount' => $totalBucketAmount
-        ]);
+            'totalBucketAmount' => $totalBucketAmount,
+            'servicemanId' => $servicemanId,
+            'servicemanName' => $servicemanName
+        ];
     }
 
-    public function serviceStops($column, $direction)
+    public function serviceStops($column, $direction, $user)
     {
 
-        $servicemanId = Auth::user()->id;
-
         // Fetch employee payments with associated service stops and customers
-        $employeePayments = EmployeePayment::where('serviceman_id', $servicemanId)
+        $employeePayments = EmployeePayment::where('serviceman_id', $user)
             ->whereNotNull('service_stop_id') // Ensure it's linked to a service stop
             ->where('status', 'pending') // Filter by pending status
             ->get()
@@ -132,12 +151,11 @@ class PaymentController extends Controller
         return response()->json($employeePayments->values()->all());
     }
 
-    public function repairs($column, $direction)
+    public function repairs($column, $direction, $user)
     {
-        $servicemanId = Auth::user()->id;
 
         // Fetch employee payments with associated tasks and customers
-        $employeePayments = EmployeePayment::where('serviceman_id', $servicemanId)
+        $employeePayments = EmployeePayment::where('serviceman_id', $user)
             ->whereNotNull('task_id') // Ensure it's linked to a task
             ->where('status', 'pending') // Filter by pending status
             ->get()

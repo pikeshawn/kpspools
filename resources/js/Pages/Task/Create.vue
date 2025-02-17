@@ -24,55 +24,81 @@
                         placeholder="Enter task details..."
                         class="mt-1 w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-400 focus:outline-none">
                 </div>
-                <div class="flex justify-end mt-6">
-                    <button @click="form.description = ''"
-                            style="margin-bottom: 1rem"
-                            class="px-4 py-2 bg-red-100 text-gray-800 rounded-lg hover:bg-gray-400 transition">
-                        Clear Description
-                    </button>
+                <div v-if="!form.toDo" class="flex justify-between items-center mb-3">
+                    <label class="block text-sm font-medium text-gray-700">Repair Rate: ${{ techRate() }}</label>
+                    <div class="flex justify-end">
+                        <button @click="form.description = ''; form.taskItems = '';"
+                                style="margin-bottom: 1rem"
+                                class="px-4 py-2 bg-red-100 text-gray-800 rounded-lg hover:bg-gray-400 transition">
+                            Clear Description
+                        </button>
+                    </div>
                 </div>
 
-                <div v-for="task in form.taskItems" :key="task.id">
-                    <button
-                        @click="setTask(task)"
-                        class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm
+                <div class="mb-2">
+                    <div v-for="task in form.taskItems" :key="task.id">
+                        <button
+                            @click="setTask(task)"
+                            class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm
                                               ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2
                                               focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                        style="padding: 1rem; background: white"
-                    >
-                        <p>{{ task.description }}</p>
-                        <p>{{ task.product_number }}</p>
-                        <p>SCP Price {{ task.price }}</p>
-                    </button>
+                            style="padding: 1rem; background: white"
+                        >
+                            <p>{{ task.description }}</p>
+                            <p>{{ task.product_number }}</p>
+                            <p v-if="task.type === 'scpItem'">SCP Price {{ task.price }}</p>
+                        </button>
 
 
-                    <!--                    <li @click="setTask(task)">-->
-                    <!--                        {{ task.description }}-->
-                    <!--                    </li>-->
+                        <!--                    <li @click="setTask(task)">-->
+                        <!--                        {{ task.description }}-->
+                        <!--                    </li>-->
+                    </div>
                 </div>
 
-                <!-- Quantity Input -->
-                <div class="mb-4">
-                    <label class="block text-sm font-medium text-gray-700">Quantity</label>
-                    <input
-                        v-model="quantity"
-                        type="number"
-                        min="1"
-                        placeholder="Enter quantity..."
-                        class="mt-1 w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-400 focus:outline-none">
+                <div class="flex justify-between">
+                    <!-- Quantity Input -->
+                    <div class="mb-4 w-1/2">
+                        <label class="block text-sm font-medium text-gray-700">Quantity</label>
+                        <input
+                            @change="updatePrice()"
+                            v-model="quantity"
+                            type="number"
+                            min="1"
+                            placeholder="Enter quantity..."
+                            class="mt-1 w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-400 focus:outline-none">
+                    </div>
+
+                    <!-- Assign to Service Guy Dropdown -->
+                    <div class="mb-4 w-1/2">
+                        <label class="block text-sm font-medium text-gray-700">Time To Complete</label>
+                        <select v-model="form.completionTime"
+                                class="mt-1 w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-400 focus:outline-none">
+                            <option value="" disabled>Estimated Time...</option>
+                            <option v-for="time in timeIntervals" :key="time.id" :value="time.id">
+                                {{ time.name }}
+                            </option>
+                        </select>
+                    </div>
                 </div>
 
-                <!-- Update Serviceman Repair Rate Checkbox -->
-                <div class="mb-4 flex items-center">
-                    <input v-model="form.verbalApproval" type="checkbox"
-                           class="h-5 w-5 text-blue-600 border-gray-300 rounded">
-                    <label class="ml-2 text-sm text-gray-700">Verbal Approval</label>
-                </div>
+<!--                &lt;!&ndash; Update Serviceman Repair Rate Checkbox &ndash;&gt;-->
+<!--                <div class="mb-4 flex items-center">-->
+<!--                    <input v-model="form.verbalApproval" type="checkbox"-->
+<!--                           class="h-5 w-5 text-blue-600 border-gray-300 rounded">-->
+<!--                    <label class="ml-2 text-sm text-gray-700">Verbal Approval</label>-->
+<!--                </div>-->
 
                 <!-- To-Do Checkbox -->
                 <div class="mb-4 flex items-center">
                     <input v-model="form.toDo" type="checkbox" class="h-5 w-5 text-blue-600 border-gray-300 rounded">
                     <label class="ml-2 text-sm text-gray-700">To-Do</label>
+                </div>
+
+                <!-- To-Do Checkbox -->
+                <div class="mb-4 flex items-center">
+                    <input v-model="form.separateTrip" type="checkbox" class="h-5 w-5 text-blue-600 border-gray-300 rounded">
+                    <label class="ml-2 text-sm text-gray-700">Separate Trip</label>
                 </div>
 
                 <!-- Assign to Service Guy Dropdown -->
@@ -227,7 +253,9 @@ export default {
     data() {
         return {
             form: {
+                completionTime: 0,
                 address_id: '',
+                separateTrip: false,
                 customer_id: '',
                 description: '',
                 jobRate: 0,
@@ -251,6 +279,51 @@ export default {
                 updateServicemanRepairRate: false
             },
 
+            tripCharge: 80,
+            timeIntervals: [
+                {
+                    "id": 0,
+                    "multiplier": .25,
+                    "name": "less than 15 min",
+                },
+                {
+                    "id": 1,
+                    "multiplier": .5,
+                    "name": "15 to 30 min",
+                },
+                {
+                    "id": 2,
+                    "multiplier": 1,
+                    "name": "30 to 60 min",
+                },
+                {
+                    "id": 3,
+                    "multiplier": 2,
+                    "name": "1 - 2 hours",
+                },
+                {
+                    "id": 4,
+                    "multiplier": 3,
+                    "name": "2 - 3 hrs",
+                },
+                {
+                    "id": 5,
+                    "multiplier": 4,
+                    "name": "3 - 4 hrs",
+                },
+                {
+                    "id": 6,
+                    "multiplier": 5,
+                    "name": "4 - 5 hrs",
+                },
+                {
+                    "id": 7,
+                    "multiplier": 6,
+                    "name": "5 to 6 hrs",
+                }
+            ],
+
+            markup: [],
 
             csrfToken: null,
             percentages: [10, 20, 30, 40, 50], // Available percentage options
@@ -260,17 +333,7 @@ export default {
             todoChecked: false,
             selectedServiceGuy: "",
             selectedCompany: "",
-            repairRate: 0,
-            serviceGuys: [
-                {id: 1, name: "John Doe"},
-                {id: 2, name: "Jane Smith"},
-                {id: 3, name: "Mike Johnson"}
-            ],
-            companies: [
-                {id: 1, name: "RepairCo"},
-                {id: 2, name: "FixIt Services"},
-                {id: 3, name: "PoolPros Inc."}
-            ]
+            repairRate: 0
         };
     },
 
@@ -371,17 +434,72 @@ export default {
 
         },
 
+        updatePrice(){
+
+            if (this.form.selectedTask) {
+                if (this.form.selectedTask.type === 'scpItem') {
+                    this.form.repairRate = this.techRate()
+                    this.form.jobRate = this.setJobRate(this.form.selectedTask.price, this.form.quantity)
+                } else {
+                    this.form.jobRate = this.form.selectedTask.jobRate * this.quantity
+                }
+            }
+
+        },
+
         setTask(task) {
-            console.log(task)
-            this.form.selectedTask = task
-            this.form.description = task.description
-            this.form.product_number = task.product_number
-            this.form.price = task.price
-            this.form.repairRate = task.repairmanRate
-            this.form.jobRate = task.jobRate * this.form.quantity
-            this.form.source = task.source
-            this.form.taskItems = null
-            this.form.jobRate = this.form.jobRate.toFixed(2);
+            if (task.type === 'scpItem') {
+                this.form.selectedTask = task
+                this.form.description = task.description
+                this.form.product_number = task.product_number
+                this.form.price = task.price
+                this.form.repairRate = this.techRate()
+                this.form.jobRate = this.setJobRate(task.price, this.form.quantity)
+                this.form.source = task.source
+                this.form.taskItems = null
+                this.form.jobRate = this.form.jobRate.toFixed(2);
+            } else {
+                this.form.selectedTask = task
+                this.form.description = task.description
+                this.form.product_number = task.product_number
+                this.form.price = null
+                this.form.repairRate = task.repairmanRate
+                this.form.jobRate = task.price
+                this.form.source = task.source
+                this.form.taskItems = null
+            }
+
+        },
+
+        setJobRate(price, quantity) {
+            let cost = price * quantity
+            if (this.form.separateTrip) {
+                return this.markUp(cost) + this.laborRate() + this.tripCharge;
+            } else {
+                return this.markUp(cost) + this.techRate()
+            }
+        },
+
+        techRate() {
+            return this.timeIntervals[this.form.completionTime].multiplier * 65;
+        },
+
+        laborRate() {
+            return this.techRate() * 2;
+        },
+
+        markUp(price) {
+            if (price <= 50) {
+                return price * 2.08
+            } else if (price <= 100) {
+                return price * 1.83
+            } else if (price <= 500) {
+                return price * 1.73
+            } else if (price <= 1000) {
+                return price * 1.53
+            } else if (price > 1000) {
+                return price * 1.43
+            }
         },
 
         cancelCompany() {

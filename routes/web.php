@@ -138,11 +138,11 @@ Route::middleware(['auth:sanctum', 'verified', 'serviceman'])->group(function ()
         [PaymentController::class, 'currentPaycheck'])
         ->name('payments.currentPaycheck');
 
-    Route::get('/payments/serviceStops/{column}/{direction}',
+    Route::get('/payments/serviceStops/{column}/{direction}/{user}',
         [PaymentController::class, 'serviceStops'])
         ->name('payments.serviceStops');
 
-    Route::get('/payments/repairs/{column}/{direction}',
+    Route::get('/payments/repairs/{column}/{direction}/{user}',
         [PaymentController::class, 'repairs'])
         ->name('payments.repairs');
 
@@ -401,6 +401,10 @@ Route::middleware(['auth:sanctum', 'verified', 'serviceman'])->group(function ()
     Route::post('/task/deleteItem',
         [TaskController::class, 'deleteItem'])
         ->name('task.deleteItem');
+
+    Route::post('/task/addJobType',
+        [TaskController::class, 'addJobType'])
+        ->name('task.addJobType');
 
     Route::post('/task/deleteItemFromReconcile',
         [TaskController::class, 'deleteItemFromReconcile'])

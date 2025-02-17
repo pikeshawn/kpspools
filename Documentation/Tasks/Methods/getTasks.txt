@@ -32,4 +32,116 @@ logic -
             - rate => task.rate
 
 
+I need to update my price like this
+Wholesale Cost	    Markup %	Retail Price (Min - Max)
+$0 - $50	        100%	    $100 - $150
+$50 - $200	        75%	        $125 - $350
+$200 - $500	        50% - 75%	$300 - $875
+$500 - $1,000	    40% - 60%	$700 - $1,600
+$1,000+	            30% - 50%	$1,300 - $2,500+
+
+Job Type	            Time Estimate	Labor Charge (Min - Max)
+Minor Repair (<1 hr)	30-60 min	    $125 - $200
+Equipment Install	    1.5 - 3 hrs	    $300 - $500
+Pump Swap	            2 - 4 hrs	    $350 - $600
+Filter Replacement	    1.5 - 3 hrs	    $250 - $450
+Heater Install	        3 - 6 hrs	    $500 - $900
+Automation System	    4 - 8 hrs	    $600 - $1,200+
+
+
+
+
+- once the price is pulled back then I need to determine
+    - Cost of Parts
+        - from SCP Price
+    - Markup
+        - Based on the table above
+    - Tech Hourly Rate
+        - Have an hourly rate for each tech in the Users table
+        - Times Estimated Length For a given job
+        - Have an Estimated Hours for job
+            - Add to the Job Types Table
+    - Trip fee
+        - 80$
+
+Scenario -
+
+    - Select a something without a cost associated to it
+
+
+    - Select a part from SCP that needs to be installed
+        - I get the cost of that part
+        - I pull the rate from the Labor Rate from the Labor Rate table based upon the Estimated Time to put in that part
+
+
+    - change the parameters
+        - Quantity
+            - rerun setJobRate
+            - assign to new jobRate
+
+        - Time to complete
+            - rerun techRate
+            - rerun SetJobRate
+
+        - Description
+
+
+    - If it is selected job task
+        - description - task.description
+        - product_number - task.product_number
+        - cost - task.price
+        - repairRate -
+            - 80 * (this.form.completionTime + 1)
+        - jobRate -
+            - {Total Price} = ({Cost of Parts} * {Markup}) + ({Tech Hourly Rate} * 3) + {Trip Charge}
+            - task.price *
+
+        - approach 1
+            - Tech puts in price -> auto sends for approval
+                - Customer responds
+                - Customer says that is too much - how much will you charge me
+                - Tech charges their rate and does job with the job being declined by the customer
+                    - Flags
+                        - a lot of declined jobs
+                        - not a lot of jobs being done by their customers
+                        - should have metrics that suggest the number of jobs done by tech based upon
+                            - number of pools they do
+                            - age of house and equipment
+
+
+
+
+    - If it is new
+
+        - Not an admin
+            completionTime: 0,
+            address_id: 101,
+            customer_id: 101,
+            description: 'my new repair',
+            jobRate: null,
+            name: null,
+            price: null,
+            product_number: null,
+            quantity: 1,
+            initialRepairRate: null,
+            repairRate: null,
+            selectedTask: null,
+            selectedTaskDescription: null,
+            serviceman: 2,
+            source: null,
+            status: 'created',
+            subcontractor: null,
+            taskItems: null,
+            todoAssignee: null,
+            updateStandardRate: false,
+            verbalApproval: false,
+            toDo: false,
+            updateServicemanRepairRate: false
+
+- when the create page opens up
+    - the description will be empty
+        - type in the description can be from
+            - drop down
+            - brand new
+    - the separate stop will be unchecked
 

@@ -1,33 +1,35 @@
 <template>
-    <layout
-        :user="user"
-        :addressId="currentUrl"
-    >
+    <layout>
         <div class="max-w-4xl mx-auto p-6 bg-white shadow-md rounded-lg">
             <!-- Summary Section -->
             <div class="mb-6">
                 <h2 class="text-xl font-semibold mb-4">Summary</h2>
 
-                <!-- Service Stops -->
-                <div>
-                    <button @click="toggleTable('serviceStops')" class="text-blue-600 hover:underline text-lg font-bold">
-                       {{ totalPendingServiceStops }} Service Stops = ${{ totalServiceStopAmount }}
-                    </button>
+                <div v-for="s in totalPayments" class="flex justify-between">
+<!--                <div v-if="user.is_admin" v-for="s in totalPayments" class="flex justify-between">-->
+                    <!-- Service Stops -->
+                    <h2 class="text text-black font-semibold mb-4">{{ s.servicemanName }}</h2>
+                    <div>
+                        <button @click="toggleTable('serviceStops', s.servicemanId)" class="text-blue-600 hover:underline text-lg font-bold">
+                            {{ s.totalPendingServiceStops }} Service Stops = ${{ s.totalServiceStopAmount }}
+                        </button>
+                    </div>
+
+                    <!-- Repairs -->
+                    <div>
+                        <button @click="toggleTable('repairs', s.servicemanId)" class="text-blue-600 hover:underline text-lg font-bold">
+                            {{ s.totalPendingRepairs }} Repairs: ${{ s.totalRepairAmount }}
+                        </button>
+                    </div>
+
+                    <!-- Bucket (Only if totalBucketAmount > 0) -->
+                    <div v-if="s.totalBucketAmount > 0">
+                        <button class="text-black-600 text-lg font-bold">
+                            {{ s.totalNumberOfPoolsContributingToBucket }} Bucket: ${{ s.totalBucketAmount }}
+                        </button>
+                    </div>
                 </div>
 
-                <!-- Repairs -->
-                <div>
-                    <button @click="toggleTable('repairs')" class="text-blue-600 hover:underline text-lg font-bold">
-                        {{ totalPendingRepairs }} Repairs: ${{ totalRepairAmount }}
-                    </button>
-                </div>
-
-                <!-- Bucket (Only if totalBucketAmount > 0) -->
-                <div v-if="totalBucketAmount > 0">
-                    <button class="text-black-600 text-lg font-bold">
-                        {{ totalNumberOfPoolsContributingToBucket }} Bucket: ${{ totalBucketAmount }}
-                    </button>
-                </div>
             </div>
 
             <!-- Service Stops Table -->
@@ -112,12 +114,14 @@ import Button from "../../Jetstream/Button.vue";
 export default {
     name: 'CurrentPaycheck',
     props: {
+        // user: Object,
         totalPendingServiceStops: Number,
         totalServiceStopAmount: Number,
         totalPendingRepairs: Number,
         totalRepairAmount: Number,
         totalNumberOfPoolsContributingToBucket: Number,
         totalBucketAmount: Number,
+        totalPayments: Array
     },
     components: {
         Button,
@@ -133,31 +137,32 @@ export default {
         };
     },
     methods: {
-        async fetchServiceStops(column, direction) {
+        async fetchServiceStops(column, direction, userId) {
             this.serviceStops = null
             try {
-                const response = await fetch("/payments/serviceStops/" + column + "/" + direction);
+                const response = await fetch("/payments/serviceStops/" + column + "/" + direction + "/" + userId);
                 this.serviceStops = await response.json();
             } catch (error) {
                 console.error("Error fetching Service Stops:", error);
             }
         },
 
-        async fetchRepairs(column, direction) {
+        async fetchRepairs(column, direction, userId) {
+            this.repairs = null;
             try {
-                const response = await fetch("/payments/repairs/" + column + "/" + direction);
+                const response = await fetch("/payments/repairs/" + column + "/" + direction + "/" + userId);
                 this.repairs = await response.json();
             } catch (error) {
                 console.error("Error fetching Repairs:", error);
             }
         },
-        toggleTable(table) {
+        toggleTable(table, userId) {
             this.selectedTable = this.selectedTable === table ? null : table;
-            if (table === "serviceStops" && this.serviceStops.length === 0) {
-                this.fetchServiceStops('name', 'desc');
+            if (table === "serviceStops") {
+                this.fetchServiceStops('name', 'desc', userId);
             }
-            if (table === "repairs" && this.repairs.length === 0) {
-                this.fetchRepairs();
+            if (table === "repairs") {
+                this.fetchRepairs('name', 'desc', userId);
             }
         },
     },

@@ -52,3 +52,7 @@ return this object
         "name"
     }
 ]
+
+Scenarios
+todo - √ - what happens if the repair rate is > than the job rate
+todo - √ - what happens if I am charging less than the market rate

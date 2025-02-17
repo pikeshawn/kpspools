@@ -44,7 +44,11 @@ class Task extends Model
 
     public static function sendCompletedMessage($task, $customer, $phoneNumber, $address, $assigned)
     {
-        $message = "A repair has been completed by $assigned, $task->description.\n$customer->first_name $customer->last_name\n" . env('APP_URL') . "/customers/show/$address->id";
+
+        $message = "$task->description has been completed by $assigned. Please text or call Shawn if you have any questions";
+        Notification::route('vonage', $customer->phone_number)->notify(new TaskApprovalNotification($message));
+
+        $message = "A repair has been completed by $assigned, $task->description.\n$customer->first_name $customer->last_name\n" . env('APP_URL') . "/customers/show/$address->id. Please take a look";
         Notification::route('vonage', $phoneNumber)->notify(new TaskApprovalNotification($message));
     }
 

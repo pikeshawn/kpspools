@@ -35,4 +35,16 @@ class EmployeePayment extends Model
         ]);
 
     }
+
+    public static function addRepairEntry($servicemanId, $taskId, $rate)
+    {
+        $ep = new EmployeePayment([
+           'serviceman_id' => $servicemanId,
+           'task_id' => $taskId,
+           'rate' => $rate,
+           'status' => 'pending',
+        ]);
+
+        $ep->save();
+    }
 }

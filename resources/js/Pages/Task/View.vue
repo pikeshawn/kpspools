@@ -255,6 +255,24 @@
                         <label class="block font-medium">Price</label>
                         <input type="text" v-model="task.price" @blur="changePrice(task)"
                                class="w-full p-2 border rounded-lg focus:ring focus:ring-blue-300">
+                        <div v-if="true">
+                            <label class="mt-2 flex items-center space-x-2" v-if="task.jobType">Job Type Exists</label>
+                            <label class="mt-2 flex items-center space-x-2" v-else>No Job Type</label>
+                            <div class="flex justify-around">
+                                <button @click="addJobType(task, true)"
+                                        class="inline-block bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-700"
+                                        style="margin-top: 1rem"
+                                >
+                                    <label class="block text-sm font-medium leading-6 text-white">Add</label>
+                                </button>
+                                <button @click="addJobType(task, false)"
+                                        class="inline-block bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-700"
+                                        style="margin-top: 1rem"
+                                >
+                                    <label class="block text-sm font-medium leading-6 text-white">Delete</label>
+                                </button>
+                            </div>
+                        </div>
                     </div>
 
                     <div class="mt-3">
@@ -268,7 +286,6 @@
                             <label class="block font-medium">$ {{ task.sub_rate }}</label>
                         </div>
                     </div>
-
 
                     <div class="flex items-center justify-between">
                         <!-- Customer Page Link -->
@@ -369,6 +386,7 @@ export default {
             selectedCustomer: "",
             sentForApproval: false,
             sentForApprovalBoth: true,
+            addToJobType: false,
             allAddresses: true,
             allCustomers: false,
             allStatuses: false,
@@ -409,6 +427,12 @@ export default {
         requestApproval(item) {
             Inertia.post('/task/requestApproval', item)
         },
+        addJobType(item, addDelete) {
+            Inertia.post('/task/addJobType', {
+                "item" : item,
+                "addJobType" : addDelete,
+            })
+        },
         deleteItem(item) {
             item.deleted = true;
         },
@@ -419,7 +443,6 @@ export default {
             Inertia.post('/task/deleteItem', item)
             this.getTasksFromSelectedCriteria()
         },
-
 
         getCustomer(name) {
 

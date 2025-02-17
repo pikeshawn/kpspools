@@ -23,6 +23,7 @@ use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
 use Inertia\Response;
 use Illuminate\Support\Facades\Notification;
+use function Laravel\Prompts\select;
 use function PHPUnit\Framework\isNull;
 
 class TaskController extends Controller
@@ -36,8 +37,8 @@ class TaskController extends Controller
         }
 
         $query = Task::when($request->customer !== 'all', function ($q) use ($request) {
-                return $q->where('customer_id', $request->customer_id);
-            })
+            return $q->where('customer_id', $request->customer_id);
+        })
             ->when($request->address !== 'all', function ($q) use ($request) {
                 return $q->where('address_id', $request->address_id);
             })
@@ -81,6 +82,15 @@ class TaskController extends Controller
         $tasks = $query->get();
 
         foreach ($tasks as $task) {
+
+            $jt = JobType::where('name', $task->description)->first();
+
+            if (!is_null($jt)) {
+                $task->jobType = true;
+            } else {
+                $task->jobType = false;
+            }
+
             $customer = Customer::find($task->customer_id);
             $address = Address::find($task->address_id);
             $task->first_name = $customer->first_name;
@@ -492,8 +502,6 @@ class TaskController extends Controller
         }
 
 
-
-
         return Inertia::render('Task/View', [
             'servicemen' => $servicemen,
             'created' => $created,
@@ -765,86 +773,47 @@ class TaskController extends Controller
             ->get();
 
         // Fetch Task Items matching the description
-        $tasks = DB::table('tasks')
-            ->select(['description', 'price'])
-            ->whereRaw("LOWER(description) LIKE LOWER(?)", ["%{$request->name}%"])
-            ->groupBy('description', 'price')
-            ->orderBy('description', 'asc')
+        $tasks = DB::table('job_types')
+            ->select(['id', 'name', 'rate_charged'])
+            ->whereRaw("LOWER(name) LIKE LOWER(?)", ["%{$request->name}%"])
+            ->orderBy('name', 'asc')
             ->get();
-
-        // Collect all descriptions for batch querying
-        $allDescriptions = $scpItems->pluck('description')->merge($tasks->pluck('description'))->unique();
-
-        // Fetch tasks in bulk for better performance
-        $taskRecords = Task::whereIn('description', $allDescriptions)
-            ->orderBy('created_at', 'desc')
-            ->get()
-            ->keyBy('description');
-
-        // Fetch job types in bulk
-        $jobTypes = JobType::whereIn('name', $allDescriptions)
-            ->get()
-            ->keyBy('name');
-
-        // Fetch rates in bulk for all job types
-        $jobTypeIds = $jobTypes->pluck('id');
-        $repairmanRates = UserJobRate::whereIn('job_type_id', $jobTypeIds)
-            ->where('user_id', $request->serviceman)
-            ->get()
-            ->keyBy('job_type_id');
 
         $items = [];
 
         // Process SCP Items
         foreach ($scpItems as $item) {
-            $description = $item->description;
-            $task = $taskRecords->get($description);
-            $jobType = $task ? $jobTypes->get($task->description) : null;
-
-            if (!is_null($jobType)) {
-                $jobTypeId = $jobType->id;
-            } else {
-                $jobTypeId = null;
-            }
-
-
-            $jobRate = $jobType ? $jobType->rate_charged : null;
-            $repairmanRate = $jobType && $repairmanRates->has($jobType->id) ? $repairmanRates[$jobType->id]->rate_paid : null;
-
             $items[] = [
-                'jobTypeId' => $jobTypeId,
-                'description' => $description,
+                'jobTypeId' => null,
+                'description' => $item->description,
                 'price' => $item->cost,
                 'product_number' => $item->product_number,
-                'repairmanRate' => $repairmanRate,
-                'jobRate' => $jobRate,
+                'repairmanRate' => null,
+                'jobRate' => null,
                 'type' => 'scpItem'
             ];
         }
 
         // Process Task Items
         foreach ($tasks as $item) {
-            $description = $item->description;
-            $task = $taskRecords->get($description);
-            $jobType = $task ? $jobTypes->get($task->description) : null;
 
-            if (!is_null($jobType)) {
-                $jobTypeId = $jobType->id;
+            $jt = JobType::where('name', $item->name)->first();
+
+            if (is_null($jt)) {
+                $job_rate = 0;
+                $repairman_rate = 0;
             } else {
-                $jobTypeId = null;
+                $job_rate = $jt->rate_charged;
+                $repairman_rate = $jt->sub_rate;
             }
 
-
-            $jobRate = $jobType ? $jobType->rate_charged : null;
-            $repairmanRate = $jobType && $repairmanRates->has($jobType->id) ? $repairmanRates[$jobType->id]->rate_paid : null;
-
             $items[] = [
-                'jobTypeId' => $jobTypeId,
-                'description' => $description,
-                'price' => $item->price,
+                'jobTypeId' => $item->id,
+                'description' => $item->name,
+                'price' => $item->rate_charged,
                 'product_number' => null,
-                'repairmanRate' => $repairmanRate,
-                'jobRate' => $jobRate,
+                'repairmanRate' => $repairman_rate,
+                'jobRate' => $job_rate,
                 'type' => 'taskItem'
             ];
         }
@@ -870,9 +839,11 @@ class TaskController extends Controller
 
         if ($request->status === 'approved') {
             Task::sendApprovalMessage($task, $customer, Auth::user()->phone_number, $address);
-        }
-
-        self::addTaskStatus($task, $request->status);
+        } else if ($request->status === 'completed') {
+            $user = User::find($request->assigned);
+            Task::sendCompletedMessage($task, $customer, '14807034902', $address, $user->name);
+        } else
+            self::addTaskStatus($task, $request->status);
     }
 
     public function changeType(Request $request)
@@ -947,44 +918,23 @@ class TaskController extends Controller
         }
     }
 
-    private function assignServicemanFromReconcile()
-    {
-//        "id" => 602
-//      "customer_id" => 302
-//      "assigned" => "Shawn"
-//      "created_at" => "2024-05-09T10:14:35.000000Z"
-//      "description" => "Replace skimmer baskets"
-//      "status" => "created"
-//      "sent" => 1
-//      "type" => "part"
-//      "price" => 1000
-//      "address_id" => 303
-//      "name" => "Jeremiah"
-//      "first_name" => "Mike"
-//      "last_name" => "Sherman"
-//      "phone_number" => "14807034902"
-    }
-
     public function assignServiceman(Request $request)
     {
-//        dd($request);
-//        is_null();
-
 
         $user = User::find($request->assigned);
-//        dd($user[0]->id);
-
-
         $customer = Customer::find($request->customer_id);
-
         is_null($request->task_id) ? $taskId = $request['id'] : $taskId = $request->task_id;
-
-//        dd($taskId);
-
         $task = Task::find($taskId);
-
         $task->assigned = $request->assigned;
         $task->save();
+
+        $ep = EmployeePayment::where('task_id', $request->task_id)->first();
+        if (is_null($ep)){
+            EmployeePayment::addRepairEntry($request->serviceman, $task->id, $request->repairRate);
+        } else {
+            $ep->serviceman_id = $request->assigned;
+        }
+
         if (Auth::user()->getAuthIdentifier() !== $user->id) {
             Notification::route('vonage', $user->phone_number)->notify(new GenericNotification(
                 "You were assigned a Task::\n$customer->first_name $customer->last_name\n$request->description\n" . env('APP_URL') . "/customers/show/" . $task->address_id
@@ -1019,12 +969,38 @@ class TaskController extends Controller
         }
 
         $task->delete();
+        $ep = EmployeePayment::where('task_id', $task->id)->first();
+        if (!is_null($ep)) {
+            $ep->delete();
+        }
 
         $taskStatuses = TaskStatus::where('task_id', $request->task_id)->get();
 
         foreach ($taskStatuses as $ts) {
             $ts->delete();
         }
+
+    }
+
+    public function addJobType(Request $request)
+    {
+
+        if ($request->addJobType) {
+            $jt = JobType::where('name', $request->item['description'])->first();
+            if (is_null($jt)) {
+                $jt = new JobType([
+                    'name' => $request->item['description'],
+                    'rate_charged' => $request->item['price']
+                ]);
+                $jt->save();
+            }
+        } else {
+            $jt = JobType::where('name', $request->item['description'])->first();
+            if (!is_null($jt)) {
+                $jt->delete();
+            }
+        }
+
 
     }
 
@@ -1041,10 +1017,20 @@ class TaskController extends Controller
 //        dd($request);
 
         is_null($request->task_id) ? $taskId = $request->id : $taskId = $request->task_id;
-
         $task = Task::find($taskId);
         $task->price = $request->price;
         $task->save();
+
+        $jt = JobType::where('name', $request->description)->first();
+
+        if (is_null($jt)) {
+            $jt = new JobType([
+               'name' => $request->description,
+               'rate_charged' => $request->price
+            ]);
+            $jt->save();
+        }
+
     }
 
     public function pickedUp(Request $request)
@@ -1154,10 +1140,6 @@ class TaskController extends Controller
 
 //        dd('In Store Method');
 
-        if (is_null($request->repairRate)) {
-            $request->repairRate = 0;
-        }
-
         if (!is_null($request->description)) {
             DB::beginTransaction();
             try {
@@ -1265,24 +1247,49 @@ class TaskController extends Controller
      */
     private function handleRepairTask(Request $request)
     {
-        $status = $request->verbalApproval ? 'approved' : 'created';
 
-        $task = Task::create([
-            'assigned' => $request->serviceman,
-            'customer_id' => $request->customer_id,
-            'description' => $request->description,
-            'scp_id' => $request->product_number,
-            'status' => $status,
-            'type' => 'repair',
-            'price' => $request->jobRate,
-            'sent' => false,
-            'address_id' => $request->address_id,
-            'been_paid' => false,
-            'count' => 1,
-            'quantity' => $request->quantity,
-            'rate' => $request->repairRate
-        ]);
+        //        if new
 
+//        if existing
+        if (
+            $request->jobRate &&
+            $request->repairRate > -1
+        ) {
+            $task = Task::create([
+                'assigned' => $request->serviceman,
+                'customer_id' => $request->customer_id,
+                'description' => $request->description,
+                'scp_id' => $request->product_number,
+                'status' => 'created',
+                'type' => 'repair',
+                'price' => $request->jobRate,
+                'sent' => false,
+                'address_id' => $request->address_id,
+                'been_paid' => false,
+                'count' => 1,
+                'quantity' => $request->quantity,
+                'rate' => $request->repairRate
+            ]);
+
+            EmployeePayment::addRepairEntry($request->serviceman, $task->id, $request->repairRate);
+
+        } else {
+            $task = Task::create([
+                'assigned' => $request->serviceman,
+                'customer_id' => $request->customer_id,
+                'description' => $request->description,
+                'scp_id' => $request->product_number,
+                'status' => 'created',
+                'type' => 'repair',
+                'price' => 0,
+                'sent' => false,
+                'address_id' => $request->address_id,
+                'been_paid' => false,
+                'count' => 1,
+                'quantity' => $request->quantity,
+                'rate' => 0
+            ]);
+        }
         $tasks = Task::where('address_id', $request->address_id)
             ->orderBy('count', 'desc')
             ->get();
@@ -1296,26 +1303,21 @@ class TaskController extends Controller
             'status_date' => now()
         ]);
 
-        if (!is_null($request->jobRate) && $request->jobRate > 0) {
-            $customer = Customer::find($request->customer_id);
-            $address = Address::find($request->address_id);
-            if ($request->verbalApproval) {
-                TaskStatus::create([
-                    'task_id' => $task->id,
-                    'status' => 'approved',
-                    'status_creator' => Auth::id(),
-                    'status_date' => now()
-                ]);
-                $serviceman = User::find($request->serviceman);
-                $phoneNumber = $serviceman->phone_number;
-                Task::sendApprovalMessage($task, $customer, $phoneNumber, $address);
-            } else {
-                $message = "Please Reply\n==================\n\nKPS Pools needs to inform you about a necessary repair for your pool:\n\n" . $request->description . " for $" . $request->price . "\n\nWould you like for us to complete this for you?\n\nY$task->count for Yes\nN$task->count for No\n\nYou may also reach out to Shawn at 480.703.4902 or 480.622.6441. If you have any questions";
-                Notification::route('vonage', $customer->phone_number)->notify(new TaskApprovalNotification($message));
-            }
+        $customer = Customer::find($request->customer_id);
+
+        if ($request->jobRate &&
+            $request->repairRate > -1) {
+            $message = "Please Reply\n==================\n\nKPS Pools needs to inform you about a necessary repair for your pool:\n\n" . $request->description . " for $" . $request->jobRate . "\n\nWould you like for us to complete this for you?\n\nY$task->count for Yes\nN$task->count for No\n\nYou may also reach out to Shawn at 480.703.4902 or 480.622.6441. If you have any questions";
+            Notification::route('vonage', $customer->phone_number)->notify(new TaskApprovalNotification($message));
             $task->sent = true;
-            $task->save();
+        } else {
+            $message = "New repair type has been created\nLink:: " . env('APP_URL') . "/tasksNeedsApproval"
+                . "\nName:: $customer->first_name $customer->last_name\nDescription:: $task->description\n";
+            Notification::route('vonage', '14807034902')->notify(new GenericNotification($message));
         }
+
+        $task->save();
+
     }
 
     private function updateJobRates(Request $request)
@@ -1331,10 +1333,7 @@ class TaskController extends Controller
             }
 
             if ($request->repairRate !== null) {
-                UserJobRate::updateOrCreate(
-                    ['user_id' => $request->serviceman, 'job_type_id' => $jobType->id],
-                    ['rate_paid' => $request->repairRate]
-                );
+                $jobType->sub_rate = $request->repairRate;
             }
         }
     }
@@ -1345,10 +1344,10 @@ class TaskController extends Controller
     private function updateServicemanRates(Request $request)
     {
         if ($request->updateServicemanRepairRate && $request->repairRate !== null) {
-            UserJobRate::updateOrCreate(
-                ['user_id' => $request->serviceman, 'job_type_id' => $request->selectedTask['jobTypeId']],
-                ['rate_paid' => $request->repairRate]
-            );
+
+            $jt = JobType::find($request->selectedTask['jobTypeId']);
+            $jt->sub_rate = $request->repairRate;
+            $jt->save();
         }
     }
 

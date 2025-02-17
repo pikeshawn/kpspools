@@ -13,5 +13,11 @@ class UserJobRate extends Model
     protected $guarded = [];
 
 
+    public static function getRate($servicemanId, $jobTypeId)
+    {
+        $ujr = UserJobRate::where('serviceman_id', $servicemanId)
+        ->where('job_type_id', $jobTypeId)->first();
+        return $ujr->rate;
+    }
 
 }
