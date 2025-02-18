@@ -61,8 +61,8 @@
                     <div class="mb-4 w-1/2">
                         <label class="block text-sm font-medium text-gray-700">Quantity</label>
                         <input
-                            @change="updatePrice()"
-                            v-model="quantity"
+                            @input="updatePrice()"
+                            v-model="form.quantity"
                             type="number"
                             min="1"
                             placeholder="Enter quantity..."
@@ -73,6 +73,7 @@
                     <div class="mb-4 w-1/2">
                         <label class="block text-sm font-medium text-gray-700">Time To Complete</label>
                         <select v-model="form.completionTime"
+                                @change="updatePrice()"
                                 class="mt-1 w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-400 focus:outline-none">
                             <option value="" disabled>Estimated Time...</option>
                             <option v-for="time in timeIntervals" :key="time.id" :value="time.id">
@@ -82,12 +83,12 @@
                     </div>
                 </div>
 
-<!--                &lt;!&ndash; Update Serviceman Repair Rate Checkbox &ndash;&gt;-->
-<!--                <div class="mb-4 flex items-center">-->
-<!--                    <input v-model="form.verbalApproval" type="checkbox"-->
-<!--                           class="h-5 w-5 text-blue-600 border-gray-300 rounded">-->
-<!--                    <label class="ml-2 text-sm text-gray-700">Verbal Approval</label>-->
-<!--                </div>-->
+                <!--                &lt;!&ndash; Update Serviceman Repair Rate Checkbox &ndash;&gt;-->
+                <!--                <div class="mb-4 flex items-center">-->
+                <!--                    <input v-model="form.verbalApproval" type="checkbox"-->
+                <!--                           class="h-5 w-5 text-blue-600 border-gray-300 rounded">-->
+                <!--                    <label class="ml-2 text-sm text-gray-700">Verbal Approval</label>-->
+                <!--                </div>-->
 
                 <!-- To-Do Checkbox -->
                 <div class="mb-4 flex items-center">
@@ -95,13 +96,13 @@
                     <label class="ml-2 text-sm text-gray-700">To-Do</label>
                 </div>
 
-<!--                &lt;!&ndash; To-Do Checkbox &ndash;&gt;-->
-<!--                <div class="mb-4 flex items-center">-->
-<!--                    <input v-model="form.separateTrip"-->
-<!--                           @change="add()"-->
-<!--                           type="checkbox" class="h-5 w-5 text-blue-600 border-gray-300 rounded">-->
-<!--                    <label class="ml-2 text-sm text-gray-700">Separate Trip</label>-->
-<!--                </div>-->
+                <!--                &lt;!&ndash; To-Do Checkbox &ndash;&gt;-->
+                <!--                <div class="mb-4 flex items-center">-->
+                <!--                    <input v-model="form.separateTrip"-->
+                <!--                           @change="add()"-->
+                <!--                           type="checkbox" class="h-5 w-5 text-blue-600 border-gray-300 rounded">-->
+                <!--                    <label class="ml-2 text-sm text-gray-700">Separate Trip</label>-->
+                <!--                </div>-->
 
                 <!-- Assign to Service Guy Dropdown -->
                 <div class="mb-4">
@@ -344,12 +345,6 @@ export default {
         this.csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
     },
 
-    watch: {
-        quantity() {
-            this.adjustPrice();
-        }
-    },
-
     methods: {
         applyPercentage(percent) {
             if (this.form.repairRate || this.form.selectedTask.price) {
@@ -382,19 +377,7 @@ export default {
             this.form.address_id = this.addressId
             this.form.customer_id = this.customerId
             this.form.assigned = this.user.id
-            this.form.quantity = this.quantity
             Inertia.post('/task/store', this.form)
-        },
-
-        adjustPrice() {
-
-            // debugger;
-
-            if (this.form.selectedTask) {
-                this.form.jobRate = this.form.selectedTask.price * this.quantity
-                this.form.jobRate = this.form.jobRate.toFixed(2);
-            }
-
         },
 
         getTasks(name) {
@@ -436,17 +419,14 @@ export default {
 
         },
 
-        updatePrice(){
-
-            if (this.form.selectedTask) {
-                if (this.form.selectedTask.type === 'scpItem') {
-                    this.form.repairRate = this.techRate()
-                    this.form.jobRate = this.setJobRate(this.form.selectedTask.price, this.form.quantity)
-                } else {
-                    this.form.jobRate = this.form.selectedTask.jobRate * this.quantity
-                }
+        updatePrice() {
+            if (this.form.source === 'scpItem') {
+                this.form.repairRate = this.techRate()
+                this.form.jobRate = this.setJobRate(this.form.selectedTask.price, this.form.quantity)
+            } else if (this.form.source === 'taskItem') {
+                this.form.repairRate = this.techRate()
+                this.form.jobRate = this.form.selectedTask.jobRate * this.form.quantity
             }
-
         },
 
         setTask(task) {
@@ -457,7 +437,7 @@ export default {
                 this.form.price = task.price
                 this.form.repairRate = this.techRate()
                 this.form.jobRate = this.setJobRate(task.price, this.form.quantity)
-                this.form.source = task.source
+                this.form.source = task.type
                 this.form.taskItems = null
                 this.form.jobRate = this.form.jobRate.toFixed(2);
             } else {
@@ -467,24 +447,33 @@ export default {
                 this.form.price = null
                 this.form.repairRate = task.repairmanRate
                 this.form.jobRate = task.price
-                this.form.source = task.source
+                this.form.source = task.type
                 this.form.taskItems = null
             }
 
         },
 
-        getSubRate(){
-          if (this.form.selectedTask && this.form.selectedTask.type) {
-              if (this.form.selectedTask.type === 'scpItem') {
-                  return this.techRate();
-              } else {
-                  return this.form.repairRate
-              }
-          }
+        getSubRate() {
+            if (this.form.selectedTask && this.form.selectedTask.type) {
+                if (this.form.selectedTask.type === 'scpItem') {
+                    return this.techRate();
+                } else {
+                    return this.form.repairRate
+                }
+            }
         },
 
         setJobRate(price, quantity) {
             let cost = price * quantity
+
+
+
+
+
+
+
+
+
             if (this.form.separateTrip) {
                 return this.markUp(cost) + this.laborRate() + this.tripCharge;
             } else {

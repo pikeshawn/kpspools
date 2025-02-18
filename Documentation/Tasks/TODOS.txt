@@ -1,0 +1,99 @@
+Dugan
+    1. Blake created a repair for Mary Dugan
+    2. created with a name but not a drop down
+    3.
+
+
+
+todo - add quantity to tasks
+todo - add quantity to message to customer
+todo - jobRate not changing when time to complete changes
+
+- Logic
+    1. I type into a description field that will have a drop down if the item is in the database or nothing if the item
+        is new
+        - If item is in the drop down it will pull back one of two types
+            1. SCP Item
+                -
+                - json fields for each item
+                    - description : SUCTION CLEANER HOSE
+                      jobRate : null
+                      jobTypeId : null
+                      price : 9.81
+                      product_number : PSL-201-7001
+                      repairmanRate : null
+                      type : scpItem
+            2. Task Item
+                - json fields for each item
+                    - description : Filter clean
+                      jobRate : 120
+                      jobTypeId : 6
+                      price : 120
+                      product_number : null
+                      repairmanRate : 80
+                      type : taskItem
+        - else there is just the new description and nothing is pulled back from the database
+    2. Job Rate would use this formula
+        1. - {Total Price} = ({Cost of Parts} * {Markup}) + ({Tech Hourly Rate} * 3)
+            - {Cost of Parts} = price from the task item that was returned
+                - would also be times the quantity that is being attributed to it -> form.quantity
+            - {Markup} would use this table
+                -  if (price <= 50) {
+                      return price * 2.08
+                  } else if (price <= 100) {
+                      return price * 1.83
+                  } else if (price <= 500) {
+                      return price * 1.73
+                  } else if (price <= 1000) {
+                      return price * 1.53
+                  } else if (price > 1000) {
+                      return price * 1.43
+                  }
+            - {Tech Hourly Rate} would use this table
+                - price * the multiplier where the name is the estimated time duration of the repair ->
+                    [
+                        {
+                            "id": 0,
+                            "multiplier": .25,
+                            "name": "less than 15 min",
+                        },
+                        {
+                            "id": 1,
+                            "multiplier": .5,
+                            "name": "15 to 30 min",
+                        },
+                        {
+                            "id": 2,
+                            "multiplier": 1,
+                            "name": "30 to 60 min",
+                        },
+                        {
+                            "id": 3,
+                            "multiplier": 2,
+                            "name": "1 - 2 hours",
+                        },
+                        {
+                            "id": 4,
+                            "multiplier": 3,
+                            "name": "2 - 3 hrs",
+                        },
+                        {
+                            "id": 5,
+                            "multiplier": 4,
+                            "name": "3 - 4 hrs",
+                        },
+                        {
+                            "id": 6,
+                            "multiplier": 5,
+                            "name": "4 - 5 hrs",
+                        },
+                        {
+                            "id": 7,
+                            "multiplier": 6,
+                            "name": "5 to 6 hrs",
+                        }
+                    ]
+                    - I need the hourly rate to tied to a label to display to my guys
+            - I have an input for quantity and a drop down for time duration
+            - I need to be able to change the values for quanity and time to complete to update the prices for my guys and
+                and the job rate accurately
