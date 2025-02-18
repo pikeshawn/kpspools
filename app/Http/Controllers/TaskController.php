@@ -1315,7 +1315,7 @@ class TaskController extends Controller
 
         if ($request->jobRate &&
             $request->repairRate > -1) {
-            $message = "Please Reply\n==================\n\nKPS Pools needs to inform you about a necessary repair for your pool:\n\n" . $request->description . " for $" . $request->jobRate . "\n\nWould you like for us to complete this for you?\n\nY$task->count for Yes\nN$task->count for No\n\nYou may also reach out to Shawn at 480.703.4902 or 480.622.6441. If you have any questions";
+            $message = "Please Reply\n==================\n\nKPS Pools needs to inform you about a necessary repair for your pool:\n\n" . $request->description . " Quantity: " . $request->quantity . " for $" . $request->jobRate . "\n\nWould you like for us to complete this for you?\n\nY$task->count for Yes\nN$task->count for No\n\nYou may also reach out to Shawn at 480.703.4902 or 480.622.6441. If you have any questions";
             Notification::route('vonage', $customer->phone_number)->notify(new TaskApprovalNotification($message));
             $task->sent = true;
         } else {

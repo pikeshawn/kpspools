@@ -5,7 +5,7 @@ Dugan
 
 
 
-todo - add quantity to tasks
+todo - add quantity to task view
 todo - add quantity to message to customer
 todo - jobRate not changing when time to complete changes
 
