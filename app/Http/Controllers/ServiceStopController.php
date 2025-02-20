@@ -210,6 +210,8 @@ class ServiceStopController extends Controller
             self::sendMissedServiceNotification($serviceStop, Auth::user(), $cust);
         } else {
             $serviceStop = self::createServiceStop($request, $address, $phLevel, $chlorineLevel, $start, $end);
+            $serviceStop->phosphateLevel = $request->phosphateLevel;
+//            dd($serviceStop);
             self::sendNotification($request, $cust, $serviceStop, $address);
         }
 
@@ -339,6 +341,9 @@ class ServiceStopController extends Controller
 
     private function sendNotification($request, $cust, $serviceStop, $address)
     {
+
+//        dd($serviceStop);
+
         if ($request->service_type == 'Service Stop') {
             if ($cust->phone_number) {
 //                $cust->notify(new ServiceStopCompleted($serviceStop, $cust, $address));

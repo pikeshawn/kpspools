@@ -80,7 +80,6 @@ class ServiceStopCompleted extends Notification
     public function toVonage($notifiable): VonageMessage
     {
 
-
         $vacuum = $this->correctValue($this->service_stop->vacuum);
         $brush = $this->correctValue($this->service_stop->brush);
         $empty_baskets = $this->correctValue($this->service_stop->empty_baskets);
@@ -113,6 +112,10 @@ class ServiceStopCompleted extends Notification
 
             if ($this->service_stop->salt_level !== 'not checked') {
                 $text = $text . "\nsalt level: " . $this->service_stop->salt_level . "\n";
+            }
+
+            if (!is_null($this->service_stop->phosphateLevel)) {
+                $text = $text . "\nPhosphate Level:    " . $this->service_stop->phosphateLevel . " ppb\n";
             }
 
             if ($this->isAdmin) {
