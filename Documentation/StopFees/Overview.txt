@@ -60,3 +60,82 @@ Functionality
         1. waives the service call fee
 
 
+Scenarios - Service Person - reports an issue they cant resolve
+    - Customer question
+        - are the techs qualified to diagnose?
+        - why does it cost me 80$ for untrained techs?
+        - couldnt I get a one man show that could just diagnose without charging an extra trip?
+    - I have to say -
+        - My guy has reported an issue and I need to take a look. We charge $80 for the trip but it will be applied to
+            any work that is approved.
+                - Questions
+                    - what if the work that needs to be done is less than $80 dollars?
+                    - what if the work that needs to be done is due to some mistake the service tech made?
+                    - what if the work that needs to be done is within the scope of what the service tech should know?
+                    - I dont want to pay for incompetence!?
+        - I need to report to the customer there was an issue
+        - I need to notify them of the trip charge
+        - I need approval of them to look at it and approval of the trip charge
+    1. trip charge message was sent
+    2. trip charge message was approved
+    3. tasks table
+        - trip_charge_message_sent
+        - trip_charge_approved
+        - trip_completed
+    4. when tasks are tallied at the end of the month
+        - for any tasks that are not completed but have
+            - trip_charge_message_sent = true
+            - trip_charge_approved = true
+            - trip_completed = true
+        - charge $80
+        - what happens when more than one task applies to more than one trip?
+
+- need to create a link to an updated service agreement
+    1. need a text message for advanced warning ->
+        2. create a console script
+            - logic
+                - go through each customer in customers table joining addresses table where active = true and sold <> true
+                    - select customer->first_name, customer->last_name, customer->phone_number
+                    - link generation
+                        - generate 8 character alphanumberic code
+                            - add customer_id, code to table one_time_pass_codes table
+                                - customer_id = $customer->id
+                                - one_time_code = alphanumberic code
+                        - link would be => env('APP_URL')/terms_of_service/service_fee/{one_time_code}
+                    - message = Hi $customer->first_name $customer->last_name, we’ve updated our Service Call policy to ensure efficient and expert troubleshooting. Going forward, we charge an $80 Service Call Fee for onsite diagnostics and consultation. This fee is applied toward any approved repairs.
+                                           Please review and accept our updated terms here: $link
+                                           Let us know if you have any questions!
+                    - text message is sent
+                      - Notification::route('vonage', '14806226441')->notify(new GenericNotification(
+                        $message ));
+                - customer receives text
+                - customer hits link
+                - customer goes to page
+                    - when page is hit the customer in the CustomerController
+                        - method name -> serviceFee
+                        - take in the $code parameter
+                        - use it to pull the user_id from the one_time_codes table where
+                            one_time_code = $code
+                        - return an Inertia Render with 'code' => $code to TermsOfService/ServiceFee page
+                - Service Fee page
+                    - displays the new terms of service page
+                    - has button on page to accept the terms
+                    - accepting the terms will send the yes to the backend
+                        - CustomerController
+                            - name - accept
+                                - have a table for terms_of_service
+                                    - columns
+                                        - name
+                                        - content
+                                - have a terms entry
+                                - have another table customer_terms_acceptance
+                                    - tos_id
+                                    - customer_id
+                                    - accepting is true
+                                - get routed to a new page
+                                    - acknowledges the acceptance
+
+
+    Jobs table ->
+        1. Job can have more than one task
+

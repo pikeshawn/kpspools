@@ -8,6 +8,7 @@ use App\Console\Commands\RunOneTimeScript;
 use App\Console\Commands\HolidayBilling;
 use App\Console\Commands\PaymentReminder;
 use App\Console\Commands\PaymentHistory;
+use App\Console\Commands\SendServiceFeeNotification;
 use App\Console\Commands\DetermineFilterCleans;
 
 class Kernel extends ConsoleKernel
@@ -24,6 +25,7 @@ class Kernel extends ConsoleKernel
         PaymentHistory::class,
         HolidayBilling::class,
         DetermineFilterCleans::class,
+        SendServiceFeeNotification::class,
     ];
 
     /**

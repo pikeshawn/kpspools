@@ -730,6 +730,11 @@ class TaskController extends Controller
         $task->save();
     }
 
+    public function sendTripMessage(Request $request)
+    {
+        dd($request);
+    }
+
     public function getUserRate(Request $request)
     {
         // Validate the request parameters

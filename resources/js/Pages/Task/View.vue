@@ -221,14 +221,20 @@
 
 
 
-                    <div
-                        v-if="task.status === 'created'"
-                        class="mt-4">
-                        <label class="block font-medium text-green-900" v-if="task.sent === 1">Sent</label>
-                        <button @click="requestApproval(task)"
-                                class="inline-block bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-700">
-                            Send For Approval
-                        </button>
+                    <div v-if="task.status === 'created'" class="flex justify-between">
+                        <div class="mt-4 m-1">
+                            <label class="block font-medium text-green-900" v-if="task.sent === 1">Sent</label>
+                            <button @click="requestApproval(task)"
+                                    class="inline-block bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-700">
+                                Send For Approval
+                            </button>
+                        </div>
+                        <div class="mt-4 m-1">
+                            <button @click="sendTripMessage(task)"
+                                    class="inline-block bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-700">
+                                Send Trip Message
+                            </button>
+                        </div>
                     </div>
 
                     <!-- Task Type -->
@@ -426,6 +432,9 @@ export default {
         },
         requestApproval(item) {
             Inertia.post('/task/requestApproval', item)
+        },
+        sendTripMessage(item) {
+            Inertia.post('/task/sendTripMessage', item)
         },
         addJobType(item, addDelete) {
             Inertia.post('/task/addJobType', {

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\TaskController;
+use App\Http\Controllers\TermsOfServiceController;
 use App\Http\Controllers\InitiateBidController;
 use App\Http\Controllers\ProfitController;
 use App\Http\Controllers\TestingController;
@@ -43,6 +44,13 @@ Route::get('/', function () {
         'phpVersion' => PHP_VERSION,
     ]);
 });
+
+Route::get('/terms_of_service/service_fee/{code}',
+    [TermsOfServiceController::class, 'serviceFee'])->name('serviceFee');
+
+Route::get('/terms_of_service/accept/{customerId}',
+    [TermsOfServiceController::class, 'accept'])->name('accept');
+
 
 
 Route::get('/checkout', function (Request $request) {
@@ -377,6 +385,10 @@ Route::middleware(['auth:sanctum', 'verified', 'serviceman'])->group(function ()
     Route::post('/task/changeType',
         [TaskController::class, 'changeType'])
         ->name('task.changeType');
+
+    Route::post('/task/sendTripMessage',
+        [TaskController::class, 'sendTripMessage'])
+        ->name('task.sendTripMessage');
 
     Route::post('/task/changeSubRate',
         [TaskController::class, 'changeSubRate'])
