@@ -229,12 +229,12 @@
                                 Send For Approval
                             </button>
                         </div>
-                        <div class="mt-4 m-1">
-                            <button @click="sendTripMessage(task)"
-                                    class="inline-block bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-700">
-                                Send Trip Message
-                            </button>
-                        </div>
+<!--                        <div class="mt-4 m-1">-->
+<!--                            <button @click="sendTripMessage(task)"-->
+<!--                                    class="inline-block bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-700">-->
+<!--                                Send Trip Message-->
+<!--                            </button>-->
+<!--                        </div>-->
                     </div>
 
                     <!-- Task Type -->
