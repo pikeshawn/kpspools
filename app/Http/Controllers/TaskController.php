@@ -826,7 +826,6 @@ class TaskController extends Controller
         return $items;
     }
 
-
     public function changeStatus(Request $request)
     {
 //        dd($request);

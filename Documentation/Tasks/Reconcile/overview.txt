@@ -1,0 +1,8 @@
+todo - make adjustment to when a whole task is pulled down that the time is greyed out for the
+    - repairman estimated time
+
+I need to reconcile the times so that what is stated in the database accurately reflects the
+service and repair times
+
+1. pull all repairs for a given tech
+2. need to match them with employee payments
