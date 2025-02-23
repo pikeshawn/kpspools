@@ -841,11 +841,12 @@ class TaskController extends Controller
 
         $customer = Customer::find($request->customer_id);
         $address = Address::find($request->address_id);
+        $user = User::find($request->assigned);
 
         if ($request->status === 'approved') {
-            Task::sendApprovalMessage($task, $customer, Auth::user()->phone_number, $address);
+            Task::sendApprovalMessage($task, $customer, $user->phone_number, $address);
         } else if ($request->status === 'completed') {
-            $user = User::find($request->assigned);
+            EmployeePayment::addRepairEntry($request->assigned, $task->id, $request->sub_rate);
             Task::sendCompletedMessage($task, $customer, '14807034902', $address, $user->name);
         } else
             self::addTaskStatus($task, $request->status);
@@ -942,7 +943,7 @@ class TaskController extends Controller
         $task->save();
 
         $ep = EmployeePayment::where('task_id', $request->task_id)->first();
-        if (is_null($ep)){
+        if (is_null($ep)) {
             EmployeePayment::addRepairEntry($request->serviceman, $task->id, $request->repairRate);
         } else {
             $ep->serviceman_id = $request->assigned;
@@ -1038,8 +1039,8 @@ class TaskController extends Controller
 
         if (is_null($jt)) {
             $jt = new JobType([
-               'name' => $request->description,
-               'rate_charged' => $request->price
+                'name' => $request->description,
+                'rate_charged' => $request->price
             ]);
             $jt->save();
         }
@@ -1284,7 +1285,7 @@ class TaskController extends Controller
                 'rate' => $request->repairRate
             ]);
 
-            EmployeePayment::addRepairEntry($request->serviceman, $task->id, $request->repairRate);
+//            EmployeePayment::addRepairEntry($request->serviceman, $task->id, $request->repairRate);
 
         } else {
             $task = Task::create([

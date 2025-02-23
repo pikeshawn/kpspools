@@ -465,15 +465,6 @@ export default {
 
         setJobRate(price, quantity) {
             let cost = price * quantity
-
-
-
-
-
-
-
-
-
             if (this.form.separateTrip) {
                 return this.markUp(cost) + this.laborRate() + this.tripCharge;
             } else {

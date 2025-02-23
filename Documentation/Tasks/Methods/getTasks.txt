@@ -50,7 +50,6 @@ Automation System	    4 - 8 hrs	    $600 - $1,200+
 
 
 
-
 - once the price is pulled back then I need to determine
     - Cost of Parts
         - from SCP Price

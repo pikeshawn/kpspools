@@ -38,13 +38,18 @@ class EmployeePayment extends Model
 
     public static function addRepairEntry($servicemanId, $taskId, $rate)
     {
-        $ep = new EmployeePayment([
-           'serviceman_id' => $servicemanId,
-           'task_id' => $taskId,
-           'rate' => $rate,
-           'status' => 'pending',
-        ]);
 
-        $ep->save();
+        $entry = EmployeePayment::where('task_id', $taskId)->get();
+
+        if ($entry->isEmpty()) {
+            $ep = new EmployeePayment([
+                'serviceman_id' => $servicemanId,
+                'task_id' => $taskId,
+                'rate' => $rate,
+                'status' => 'pending',
+            ]);
+            $ep->save();
+        }
+
     }
 }
