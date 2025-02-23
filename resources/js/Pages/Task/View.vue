@@ -201,6 +201,18 @@
                                class="w-full p-2 border rounded-lg focus:ring focus:ring-blue-300">
                     </div>
 
+<!--                    <div class="mt-3">-->
+<!--                        <label class="block font-medium">Cost</label>-->
+<!--                        <input type="text" v-model="cost" @blur="changeProductNumber(task)"-->
+<!--                               class="w-full p-2 border rounded-lg focus:ring focus:ring-blue-300">-->
+<!--                        <button @click="updatePrice()"-->
+<!--                                class="inline-block bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-700"-->
+<!--                                style="margin-top: 1rem"-->
+<!--                        >-->
+<!--                            <label class="block text-sm font-medium leading-6 text-white">Update Price</label>-->
+<!--                        </button>-->
+<!--                    </div>-->
+
                     <!-- Assigned -->
                     <div class="mt-3">
                         <label class="block font-medium">Assigned</label>
@@ -390,6 +402,7 @@ export default {
             users: [],
             tasks: [],
             selectedCustomer: "",
+            cost: null,
             sentForApproval: false,
             sentForApprovalBoth: true,
             addToJobType: false,
@@ -451,6 +464,10 @@ export default {
         doTheDeletion(item) {
             Inertia.post('/task/deleteItem', item)
             this.getTasksFromSelectedCriteria()
+        },
+
+        updatePrice() {
+            let jobRate = 100;
         },
 
         getCustomer(name) {

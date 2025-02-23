@@ -943,7 +943,7 @@ class TaskController extends Controller
 
         $ep = EmployeePayment::where('task_id', $request->task_id)->first();
         if (is_null($ep)) {
-            EmployeePayment::addRepairEntry($request->serviceman, $task->id, $request->repairRate);
+            EmployeePayment::addRepairEntry($request->assigned, $task->id, $request->sub_rate);
         } else {
             $ep->serviceman_id = $request->assigned;
         }
