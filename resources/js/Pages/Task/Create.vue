@@ -27,7 +27,7 @@
                 <div v-if="!form.toDo" class="flex justify-between items-center mb-3">
                     <label class="block text-sm font-medium text-gray-700">Repair Rate: ${{ getSubRate() }}</label>
                     <div class="flex justify-end">
-                        <button @click="form.description = ''; form.taskItems = '';"
+                        <button @click="form.description = ''; form.taskItems = ''; this.form.selectedTask = null"
                                 style="margin-bottom: 1rem"
                                 class="px-4 py-2 bg-red-100 text-gray-800 rounded-lg hover:bg-gray-400 transition">
                             Clear Description
@@ -73,6 +73,7 @@
                     <div class="mb-4 w-1/2">
                         <label class="block text-sm font-medium text-gray-700">Time To Complete</label>
                         <select v-model="form.completionTime"
+                                :disabled="this.form.selectedTask && this.form.selectedTask.type === 'taskItem'"
                                 @change="updatePrice()"
                                 class="mt-1 w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-400 focus:outline-none">
                             <option value="" disabled>Estimated Time...</option>
