@@ -23,16 +23,23 @@ class EmployeePayment extends Model
             $bucketRate = 0;
         }
 
-        // Insert record into employee_payments table
-        EmployeePayment::create([
+        $existingPayment = EmployeePayment::where([
             'serviceman_id' => $user->id,
             'service_stop_id' => $serviceStop->id,
-            'paycheck_id' => null,
-            'task_id' => null,
-            'rate' => $user->service_rate, // Fetching rate from Users table
-            'bucket_rate' => $bucketRate, // Fetching rate from Users table
-            'status' => 'pending'
-        ]);
+        ])->first();
+
+        if (!$existingPayment) {
+            // Insert record into employee_payments table
+            EmployeePayment::create([
+                'serviceman_id' => $user->id,
+                'service_stop_id' => $serviceStop->id,
+                'paycheck_id' => null,
+                'task_id' => null,
+                'rate' => $user->service_rate, // Fetching rate from Users table
+                'bucket_rate' => $bucketRate, // Fetching rate from Users table
+                'status' => 'pending'
+            ]);
+        }
 
     }
 
