@@ -72,7 +72,7 @@
                                                 </h3>
                                                 -----------------------------------
                                             </div>
-                                            <div class="py-1">{{ item.description }}</div>
+                                            <div class="py-1">{{ item.quantity }} - {{ item.description }}</div>
                                             -----------------------------------
                                             <Switch
                                                 @click="emitEnabled(item)"

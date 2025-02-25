@@ -73,6 +73,7 @@ class Task extends Model
 
             $cust = [];
             $cust['customer_id'] = $customer->id;
+            $cust['quantity'] = $approved->quantity;
             $cust['task_id'] = $approved->id;
             $cust['first_name'] = $customer->first_name;
             $cust['last_name'] = $customer->last_name;
