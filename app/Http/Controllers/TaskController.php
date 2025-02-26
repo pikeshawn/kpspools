@@ -767,13 +767,14 @@ class TaskController extends Controller
     {
         // Fetch SCP Invoice Items matching the description
         $scpItems = ScpInvoiceItem::select([
+            'model_num',
             'description',
             'cost',
             DB::raw('MAX(created_at) as latest_created_at'),
             'product_number'
         ])
             ->whereRaw("LOWER(description) LIKE LOWER(?)", ["%{$request->name}%"])
-            ->groupBy('description', 'cost', 'product_number')
+            ->groupBy('description', 'cost', 'product_number', 'model_num')
             ->orderBy('latest_created_at', 'desc')
             ->get();
 
@@ -790,6 +791,7 @@ class TaskController extends Controller
         foreach ($scpItems as $item) {
             $items[] = [
                 'jobTypeId' => null,
+                'modelNum' =>  $item->model_num,
                 'description' => $item->description,
                 'price' => $item->cost,
                 'product_number' => $item->product_number,

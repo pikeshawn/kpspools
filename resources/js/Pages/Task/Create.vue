@@ -44,6 +44,7 @@
                                               focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                             style="padding: 1rem; background: white"
                         >
+                            <p>{{ task.modelNum }}</p>
                             <p>{{ task.description }}</p>
                             <p>{{ task.product_number }}</p>
                             <p v-if="task.type === 'scpItem'">SCP Price {{ task.price }}</p>
