@@ -106,6 +106,8 @@ class ReportsController extends Controller
                 'address' => $address->address_line_1 . " " . $address->city . " " . $address->zip,
                 'planPrice' => $address->plan_price,
                 'totalStops' => $totalStops,
+                'active' => $address->active ? 'yes' : 'no',
+                'sold' => $address->sold ? 'yes' : 'no',
                 'serviceRate' => $serviceRate,
                 'revenue' => $income,
                 'chemicals' => $chemicals,

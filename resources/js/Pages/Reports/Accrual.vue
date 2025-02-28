@@ -4,13 +4,13 @@
     >
 
         <div class="max-w-4xl mx-auto p-6">
-            <h1 class="text-2xl font-bold mb-4">Summary Report</h1>
+            <h1 class="text-2xl font-bold mb-4">Accrual Report</h1>
 
             <div class="bg-white shadow-lg rounded-lg p-6 mb-6">
                 <div class="mb-4">
                     <label class="block font-semibold">Select Date Range</label>
-                    <input type="date" v-model="startDate" :disabled="selectedPeriod" class="border p-2 rounded w-full mt-2">
-                    <input type="date" v-model="endDate" :disabled="selectedPeriod" class="border p-2 rounded w-full mt-2">
+                    <input type="date" v-model="startDate" class="border p-2 rounded w-full mt-2">
+                    <input type="date" v-model="endDate" class="border p-2 rounded w-full mt-2">
                 </div>
 
                 <div class="mb-4">
@@ -24,10 +24,17 @@
                 </div>
 
                 <div class="flex justify-between">
-                    <button @click="fetchReport" class="bg-blue-500 text-white px-4 py-2 rounded">Submit</button>
+                    <div>
+                        <span v-if="loading" class="animate-spin border-4 border-t-transparent border-white rounded-full h-5 w-5 mr-2"></span>
+                        <button @click="fetchReport" class="bg-blue-500 text-white px-4 py-2 rounded">Submit</button>
+                    </div>
                     <button v-if="reports.length" @click="downloadCsv(this.reports)" class="bg-blue-500 text-white px-4 py-2 rounded">Download CSV</button>
                 </div>
+
+                <div v-if="loading" class="text-center text-gray-600">Processing report, please wait...</div>
+
             </div>
+
 
             <div v-if="reports.length" class="space-y-4">
                 <div v-for="report in reports" :key="report.id" class="bg-gray-100 p-4 rounded-lg shadow">
@@ -35,6 +42,8 @@
                         {{ report.name }}
                     </inertia-link>
                     <p>Address: {{ report.address }}</p>
+                    <p>Active: {{ report.active }}</p>
+                    <p>Sold: {{ report.sold }}</p>
                     <p>Plan Price: ${{ report.planPrice }}</p>
                     <p>Total Service Stops: {{ report.totalStops }}</p>
                     <p>Weekly Service Rate: ${{ report.serviceRate }}</p>
@@ -69,6 +78,7 @@ export default {
     data() {
         return {
             startDate: '',
+            loading: false,
             endDate: '',
             selectedPeriod: null,
             reports: [],
@@ -90,6 +100,7 @@ export default {
     },
     methods: {
         async fetchReport() {
+            this.loading = true;
             const payload = {
                 start_date: this.selectedPeriod ? null : this.startDate,
                 end_date: this.selectedPeriod ? null : this.endDate,
@@ -106,6 +117,7 @@ export default {
 
             if (response.ok) {
                 this.reports = await response.json();
+                this.loading = false;
             }
         },
         jsonToCsv(jsonData) {
