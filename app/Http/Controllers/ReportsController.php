@@ -83,6 +83,7 @@ class ReportsController extends Controller
 
             $serviceStops = ServiceStop::where('address_id', $addressId)
                 ->whereBetween('created_at', [$startDate, $endDate])
+                ->where('service_type', 'Service Stop')
                 ->get();
 
             $totalStops = $serviceStops->count();
@@ -98,13 +99,19 @@ class ReportsController extends Controller
             $labor = $totalStops * 20;
 
             $gross = round($income - ($chemicals + $labor), 2);
+            $grossPercentage = round(1-($chemicals+$labor)/$income, 2);
 
             $results[] = [
                 'name' => $customerName,
+                'address' => $address->address_line_1 . " " . $address->city . " " . $address->zip,
+                'planPrice' => $address->plan_price,
+                'totalStops' => $totalStops,
+                'serviceRate' => $serviceRate,
                 'revenue' => $income,
                 'chemicals' => $chemicals,
                 'labor' => $labor,
-                'gross' => $gross
+                'gross' => $gross,
+                'grossPercentage' => $grossPercentage
             ];
         }
 

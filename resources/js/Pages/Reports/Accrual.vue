@@ -34,10 +34,15 @@
                     <inertia-link :href="`/reports/customer/${report.id}`" class="block text-lg font-bold text-blue-600">
                         {{ report.name }}
                     </inertia-link>
+                    <p>Address: {{ report.address }}</p>
+                    <p>Plan Price: ${{ report.planPrice }}</p>
+                    <p>Total Service Stops: {{ report.totalStops }}</p>
+                    <p>Weekly Service Rate: ${{ report.serviceRate }}</p>
                     <p>Revenue: ${{ report.revenue }}</p>
                     <p>Chemicals: ${{ report.chemicals }}</p>
                     <p>Labor: ${{ report.labor }}</p>
-                    <p>Gross: {{ report.gross }}%</p>
+                    <p>Gross: ${{ report.gross }}</p>
+                    <p>Gross Percentage: {{ report.grossPercentage }}%</p>
                 </div>
             </div>
         </div>
