@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\TaskController;
+use App\Http\Controllers\ReportsController;
 use App\Http\Controllers\TermsOfServiceController;
 use App\Http\Controllers\InitiateBidController;
 use App\Http\Controllers\ProfitController;
@@ -137,6 +138,18 @@ Route::middleware(['auth:sanctum', 'verified', 'customer', 'subscribed'])->group
 });
 
 Route::middleware(['auth:sanctum', 'verified', 'serviceman'])->group(function () {
+
+    Route::get('/reports',
+        [ReportsController::class, 'index'])
+        ->name('reports.index');
+
+    Route::get('/reports/accrual',
+        [ReportsController::class, 'accrual'])
+        ->name('reports.accrual');
+
+    Route::post('/reports/accrual',
+        [ReportsController::class, 'accrualAll'])
+        ->name('reports.accrualAll');
 
     Route::get('/payment/history/{address}',
         [PaymentController::class, 'index'])

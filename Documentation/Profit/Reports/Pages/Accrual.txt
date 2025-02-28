@@ -1,0 +1,35 @@
+- Vue page
+- Tailwind
+- Summary Section
+- Items
+    - Time control to select start date
+    - Time control to select end date
+    - radio buttons for
+        - last month
+        - last year
+        - Q1
+        - Q2
+        - Q3
+        - Q4
+        - Winter
+            - November through March
+        - Summer
+            - April through October
+- radio buttons will supersede the time controls
+- submit button that send the parameters back to the server using a fetch request
+    - post
+    - returns json of this structure
+        - [
+              {
+                  "id": 1,
+                  "name": "joe smith",
+                  "revenue": 1000,
+                  "chemicals": 300,
+                  "labor": 80,
+                  "gross": 40
+              }
+          ]
+- the json response is displayed below in a clickable card per row
+    - using the inertia <Link> command
+        - get request
+        - goes to /reports/customer/ + id

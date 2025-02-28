@@ -1,0 +1,73 @@
+- I need a way to see how profitable each customer is and how profitable the entire business is
+- Each customer
+    - What did I bill for
+        - Service Stop
+        - Parts and repairs
+    - Costs
+        - Included
+            - Direct Costs
+                - Liquid Chlorine
+                - Tabs
+                - Acid
+                - Labor
+    - Accrual Gross Profit
+        - totals for all customers based upon a
+                - Inputs
+                    - start_date
+                    - end_date
+                    - period - options
+                        - 'Last Month'
+                        - 'Last Year'
+                        - Q1, Q2, Q3, Q4
+                        - 'Winter (Nov - Mar)'
+                        - 'Summer (Apr - Oct)'
+                    - period overrides the start_date and end_date
+                    - each date is converted into carbon dates to be used in the queries
+            - Get all unique address ids from service_stops ss table
+                - from all entries in timeframe
+                - ss.address_id
+            - cycle through each one in the array
+                - get the customer name only once
+                    - $a = Address::find($addressId)
+                    - $c = Customer::find($a->customer_id)
+                    - $c->first_name . " " . $c->last_name
+                - get all service stops from the service_stops table where ss.address_id = $addressId
+                - cycle through each service_stop
+                    - When work is performed then handle the accounting
+                    - When a given stop occurs
+                        - a stop is found in service_stops table
+                            - where ss.address_id = address.id
+                            - and ss.service_type = "Service Stop"
+                            - and created_at = last month
+                        - $income = $service_rate * number of stops
+                            - service rate = addresses.plan_price / 4
+                        - costs
+                            - $chemicals = sum of all costs =
+                                - Tabs = ss.tabs_whole_mine * 1.65
+                                - Liquid Chlorine = ss.liquid_chlorine * ((19.65 * 1.08) / 4)
+                                - Acid = ss.liquid_acid * ((27 * 1.08) / 4)
+                            - $labor = 20$ * number of stops
+                                - 20$ per stop
+                    - create sums for each
+                        - total income from all stops
+                        - total costs for all stops
+                    - generate a json object
+                    - [
+                        {
+                            "name": $customerName,
+                            "revenue": $income,
+                            "chemicals": $chemicals,
+                            "labor": $labor,
+                            "gross": $customerName
+                        }
+                    ]
+        - Each individual customer
+    - 5 stops
+        - accurral
+            - will reflect a stop that wont billed for until the vacation weeks so it will record extra income and extra expense
+        - cash
+            - show less than the accrural because I dont get the cash until the end of the year
+
+
+    - All active customers
+        - select * customers c join addresses a on c.id = a.customer_id where a.active = 1 and a.sold <> 1

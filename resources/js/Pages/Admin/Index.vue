@@ -132,6 +132,10 @@ export default {
                     id: 12,
                     name: "Sub Tasks",
                     route: "sub.tasks"
+                },{
+                    id: 13,
+                    name: "Reports",
+                    route: "reports.index"
                 }
             ]
         }

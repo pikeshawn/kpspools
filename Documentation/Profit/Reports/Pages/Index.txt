@@ -1,0 +1,4 @@
+- Clickable links of report types - using tailwind and modern
+- Row names - Accrual
+- Link is an interia get request to
+    - reports.accrual
