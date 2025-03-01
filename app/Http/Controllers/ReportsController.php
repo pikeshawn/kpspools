@@ -99,7 +99,7 @@ class ReportsController extends Controller
             $labor = $totalStops * 20;
 
             $gross = round($income - ($chemicals + $labor), 2);
-            $grossPercentage = round(1-($chemicals+$labor)/$income, 2);
+            $grossPercentage = round((1-($chemicals+$labor)/$income) * 100, 2);
 
             $results[] = [
                 'name' => $customerName,
