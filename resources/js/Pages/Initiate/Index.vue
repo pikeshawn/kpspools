@@ -7,7 +7,7 @@
           <li v-for="customer in customers" :key="customer.id"
               style="border: solid black thin; margin: 1rem"
               class="flex justify-between gap-x-6 py-5">
-              <div @click="goToCustomer(customer.id)" class="flex min-w-0 gap-x-4">
+              <div @click="goToCustomer(customer.address_id)" class="flex min-w-0 gap-x-2">
                   <div class="min-w-0 flex-auto">
                       <p style="padding-left: 1rem"
                           class="text-sm font-semibold leading-6 text-gray-900">{{ customer.first_name }} {{ customer.last_name }}</p>

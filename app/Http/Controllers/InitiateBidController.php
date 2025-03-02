@@ -24,6 +24,11 @@ class InitiateBidController extends Controller
             ->where('active', 1)
             ->get();
 
+        foreach ($customers as $customer){
+            $address = Address::select(["id"])->where('customer_id', $customer->id)->first();
+            $customer->address_id = $address->id;
+        }
+
         return Inertia::render('Initiate/Index', [
             'customers' => $customers
         ]);
