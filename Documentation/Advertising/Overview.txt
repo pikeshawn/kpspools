@@ -1,0 +1,249 @@
+Goal = to pull an updated mailing list from the assessor site using the API
+logic -
+    - Use the section township range API to pull all the APNs in each township
+        - url - https://mcassessor.maricopa.gov/parcel/str/{str}/?page={page}
+        - verb - get
+        - header - Authorization - 1034e75e-89c6-11e8-8a04-00155da2c015
+        - need an array of townships
+            - 13 3S 8E
+            - 13 3S 7E
+            - 13 2S 5E
+            - 13 2S 6E
+            - 13 2S 7E
+            - 13 2S 8E
+            - 13 1S 3E
+            - 13 1S 4E
+            - 13 1S 5E
+            - 13 1S 6E
+            - 13 1S 7E
+            - 13 1N 3E
+            - 13 1N 4E
+            - 13 1N 5E
+            - 13 1N 6E
+            - 13 1N 7E
+            - 13 1N 8E
+            - 13 2N 4E
+            - 13 3N 4E
+        - Each result pulls only 25 results so will need to keep upping the page number until an empty set is pulled back
+            - /?page{pageNumber}
+        - Cycle through a result in each page and put the result into a database
+            -  result example =>
+                - {
+                      "MCR": "87734",
+                      "SectionTownshipRange": "13-1S-7E",
+                      "SubdivisonName": "MOUNTAIN HORIZONS UNIT 1",
+                      "Parcels": [
+                          {
+                              "MCR": "87540",
+                              "SubdivisonName": "NOVA VISTA UNIT D",
+                              "SectionTownshipRange": "13-1S-7E",
+                              "APN": "30434319",
+                              "Ownership": "GILBERT FAMILY TRUST",
+                              "SitusAddress": "11108 E QUINTANA AVE  ",
+                              "SitusCity": "MESA",
+                              "SitusZip": "85212",
+                              "PropertyType": "RESIDENTIAL",
+                              "RentalID": null
+                          },
+                          {
+                              "MCR": "87540",
+                              "SubdivisonName": "NOVA VISTA UNIT D",
+                              "SectionTownshipRange": "13-1S-7E",
+                              "APN": "30434320",
+                              "Ownership": "COLON ANGEL LUIS/MARIA R",
+                              "SitusAddress": "11116 E QUINTANA AVE  ",
+                              "SitusCity": "MESA",
+                              "SitusZip": "85212",
+                              "PropertyType": "RESIDENTIAL",
+                              "RentalID": null
+                          },
+                        ]
+                    }
+                - for each of the parcel results put in the str table with this matching
+                    - str table
+                        - columns
+                            - mcr = parcel[i].mcr
+                            - mcr = parcel[i].SubdivisonName
+                            - mcr = parcel[i].SectionTownshipRange
+                            - mcr = parcel[i].APN
+                            - mcr = parcel[i].Ownership
+                            - mcr = parcel[i].SitusAddress
+                            - mcr = parcel[i].SitusCity
+                            - mcr = parcel[i].SitusZip
+                            - mcr = parcel[i].PropertyType
+                            - mcr = parcel[i].RentalID
+            - Once the strs are done then I will cycle through each APN in the str table and pull the results
+                - will perform 3 queries on the APNs
+                    - residential details query
+                        - https://mcassessor.maricopa.gov/parcel/{apn}/residential-details
+                        - verb - get
+                        - header - Authorization - 1034e75e-89c6-11e8-8a04-00155da2c015
+                        - example response
+                            - {
+                                  "ConstructionYear": "1974",
+                                  "OriginalConstructionYear": "1973",
+                                  "LotSize": "6881",
+                                  "LivableSpace": "1393",
+                                  "Detached_Livable_sqft": null,
+                                  "AssessorMarket": "02",
+                                  "AreaNeighborhood": "007",
+                                  "Pool": "450",
+                                  "PEImprovementQualityGrade": "Comparable",
+                                  "ImprovementQualityGrade": "CLASS R3",
+                                  "NumberOfCoveredPatios": "1",
+                                  "NumberOfUncoveredPatios": 0,
+                                  "NumberOfPatios": "1",
+                                  "PatioType": "Covered",
+                                  "ExteriorWalls": "Bp - 8\" Painted Block",
+                                  "RoofType": "As - Asphalt",
+                                  "BathFixtures": "6",
+                                  "Cooling": "RF - REFRIGERATION",
+                                  "Heating": "Yes",
+                                  "NumberOfGarages": null,
+                                  "NumberOfCarports": 0,
+                                  "ParkingDetails": [],
+                                  "LocationalFactors": "",
+                                  "OtherStructures": "",
+                                  "ParkingType": null,
+                                  "CoveredParking": false,
+                                  "LocationalCharacteristics": "",
+                                  "PhysicalCondition": null
+                              }
+                        - in response check
+                            - if the "Pool" field is greater than 0
+                                - then store result in the residential_details table with the corresponding columns
+                                - also add a column
+                                    - apn_id = str.id of the searched APN number
+                            - if the "Pool" field = 0 then ignore and go to the next APN in the str table
+                    - if pool field is > 0 run the next two queries
+                        - OwnerDetails query
+                            - https://mcassessor.maricopa.gov/parcel/{apn}/owner-details
+                            - verb - get
+                            - header - Authorization - 1034e75e-89c6-11e8-8a04-00155da2c015
+                            - result example will be put in the owners table
+                                - example response -
+                                    - {
+                                          "OwnerID": "7416DA3E-1672-4903-9C95-49EBB0C310D7",
+                                          "Ownership": "FKH SFR C1 L P",
+                                          "InCareOf": "FIRST KEY HOMES LLC",
+                                          "ContoOwnership": "",
+                                          "MailingAddress1": "1850 PARKWAY PL STE 900",
+                                          "MailingAddress2": null,
+                                          "MailingCity": "MARIETTA",
+                                          "MailingState": "GA",
+                                          "MailingZip": "30067",
+                                          "MailingCountry": "USA",
+                                          "MostCurrentDeed": "20210788071",
+                                          "DeedDate": "07/20/2021",
+                                          "DeedType": "SD",
+                                          "SalePrice": null,
+                                          "SaleDate": null,
+                                          "Redacted": false,
+                                          "FullMailingAddress": "1850 PARKWAY PL STE 900, MARIETTA, GA 30067",
+                                          "DeedTypeID": null
+                                      }
+                                - each one will correspond to column in the owners table
+                                - also add a column
+                                    - apn_id = str.id of the searched APN number
+                        - Property Valuations query
+                            - https://mcassessor.maricopa.gov/parcel/{apn}/valuations
+                            - verb - get
+                            - header - Authorization - 1034e75e-89c6-11e8-8a04-00155da2c015
+                            - example response
+                                - [
+                                      {
+                                          "TaxYear": "2026",
+                                          "FullCashValue": "381600",
+                                          "LimitedPropertyValue": "192802      ",
+                                          "LegalClassificationCode": "4.2 ",
+                                          "LegalClassification": "RESIDENTIAL RENTAL",
+                                          "AssessmentRatioPercentage": "0.1000",
+                                          "AssessedFCV": "na",
+                                          "AssessedLPV": "19280       ",
+                                          "ValuationSource": "Notice",
+                                          "PEPropUseDesc": "Single Family Residence",
+                                          "PropertyUseCode": "0131",
+                                          "TaxAreaCode": "031600",
+                                          "NoticeOfChangeIndc": "N"
+                                      },
+                                      {
+                                          "TaxYear": "2025",
+                                          "FullCashValue": "356800",
+                                          "LimitedPropertyValue": "183621      ",
+                                          "LegalClassificationCode": "4.2 ",
+                                          "LegalClassification": "RESIDENTIAL RENTAL",
+                                          "AssessmentRatioPercentage": "0.1000",
+                                          "AssessedFCV": "na",
+                                          "AssessedLPV": "18362       ",
+                                          "ValuationSource": "Notice",
+                                          "PEPropUseDesc": "Single Family Residence",
+                                          "PropertyUseCode": "0131",
+                                          "TaxAreaCode": "031600",
+                                          "NoticeOfChangeIndc": "N"
+                                      },
+                                      {
+                                          "TaxYear": "2024",
+                                          "FullCashValue": "379600",
+                                          "LimitedPropertyValue": "174878      ",
+                                          "LegalClassificationCode": "4.2 ",
+                                          "LegalClassification": "RESIDENTIAL RENTAL",
+                                          "AssessmentRatioPercentage": "0.1000",
+                                          "AssessedFCV": "na",
+                                          "AssessedLPV": "17488       ",
+                                          "ValuationSource": "Notice",
+                                          "PEPropUseDesc": "Single Family Residence",
+                                          "PropertyUseCode": "0131",
+                                          "TaxAreaCode": "031600",
+                                          "NoticeOfChangeIndc": "N"
+                                      },
+                                      {
+                                          "TaxYear": "2023",
+                                          "FullCashValue": "343700",
+                                          "LimitedPropertyValue": "166550      ",
+                                          "LegalClassificationCode": "4.2 ",
+                                          "LegalClassification": "RESIDENTIAL RENTAL",
+                                          "AssessmentRatioPercentage": "0.1000",
+                                          "AssessedFCV": "na",
+                                          "AssessedLPV": "16655       ",
+                                          "ValuationSource": "Notice",
+                                          "PEPropUseDesc": "Single Family Residence",
+                                          "PropertyUseCode": "0131",
+                                          "TaxAreaCode": "031600",
+                                          "NoticeOfChangeIndc": "N"
+                                      },
+                                      {
+                                          "TaxYear": "2022",
+                                          "FullCashValue": "253800",
+                                          "LimitedPropertyValue": "158619      ",
+                                          "LegalClassificationCode": "4.1 ",
+                                          "LegalClassification": "NON-PRIMARY/NOT IN OTHER CLASSES RESID",
+                                          "AssessmentRatioPercentage": "0.1000",
+                                          "AssessedFCV": "na",
+                                          "AssessedLPV": "15862       ",
+                                          "ValuationSource": "Notice",
+                                          "PEPropUseDesc": "Single Family Residence",
+                                          "PropertyUseCode": "0131",
+                                          "TaxAreaCode": "031600",
+                                          "NoticeOfChangeIndc": "N"
+                                      },
+                                      {
+                                          "TaxYear": "2021",
+                                          "FullCashValue": "231700",
+                                          "LimitedPropertyValue": "151066      ",
+                                          "LegalClassificationCode": "4.2 ",
+                                          "LegalClassification": "RESIDENTIAL RENTAL",
+                                          "AssessmentRatioPercentage": "0.1000",
+                                          "AssessedFCV": "na",
+                                          "AssessedLPV": "15107       ",
+                                          "ValuationSource": "Notice",
+                                          "PEPropUseDesc": "Single Family Residence",
+                                          "PropertyUseCode": "0131",
+                                          "TaxAreaCode": "031600",
+                                          "NoticeOfChangeIndc": "N"
+                                      }
+                                  ]
+                                  - for result add a row into the valuations table that matches the keys in the result
+                                  - also add a column
+                                      - apn_id = str.id of the searched APN number for each row
+
+
