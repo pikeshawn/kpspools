@@ -38,7 +38,7 @@
 
             <div v-if="reports.length" class="space-y-4">
                 <div v-for="report in reports" :key="report.id" class="bg-gray-100 p-4 rounded-lg shadow">
-                    <inertia-link :href="`/reports/customer/${report.id}`" class="block text-lg font-bold text-blue-600">
+                    <inertia-link :href="`/reports/customer/${report.addressId}/${report.startDate}/${report.endDate}`" class="block text-lg font-bold text-blue-600">
                         {{ report.name }}
                     </inertia-link>
                     <p>Address: {{ report.address }}</p>

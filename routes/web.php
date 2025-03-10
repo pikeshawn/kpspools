@@ -147,6 +147,10 @@ Route::middleware(['auth:sanctum', 'verified', 'serviceman'])->group(function ()
         [ReportsController::class, 'accrual'])
         ->name('reports.accrual');
 
+    Route::get('/reports/customer/{addressId}/{startDate}/{endDate}',
+        [ReportsController::class, 'customerRows'])
+        ->name('reports.customerRows');
+
     Route::post('/reports/accrual',
         [ReportsController::class, 'accrualAll'])
         ->name('reports.accrualAll');

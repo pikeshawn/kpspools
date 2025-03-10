@@ -6,8 +6,11 @@ use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Carbon\Carbon;
 use App\Models\ServiceStop;
+use App\Models\EmployeePayment;
 use App\Models\Customer;
 use App\Models\Address;
+use App\Models\User;
+use DateTime;
 
 class ReportsController extends Controller
 {
@@ -90,19 +93,20 @@ class ReportsController extends Controller
             $serviceRate = $address->plan_price / 4;
             $income = $serviceRate * $totalStops;
 
+            $labor = self::getLaborCost($serviceStops);
+
             $chemicals = round($serviceStops->sum(fn($ss) =>
                 ($ss->tabs_whole_mine * 1.65) +
                 ($ss->liquid_chlorine * ((19.65 * 1.08) / 4)) +
                 ($ss->liquid_acid * ((27 * 1.08) / 4))
             ), 2);
 
-            $labor = $totalStops * 20;
-
             $gross = round($income - ($chemicals + $labor), 2);
             $grossPercentage = round((1-($chemicals+$labor)/$income) * 100, 2);
 
             $results[] = [
                 'name' => $customerName,
+                'addressId' => $address->id,
                 'address' => $address->address_line_1 . " " . $address->city . " " . $address->zip,
                 'planPrice' => $address->plan_price,
                 'totalStops' => $totalStops,
@@ -113,11 +117,93 @@ class ReportsController extends Controller
                 'chemicals' => $chemicals,
                 'labor' => $labor,
                 'gross' => $gross,
+                'startDate' => $startDate,
+                'endDate' => $endDate,
                 'grossPercentage' => $grossPercentage
             ];
         }
 
+
+        $totalStopsInTimePeriod = 0;
+        $totalChemicalsInTimePeriod = 0;
+        $leastProfitableCustomerInTimePeriod = 0;
+        $mostProfitableCustomerInTimePeriod = 0;
+
         return response()->json($results);
+    }
+
+    private function getLaborCost($serviceStops)
+    {
+        $labor = 0;
+        foreach ($serviceStops as $serviceStop) {
+/*
+ *          if $serviceStop created date was before 3/10/2025
+ *              then $labor = $labor + 20
+ *          else
+ *             $ep = EmployeePayments::where('service_stop_id', $serviceStop->id)->first()
+ *             $labor = $labor + $ep->rate;
+ * */
+            $serviceStopDate = Carbon::parse($serviceStop->created_at);
+            $cutoffDate = Carbon::parse('2025-03-10');
+
+            if ($serviceStopDate->lessThan($cutoffDate)) {
+                $labor += 20;
+            } else {
+                $ep = EmployeePayment::where('service_stop_id', $serviceStop->id)->first();
+                if ($ep) {
+                    $labor += $ep->rate;
+                }
+            }
+        }
+
+        return $labor;
+
+    }
+
+
+    public function customerRows($addressId, $startDate, $endDate)
+    {
+        /*
+         * - need to pull all service stops in the service_stops table
+         * that fall between the startDate and endDate and have the given
+         * addressId
+         * - startDate and endDate with reference created_at in the service_stops table
+         * - addressId with reference the address_id column
+         * - return a inertia response to page Reports/Customer
+         */
+
+        // Convert start and end dates to Carbon instances for proper comparison
+
+        if ($startDate == 'begin') {
+            $ss = ServiceStop::where('address_id', $addressId)->first();
+            $startDate = $ss->created_at;
+            $endDate = Carbon::now();
+        } else {
+            $startDate = Carbon::parse($startDate);
+            $endDate = Carbon::parse($endDate);
+        }
+
+        // Query the service_stops table
+        $serviceStops = ServiceStop::where('address_id', $addressId)
+            ->whereBetween('created_at', [$startDate, $endDate])
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        foreach ($serviceStops as $serviceStop) {
+            $customer = Customer::find($serviceStop->customer_id);
+            $user = User::find($serviceStop->user_id);
+            $address = Address::find($serviceStop->address_id);
+
+            $serviceStop->customer_name = "$customer->first_name $customer->last_name";
+            $serviceStop->serviceman_name = "$user->name";
+            $serviceStop->address = "$address->address_line_1";
+
+        }
+
+        // Return the data as an Inertia response
+        return Inertia::render('Reports/Customer', [
+            'serviceStops' => $serviceStops,
+        ]);
     }
 
 }

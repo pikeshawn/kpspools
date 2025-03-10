@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('residential_details', function (Blueprint $table) {
             $table->id();
-            $table->string('apn');
+            $table->foreignId('apn_id')->constrained('str')->onDelete('cascade'); // Foreign key reference to the str table
             $table->string('construction_year')->nullable();
             $table->string('original_construction_year')->nullable();
             $table->string('lot_size')->nullable();

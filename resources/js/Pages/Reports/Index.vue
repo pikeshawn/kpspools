@@ -27,21 +27,9 @@
 </template>
 
 <script>
-import {ref} from 'vue'
 import Layout from "../Shared/Layout";
 import {Dialog, DialogOverlay, TransitionChild, TransitionRoot} from '@headlessui/vue'
 import {Link} from '@inertiajs/inertia-vue3'
-import {Inertia} from '@inertiajs/inertia'
-import {
-    CalendarIcon,
-    ChartBarIcon,
-    FolderIcon,
-    HomeIcon,
-    InboxIcon,
-    // MenuIcon,
-    UsersIcon,
-    // XIcon
-} from '@heroicons/vue/24/outline'
 
 
 export default {

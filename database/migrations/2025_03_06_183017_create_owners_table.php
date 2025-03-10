@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('owners', function (Blueprint $table) {
             $table->id();
-            $table->string('apn');
+            $table->foreignId('apn_id')->constrained('str')->onDelete('cascade'); // Foreign key reference to the str table
             $table->uuid('owner_id')->nullable(); // OwnerID stored as UUID
             $table->string('ownership')->nullable();
             $table->string('in_care_of')->nullable();

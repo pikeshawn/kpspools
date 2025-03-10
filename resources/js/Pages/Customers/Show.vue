@@ -338,8 +338,9 @@
                 <div>
                     <div class="mt-6 border-t border-white/10"></div>
                     <ul class="mt-2">
-                        <li class="text-sm font-medium leading-6 text-white" v-for="note in generalNotes" :key="note.id">
-                           - {{ note.note }}
+                        <li class="text-sm font-medium leading-6 text-white" v-for="note in generalNotes"
+                            :key="note.id">
+                            - {{ note.note }}
                         </li>
                     </ul>
                     <button style="margin-top: 2rem;"
@@ -468,7 +469,7 @@
             </inertia-link>
             <inertia-link
                 class="relative inline-flex items-center px-4 py-2 rounded-l-md bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:z-10 focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500"
-                :href="route('service_stops', addressId(address))"
+                :href="`/reports/customer/${address.id}/begin/complete`"
             >
                 <div
                     class="relative flex items-center space-x-3 rounded-lg bg-white px-6 py-5 focus-within:ring-2 focus-within:ring-indigo-500 focus-within:ring-offset-2 hover:border-gray-400">

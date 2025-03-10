@@ -1077,15 +1077,19 @@ class TaskController extends Controller
             return response()->json(['error' => 'Unauthorized'], 403);
         }
 
-        // Insert record into employee_payments table
-        EmployeePayment::create([
-            'serviceman_id' => $user->id,
-            'service_stop_id' => null,
-            'paycheck_id' => null,
-            'task_id' => $task->id,
-            'rate' => $task->rate, // Fetching repair_rate from Users table
-            'status' => 'pending'
-        ]);
+        if ($task->type === 'repair' || $task->type === 'part') {
+            // Insert record into employee_payments table
+            EmployeePayment::create([
+                'serviceman_id' => $user->id,
+                'service_stop_id' => null,
+                'paycheck_id' => null,
+                'task_id' => $task->id,
+                'rate' => $task->rate, // Fetching repair_rate from Users table
+                'status' => 'pending'
+            ]);
+        }
+
+
 
         $customer = Customer::find($task->customer_id);
         $address = Customer::find($task->address_id);

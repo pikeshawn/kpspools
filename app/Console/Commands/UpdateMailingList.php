@@ -30,8 +30,8 @@ class UpdateMailingList extends Command
 
         try {
             $controller = new AdvertisingController();
-            $controller->getApnsFromArray();
-//            $controller->updateMailingList();
+//            $controller->getApnsFromArray();
+            $controller->updateMailingList();
             $this->info('Mailing list updated successfully.');
         } catch (\Exception $e) {
             $this->error('Error updating mailing list: ' . $e->getMessage());

@@ -45,8 +45,10 @@ class Task extends Model
     public static function sendCompletedMessage($task, $customer, $phoneNumber, $address, $assigned)
     {
 
-        $message = "$task->description has been completed by $assigned. Please text or call Shawn if you have any questions";
-        Notification::route('vonage', $customer->phone_number)->notify(new TaskApprovalNotification($message));
+        if ($task->type === 'repair' || $task->type === 'part') {
+            $message = "$task->description has been completed by $assigned. Please text or call Shawn if you have any questions";
+            Notification::route('vonage', $customer->phone_number)->notify(new TaskApprovalNotification($message));
+        }
 
         $message = "A repair has been completed by $assigned, $task->description.\n$customer->first_name $customer->last_name\n" . env('APP_URL') . "/customers/show/$address->id. Please take a look";
         Notification::route('vonage', $phoneNumber)->notify(new TaskApprovalNotification($message));
@@ -67,7 +69,7 @@ class Task extends Model
             })
             ->get();
 
-        foreach ($approvedTasks as $approved){
+        foreach ($approvedTasks as $approved) {
 
             $customer = Customer::find($approved->customer_id);
 
@@ -292,7 +294,6 @@ class Task extends Model
             if ($poolGuy === null) {
                 Log::debug("POOLGUY IS NULL\n\ntask :: $task\ncustomer :: $c\naddress :: $a\npoolguy :: $poolGuy\n");
             }
-
 
 
             $line = [];

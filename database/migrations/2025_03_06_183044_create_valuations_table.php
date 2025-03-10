@@ -12,8 +12,7 @@ return new class extends Migration {
     {
         Schema::create('valuations', function (Blueprint $table) {
             $table->id();
-            $table->string('apn');
-//        $table->foreignId('apn_id')->constrained('str')->onDelete('cascade'); // Foreign key reference to the str table
+            $table->foreignId('apn_id')->constrained('str')->onDelete('cascade'); // Foreign key reference to the str table
             $table->string('tax_year');
             $table->decimal('full_cash_value', 15, 2)->nullable();
             $table->decimal('limited_property_value', 15, 2)->nullable();
