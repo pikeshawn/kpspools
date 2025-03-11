@@ -5,10 +5,9 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class str extends Model
+class TaskImage extends Model
 {
     use HasFactory;
-
-    protected $table = "str";
+    protected $table = 'task_images';
     protected $guarded = [];
 }

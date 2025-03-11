@@ -19,21 +19,21 @@ class AdvertisingController extends Controller
 
     private $townships = [
 //        '-2S-6E',
-        '-2S-7E',
-        '-2S-8E',
-        '-1S-3E',
+//        '-2S-7E',
+//        '-2S-8E',
+//        '-1S-3E',
         '-1S-4E',
         '-1S-5E',
         '-1S-6E',
         '-1S-7E',
-        '-1N-3E',
-        '-1N-4E',
-        '-1N-5E',
-        '-1N-6E',
-        '-1N-7E',
-        '-1N-8E',
-        '-2N-4E',
-        '-3N-4E'
+//        '-1N-3E',
+//        '-1N-4E',
+//        '-1N-5E',
+//        '-1N-6E',
+//        '-1N-7E',
+//        '-1N-8E',
+//        '-2N-4E',
+//        '-3N-4E'
     ];
 
     public function updateMailingList()
@@ -42,13 +42,26 @@ class AdvertisingController extends Controller
 
 
         foreach ($this->townships as $township) {
-            for ($i = 1; $i < 33; $i++) {
-                $str = $i . $township;
-                $this->fetchTownshipParcels($str);
-                $apns = self::getApns($str);
-                self::fetchParcelDetails($apns);
-                Log::debug("$str is done");
+
+            if ($township === '-1S-4E') {
+                for ($i = 12; $i < 36; $i++) {
+                    $str = $i . $township;
+                    $apns = self::getApns($str, '30149078');
+                    self::fetchParcelDetails($apns);
+                    Log::debug("$str is done");
+                }
+            } else {
+                for ($i = 1; $i < 36; $i++) {
+                    $str = $i . $township;
+                    $this->fetchTownshipParcels($str);
+                    $apns = self::getApns($str);
+                    self::fetchParcelDetails($apns);
+                    Log::debug("$str is done");
+                }
             }
+
+
+
         }
 
         return response()->json(['message' => 'Mailing list updated successfully.']);
@@ -88,9 +101,12 @@ class AdvertisingController extends Controller
         } while (!empty($data));
     }
 
-    private function getApns($str)
+    private function getApns($str, $apn = 0)
     {
-        return Str::select(['apn'])->where('section_township_range', $str)->get();
+        return Str::select(['apn'])
+            ->where('section_township_range', $str)
+            ->where('apn', '>', $apn)
+            ->get();
     }
 
     private function fetchParcelDetails($apns)

@@ -23,6 +23,7 @@ use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\PasswordlessController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\CloudinaryController;
 use Inertia\Inertia;
 use Illuminate\Http\Request;
 
@@ -138,6 +139,13 @@ Route::middleware(['auth:sanctum', 'verified', 'customer', 'subscribed'])->group
 });
 
 Route::middleware(['auth:sanctum', 'verified', 'serviceman'])->group(function () {
+
+    Route::post('/upload', [CloudinaryController::class, 'upload']);
+    Route::delete('image/delete/{publicId}', [CloudinaryController::class, 'deleteImage']);
+
+    Route::get('/images/{addressId}',
+        [CloudinaryController::class, 'images'])
+        ->name('images');
 
     Route::get('/reports',
         [ReportsController::class, 'index'])

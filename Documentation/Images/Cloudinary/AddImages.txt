@@ -1,0 +1,11 @@
+- I need a vue component that will allow me to upload an image
+    to the laravel backend and cloudinary.
+- styled using tailwind and have a modern feel to it.
+
+Tasks
+- need a database to retrieve the right images from cloudinary
+    - task_id
+    - image_url
+    - address_id
+    - public_id
+    - part_number

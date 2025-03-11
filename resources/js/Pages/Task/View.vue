@@ -108,13 +108,15 @@
                 <div v-if="selectedStatus === 'created'">
                     <!-- To-Do Checkbox -->
                     <div class="mb-4 flex items-center">
-                        <input v-model="sentForApproval" type="checkbox" class="h-5 w-5 text-blue-600 border-gray-300 rounded">
+                        <input v-model="sentForApproval" type="checkbox"
+                               class="h-5 w-5 text-blue-600 border-gray-300 rounded">
                         <label class="ml-2 text-sm text-gray-700">Sent For Approval</label>
                     </div>
 
                     <!-- To-Do Checkbox -->
                     <div class="mb-4 flex items-center">
-                        <input v-model="sentForApprovalBoth" type="checkbox" class="h-5 w-5 text-blue-600 border-gray-300 rounded">
+                        <input v-model="sentForApprovalBoth" type="checkbox"
+                               class="h-5 w-5 text-blue-600 border-gray-300 rounded">
                         <label class="ml-2 text-sm text-gray-700">Approval Status Doesn't Matter</label>
                     </div>
                 </div>
@@ -188,6 +190,15 @@
                     <p class="text-sm text-gray-600">Status: <span class="font-bold">{{ task.status }}</span></p>
                     <p class="text-sm text-gray-600">Name: <span class="font-bold">{{ task.name }}</span></p>
 
+                    <inertia-link
+                        :href="route('images', task.address_id)"
+                    >
+                        <div
+                            class="inline-block bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-700">
+                            <p class="text-sm font-medium text-gray-900">Images</p>
+                        </div>
+                    </inertia-link>
+
                     <!-- Description & Product Number -->
                     <div class="mt-3">
                         <label class="block font-medium">Description</label>
@@ -201,17 +212,17 @@
                                class="w-full p-2 border rounded-lg focus:ring focus:ring-blue-300">
                     </div>
 
-<!--                    <div class="mt-3">-->
-<!--                        <label class="block font-medium">Cost</label>-->
-<!--                        <input type="text" v-model="cost" @blur="changeProductNumber(task)"-->
-<!--                               class="w-full p-2 border rounded-lg focus:ring focus:ring-blue-300">-->
-<!--                        <button @click="updatePrice()"-->
-<!--                                class="inline-block bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-700"-->
-<!--                                style="margin-top: 1rem"-->
-<!--                        >-->
-<!--                            <label class="block text-sm font-medium leading-6 text-white">Update Price</label>-->
-<!--                        </button>-->
-<!--                    </div>-->
+                    <!--                    <div class="mt-3">-->
+                    <!--                        <label class="block font-medium">Cost</label>-->
+                    <!--                        <input type="text" v-model="cost" @blur="changeProductNumber(task)"-->
+                    <!--                               class="w-full p-2 border rounded-lg focus:ring focus:ring-blue-300">-->
+                    <!--                        <button @click="updatePrice()"-->
+                    <!--                                class="inline-block bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-700"-->
+                    <!--                                style="margin-top: 1rem"-->
+                    <!--                        >-->
+                    <!--                            <label class="block text-sm font-medium leading-6 text-white">Update Price</label>-->
+                    <!--                        </button>-->
+                    <!--                    </div>-->
 
                     <!-- Assigned -->
                     <div class="mt-3">
@@ -232,7 +243,6 @@
                     </div>
 
 
-
                     <div v-if="task.status === 'created'" class="flex justify-between">
                         <div class="mt-4 m-1">
                             <label class="block font-medium text-green-900" v-if="task.sent === 1">Sent</label>
@@ -241,12 +251,12 @@
                                 Send For Approval
                             </button>
                         </div>
-<!--                        <div class="mt-4 m-1">-->
-<!--                            <button @click="sendTripMessage(task)"-->
-<!--                                    class="inline-block bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-700">-->
-<!--                                Send Trip Message-->
-<!--                            </button>-->
-<!--                        </div>-->
+                        <!--                        <div class="mt-4 m-1">-->
+                        <!--                            <button @click="sendTripMessage(task)"-->
+                        <!--                                    class="inline-block bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-700">-->
+                        <!--                                Send Trip Message-->
+                        <!--                            </button>-->
+                        <!--                        </div>-->
                     </div>
 
                     <!-- Task Type -->
@@ -451,8 +461,8 @@ export default {
         },
         addJobType(item, addDelete) {
             Inertia.post('/task/addJobType', {
-                "item" : item,
-                "addJobType" : addDelete,
+                "item": item,
+                "addJobType": addDelete,
             })
         },
         deleteItem(item) {

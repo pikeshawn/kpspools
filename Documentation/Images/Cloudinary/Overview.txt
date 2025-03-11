@@ -1,0 +1,4 @@
+- I want to be able to add images to create task
+- I want to be able to view the images on the scp list
+- I want to add images to new customer creation
+- I want to view images of new customer

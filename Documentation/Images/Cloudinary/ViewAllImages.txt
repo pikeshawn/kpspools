@@ -1,0 +1,5 @@
+- I need a vue page in tailwind that is modern that can display all images from
+    a cloudinary file.
+- I should be able to delete them
+- I can use the ImageUpload component to upload a new image
+- I will have as input cloudinary public Ids and Urls

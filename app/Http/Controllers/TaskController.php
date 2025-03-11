@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Customer;
+use App\Models\TaskImage;
 use App\Models\EmployeePayment;
 use App\Models\UserJobRate;
 use App\Models\JobType;
@@ -1314,6 +1315,15 @@ class TaskController extends Controller
             ->get();
         $task->count = $tasks[0]->count + 1;
         $task->save();
+
+        if (!empty($request->publicId)) {
+            foreach($request->publicId as $publicId){
+                TaskImage::firstOrCreate([
+                    'task_id' => $task->id,
+                    'public_id' => $publicId
+                ]);
+            }
+        }
 
         TaskStatus::create([
             'task_id' => $task->id,

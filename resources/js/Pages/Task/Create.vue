@@ -85,6 +85,11 @@
                     </div>
                 </div>
 
+                <image-upload class="mb-2"
+                              :address-id="addressId"
+                              @imageUploaded="handleImageUploaded"
+                ></image-upload>
+
                 <!--                &lt;!&ndash; Update Serviceman Repair Rate Checkbox &ndash;&gt;-->
                 <!--                <div class="mb-4 flex items-center">-->
                 <!--                    <input v-model="form.verbalApproval" type="checkbox"-->
@@ -233,6 +238,7 @@ import LoadingButton from "../Shared/LoadingButton";
 import {Inertia} from '@inertiajs/inertia'
 import {reactive} from 'vue'
 import {Link} from '@inertiajs/inertia-vue3'
+import ImageUpload from "../Components/ImageUpload.vue";
 
 export default {
     components: {
@@ -240,7 +246,8 @@ export default {
         LoadingButton,
         Link,
         Layout,
-        Toggle
+        Toggle,
+        ImageUpload
     },
     props: {
         user: Array,
@@ -269,6 +276,7 @@ export default {
                 product_number: '',
                 quantity: 1,
                 initialRepairRate: 0,
+                publicId: [],
                 repairRate: 0,
                 selectedTask: null,
                 selectedTaskDescription: null,
@@ -348,6 +356,11 @@ export default {
     },
 
     methods: {
+
+        handleImageUploaded(publicId){
+            this.form.publicId.push(publicId);
+        },
+
         applyPercentage(percent) {
             if (this.form.repairRate || this.form.selectedTask.price) {
                 this.form.repairRate = parseFloat(this.form.repairRate);
