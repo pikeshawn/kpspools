@@ -9,7 +9,7 @@ class CloudinaryModel extends Model
 {
     use HasFactory;
 
-    protected $table = 'Cloudinary';
+    protected $table = 'cloudinary';
     protected $guarded = [];
 
     public static function store($image)
