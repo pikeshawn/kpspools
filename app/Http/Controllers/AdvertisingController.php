@@ -18,22 +18,25 @@ class AdvertisingController extends Controller
     ];
 
     private $townships = [
-//        '-2S-6E',
-//        '-2S-7E',
-//        '-2S-8E',
-//        '-1S-3E',
+
+        '-2S-6E',
+        '-2S-7E',
+        '-2S-8E',
+        '-1S-3E',
+
         '-1S-4E',
         '-1S-5E',
         '-1S-6E',
         '-1S-7E',
-//        '-1N-3E',
-//        '-1N-4E',
-//        '-1N-5E',
-//        '-1N-6E',
-//        '-1N-7E',
-//        '-1N-8E',
-//        '-2N-4E',
-//        '-3N-4E'
+
+        '-1N-3E',
+        '-1N-4E',
+        '-1N-5E',
+        '-1N-6E',
+        '-1N-7E',
+        '-1N-8E',
+        '-2N-4E',
+        '-3N-4E'
     ];
 
     public function updateMailingList()

@@ -134,7 +134,7 @@ const uploadImage = async () => {
             }
         });
 
-        if (response.data.publicId) {
+        if (response.data.public_id) {
             uploadMessage.value = "Image uploaded successfully!";
             setTimeout(() => {
                 uploadMessage.value = "";
@@ -142,12 +142,12 @@ const uploadImage = async () => {
         }
 
         // Emit the event to the parent component with the public ID
-        emit("imageUploaded", response.data.publicId);
+        emit("imageUploaded", publicId);
 
         previewUrl.value = response.data.url; // Use Cloudinary URL if returned
     } catch (error) {
-        console.debug(error.value);
         uploadError.value = "Upload failed. Try again.";
+
         setTimeout(() => {
             uploadError.value = "";
         }, 2000);

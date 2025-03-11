@@ -19,7 +19,7 @@
                     <!-- Delete Button -->
                     <button
                         @click="deleteImage(image.public_id, index)"
-                        class="absolute top-2 right-2 bg-red-600 text-white p-2 rounded-full group-hover:opacity-100 transition-opacity"
+                        class="absolute top-2 right-2 bg-red-600 text-black p-2 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
                     >
                         X
                     </button>
