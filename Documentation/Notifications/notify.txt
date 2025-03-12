@@ -1,0 +1,31 @@
+- need a method to notify the customers that a guy I have is
+    unable to make to the pool today and will be servicing it tomorrow
+- input
+    - [
+        {
+            servicemanId: this.selectedServiceman,
+            sick: this.sick,
+            message: this.message,
+            addressIds: this.selectedPools
+        }
+      ]
+
+- logic
+    - if sick is true then select the message
+        - $serviceman = User::find($request->servicemanId)
+        - $message = "$serviceman->name was feeling a bit under the weather, so he was unable to service your pool today at $param. He will be servicing it tomorrow. Sorry for the delay."
+    - if sick is false
+        - $message = $request->message
+    - cycle through each of the $request->addressIds
+        - get the customer phone number
+            - Address::find($addressId);
+            - Customer::find($address->customer_id)
+            - get the phone_number $customer->phone_number
+            - send a generalNotification to each customer
+                Notification::route('vonage', $customer->phone_number)->notify(new GenericNotification(
+                            $message
+                        ));
+
+
+
+

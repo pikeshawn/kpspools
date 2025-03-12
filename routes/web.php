@@ -232,6 +232,14 @@ Route::middleware(['auth:sanctum', 'verified', 'serviceman'])->group(function ()
         [CustomerController::class, 'index'])
         ->name('customers');
 
+    Route::get('/customers/bulkNotify',
+        [CustomerController::class, 'bulkNotify'])
+        ->name('customers.bulkNotify');
+
+    Route::post('/customers/notify',
+        [CustomerController::class, 'notify'])
+        ->name('customers.notify');
+
     Route::get('/customers/getCustomersForDay/{day}',
         [CustomerController::class, 'getCustomersForDay'])
         ->name('getCustomersForDay');

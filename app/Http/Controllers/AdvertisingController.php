@@ -45,8 +45,8 @@ class AdvertisingController extends Controller
 
 //        self::updateStr('-2S-6E', 32, 39819);
 //        self::updateStr('-2S-7E', 32, 66108);
-        self::updateStr('-1S-3E', 28, 151077);
-        self::updateStr('-1S-4E', 12, 92470);
+//        self::updateStr('-1S-3E', 36, 162099);
+        self::updateStr('-1S-4E', 15, 165303);
         self::updateStr('-1S-5E', 10, 108765);
         self::updateStr('-1S-6E', 6, 118063);
         self::updateStr('-1S-7E', 3, 130035);

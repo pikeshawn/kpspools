@@ -59,18 +59,41 @@
                     </div>
                 </div>
 
-                <!-- Transfer Section -->
-                <div class="mt-6">
-                    <label class="block font-semibold">Transfer To</label>
-                    <select v-model="transferToServiceman" class="border p-2 rounded w-full">
-                        <option v-for="serviceman in servicemen" :key="serviceman.id"
-                                :value="serviceman.id">
-                            {{ serviceman.name }}
-                        </option>
-                    </select>
+                <div class="mb-2 flex flex-col gap-4 p-4 max-w-sm mx-auto bg-white rounded-2xl shadow-md">
+                    <label class="flex items-center gap-2 text-gray-700 text-lg">
+                        <input
+                            type="checkbox"
+                            v-model="sick"
+                            class="w-5 h-5 accent-blue-500 rounded-md border-gray-300 focus:ring-2 focus:ring-blue-500"
+                        />
+                        Sick
+                    </label>
+
+                    <label class="flex items-center gap-2 text-gray-700 text-lg">
+                        <input
+                            type="checkbox"
+                            v-model="customMessage"
+                            class="w-5 h-5 accent-blue-500 rounded-md border-gray-300 focus:ring-2 focus:ring-blue-500"
+                        />
+                        Custom Message
+                    </label>
+
+                    <div v-show="customMessage" class="flex flex-col">
+                        <label class="text-gray-700 text-lg mb-1">
+                            Custom Message
+                        </label>
+                        <textarea
+                            v-model="message"
+                            id="customMessage"
+                            type="text"
+                            placeholder="Enter your message..."
+                            class="px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                        />
+                    </div>
                 </div>
 
-                <button @click="transferPools" class="bg-green-500 text-white px-4 py-2 rounded mt-4">Transfer Pools
+
+                <button @click="sendNotification" class="bg-green-500 text-white px-4 py-2 rounded mt-4">Send Notification
                 </button>
             </div>
         </div>
@@ -105,7 +128,10 @@ export default {
             selectedPools: [],
             transferToServiceman: null,
             daysOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
-            selectAll: false
+            selectAll: false,
+            sick: false,
+            customMessage: false,
+            message: ""
         };
     },
     methods: {
@@ -132,19 +158,32 @@ export default {
         toggleAll() {
             this.selectedPools = this.selectAll ? this.pools.map(pool => pool.addressId) : [];
         },
-        async transferPools() {
-            if (!this.transferToServiceman || this.selectedPools.length === 0) {
-                alert("Please select a serviceman and pools to transfer.");
+
+        messageChoice(choice){
+            if (choice === 'sick') {
+                this.sick = true
+                this.customMessage = false
+            } else {
+                this.sick = false
+                this.customMessage = true
+            }
+        },
+
+        async sendNotification() {
+            if (this.selectedPools.length === 0 && ( this.sick ^ this.customMessage )) {
+                alert("Please select a serviceman and pools to notify.");
                 return;
             }
 
             try {
-                await axios.post("/transfer/doTransfer", {
-                    servicemanId: this.transferToServiceman,
+                await axios.post("/customers/notify", {
+                    servicemanId: this.selectedServiceman,
+                    sick: this.sick,
+                    message: this.message,
                     addressIds: this.selectedPools
                 });
 
-                alert("Transfer successful");
+                alert("Customers have been notified");
                 this.pools = [];
                 this.selectedPools = [];
             } catch (error) {

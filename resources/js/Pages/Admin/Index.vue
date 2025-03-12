@@ -140,6 +140,10 @@ export default {
                     id: 14,
                     name: "Bulk Transfer",
                     route: "transfer.bulk"
+                },{
+                    id: 15,
+                    name: "Bulk Notification",
+                    route: "customers.bulkNotify"
                 }
             ]
         }

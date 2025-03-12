@@ -56,6 +56,16 @@ class CustomerController extends Controller
         ]);
     }
 
+    public function bulkNotify()
+    {
+        $servicemen = User::where('type', 'serviceman')
+            ->where('active', true)->get();
+
+        return Inertia::render('Notification/BulkNotification', [
+            'servicemen' => $servicemen
+        ]);
+    }
+
     public function search(Request $request)
     {
         $query = $request->input('query');
@@ -81,6 +91,40 @@ class CustomerController extends Controller
 
 
 //        return Customer::where('last_name', 'like', "%{$request->customer}%")->get();
+    }
+
+    public function notify(Request $request)
+    {
+        // Validate the input
+        $request->validate([
+            'servicemanId' => 'required|exists:users,id',
+            'sick' => 'required|boolean',
+            'message' => 'nullable|string',
+            'addressIds' => 'required|array'
+        ]);
+
+        // Retrieve the serviceman
+        $serviceman = User::find($request->servicemanId);
+
+        // Determine the message
+        foreach ($request->addressIds as $addressId) {
+            $address = Address::find($addressId);
+            $customer = Customer::find($address->customer_id);
+
+            if (!$customer) {
+                continue; // Skip if no customer is found
+            }
+
+            $message = $request->sick
+                ? "{$serviceman->name} was feeling a bit under the weather, so he was unable to service your pool today at {$address->address_line_1}. He will be servicing it tomorrow. Sorry for the delay."
+                : $request->message;
+
+            // Send notification to customer via Vonage (SMS)
+            Notification::route('vonage', $customer->phone_number)
+                ->notify(new GenericNotification($message));
+        }
+
+        return response()->json(['message' => 'Notifications sent successfully.'], 200);
     }
 
     public function getCustomersForDay($day)

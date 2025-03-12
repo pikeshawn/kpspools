@@ -1,0 +1,8 @@
+Notifications ->
+Sick
+    - I need a notification that is a text message,
+    - lets the customer know my guy is sick and
+    - will be doing the pool the next day
+
+
+
