@@ -20,18 +20,42 @@ class CloudinaryController extends Controller
 //            'image' => 'required|mimes:jpg,jpeg,png,gif|max:5120',
 //        ]);
 
+
+        $mimeType = finfo_file(finfo_open(FILEINFO_MIME_TYPE),  $request->file('image')->getRealPath());
+        Log::info("Detected MIME Type: " . $mimeType);
+
         Log::info("Upload request received", [
             'content_length' => $_SERVER['CONTENT_LENGTH'] ?? 'not set',
             'request_size' => strlen(file_get_contents('php://input')),
+            'raw_input' => file_get_contents('php://input')
         ]);
+
+//        Log::debug(mime_content_type('path/to/test-image.jpg'));
+
+        // Debugging: Check the file data
+        if ($request->hasFile('image')) {
+            $file = $request->file('image');
+
+            Log::info("File detected", [
+                'original_name' => $file->getClientOriginalName(),
+                'mime_type' => $file->getMimeType(),
+                'client_mime_type' => $file->getClientMimeType(),
+                'size' => $file->getSize(),
+                'error_code' => $file->getError(),
+                'real_path' => $file->getRealPath(),
+            ]);
+        } else {
+            Log::error("No file uploaded. Request Data:", $request->all());
+            return response()->json(['error' => 'No file uploaded or file not fully received'], 400);
+        }
 
 //        dd($request);
 
         // Check if Laravel received the file
-        if (!$request->hasFile('image')) {
-            Log::error("No file uploaded.");
-            return response()->json(['error' => 'No file uploaded or file not fully received'], 400);
-        }
+//        if (!$request->hasFile('image')) {
+//            Log::error("No file uploaded.");
+//            return response()->json(['error' => 'No file uploaded or file not fully received'], 400);
+//        }
 
         $file = $request->file('image');
 
@@ -46,6 +70,8 @@ class CloudinaryController extends Controller
             'size' => $file->getSize(),
             'mime_type' => $file->getMimeType(),
         ]);
+
+
 
 
         // Upload to Cloudinary
