@@ -15,10 +15,54 @@
             <!--            <pre>{{ address }}</pre>-->
 
 
+
+
             <div class="py-6 mx-auto max-w-2xl text-center">
                 <h2 class="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">New Customer</h2>
             </div>
+
+
             <div class="mx-auto mt-16 max-w-xl sm:mt-20">
+                <div class="relative mb-6 w-full max-w-lg">
+                    <button
+                        @click="searchResults = []"
+                        class="px-6 py-2 mb-2 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2 transition duration-300"
+                    >
+                        Clear
+                    </button>
+                    <input
+                        type="text"
+                        v-model="searchQuery"
+                        @input="fetchResults"
+                        class="w-full px-4 py-2 border rounded-lg shadow-sm focus:ring focus:ring-blue-300"
+                        placeholder="Search by Name or Address..."
+                    />
+
+                    <ul v-if="searchResults.length" class="absolute z-10 w-full bg-white border rounded-lg shadow-lg mt-2 max-h-60 overflow-auto">
+                        <li
+                            v-for="customer in searchResults"
+                            :key="customer.mailing_address_1"
+                            @click="selectCustomer(customer)"
+                            class="px-4 py-2 hover:bg-blue-100 cursor-pointer"
+                        >
+                            {{ customer.ownership }} - {{ customer.mailing_address_1 }}
+                        </li>
+                    </ul>
+
+                    <div v-if="selectedCustomer" class="mt-4 p-4 bg-gray-100 rounded-lg shadow">
+                        <h3 class="text-lg font-semibold">Selected Customer</h3>
+                        <p><strong>Name:</strong> {{ selectedCustomer.firstName }} {{ selectedCustomer.lastName }}</p>
+                        <p><strong>Address:</strong> {{ selectedCustomer.address }}, {{ selectedCustomer.city }}, {{ selectedCustomer.zip }}</p>
+                        <p><strong>Sale Date:</strong> {{ selectedCustomer.saleDate }}</p>
+                        <p><strong>Sale Price:</strong> {{ selectedCustomer.salePrice }}</p>
+                        <button
+                            @click="populateFields(selectedCustomer)"
+                            class="px-6 py-2 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2 transition duration-300"
+                        >
+                            Use
+                        </button>
+                    </div>
+                </div>
                 <div class="grid grid-cols-1 gap-x-8 gap-y-6 sm:grid-cols-2">
                     <div>
                         <label for="first-name" class="block text-sm font-semibold leading-6 text-gray-900">First
@@ -223,6 +267,44 @@
     </layout>
 </template>
 
+<script setup>
+import { ref, computed } from "vue";
+import axios from "axios";
+
+const searchQuery = ref("");
+const searchResults = ref([]);
+const selectedCustomer = ref(null);
+
+const fetchResults = async () => {
+    if (searchQuery.value.length < 2) return;
+
+    try {
+        const response = await axios.get(`/customer/search`, {
+            params: { query: searchQuery.value }
+        });
+
+        searchResults.value = response.data;
+    } catch (error) {
+        console.error("Error fetching data:", error);
+    }
+};
+
+const selectCustomer = (customer) => {
+    const [firstName, ...lastName] = customer.ownership.split(" ");
+    selectedCustomer.value = {
+        firstName: firstName || "",
+        lastName: lastName.join(" ") || "",
+        address: customer.mailing_address_1,
+        city: customer.mailing_city,
+        zip: customer.mailing_zip,
+        saleDate: customer.sale_date,
+        salePrice: customer.sale_price
+    };
+    searchQuery.value = customer.mailing_address_1;
+    searchResults.value = [];
+};
+</script>
+
 <script>
 import Layout from "../Shared/Layout";
 import {Link} from '@inertiajs/inertia-vue3'
@@ -333,15 +415,15 @@ export default {
         }
     },
     mounted() {
-        this.customer.userId = this.prospective.user_id;
-        this.customer.customerId = this.prospective.id;
-        this.customer.addressId = this.address.id;
-        this.customer.firstName = this.prospective.first_name;
-        this.customer.lastName = this.prospective.last_name;
-        this.customer.address = this.address.address_line_1;
-        this.customer.city = this.address.city;
-        this.customer.zip = this.address.zip;
-        this.customer.phoneNumber = this.prospective.phone_number;
+        // this.customer.userId = this.prospective.user_id;
+        // this.customer.customerId = this.prospective.id;
+        // this.customer.addressId = this.address.id;
+        // this.customer.firstName = this.prospective.first_name;
+        // this.customer.lastName = this.prospective.last_name;
+        // this.customer.address = this.address.address_line_1;
+        // this.customer.city = this.address.city;
+        // this.customer.zip = this.address.zip;
+        // this.customer.phoneNumber = this.prospective.phone_number;
     },
     methods: {
         // addTaskContainers(){
@@ -403,6 +485,13 @@ export default {
         //     taskContainer.appendChild(taskDiv);
         //
         // },
+        populateFields(customer){
+            this.customer.firstName = customer.lastName;
+            this.customer.lastName = customer.firstName;
+            this.customer.address = customer.address;
+            this.customer.city = customer.city;
+            this.customer.zip = customer.zip;
+        },
         addTask() {
             console.log('another task');
             console.log(this.customer.tasks);

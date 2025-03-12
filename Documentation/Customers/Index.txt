@@ -1,0 +1,65 @@
+- For the Index page I need header of buttons that has each day on it
+    - when a certain day is pushed then the customers for that day are displayed and
+        On initial page load the below data is returned for the current day
+        - 2 json responses from the server
+        - customers
+            - [
+                {
+                    "first_name": Justin,
+                    "last_name" : Schudel
+                    'order': 1
+                    'id': 183
+                    'service_day': Tuesday
+                    'assigned_serviceman': Blake
+                    'phone_number': 15417602965
+                    'community_gate_code': Close properly because of little kids
+                    'address_line_1': 3315 S Hazelton Lane
+                    'city': Tempe
+                    'zip': 85282
+                    'addressId': 185
+                    'completed': false
+                    'needsBackwash': false
+                },
+                {
+                    "first_name": Justin,
+                    "last_name" :Schudel
+                    'order': 1
+                    'id': 183
+                    'service_day': Tuesday
+                    'assigned_serviceman': Blake
+                    'phone_number': 15417602965
+                    'community_gate_code': Close properly because of little kids
+                    'address_line_1': 3315 S Hazelton Lane
+                    'city': Tempe
+                    'zip': 85282
+                    'addressId': 185
+                    'completed': false
+                    'needsBackwash': false
+                }
+            ]
+        - servicemen
+            - [
+                {
+                    id:10
+                    name:Blake
+                },
+                {
+                    id:10
+                    name:Blake
+                }
+              ]
+    - each of these rows is displayed in a card form
+    - for each row I also have a drop down button of the serviceman that I can transfer
+        a particular customer to
+        - it is only displayed if the user is an admin
+            - v-if="user.is_admin === 1"
+        - functionality is
+            transfer(addressId) {
+                        Inertia.post('/transfer/storeFromCustomers', {'address': address})
+                    },
+    - I need a button to go to the customer that implements this logic
+        - goToCustomer(id) {
+                      Inertia.get('customers/show/' + id);
+                  },
+    - need the row to marked that a pool was completed if the completed is true and
+        denoted as false if completed is marked as false

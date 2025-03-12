@@ -19,17 +19,17 @@ class AdvertisingController extends Controller
 
     private $townships = [
 
-        '-2S-6E',
-        '-2S-7E',
-        '-2S-8E',
-        '-1S-3E',
+//        '-2S-6E',
+//        '-2S-7E',
+//        '-2S-8E',
+//        '-1S-3E',
 
-        '-1S-4E',
-        '-1S-5E',
-        '-1S-6E',
-        '-1S-7E',
+//        '-1S-4E',
+//        '-1S-5E',
+//        '-1S-6E',
+//        '-1S-7E',
 
-        '-1N-3E',
+//        '-1N-3E',
         '-1N-4E',
         '-1N-5E',
         '-1N-6E',
@@ -43,31 +43,43 @@ class AdvertisingController extends Controller
     {
 //        dd('updateMailing');
 
+//        self::updateStr('-2S-6E', 32, 39819);
+//        self::updateStr('-2S-7E', 32, 66108);
+        self::updateStr('-1S-3E', 28, 151077);
+        self::updateStr('-1S-4E', 12, 92470);
+        self::updateStr('-1S-5E', 10, 108765);
+        self::updateStr('-1S-6E', 6, 118063);
+        self::updateStr('-1S-7E', 3, 130035);
+        self::updateStr('-1N-3E', 2, 134549);
+        self::updateStr('-1N-4E', 1, 136138);
 
         foreach ($this->townships as $township) {
-
-            if ($township === '-1S-4E') {
-                for ($i = 12; $i < 36; $i++) {
-                    $str = $i . $township;
-                    $apns = self::getApns($str, '30149078');
-                    self::fetchParcelDetails($apns);
-                    Log::debug("$str is done");
-                }
-            } else {
-                for ($i = 1; $i < 36; $i++) {
-                    $str = $i . $township;
-                    $this->fetchTownshipParcels($str);
-                    $apns = self::getApns($str);
-                    self::fetchParcelDetails($apns);
-                    Log::debug("$str is done");
-                }
+            for ($i = 1; $i < 37; $i++) {
+                $str = $i . $township;
+                $this->fetchTownshipParcels($str);
+                $apns = self::getApns($str);
+                self::fetchParcelDetails($apns);
+                Log::debug("$str is done");
             }
-
-
-
         }
 
         return response()->json(['message' => 'Mailing list updated successfully.']);
+    }
+
+    private function updateStr($township, $startingSection, $startingId)
+    {
+
+        $str = $startingSection . $township;
+        $apns = self::getApns($str, $startingId);
+        self::fetchParcelDetails($apns);
+        Log::debug("$str is done");
+        for ($i = $startingSection + 1; $i < 37; $i++) {
+            $str = $i . $township;
+            $this->fetchTownshipParcels($str);
+            $apns = self::getApns($str);
+            self::fetchParcelDetails($apns);
+            Log::debug("$str is done");
+        }
     }
 
     private function fetchTownshipParcels($township)
@@ -104,11 +116,11 @@ class AdvertisingController extends Controller
         } while (!empty($data));
     }
 
-    private function getApns($str, $apn = 0)
+    private function getApns($str, $id = 0)
     {
         return Str::select(['apn'])
             ->where('section_township_range', $str)
-            ->where('apn', '>', $apn)
+            ->where('id', '>', $id)
             ->get();
     }
 
@@ -131,12 +143,12 @@ class AdvertisingController extends Controller
 //        }
 
         if (is_null($data)) {
-            Log::debug($apn->apn . " :: is null" );
+//            Log::debug($apn->apn . " :: is null" );
             return;
         }
 
         if (count($data) === 0) {
-            Log::debug($apn->apn . " :: is empty" );
+//            Log::debug($apn->apn . " :: is empty" );
             return;
         }
 

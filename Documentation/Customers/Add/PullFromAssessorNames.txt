@@ -1,0 +1,25 @@
+- I want to be able to pull from Assessor on the add page to pre populate the fields
+- Steps
+    - I type in a name or an address in a combobox
+    - styled in tailwind, vue and modern
+    - with the keystroke a request is made in the backend
+        - the backend
+            - runs a query on the owners table
+                - pull json response with these columns
+                    - ownership
+                    - mailing_address_1
+                    - mailing_city
+                    - mailing_zip
+                    - sale_date
+                    - sale_price
+   - Front end
+        - display results in a drop down
+        - user selects the result
+        - once selected the json response matches the fields to
+            - customer.firstName = parsed ownership by first space where the first word is the firstName
+            - customer.lastName = the last half of parsed ownership
+            - customer.address = mailing_address_1
+            - customer.city = mailing_city
+            - customer.zip = mailing_zip
+        - have a label that displays the sale_date and sale_price
+

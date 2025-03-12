@@ -1,0 +1,144 @@
+local that works
+
+Request URL:
+http://127.0.0.1:7000/upload
+Request Method:
+POST
+Status Code:
+200 OK
+Remote Address:
+127.0.0.1:7000
+Referrer Policy:
+strict-origin-when-cross-origin
+cache-control:
+no-cache, private
+connection:
+close
+content-type:
+application/json
+date:
+Tue, 11 Mar 2025 13:32:51 GMT
+host:
+127.0.0.1:7000
+set-cookie:
+XSRF-TOKEN=eyJpdiI6ImhvQi9zbkFUcXF4YW5BZVUweTBiTFE9PSIsInZhbHVlIjoiN0VjWEZBaWtjcmJhZWQvZk01OE5nY1JUSWZidzU1VEhkUytNc1JjT09uWm5qVFA2dUJLL2phTmt2dmEwZkNKUlovNGhUb1YzN1VnZVlEU0oxcDFZc3RFWm9BT3ZvUkUvN21GT1AzN1ZiRHhqUlJJaWE1TXRMVEZsNWYrYmZhNkoiLCJtYWMiOiJjMTZmMTVjZTk2ODQ3NTY1OGU2MzNmZTFhNmM1NTBhZGUzMWM1MTk3ZGU5NjYzZTM1YjdhYWE3N2M4MzgyMTgzIiwidGFnIjoiIn0%3D; expires=Tue, 11 Mar 2025 15:32:51 GMT; Max-Age=7200; path=/; samesite=lax
+set-cookie:
+kps_pools_session=eyJpdiI6IkZLeUQweVc3dk9GT3lqbERpOTRJcHc9PSIsInZhbHVlIjoiVkJuNk9mMnVTK3FSenpjTnBUVGlEVVJxRWtTdlhIM2RLRWdsNkt1R1p4UGlFa3RqY010TnRYRUpwL05jbDFyMkJLZjNqSldjcWxkWUJmc3Y4QVB1T0FZMXQybmM3cFVCMW9LS09Sd1ZScGtqOHk1b2ZvWFBJTnEwUEhuQWtCcEsiLCJtYWMiOiIyYTZmZDIzY2MwZjAzOTI1OGNjZDQ0YWY3MmU3ZDNiM2FkYzZjMTdjMDY3ZjMzODk2YWFiYmQ0YTkzYjA0NTZhIiwidGFnIjoiIn0%3D; expires=Tue, 11 Mar 2025 15:32:51 GMT; Max-Age=7200; path=/; httponly; samesite=lax
+vary:
+X-Inertia
+x-powered-by:
+PHP/8.2.22
+accept:
+application/json, text/plain, */*
+accept-encoding:
+gzip, deflate, br, zstd
+accept-language:
+en-US,en;q=0.9
+connection:
+keep-alive
+content-length:
+2708963
+content-type:
+multipart/form-data; boundary=----WebKitFormBoundarytBvzS3NSUzPRAeOm
+cookie:
+XDEBUG_SESSION=XDEBUG_ECLIPSE; XSRF-TOKEN=eyJpdiI6ImdmalNsOFFZMDFqL1FzYjVNY0RFblE9PSIsInZhbHVlIjoiTnhCK01xK0kxdjBWaUNGOXhOZUE0L21ZUk4va3RGa2M2Y3dLMnpySzE2SXM2VXlFSW5IS1MyckdKeUhtMUIrcXZpS0tsSWsyM0lkYVNwRUQ1S0ZQaklMSy9NNndGUWY5ZUExeUwwTC9Ld2NreFpFR3dQRGQ5RDNNSWtQL0Z0V1oiLCJtYWMiOiJkNjU5YjZhMWVkZWQzY2M2MDY2NmZlZDhmM2MwMmY1MDM3ZjZiM2YyYmRmNWMwYmM4ODk4NTYwM2ViMjhmZDY4IiwidGFnIjoiIn0%3D; kps_pools_session=eyJpdiI6Im1XUklsVG5xQnVWNGJCeUZmYXVZYVE9PSIsInZhbHVlIjoiSTNDam1BQWNTYVF5dVBSSndJblVJcWNTUm5vVDBRR2pGaVlxenZFK3RmVTMzcGg4bWVERCt1RjQzbW94QkN4b2I3ZjRwSDAvUG00MkNpVFdMTE1uOUFNNi9JTFdlTjNCTXh0NDFqNDZYRHBhZER4eVNLQ05EVkJaVnFnS0U1TVAiLCJtYWMiOiI3NTBlMDhkNmViYTc1MmQ5NzMxMDE1ODU4Mzc0MTQxYzQzMTdlM2ZhOWIwYjliMmQ2OGYzMTViM2Q5MTJlMzM3IiwidGFnIjoiIn0%3D
+host:
+127.0.0.1:7000
+origin:
+http://127.0.0.1:7000
+referer:
+http://127.0.0.1:7000/images/101
+sec-ch-ua:
+"Not(A:Brand";v="99", "Google Chrome";v="133", "Chromium";v="133"
+sec-ch-ua-mobile:
+?0
+sec-ch-ua-platform:
+"macOS"
+sec-fetch-dest:
+empty
+sec-fetch-mode:
+cors
+sec-fetch-site:
+same-origin
+user-agent:
+Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Safari/537.36
+x-csrf-token:
+bpYlLGmNZOOj9ZJnYRO8NwLe3TkNklYuMg7c8LI3
+x-requested-with:
+XMLHttpRequest
+x-xsrf-token:
+eyJpdiI6ImdmalNsOFFZMDFqL1FzYjVNY0RFblE9PSIsInZhbHVlIjoiTnhCK01xK0kxdjBWaUNGOXhOZUE0L21ZUk4va3RGa2M2Y3dLMnpySzE2SXM2VXlFSW5IS1MyckdKeUhtMUIrcXZpS0tsSWsyM0lkYVNwRUQ1S0ZQaklMSy9NNndGUWY5ZUExeUwwTC9Ld2NreFpFR3dQRGQ5RDNNSWtQL0Z0V1oiLCJtYWMiOiJkNjU5YjZhMWVkZWQzY2M2MDY2NmZlZDhmM2MwMmY1MDM3ZjZiM2YyYmRmNWMwYmM4ODk4NTYwM2ViMjhmZDY4IiwidGFnIjoiIn0=
+
+
+Server that doesnt
+Request URL:
+https://kpspools.com/upload
+Request Method:
+POST
+Status Code:
+400 Bad Request
+Remote Address:
+143.198.154.103:443
+Referrer Policy:
+strict-origin-when-cross-origin
+cache-control:
+no-cache, private
+content-type:
+application/json
+date:
+Tue, 11 Mar 2025 13:28:44 GMT
+server:
+nginx
+set-cookie:
+XSRF-TOKEN=eyJpdiI6IkUxbmxYRTNuTTl3Z251Q3RUZGpXWHc9PSIsInZhbHVlIjoiM0FFNFlxOHlsMVdRdGxpSFZxaGxNNEJHVkZwY285VUhlam1SNEN5RHVaRHJKWkgwOVpGc2lTMkEwbE83dHJ6aU9VNVhKZUFmL3ZwNlJhOWFFMnBuNThkaFFKb1c4dm1jeENkSktxL0hyeGt5WWdTRTRqTWlOT2sxeGdkMVJZeTUiLCJtYWMiOiJlODIyMmMxMjEzNTJjNzY2Y2NmOTJjNTIzNzJkZTg5OWJkZTBmMDViNDYxYjNhNTc5ZDBlZjRiNTIxN2ZjNTI1IiwidGFnIjoiIn0%3D; expires=Tue, 11 Mar 2025 15:28:44 GMT; Max-Age=7200; path=/; secure; samesite=lax
+set-cookie:
+kps_pools_session=eyJpdiI6IklaV0F1b0FhNVRYeXFmR3hyWDk5Y0E9PSIsInZhbHVlIjoiSWFuRGZ1WS9TN1dKbnJnR3JqUXBWSTNHckR3eXp2ZWhvcmlUQUlweEh4TU1sNjh2VE1MUXBVa3UvSXo5bVBLUFM3d2FqZ3FqSS9QUms3Y0dMelZRbitjRHRFR0lYeVZnZ2dNdmx4SnFRUStWUVlGc0JQaGpFdTJsajlDVkY0L3kiLCJtYWMiOiIxMTgzMDA5YjNjNzg0ZTk0N2QyOTg4MDFlM2ZjOGIwYTQ0ZDEyNzBiYjhlZjRjZTc2NjI0MWZlZWQ4ZWJiZDgyIiwidGFnIjoiIn0%3D; expires=Tue, 11 Mar 2025 15:28:44 GMT; Max-Age=7200; path=/; httponly; samesite=lax
+vary:
+X-Inertia
+:authority:
+kpspools.com
+:method:
+POST
+:path:
+/upload
+:scheme:
+https
+accept:
+application/json, text/plain, */*
+accept-encoding:
+gzip, deflate, br, zstd
+accept-language:
+en-US,en;q=0.9
+content-length:
+2708963
+content-type:
+multipart/form-data; boundary=----WebKitFormBoundary59Ucn2cJ8U21wG1y
+cookie:
+XSRF-TOKEN=eyJpdiI6IjlWbCtTZDV0QmZzaSsxVXhWY2JjNlE9PSIsInZhbHVlIjoiY0o1eC9kNHMzVE5teWVtOTYwU1M2aGlGYjNwaWdNVWIycVg4YVpQZGFvYnZhdERVR1BIQXgzVUpiNVlYMHNpUlZGU2NsZnp0Q0RBYVBCa3ExVmdaMjFYSzdUdVhpT3AxUlBXa2dUZFFnSldQS1FzZWtqaXg4TTBvL3BhUWNqMXQiLCJtYWMiOiJlODNmZWI1NDczMDExN2NiNjljZDIzZDc5MWI5Mzk4NjlmZjU5YTM0MWY5MmNiNTlmMzc4ZTFhNzg0ZDM4N2ZjIiwidGFnIjoiIn0%3D; kps_pools_session=eyJpdiI6IkswYW1zR0dOZVRRN1V0Nm1BNFROemc9PSIsInZhbHVlIjoiUWQySC8wYSt2VkI3Ui93dW1kRDNReDk1UTJabWRMYnZFaXN0T0tsaTdoMUVUNThaWTEyQURxdkpFVUNvSXhxK0c1ZSthSmlZWEcwWkpwZmE5dW1Ed2FBc1VSMFUrcVVrd1Y3VGZ1bUl4MWdNZHBKTkZFejhBV0VhSWd4STN6U3IiLCJtYWMiOiJhNThlOTgxYTJmNWQ4YjlhYjhhODVjZTMyNjE1N2ZmYmViNzJiNDMyMWIyYzQwZDA1ZjcwMTllMTg3NTA1YTI5IiwidGFnIjoiIn0%3D
+origin:
+https://kpspools.com
+priority:
+u=1, i
+referer:
+https://kpspools.com/images/101
+sec-ch-ua:
+"Not(A:Brand";v="99", "Google Chrome";v="133", "Chromium";v="133"
+sec-ch-ua-mobile:
+?0
+sec-ch-ua-platform:
+"macOS"
+sec-fetch-dest:
+empty
+sec-fetch-mode:
+cors
+sec-fetch-site:
+same-origin
+user-agent:
+Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Safari/537.36
+x-csrf-token:
+Tkm4BcwuZ9UKkRKUuSe7ntU11LkwJigvZddqP5FO
+x-requested-with:
+XMLHttpRequest
+x-xsrf-token:
+eyJpdiI6IjlWbCtTZDV0QmZzaSsxVXhWY2JjNlE9PSIsInZhbHVlIjoiY0o1eC9kNHMzVE5teWVtOTYwU1M2aGlGYjNwaWdNVWIycVg4YVpQZGFvYnZhdERVR1BIQXgzVUpiNVlYMHNpUlZGU2NsZnp0Q0RBYVBCa3ExVmdaMjFYSzdUdVhpT3AxUlBXa2dUZFFnSldQS1FzZWtqaXg4TTBvL3BhUWNqMXQiLCJtYWMiOiJlODNmZWI1NDczMDExN2NiNjljZDIzZDc5MWI5Mzk4NjlmZjU5YTM0MWY5MmNiNTlmMzc4ZTFhNzg0ZDM4N2ZjIiwidGFnIjoiIn0=
+

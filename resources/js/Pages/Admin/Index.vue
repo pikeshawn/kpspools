@@ -136,6 +136,10 @@ export default {
                     id: 13,
                     name: "Reports",
                     route: "reports.index"
+                },{
+                    id: 14,
+                    name: "Bulk Transfer",
+                    route: "transfer.bulk"
                 }
             ]
         }

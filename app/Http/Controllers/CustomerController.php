@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Address;
+use App\Models\Owner;
 use App\Models\Customer;
 use App\Models\PasswordlessToken;
 use App\Models\Task;
@@ -51,7 +52,20 @@ class CustomerController extends Controller
         return Inertia::render('Customers/Index', [
             'customers' => $customers,
             'servicemen' => $servicemen,
+            'currentDay' => strtolower(Carbon::now()->timezone(config('app.timezone'))->format('l'))
         ]);
+    }
+
+    public function search(Request $request)
+    {
+        $query = $request->input('query');
+
+        $results = Owner::where('ownership', 'LIKE', "%{$query}%")
+            ->orWhere('mailing_address_1', 'LIKE', "%{$query}%")
+            ->limit(10)
+            ->get(['ownership', 'mailing_address_1', 'mailing_city', 'mailing_zip', 'sale_date', 'sale_price']);
+
+        return response()->json($results);
     }
 
     public function getCustomer(Request $request)
@@ -69,19 +83,24 @@ class CustomerController extends Controller
 //        return Customer::where('last_name', 'like', "%{$request->customer}%")->get();
     }
 
-    public function getCustomersForDay(Request $request)
+    public function getCustomersForDay($day)
     {
 //        dd($day);
 
         if (User::isAdmin()) {
-            $customers = Customer::allCustomers(ucfirst($request->day));
+            $customers = Customer::allCustomers(ucfirst($day));
         } else {
-            $customers = Customer::allCustomersTiedToUser(ucfirst($request->day));
+            $customers = Customer::allCustomersTiedToUser(ucfirst($day));
         }
 
 //        $servicemen = User::where('type', 'serviceman')->orderBy('name', 'asc')->where('active', 1)->get();
 
-        return $customers;
+//        return $customers;
+
+        return response()->json([
+            'success' => true,
+            'customers' => $customers,
+        ]);
 
 //        return Inertia::render('Customers/Index', [
 //            'customers' => $customers,
@@ -91,35 +110,37 @@ class CustomerController extends Controller
 
     public function getNames(Request $request)
     {
-//        dd($request);
+        $query = Customer::select(
+            'customers.first_name',
+            'customers.last_name',
+            'customers.phone_number', // Added phone number
+            'addresses.address_line_1',
+            'addresses.id as addressId'
+        )
+            ->join('addresses', 'customers.id', '=', 'addresses.customer_id');
 
-        if (User::isAdmin()) {
-            $customers = Customer::select(
-                'customers.first_name',
-                'customers.last_name',
-                'addresses.address_line_1',
-                'addresses.id as addressId'
-            )
-                ->join('addresses', 'customers.id', '=', 'addresses.customer_id')
-                ->where('customers.last_name', 'like', "$request->name%")
-                ->orderByDesc('addresses.order')
-                ->get();
-        } else {
-            $customers = Customer::select(
-                'customers.first_name',
-                'customers.last_name',
-                'addresses.address_line_1',
-                'addresses.id as addressId'
-            )
-                ->join('addresses', 'customers.id', '=', 'addresses.customer_id')
-                ->where('addresses.active', 1)
-                ->where('addresses.sold', 0)
-                ->where('customers.last_name', 'like', "$request->name%")
-                ->orderByDesc('addresses.order')
-                ->get();
+        // Apply filters based on the search input
+        if ($request->has('name') && !empty($request->name)) {
+            $query->where(function ($q) use ($request) {
+                $q->where('customers.first_name', 'like', "{$request->name}%")
+                    ->orWhere('customers.last_name', 'like', "{$request->name}%")
+                    ->orWhere('customers.phone_number', 'like', "{$request->name}%");
+            });
         }
 
-        return $customers;
+//        if ($request->has('phone') && !empty($request->phone)) {
+//            $query->orWhere('customers.phone_number', 'like', "%{$request->phone}%");
+//        }
+
+        // Admin-specific condition
+        if (!User::isAdmin()) {
+            $query->where('addresses.active', 1)
+                ->where('addresses.sold', 0);
+        }
+
+        $customers = $query->orderByDesc('addresses.order')->get();
+
+        return response()->json($customers);
     }
 
     public function notes(Customer $customer): Response

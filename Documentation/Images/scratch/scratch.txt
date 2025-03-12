@@ -1,0 +1,559 @@
+My local computer where uploading the images works sends this as the request
+Illuminate\Http\Request {#41 // app/Http/Controllers/CloudinaryController.php:28
+  +attributes:
+Symfony\Component\HttpFoundation
+\
+ParameterBag {#46
+    #parameters: []
+  }
+  +request:
+Symfony\Component\HttpFoundation
+\
+InputBag {#42
+    #parameters: array:1 [
+      "address_id" => "101"
+    ]
+  }
+  +query:
+Symfony\Component\HttpFoundation
+\
+InputBag {#49
+    #parameters: []
+  }
+  +server:
+Symfony\Component\HttpFoundation
+\
+ServerBag {#44
+    #parameters: array:37 [
+      "DOCUMENT_ROOT" => "/Users/shawnpike/Documents/code/business/kpspools/public"
+      "REMOTE_ADDR" => "127.0.0.1"
+      "REMOTE_PORT" => "60606"
+      "SERVER_SOFTWARE" => "PHP 8.2.22 Development Server"
+      "SERVER_PROTOCOL" => "HTTP/1.1"
+      "SERVER_NAME" => "127.0.0.1"
+      "SERVER_PORT" => "7000"
+      "REQUEST_URI" => "/upload"
+      "REQUEST_METHOD" => "POST"
+      "SCRIPT_NAME" => "/index.php"
+      "SCRIPT_FILENAME" => "/Users/shawnpike/Documents/code/business/kpspools/public/index.php"
+      "PATH_INFO" => "/upload"
+      "PHP_SELF" => "/index.php/upload"
+      "HTTP_HOST" => "127.0.0.1:7000"
+      "HTTP_CONNECTION" => "keep-alive"
+      "CONTENT_LENGTH" => "2708963"
+      "HTTP_CONTENT_LENGTH" => "2708963"
+      "HTTP_SEC_CH_UA_PLATFORM" => ""macOS""
+      "HTTP_X_CSRF_TOKEN" => "bpYlLGmNZOOj9ZJnYRO8NwLe3TkNklYuMg7c8LI3"
+      "HTTP_X_XSRF_TOKEN" => "eyJpdiI6IjlhRkFxSndGQXNNM2R3Q2xjL0pFNWc9PSIsInZhbHVlIjoiaFhNUHJoa3pDcFl4c3dNYWNJeFFuYzNvTkZJRnBXa0hkb3pONE5Sdk9oZFRJOVI2TGFpTG01aDhXUVZPem53NEx4WXJ1MFVhcGRjenFDYjBkNmkrUXlqSVFoM2ZXWTF4Uy9TQjAzclJONUZXSXN5dHJEb0w3NzdjTjBydERtdUUiLCJtYWMiOiI1ZWVkMGFjMjhjNWQ5MDg0MGU2MDA4MDc5NTU2Mzk2NThhMjQyYjQ5NjEzMGJhMGUzM2QxOTEzMGI1MDU2MWE5IiwidGFnIjoiIn0="
+      "HTTP_SEC_CH_UA" => ""Not(A:Brand";v="99", "Google Chrome";v="133", "Chromium";v="133""
+      "HTTP_SEC_CH_UA_MOBILE" => "?0"
+      "HTTP_X_REQUESTED_WITH" => "XMLHttpRequest"
+      "HTTP_USER_AGENT" => "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Safari/537.36"
+      "HTTP_ACCEPT" => "application/json, text/plain, */*"
+      "CONTENT_TYPE" => "multipart/form-data; boundary=----WebKitFormBoundary4UN5rOkEY9V8bzs9"
+      "HTTP_CONTENT_TYPE" => "multipart/form-data; boundary=----WebKitFormBoundary4UN5rOkEY9V8bzs9"
+      "HTTP_ORIGIN" => "http://127.0.0.1:7000"
+      "HTTP_SEC_FETCH_SITE" => "same-origin"
+      "HTTP_SEC_FETCH_MODE" => "cors"
+      "HTTP_SEC_FETCH_DEST" => "empty"
+      "HTTP_REFERER" => "http://127.0.0.1:7000/images/101"
+      "HTTP_ACCEPT_ENCODING" => "gzip, deflate, br, zstd"
+      "HTTP_ACCEPT_LANGUAGE" => "en-US,en;q=0.9"
+      "HTTP_COOKIE" => "XDEBUG_SESSION=XDEBUG_ECLIPSE; XSRF-TOKEN=eyJpdiI6IjlhRkFxSndGQXNNM2R3Q2xjL0pFNWc9PSIsInZhbHVlIjoiaFhNUHJoa3pDcFl4c3dNYWNJeFFuYzNvTkZJRnBXa0hkb3pONE5Sdk9oZFRJOVI2TGFpTG01aDhXUVZPem53NEx4WXJ1MFVhcGRjenFDYjBkNmkrUXlqSVFoM2ZXWTF4Uy9TQjAzclJONUZXSXN5dHJEb0w3NzdjTjBydERtdUUiLCJtYWMiOiI1ZWVkMGFjMjhjNWQ5MDg0MGU2MDA4MDc5NTU2Mzk2NThhMjQyYjQ5NjEzMGJhMGUzM2QxOTEzMGI1MDU2MWE5IiwidGFnIjoiIn0%3D; kps_pools_session=eyJpdiI6ImoydUdJTi9DU3grWU91WFI4cUh2aGc9PSIsInZhbHVlIjoiKzFYMEZFdG9Jb3hZVGxvY1kwNGZPVksxVUNUcjF1RUV3N2FHcUNaajRlZWo3SzYxbytGUU1GTUU3eTBnaCs0aCtCVmVsUGtERGVIbmN1QjN3MzBwdGFEb0FiSzRUVHN5cjM2dGZBZjF3b2NQcW5XSUFlbWhDV2pERE44amFVU1MiLCJtYWMiOiIzYzM0MDA0NmM4ZWJmNmY2OTkzMmIwOWZlNGRlYzMyZTU2NTUwMTE0MmEzN2FjMmE3YTRiM2UxNGY4NmI5ZDI3IiwidGFnIjoiIn0%3D"
+      "REQUEST_TIME_FLOAT" => 1741697292.1438
+      "REQUEST_TIME" => 1741697292
+    ]
+  }
+  +files:
+Symfony\Component\HttpFoundation
+\
+FileBag {#48
+    #parameters: array:1 [
+      "image" =>
+Symfony\Component\HttpFoundation\File
+\
+UploadedFile {#38
+        -test: false
+        -originalName: "IMG_0616.jpeg"
+        -mimeType: "image/jpeg"
+        -error: 0
+        path: "/private/var/folders/km/r3p976yj2jxbj98yhlbsrvd80000gn/T"
+        filename: "phpUPBf2q"
+        basename: "phpUPBf2q"
+        pathname: "/private/var/folders/km/r3p976yj2jxbj98yhlbsrvd80000gn/T/phpUPBf2q"
+        extension: ""
+        realPath: "
+/private/var/folders/km/r3p976yj2jxbj98yhlbsrvd80000gn
+/
+T/phpUPBf2q"
+        aTime: 2025-03-11 12:48:12
+        mTime: 2025-03-11 12:48:12
+        cTime: 2025-03-11 12:48:12
+        inode: 125184669
+        size: 2708675
+        perms: 0100600
+        owner: 501
+        group: 20
+        type: "file"
+        writable: true
+        readable: true
+        executable: false
+        file: true
+        dir: false
+        link: false
+      }
+    ]
+  }
+  +cookies:
+Symfony\Component\HttpFoundation
+\
+InputBag {#47
+    #parameters: array:3 [
+      "XDEBUG_SESSION" => null
+      "XSRF-TOKEN" => "bpYlLGmNZOOj9ZJnYRO8NwLe3TkNklYuMg7c8LI3"
+      "kps_pools_session" => "JNJIZxg4bNZA3mOX2qUaxd8ToXyT7to7HkJOYibt"
+    ]
+  }
+  +headers:
+Symfony\Component\HttpFoundation
+\
+HeaderBag {#43
+    #headers: array:20 [
+      "host" => array:1 [
+        0 => "127.0.0.1:7000"
+      ]
+      "connection" => array:1 [
+        0 => "keep-alive"
+      ]
+      "content-length" => array:1 [
+        0 => "2708963"
+      ]
+      "sec-ch-ua-platform" => array:1 [
+        0 => ""macOS""
+      ]
+      "x-csrf-token" => array:1 [
+        0 => "bpYlLGmNZOOj9ZJnYRO8NwLe3TkNklYuMg7c8LI3"
+      ]
+      "x-xsrf-token" => array:1 [
+        0 => "eyJpdiI6IjlhRkFxSndGQXNNM2R3Q2xjL0pFNWc9PSIsInZhbHVlIjoiaFhNUHJoa3pDcFl4c3dNYWNJeFFuYzNvTkZJRnBXa0hkb3pONE5Sdk9oZFRJOVI2TGFpTG01aDhXUVZPem53NEx4WXJ1MFVhcGRjenFDYjBkNmkrUXlqSVFoM2ZXWTF4Uy9TQjAzclJONUZXSXN5dHJEb0w3NzdjTjBydERtdUUiLCJtYWMiOiI1ZWVkMGFjMjhjNWQ5MDg0MGU2MDA4MDc5NTU2Mzk2NThhMjQyYjQ5NjEzMGJhMGUzM2QxOTEzMGI1MDU2MWE5IiwidGFnIjoiIn0="
+      ]
+      "sec-ch-ua" => array:1 [
+        0 => ""Not(A:Brand";v="99", "Google Chrome";v="133", "Chromium";v="133""
+      ]
+      "sec-ch-ua-mobile" => array:1 [
+        0 => "?0"
+      ]
+      "x-requested-with" => array:1 [
+        0 => "XMLHttpRequest"
+      ]
+      "user-agent" => array:1 [
+        0 => "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Safari/537.36"
+      ]
+      "accept" => array:1 [
+        0 => "application/json, text/plain, */*"
+      ]
+      "content-type" => array:1 [
+        0 => "multipart/form-data; boundary=----WebKitFormBoundary4UN5rOkEY9V8bzs9"
+      ]
+      "origin" => array:1 [
+        0 => "http://127.0.0.1:7000"
+      ]
+      "sec-fetch-site" => array:1 [
+        0 => "same-origin"
+      ]
+      "sec-fetch-mode" => array:1 [
+        0 => "cors"
+      ]
+      "sec-fetch-dest" => array:1 [
+        0 => "empty"
+      ]
+      "referer" => array:1 [
+        0 => "http://127.0.0.1:7000/images/101"
+      ]
+      "accept-encoding" => array:1 [
+        0 => "gzip, deflate, br, zstd"
+      ]
+      "accept-language" => array:1 [
+        0 => "en-US,en;q=0.9"
+      ]
+      "cookie" => array:1 [
+        0 => "XDEBUG_SESSION=XDEBUG_ECLIPSE; XSRF-TOKEN=eyJpdiI6IjlhRkFxSndGQXNNM2R3Q2xjL0pFNWc9PSIsInZhbHVlIjoiaFhNUHJoa3pDcFl4c3dNYWNJeFFuYzNvTkZJRnBXa0hkb3pONE5Sdk9oZFRJOVI2TGFpTG01aDhXUVZPem53NEx4WXJ1MFVhcGRjenFDYjBkNmkrUXlqSVFoM2ZXWTF4Uy9TQjAzclJONUZXSXN5dHJEb0w3NzdjTjBydERtdUUiLCJtYWMiOiI1ZWVkMGFjMjhjNWQ5MDg0MGU2MDA4MDc5NTU2Mzk2NThhMjQyYjQ5NjEzMGJhMGUzM2QxOTEzMGI1MDU2MWE5IiwidGFnIjoiIn0%3D; kps_pools_session=eyJpdiI6ImoydUdJTi9DU3grWU91WFI4cUh2aGc9PSIsInZhbHVlIjoiKzFYMEZFdG9Jb3hZVGxvY1kwNGZPVksxVUNUcjF1RUV3N2FHcUNaajRlZWo3SzYxbytGUU1GTUU3eTBnaCs0aCtCVmVsUGtERGVIbmN1QjN3MzBwdGFEb0FiSzRUVHN5cjM2dGZBZjF3b2NQcW5XSUFlbWhDV2pERE44amFVU1MiLCJtYWMiOiIzYzM0MDA0NmM4ZWJmNmY2OTkzMmIwOWZlNGRlYzMyZTU2NTUwMTE0MmEzN2FjMmE3YTRiM2UxNGY4NmI5ZDI3IiwidGFnIjoiIn0%3D"
+      ]
+    ]
+    #cacheControl: []
+  }
+  #content: null
+  #languages: null
+  #charsets: null
+  #encodings: null
+  #acceptableContentTypes: null
+  #pathInfo: "/upload"
+  #requestUri: "/upload"
+  #baseUrl: ""
+  #basePath: null
+  #method: "POST"
+  #format: null
+  #session:
+Illuminate\Session
+\
+Store {#604
+    #id: "JNJIZxg4bNZA3mOX2qUaxd8ToXyT7to7HkJOYibt"
+    #name: "kps_pools_session"
+    #attributes: array:5 [
+      "_token" => "bpYlLGmNZOOj9ZJnYRO8NwLe3TkNklYuMg7c8LI3"
+      "_previous" => array:1 [
+        "url" => "http://127.0.0.1:7000/images/101"
+      ]
+      "_flash" => array:2 [
+        "old" => []
+        "new" => []
+      ]
+      "login_web_59ba36addc2b2f9401580f014c7f58ea4e30989d" => 2
+      "password_hash_sanctum" => "$2y$10$wcZMn3lzGwZNGXep67h.VODDe48b9mAcXoUvnzLsPsqtLSyU.RB82"
+    ]
+    #handler:
+Illuminate\Session
+\
+DatabaseSessionHandler {#596
+      #connection:
+Illuminate\Database
+\
+MySqlConnection {#598 …25}
+      #table: "sessions"
+      #minutes: "120"
+      #container:
+Illuminate\Foundation
+\
+Application {#2 …40}
+      #exists: true
+    }
+    #serialization: "php"
+    #started: true
+  }
+  #locale: null
+  #defaultLocale: "en"
+  -preferredFormat: null
+  -isHostValid: true
+  -isForwardedValid: true
+  -isSafeContentPreferred: ? bool
+  -trustedValuesCache: []
+  -isIisRewrite: false
+  #json: null
+  #convertedFiles: null
+  #userResolver: Closure($guard = null) {#542
+    class: "
+Illuminate\Auth
+\
+AuthServiceProvider"
+    this:
+Illuminate\Auth
+\
+AuthServiceProvider {#198 …}
+    use: {
+      $app:
+Illuminate\Foundation
+\
+Application {#2 …40}
+    }
+  }
+  #routeResolver: Closure() {#551
+    class: "
+Illuminate\Routing
+\
+Router"
+    this:
+Illuminate\Routing
+\
+Router {#30 …}
+    use: {
+      $route:
+Illuminate\Routing
+\
+Route {#429 …}
+    }
+  }
+  basePath: ""
+  format: "html"
+}
+
+My server where uploading the image does not seem to work sends this
+Illuminate\Http\Request {#41 // app/Http/Controllers/CloudinaryController.php:28
+  +attributes:
+Symfony\Component\HttpFoundation
+\
+ParameterBag {#46
+    #parameters: []
+  }
+  +request:
+Symfony\Component\HttpFoundation
+\
+InputBag {#42
+    #parameters: array:1 [
+      "address_id" => "101"
+    ]
+  }
+  +query:
+Symfony\Component\HttpFoundation
+\
+InputBag {#49
+    #parameters: []
+  }
+  +server:
+Symfony\Component\HttpFoundation
+\
+ServerBag {#44
+    #parameters: array:45 [
+      "USER" => "forge"
+      "HOME" => "/home/forge"
+      "HTTP_COOKIE" => "XSRF-TOKEN=eyJpdiI6IncxQTh6ZXl6UzREcWpkSW4yVzZDOHc9PSIsInZhbHVlIjoiRTliaWhOc3I4TGw5NzlFMnhwa2tTK1ZtbFliN3g3dERoUEY4MzVMSkdreFp1amlJMHJjZThvRHQ4ano3OFhHWmpub29jdkZXZG1MZkhNM25BZExBVnNseWtJQVhsendGUlJISTJybFpoU2dwYXRIVnhLRGZJYS80MGJwREw2QmYiLCJtYWMiOiI1ZjMxZWIwNzljZWI2NTY5YTliZmQxNDUxZjIxZDhhZDk0MjdlZDYzNmRkMWMwYzkxMjliMGMyMGNkZjNkMjEyIiwidGFnIjoiIn0%3D; kps_pools_session=eyJpdiI6ImNDRkV3ZUpEbXZJdGE1bmdXWlpoRmc9PSIsInZhbHVlIjoia2Z6TmtPTHJDM0p4N3YzdkNUV3N1QmFta0c2c3dFSzgyUE1QNDNXNmZxaUQrck5lNXFqYWcyZVQ4aFZnL2N5Y2VQT1JWN0VMeXNIcDBFRzU4ZUtnT1QrM0F5elNTNHh4WVlLc3hhUmdiREdvVDlsOU0weS9URlJRdy9tUWhOeEoiLCJtYWMiOiJlZDhhNWE3MTI4ZTU1MTc0NDEwMWMyY2ExZjFiYmIxNzgzMzk3Njc1N2U0Mjc5MjQxYzdiN2FkN2FjYmJhMjQwIiwidGFnIjoiIn0%3D"
+      "HTTP_PRIORITY" => "u=1, i"
+      "HTTP_ACCEPT_LANGUAGE" => "en-US,en;q=0.9"
+      "HTTP_ACCEPT_ENCODING" => "gzip, deflate, br, zstd"
+      "HTTP_REFERER" => "https://kpspools.com/images/101"
+      "HTTP_SEC_FETCH_DEST" => "empty"
+      "HTTP_SEC_FETCH_MODE" => "cors"
+      "HTTP_SEC_FETCH_SITE" => "same-origin"
+      "HTTP_ORIGIN" => "https://kpspools.com"
+      "HTTP_CONTENT_TYPE" => "multipart/form-data; boundary=----WebKitFormBoundary03iFezBXMcNcrM0N"
+      "HTTP_ACCEPT" => "application/json, text/plain, */*"
+      "HTTP_USER_AGENT" => "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Safari/537.36"
+      "HTTP_X_REQUESTED_WITH" => "XMLHttpRequest"
+      "HTTP_SEC_CH_UA_MOBILE" => "?0"
+      "HTTP_SEC_CH_UA" => ""Not(A:Brand";v="99", "Google Chrome";v="133", "Chromium";v="133""
+      "HTTP_X_XSRF_TOKEN" => "eyJpdiI6IncxQTh6ZXl6UzREcWpkSW4yVzZDOHc9PSIsInZhbHVlIjoiRTliaWhOc3I4TGw5NzlFMnhwa2tTK1ZtbFliN3g3dERoUEY4MzVMSkdreFp1amlJMHJjZThvRHQ4ano3OFhHWmpub29jdkZXZG1MZkhNM25BZExBVnNseWtJQVhsendGUlJISTJybFpoU2dwYXRIVnhLRGZJYS80MGJwREw2QmYiLCJtYWMiOiI1ZjMxZWIwNzljZWI2NTY5YTliZmQxNDUxZjIxZDhhZDk0MjdlZDYzNmRkMWMwYzkxMjliMGMyMGNkZjNkMjEyIiwidGFnIjoiIn0="
+      "HTTP_X_CSRF_TOKEN" => "Tkm4BcwuZ9UKkRKUuSe7ntU11LkwJigvZddqP5FO"
+      "HTTP_SEC_CH_UA_PLATFORM" => ""macOS""
+      "HTTP_CONTENT_LENGTH" => "2708963"
+      "HTTP_HOST" => "kpspools.com"
+      "REDIRECT_STATUS" => "200"
+      "HTTPS" => "on"
+      "SERVER_NAME" => "kpspools.com"
+      "SERVER_PORT" => "443"
+      "SERVER_ADDR" => "143.198.154.103"
+      "REMOTE_PORT" => "60591"
+      "REMOTE_ADDR" => "72.200.126.111"
+      "SERVER_SOFTWARE" => "nginx/1.22.1"
+      "GATEWAY_INTERFACE" => "CGI/1.1"
+      "SERVER_PROTOCOL" => "HTTP/2.0"
+      "DOCUMENT_ROOT" => "/home/forge/kpspools.com/public"
+      "DOCUMENT_URI" => "/index.php"
+      "REQUEST_URI" => "/upload"
+      "SCRIPT_NAME" => "/index.php"
+      "SCRIPT_FILENAME" => "/home/forge/kpspools.com/public/index.php"
+      "CONTENT_LENGTH" => "2708963"
+      "CONTENT_TYPE" => "multipart/form-data; boundary=----WebKitFormBoundary03iFezBXMcNcrM0N"
+      "REQUEST_METHOD" => "POST"
+      "QUERY_STRING" => ""
+      "FCGI_ROLE" => "RESPONDER"
+      "PHP_SELF" => "/index.php"
+      "REQUEST_TIME_FLOAT" => 1741697289.7242
+      "REQUEST_TIME" => 1741697289
+    ]
+  }
+  +files:
+Symfony\Component\HttpFoundation
+\
+FileBag {#48
+    #parameters: array:1 [
+      "image" =>
+Symfony\Component\HttpFoundation\File
+\
+UploadedFile {#38
+        -test: false
+        -originalName: "IMG_0616.jpeg"
+        -mimeType: "application/octet-stream"
+        -error: 1
+        path: ""
+        filename: ""
+        basename: ""
+        pathname: ""
+        extension: ""
+        realPath: "/home/forge/kpspools.com/public"
+        aTime: 1970-01-01 00:00:00
+        mTime: 1970-01-01 00:00:00
+        cTime: 1970-01-01 00:00:00
+        inode: false
+        size: false
+        perms: 00
+        owner: false
+        group: false
+        type: false
+        writable: false
+        readable: false
+        executable: false
+        file: false
+        dir: false
+        link: false
+      }
+    ]
+  }
+  +cookies:
+Symfony\Component\HttpFoundation
+\
+InputBag {#47
+    #parameters: array:2 [
+      "XSRF-TOKEN" => "Tkm4BcwuZ9UKkRKUuSe7ntU11LkwJigvZddqP5FO"
+      "kps_pools_session" => "wY8ghNTtQRWjR0ZNkhx2qfK1NLI4T42egCTeirjy"
+    ]
+  }
+  +headers:
+Symfony\Component\HttpFoundation
+\
+HeaderBag {#43
+    #headers: array:20 [
+      "cookie" => array:1 [
+        0 => "XSRF-TOKEN=eyJpdiI6IncxQTh6ZXl6UzREcWpkSW4yVzZDOHc9PSIsInZhbHVlIjoiRTliaWhOc3I4TGw5NzlFMnhwa2tTK1ZtbFliN3g3dERoUEY4MzVMSkdreFp1amlJMHJjZThvRHQ4ano3OFhHWmpub29jdkZXZG1MZkhNM25BZExBVnNseWtJQVhsendGUlJISTJybFpoU2dwYXRIVnhLRGZJYS80MGJwREw2QmYiLCJtYWMiOiI1ZjMxZWIwNzljZWI2NTY5YTliZmQxNDUxZjIxZDhhZDk0MjdlZDYzNmRkMWMwYzkxMjliMGMyMGNkZjNkMjEyIiwidGFnIjoiIn0%3D; kps_pools_session=eyJpdiI6ImNDRkV3ZUpEbXZJdGE1bmdXWlpoRmc9PSIsInZhbHVlIjoia2Z6TmtPTHJDM0p4N3YzdkNUV3N1QmFta0c2c3dFSzgyUE1QNDNXNmZxaUQrck5lNXFqYWcyZVQ4aFZnL2N5Y2VQT1JWN0VMeXNIcDBFRzU4ZUtnT1QrM0F5elNTNHh4WVlLc3hhUmdiREdvVDlsOU0weS9URlJRdy9tUWhOeEoiLCJtYWMiOiJlZDhhNWE3MTI4ZTU1MTc0NDEwMWMyY2ExZjFiYmIxNzgzMzk3Njc1N2U0Mjc5MjQxYzdiN2FkN2FjYmJhMjQwIiwidGFnIjoiIn0%3D"
+      ]
+      "priority" => array:1 [
+        0 => "u=1, i"
+      ]
+      "accept-language" => array:1 [
+        0 => "en-US,en;q=0.9"
+      ]
+      "accept-encoding" => array:1 [
+        0 => "gzip, deflate, br, zstd"
+      ]
+      "referer" => array:1 [
+        0 => "https://kpspools.com/images/101"
+      ]
+      "sec-fetch-dest" => array:1 [
+        0 => "empty"
+      ]
+      "sec-fetch-mode" => array:1 [
+        0 => "cors"
+      ]
+      "sec-fetch-site" => array:1 [
+        0 => "same-origin"
+      ]
+      "origin" => array:1 [
+        0 => "https://kpspools.com"
+      ]
+      "content-type" => array:1 [
+        0 => "multipart/form-data; boundary=----WebKitFormBoundary03iFezBXMcNcrM0N"
+      ]
+      "accept" => array:1 [
+        0 => "application/json, text/plain, */*"
+      ]
+      "user-agent" => array:1 [
+        0 => "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Safari/537.36"
+      ]
+      "x-requested-with" => array:1 [
+        0 => "XMLHttpRequest"
+      ]
+      "sec-ch-ua-mobile" => array:1 [
+        0 => "?0"
+      ]
+      "sec-ch-ua" => array:1 [
+        0 => ""Not(A:Brand";v="99", "Google Chrome";v="133", "Chromium";v="133""
+      ]
+      "x-xsrf-token" => array:1 [
+        0 => "eyJpdiI6IncxQTh6ZXl6UzREcWpkSW4yVzZDOHc9PSIsInZhbHVlIjoiRTliaWhOc3I4TGw5NzlFMnhwa2tTK1ZtbFliN3g3dERoUEY4MzVMSkdreFp1amlJMHJjZThvRHQ4ano3OFhHWmpub29jdkZXZG1MZkhNM25BZExBVnNseWtJQVhsendGUlJISTJybFpoU2dwYXRIVnhLRGZJYS80MGJwREw2QmYiLCJtYWMiOiI1ZjMxZWIwNzljZWI2NTY5YTliZmQxNDUxZjIxZDhhZDk0MjdlZDYzNmRkMWMwYzkxMjliMGMyMGNkZjNkMjEyIiwidGFnIjoiIn0="
+      ]
+      "x-csrf-token" => array:1 [
+        0 => "Tkm4BcwuZ9UKkRKUuSe7ntU11LkwJigvZddqP5FO"
+      ]
+      "sec-ch-ua-platform" => array:1 [
+        0 => ""macOS""
+      ]
+      "content-length" => array:1 [
+        0 => "2708963"
+      ]
+      "host" => array:1 [
+        0 => "kpspools.com"
+      ]
+    ]
+    #cacheControl: []
+  }
+  #content: null
+  #languages: null
+  #charsets: null
+  #encodings: null
+  #acceptableContentTypes: null
+  #pathInfo: "/upload"
+  #requestUri: "/upload"
+  #baseUrl: ""
+  #basePath: null
+  #method: "POST"
+  #format: null
+  #session:
+Illuminate\Session
+\
+Store {#527
+    #id: "wY8ghNTtQRWjR0ZNkhx2qfK1NLI4T42egCTeirjy"
+    #name: "kps_pools_session"
+    #attributes: array:5 [
+      "_token" => "Tkm4BcwuZ9UKkRKUuSe7ntU11LkwJigvZddqP5FO"
+      "_previous" => array:1 [
+        "url" => "https://kpspools.com/Obfuscation/0c3c71ca636417fd51885f5111b4e6ae762fa5d39d32b24c"
+      ]
+      "_flash" => array:2 [
+        "old" => []
+        "new" => []
+      ]
+      "login_web_59ba36addc2b2f9401580f014c7f58ea4e30989d" => 2
+      "password_hash_sanctum" => "$2y$10$wcZMn3lzGwZNGXep67h.VODDe48b9mAcXoUvnzLsPsqtLSyU.RB82"
+    ]
+    #handler:
+Illuminate\Session
+\
+DatabaseSessionHandler {#519
+      #connection:
+Illuminate\Database
+\
+MySqlConnection {#521 …25}
+      #table: "sessions"
+      #minutes: "120"
+      #container:
+Illuminate\Foundation
+\
+Application {#2 …40}
+      #exists: true
+    }
+    #serialization: "php"
+    #started: true
+  }
+  #locale: null
+  #defaultLocale: "en"
+  -preferredFormat: null
+  -isHostValid: true
+  -isForwardedValid: true
+  -isSafeContentPreferred: ? bool
+  -trustedValuesCache: []
+  -isIisRewrite: false
+  #json: null
+  #convertedFiles: null
+  #userResolver: Closure($guard = null) {#467
+    class: "
+Illuminate\Auth
+\
+AuthServiceProvider"
+    this:
+Illuminate\Auth
+\
+AuthServiceProvider {#170 …}
+    use: {
+      $app:
+Illuminate\Foundation
+\
+Application {#2 …40}
+    }
+  }
+  #routeResolver: Closure() {#476
+    class: "
+Illuminate\Routing
+\
+Router"
+    this:
+Illuminate\Routing
+\
+Router {#30 …}
+    use: {
+      $route:
+Illuminate\Routing
+\
+Route {#354 …}
+    }
+  }
+  basePath: ""
+  format: "html"
+}

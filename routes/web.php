@@ -140,6 +140,8 @@ Route::middleware(['auth:sanctum', 'verified', 'customer', 'subscribed'])->group
 
 Route::middleware(['auth:sanctum', 'verified', 'serviceman'])->group(function () {
 
+    Route::get('/customer/search', [CustomerController::class, 'search']);
+
     Route::post('/upload', [CloudinaryController::class, 'upload']);
     Route::delete('image/delete/{publicId}', [CloudinaryController::class, 'deleteImage']);
 
@@ -205,6 +207,15 @@ Route::middleware(['auth:sanctum', 'verified', 'serviceman'])->group(function ()
     Route::post('/transfer/store',
         [TransferController::class, 'transfer'])->name('transfer.transfer');
 
+    Route::get('/transfer/bulk',
+        [TransferController::class, 'bulk'])->name('transfer.bulk');
+
+     Route::get('/transfer/getList',
+        [TransferController::class, 'getList'])->name('transfer.getList');
+
+     Route::post('/transfer/doTransfer',
+        [TransferController::class, 'doTransfer'])->name('transfer.doTransfer');
+
     Route::post('/transfer/storeFromCustomers',
         [TransferController::class, 'storeFromCustomers'])->name('transfer.storeFromCustomers');
 
@@ -221,7 +232,7 @@ Route::middleware(['auth:sanctum', 'verified', 'serviceman'])->group(function ()
         [CustomerController::class, 'index'])
         ->name('customers');
 
-    Route::post('/customers/getCustomersForDay/',
+    Route::get('/customers/getCustomersForDay/{day}',
         [CustomerController::class, 'getCustomersForDay'])
         ->name('getCustomersForDay');
 

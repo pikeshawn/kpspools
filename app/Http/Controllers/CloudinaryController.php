@@ -20,10 +20,16 @@ class CloudinaryController extends Controller
 //            'image' => 'required|mimes:jpg,jpeg,png,gif|max:5120',
 //        ]);
 
+        Log::info("Upload request received", [
+            'content_length' => $_SERVER['CONTENT_LENGTH'] ?? 'not set',
+            'request_size' => strlen(file_get_contents('php://input')),
+        ]);
 
+//        dd($request);
 
         // Check if Laravel received the file
         if (!$request->hasFile('image')) {
+            Log::error("No file uploaded.");
             return response()->json(['error' => 'No file uploaded or file not fully received'], 400);
         }
 
@@ -31,6 +37,7 @@ class CloudinaryController extends Controller
 
         // Ensure the file is fully received and is readable
         if (!$file->isValid()) {
+            Log::error("File upload incomplete or corrupted.");
             return response()->json(['error' => 'File upload incomplete or corrupted'], 400);
         }
 

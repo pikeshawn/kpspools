@@ -1,0 +1,83 @@
+- I need the ability to transfer pools from one serviceman to another
+- logic
+    - vue page
+    - tailwind
+    - modern
+    - props onLoad
+        - servicemen
+            [
+                {
+                    servicemanName: "",
+                    servicemanId: ""
+                }
+            ]
+    - methods
+        - Get pools to transfer
+            - select
+                - Serviceman name
+                - day of route
+                - options
+                    - all
+                    - completed
+                    - uncompleted
+            - button
+                - axios request
+                - get
+                - url -> /transfer/getList
+                - data to send
+                    - dayOfRoute
+                    - servicemanId
+                    - options
+            - return json
+                - [
+                    {
+                        customerName : "",
+                        addressId : "",
+                        servicemanName : "", // the serviceman the pool is currently assigned to
+                    }
+                  ]
+            - need a drop down to select the serviceman to transfer the pools to
+            - for each row in response
+                - need a tiled row where I can select a checkbox for individual ones
+                - need a checkbox to select all
+                - need a dropdown to select a different day if need be
+                    - dropdown should show the assigned day in the response
+            - need a button to do the transfer
+                - logic
+                    - axios
+                    - post
+                    - url -> /transfer/doTransfer
+                    - data to send
+                        - servicemanId of the serviceman the pools will be transferred to
+                        - array of the addressIds of the select pools to transfer
+    - backend
+        - logic for /transfer/getList
+            - method name
+                - pools = select
+                    a.service_day, c.first_name, c.last_name, a.id, a.assigned_serviceman, a.serviceman_id
+                    from customer c join address a on c.id = a.customer_id
+                    where serviceman_id = $request->servicemanId and service_day = dayOfRoute
+                - if option = completed then
+                    - for each pulled back
+                        - if the pools.address_id in any service_stops table
+                            - where address_id is plucked from any rows done since monday morning of the current week
+                        - pull back only a subset of pools from the initial set
+                - if option = incomplete then
+                    - for each pulled back
+                        - if the pools.address_id is not in any service_stops table
+                            - where address_id is plucked from any rows done since monday morning of the current week
+                        - pull back only a subset of pools from the initial set that are not in those rows
+                - return a json response to populate the front end
+
+        - logic for /transfer/doTransfer
+            - for each of the rows in the request
+                - $serviceman = User::find($request->servicemanId)
+                - Address::find($request->addressId)
+                    $address->serviceman_id = $request->servicemanId
+                    $address->assignedServiceman = $serviceman->name
+                    $address->service_day = currentPool.service_day
+                - Customer::find($address->customer_id)
+                    $customer->serviceman_id = $request->servicemanId
+                    $customer->assignedServiceman = $serviceman->name
+                    $customer->service_day = currentPool.service_day
+            - return list of pools to display on page

@@ -1,0 +1,59 @@
+🛑 Issue Identified: Different Request Behavior on Local vs. Server
+
+From your logs, the key difference is:
+	1.	On Local (Works Fine):
+	•	File is detected as an image/jpeg.
+	•	No errors in file processing.
+	•	Correct realPath and file properties are set.
+	2.	On Server (Fails):
+	•	File has an error code (-error: 1).
+	•	File path is empty (pathname: "").
+	•	MIME type is incorrect (application/octet-stream instead of image/jpeg).
+
+🛠 What Causes This?
+	•	error: 1 in Laravel’s UploadedFile means UPLOAD_ERR_INI_SIZE
+	•	This means the uploaded file exceeds the limit set in PHP configuration and was rejected before Laravel could access it.
+	•	Since the file is missing (realPath: ""), Laravel receives an empty request body.
+
+ UploadedFile {#38
+         -test: false
+         -originalName: "IMG_0616.jpeg"
+         -mimeType: "image/jpeg"
+         -error: 0
+         path: "/private/var/folders/km/r3p976yj2jxbj98yhlbsrvd80000gn/T"
+         filename: "phpUPBf2q"
+         basename: "phpUPBf2q"
+         pathname: "/private/var/folders/km/r3p976yj2jxbj98yhlbsrvd80000gn/T/phpUPBf2q"
+         extension: ""
+         realPath: "
+
+
+ UploadedFile {#38
+         -test: false
+         -originalName: "IMG_0616.jpeg"
+         -mimeType: "application/octet-stream"
+         -error: 1
+         path: ""
+         filename: ""
+         basename: ""
+         pathname: ""
+         extension: ""
+         realPath: "/home/forge/kpspools.com/public"
+         aTime: 1970-01-01 00:00:00
+         mTime: 1970-01-01 00:00:00
+         cTime: 1970-01-01 00:00:00
+         inode: false
+         size: false
+         perms: 00
+         owner: false
+         group: false
+         type: false
+         writable: false
+         readable: false
+         executable: false
+         file: false
+         dir: false
+         link: false
+       }
+     ]
+   }

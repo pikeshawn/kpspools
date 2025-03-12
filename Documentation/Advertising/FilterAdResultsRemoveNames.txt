@@ -1,0 +1,11 @@
+Create a mailing list
+1. need to pull names based upon section/township/range str
+    - have an array of str values
+    - have a valuation constraint
+    - select o.ownership, CONCAT(o.mailing_address_1, ",", " ", o.mailing_city, " ", o.mailing_state, " ", o.mailing_zip) as "Full Address"
+      from owners o
+               join kpspools.str s on s.id = o.apn_id
+              join valuations v on s.id = v.apn_id
+      where section_township_range like "%-1S-6E" and v.tax_year = 2026 and v.full_cash_value > 300000;
+2. want to remove the names of customers I currently have in the database
+    - based upon address
