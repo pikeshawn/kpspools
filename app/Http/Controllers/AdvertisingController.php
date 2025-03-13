@@ -46,8 +46,9 @@ class AdvertisingController extends Controller
 //        self::updateStr('-2S-6E', 32, 39819);
 //        self::updateStr('-2S-7E', 32, 66108);
 //        self::updateStr('-1S-3E', 36, 162099);
-        self::updateStr('-1S-4E', 15, 165303);
-        self::updateStr('-1S-5E', 10, 108765);
+//        self::updateStr('-1S-4E', 31, 186866);
+//        $this->fetchTownshipParcels('14-1S-5E', 66);
+        self::updateStr('-1S-5E', 18, 207117);
         self::updateStr('-1S-6E', 6, 118063);
         self::updateStr('-1S-7E', 3, 130035);
         self::updateStr('-1N-3E', 2, 134549);
@@ -82,10 +83,8 @@ class AdvertisingController extends Controller
         }
     }
 
-    private function fetchTownshipParcels($township)
+    private function fetchTownshipParcels($township, $page = 1)
     {
-        $page = 1;
-
         do {
             $response = Http::withHeaders($this->authHeader)
                 ->get("https://mcassessor.maricopa.gov/parcel/str/{$township}/?page={$page}");
