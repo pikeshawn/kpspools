@@ -89,6 +89,7 @@ class CloudinaryController extends Controller
             return response()->json([
                 'url' => $uploadedFile->getSecurePath(),
                 'publicId' => $uploadedFile->getPublicId(),
+                'name' => $uploadedFile->getOriginalFileName(),
             ]);
         } catch (\Exception $e) {
             return response()->json(['error' => 'Cloudinary upload failed: ' . $e->getMessage()], 500);

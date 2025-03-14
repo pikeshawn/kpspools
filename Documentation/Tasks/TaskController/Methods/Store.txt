@@ -589,10 +589,10 @@ export default {
         Toggle
     },
     props: {
-        user: Array,
+        user: Object,
         users: Array,
         subcontractors: Array,
-        addressId: String,
+        addressId: Number,
         customerId: String,
         customer: String,
         customerName: String,

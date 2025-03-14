@@ -250,12 +250,12 @@ export default {
         ImageUpload
     },
     props: {
-        user: Array,
+        user: Object,
         users: Array,
         subcontractors: Array,
-        addressId: String,
-        customerId: String,
-        customer: String,
+        addressId: Number,
+        customerId: Number,
+        customer: Object,
         customerName: String,
         assignedServiceman: String,
         tasks: Array

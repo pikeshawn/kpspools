@@ -9,3 +9,77 @@ Create a mailing list
       where section_township_range like "%-1S-6E" and v.tax_year = 2026 and v.full_cash_value > 300000;
 2. want to remove the names of customers I currently have in the database
     - based upon address
+    - store the 30,000 names in a csv file with columns
+        - name
+        - mailing_address_line_1
+        - mailing_city
+        - mailing_state
+        - mailing_zip
+    - pull all customers I have in my database
+        - foreach customer
+            - get the addresses associated to the customer
+                - $address = Address::where('customer_id', 'customer.id')->get()
+                - foreach address
+                    - cycle through each line in mailingList file
+                        - if address.address_line_1 = mailingList.mailing_address_1
+                            - remove the line from the csv file
+                        - otherwise do nothing
+        - should ran as a console command in laravel
+
+1. Clearly Define the Expected Input and Output
+	•	Example: Instead of just saying, “Store the 30,000 names in a CSV file,” specify:
+	•	File format (e.g., .csv)
+	•	Column names and order
+	•	How you want to handle duplicates or errors
+	•	If the script should produce a new mailing list, describe exactly what should be included.
+
+2. Break Down the Logic with Precise Steps
+	•	You’re already listing steps, but making each step explicit helps:
+	•	For example, instead of:
+	“Cycle through each line in mailingList file and remove matches.”
+	•	Try:
+	•	Read the CSV file into an array.
+	•	Normalize addresses (e.g., trim spaces, lowercase comparison).
+	•	Compare each entry from the database with the CSV file.
+	•	If a match is found, remove that entry before saving the final version.
+
+3. Specify Edge Cases & Constraints
+	•	What happens if:
+	•	An address has a slight variation (e.g., “St.” vs. “Street”)?
+	•	A customer has multiple addresses?
+	•	The database contains invalid or empty addresses?
+
+4. Define the Execution Context
+	•	Example:
+	•	Should this script run daily, weekly, manually?
+	•	Is this part of a scheduled job, a CLI command, or should it be triggered via API?
+	•	Should this process be memory-efficient (for large datasets)?
+
+5. State Performance Considerations
+	•	Should it:
+	•	Process in batches to handle large files?
+	•	Use indexed database queries to optimize address lookups?
+	•	Provide logs or progress updates?
+
+6. Provide Sample Data
+	•	If you can give:
+	•	A sample row from the database
+	•	A sample row from the CSV file
+	•	An example of before and after processing
+	•	That makes it easier for me to fine-tune the output.
+
+⸻
+
+Example of an Improved Request:
+
+⸻
+
+*“I need a Laravel console command that generates a mailing list from the owners table, filtering based on section_township_range. The results should be exported to a CSV file in the format: name, address, city, state, zip. Then, I want to remove any addresses that belong to my existing customers, stored in the customers table (matching on address_line_1).
+
+Requirements:
+	1.	Must support large datasets (30,000+ rows).
+	2.	Comparison should be case-insensitive and ignore minor differences like “St.” vs. “Street”.
+	3.	Output file should exclude duplicates and should be named filtered_mailing_list.csv.
+	4.	Run as a Laravel console command (php artisan mailing:list).
+	5.	Provide logs of removed entries and processing time.”*
+

@@ -21,6 +21,10 @@
             </div>
         </div>
 
+        <div v-for="name in originalFileNames">
+            {{ name }}
+        </div>
+
         <!-- Image Preview & Upload Progress -->
         <div v-if="previewUrl" class="mt-4">
             <img :src="previewUrl" alt="Preview" class="w-32 h-32 rounded-lg shadow-lg" />
@@ -36,6 +40,7 @@
             Upload
         </button>
 
+        <p v-if="isUploading" class="mt-2 text-green-600">{{ isUploadingMessage }}</p>
         <p v-if="uploadMessage" class="mt-2 text-green-600">{{ uploadMessage }}</p>
         <p v-if="uploadError" class="mt-2 text-red-600">{{ uploadError }}</p>
     </div>
@@ -47,16 +52,19 @@ import axios from "axios";
 
 // Define props from parent component
 const props = defineProps({
-    addressId: String,  // Address ID (String or Number, depending on usage)
+    addressId: Number,  // Address ID (String or Number, depending on usage)
 });
 
 // Define event emitter
 const emit = defineEmits(["imageUploaded"]);
 
 const fileInput = ref(null);
+const originalFileNames = ref([]);
 const selectedFile = ref(null);
 const previewUrl = ref(null);
 const uploadMessage = ref("");
+const isUploadingMessage = ref("Image is Uploading");
+const isUploading = ref(false);
 const uploadError = ref("");
 const isDragging = ref(false);
 const csrfToken = ref(null);
@@ -123,6 +131,8 @@ const uploadImage = async () => {
     formData.append("address_id", props.addressId);
 
     try {
+        imageReady.value = false
+        isUploading.value = true
         const response = await axios.post("/upload", formData, {
             headers: {
                 "Content-Type": "multipart/form-data",
@@ -134,6 +144,9 @@ const uploadImage = async () => {
             }
         });
 
+        imageReady.value = true
+        isUploading.value = false
+
         if (response.data.publicId) {
             uploadMessage.value = "Image uploaded successfully!";
             setTimeout(() => {
@@ -144,7 +157,11 @@ const uploadImage = async () => {
         // Emit the event to the parent component with the public ID
         emit("imageUploaded", response.data.publicId);
 
-        previewUrl.value = response.data.url; // Use Cloudinary URL if returned
+        // debugger
+
+        previewUrl.value = ""; // Use Cloudinary URL if returned
+        originalFileNames.value.push(response.data.name)
+
     } catch (error) {
         console.debug(error.value);
         uploadError.value = "Upload failed. Try again.";

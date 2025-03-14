@@ -42,7 +42,7 @@ export default {
   },
   props: {
     customers: Array,
-    user: String
+    user: Object
   },
   data() {
     return {

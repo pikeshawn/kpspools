@@ -372,7 +372,7 @@
 
 <script>
 import {ref} from 'vue'
-import {Dialog, DialogOverlay, DialogPanel, Transition, TransitionChild, TransitionRoot} from '@headlessui/vue'
+import {Popover, Dialog, DialogOverlay, DialogPanel, Transition, TransitionChild, TransitionRoot} from '@headlessui/vue'
 import {Link} from '@inertiajs/inertia-vue3'
 import {
     CalendarIcon,
@@ -397,11 +397,12 @@ const navigation = [
 export default {
     props: {
         title: String,
-        addressId: String,
-        user: String,
+        addressId: Number,
+        user: Object,
         background: String
     },
     components: {
+        Popover,
         DialogPanel,
         Dialog,
         DialogOverlay,

@@ -147,12 +147,12 @@ export default {
         Toggle
     },
     props: {
-        addressId: String,
+        addressId: Number,
         subcontractors: Array,
         customerId: String,
         customer: String,
         customerName: String,
-        user: String,
+        user: Object,
         users: String,
         tasks: Array
     },

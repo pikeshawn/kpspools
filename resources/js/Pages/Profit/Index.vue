@@ -75,7 +75,7 @@ export default {
         totalServiceAmount: String,
         totalAverageServiceAmount: String,
         totalAverageChemCostPerMonth: Array,
-        user: String
+        user: Object
     },
     data() {
         return {

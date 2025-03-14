@@ -69,7 +69,7 @@ export default {
     },
     props: {
         tasks: Array,
-        user: String
+        user: Object
     },
     data() {
         return {

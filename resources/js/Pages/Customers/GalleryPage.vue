@@ -18,11 +18,31 @@
                     <img :src="image.url" class="w-full h-48 object-cover rounded-lg shadow-md" alt="Uploaded Image" />
                     <!-- Delete Button -->
                     <button
-                        @click="deleteImage(image.public_id, index)"
+                        @click="showDeleteModal(image.public_id)"
                         class="absolute top-2 right-2 bg-red-600 text-black p-2 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
                     >
                         X
                     </button>
+                    <div v-if="isModalOpen" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+                        <div class="bg-white p-6 rounded-lg shadow-lg w-96">
+                            <h2 class="text-lg font-semibold text-gray-900">Are you sure?</h2>
+                            <p class="text-gray-600 mt-2">Do you really want to delete this image? This action cannot be undone.</p>
+                            <div class="flex justify-end mt-4 space-x-2">
+                                <button
+                                    @click="isModalOpen = false"
+                                    class="px-4 py-2 text-gray-700 bg-gray-200 rounded-lg hover:bg-gray-300"
+                                >
+                                    Cancel
+                                </button>
+                                <button
+                                    @click="deleteImage(image.public_id, index)"
+                                    class="px-4 py-2 text-white bg-red-600 rounded-lg hover:bg-red-700"
+                                >
+                                    Delete
+                                </button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -54,8 +74,17 @@ import ImageUpload from "../Components/ImageUpload.vue";// Import the upload com
 const props = defineProps({
     images: Array,  // List of Cloudinary public IDs
     address: Object,
-    customer: Object
+    customer: Object,
+    user: Object
 });
+
+const isModalOpen = ref(false);
+const imageToDelete = ref(null);
+
+const showDeleteModal = (imageName) => {
+    imageToDelete.value = imageName;
+    isModalOpen.value = true;
+};
 
 // Reactive state to track images
 const imageList = ref(props.images.map((id) => ({
@@ -76,8 +105,10 @@ const deleteImage = async (publicId, index) => {
 
         // Remove image from list after successful deletion
         imageList.value.splice(index, 1);
+        isModalOpen.value = false
     } catch (error) {
         console.error("Error deleting image:", error);
+        isModalOpen.value = false
     }
 };
 </script>

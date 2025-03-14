@@ -47,8 +47,8 @@ class AdvertisingController extends Controller
 //        self::updateStr('-2S-7E', 32, 66108);
 //        self::updateStr('-1S-3E', 36, 162099);
 //        self::updateStr('-1S-4E', 31, 186866);
-//        $this->fetchTownshipParcels('14-1S-5E', 66);
-        self::updateStr('-1S-5E', 18, 207117);
+//        $this->fetchTownshipParcels('26-1S-5E', 67);
+        self::updateStr('-1S-5E', 26, 223735);
         self::updateStr('-1S-6E', 6, 118063);
         self::updateStr('-1S-7E', 3, 130035);
         self::updateStr('-1N-3E', 2, 134549);

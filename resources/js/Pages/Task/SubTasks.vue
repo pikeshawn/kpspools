@@ -154,7 +154,7 @@ export default {
     },
     props: {
         statuses: Array,
-        user: Array,
+        user: Object,
         subs: Array
     },
     data() {

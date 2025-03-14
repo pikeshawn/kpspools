@@ -561,7 +561,7 @@ const props = defineProps({
     // customers: Array,
     notes: String,
     address: String,
-    user: String,
+    user: Object,
     tasks: Array,
     serviceman: Array,
     completedTasks: Array
@@ -656,7 +656,7 @@ export default {
         // customers: Array,
         notes: Array,
         address: String,
-        user: String,
+        user: Object,
         tasks: Array,
         serviceman: Array,
         completedTasks: Array

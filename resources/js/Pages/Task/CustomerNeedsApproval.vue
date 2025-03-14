@@ -656,8 +656,8 @@ export default {
     props: {
         tasks: Array,
         servicemen: Array,
-        user: String,
-        addressId: String
+        user: Object,
+        addressId: Number
     },
     data() {
         return {

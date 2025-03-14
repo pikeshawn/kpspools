@@ -205,7 +205,7 @@ export default {
     },
     props: {
         serviceStops: Array,
-        user: String
+        user: Object
     },
     data() {
         return {

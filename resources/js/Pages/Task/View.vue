@@ -389,7 +389,7 @@ export default {
         Toggle
     },
     props: {
-        user: Array,
+        user: Object,
         servicemen: Array,
         created: String,
         createdAndSent: Number,

@@ -47,7 +47,7 @@ import axios from "axios";
 
 // Define props from parent component
 const props = defineProps({
-    addressId: String,  // Address ID (String or Number, depending on usage)
+    addressId: Number,  // Address ID (String or Number, depending on usage)
 });
 
 // Define event emitter
