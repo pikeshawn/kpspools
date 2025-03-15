@@ -232,6 +232,14 @@ Route::middleware(['auth:sanctum', 'verified', 'serviceman'])->group(function ()
         [CustomerController::class, 'index'])
         ->name('customers');
 
+    Route::get('/customer/edit/{addressId}',
+        [CustomerController::class, 'edit'])
+        ->name('customer.edit');
+
+    Route::post('/customer/updateCustomer',
+        [CustomerController::class, 'updateCustomer'])
+        ->name('customer.updateCustomer');
+
     Route::get('/customers/bulkNotify',
         [CustomerController::class, 'bulkNotify'])
         ->name('customers.bulkNotify');
@@ -340,10 +348,10 @@ Route::middleware(['auth:sanctum', 'verified', 'serviceman'])->group(function ()
         [CustomerController::class, 'update'])
         ->name('general.update');
 
-    Route::middleware(['auth:sanctum', 'verified'])
-        ->get('customers/{customer}/edit',
-            [CustomerController::class, 'edit'])
-        ->name('customers.edit');
+//    Route::middleware(['auth:sanctum', 'verified'])
+//        ->get('customers/{customer}/edit',
+//            [CustomerController::class, 'edit'])
+//        ->name('customers.edit');
 
 // Tasks
     Route::get('/task/create/{address}',

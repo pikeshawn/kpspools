@@ -1,0 +1,102 @@
+<file name=1 path=overview.txt>- I would like to be able to edit customer information
+- The fields to be edited are
+    - Users table
+        - email - string
+        - name - string
+            - first_name . middle_name . last_name
+        - phone_number - integer
+        - send a rest password link
+            - future implementation
+        - is_admin - boolean
+            - false for a customer
+        - type - string
+            - always customer for a customer
+    - Customer Table
+        - first_name - string
+        - middle_name - string
+        - last_name - string
+        - active -> boolean
+        - phone_number - integer
+            - must be 11 digits with a 1 in front
+        - type - string
+            - service or repair
+        - terms - string
+        - jemmson_id- integer
+        - autopay - boolean
+        - jemmson_phone_number - integer
+        - date_to_run_card - date
+        - payment_type - string
+            - cash or creditCard
+    - Addresses table
+        - on the edit page be able to cycle through all addresses associated to the customer
+        - columns
+            - service_day - string
+            - order - integer
+            - chemicals_included - boolean
+            - assigned_serviceman - string
+            - serviceman_id - integer
+            - address_line_1 - string
+            - address_line_2 - string
+            - city - string
+            - state - string
+            - zip - string
+            - community_gate_code - string
+            - house_gate_has_lock - string
+            - active - boolean
+            - plan_duration - string
+                - weekly or monthly
+            - plan_price - number - integer
+            - chemicals_included - boolean
+            - assigned_serviceman
+                - dropdown of the users that have type serviceman and are active
+            - terms
+                - begin or end
+                - default is begin
+            - sold - boolean
+    - I go to this page
+        - url - customers/edit
+        - get
+        - CustomerController edit method
+            - input address id
+            - Address::find(addressId)
+            - Customer::find(address->customer_id)
+            - User::find(address->customer_id)
+            - logic
+                - Inertia render - Customers/Edit
+                - json response from
+                    - Users table
+                    - Customer table
+                    - Address table
+    - page type
+        - Vue
+        - tailwind
+        - modern
+    - input to the page from the backend is json
+        - {
+            - fields match the names above
+            - addresses are an array
+          }
+    - has an update button
+        - sends json
+        - url /Customers/update
+        - post
+    - Modify the checkbox input for `props.customerUser.active` in `Edit.vue` to correctly reflect the active status.
+        - Change:
+            ```vue
+            <input type="checkbox" :value="props.customerUser.active" v-model="props.customerUser.active"/>
+            ```
+            To:
+            ```vue
+            <input type="checkbox" v-model="props.customerUser.active"/>
+            ```
+        - The issue is caused by using `:value="props.customerUser.active"`, which binds the value but does not properly toggle the checked state. Using only `v-model` will correctly reflect the `true` or `false` value from `props.customerUser.active`.
+        - Make this change to ensure the checkbox is correctly checked when `props.customerUser.active` is `true`.
+</file>
+
+backend -> update
+    - active -
+        - if customer.active is false then all addresses associated to the customer are false
+            - if $request->customer->active === false
+        - if true then all addresses associated to the customer are marked true or false based upon the response
+
+

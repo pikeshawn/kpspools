@@ -336,6 +336,80 @@ class CustomerController extends Controller
         return Redirect::route('customers')->with('error', 'Failed to store customer and address');
     }
 
+    public function updateCustomer(Request $request)
+    {
+
+        $customerUser = $request->customerUser['_value'];
+        $customer = $request->customer['_value'];
+//        $addresses = $request->addresses['_value'];
+
+
+
+        $cust = Customer::findOrFail($customer['id']);
+        $cust->first_name = $customer['first_name'];
+        $cust->middle_name = $customer['middle_name'];
+        $cust->last_name = $customer['last_name'];
+        $cust->phone_number = $customer['phone_number'];
+        $cust->terms = $customer['terms'];
+        $cust->jemmson_id = $customer['jemmson_id'];
+        $cust->active = $customer['active'];
+        $cust->autopay = $customer['autopay'];
+        $cust->date_to_run_card = $customer['date_to_run_card'];
+        $cust->payment_type = $customer['payment_type'];
+        $cust->save();
+
+        $custUser = User::findOrFail($customerUser['id']);
+        $custUser->email = $customerUser['email'];
+        $custUser->name = $customerUser['name'];
+        $custUser->phone_number = $customerUser['phone_number'];
+        $custUser->save();
+
+
+
+        foreach($request->addresses as $address){
+
+            if ($customer['active']) {
+                $active = $address['active'];
+            } else {
+                $active = false;
+            }
+
+            $add = Address::findOrFail($address['id']);
+            $add->service_day = $address['service_day'];
+            $add->address_line_1 = $address['address_line_1'];
+            $add->city = $address['city'];
+            $add->state = $address['state'];
+            $add->zip = $address['zip'];
+            $add->community_gate_code = $address['community_gate_code'];
+            $add->plan_duration = $address['plan_duration'];
+            $add->plan_price = $address['plan_price'];
+            $add->chemicals_included = $address['chemicals_included'];
+            $add->active = $active;
+            $add->sold = $address['sold'];
+            $add->serviceman_id = $address['serviceman_id'];
+
+            $add->save();
+        }
+
+
+
+
+
+//        // Update customer details
+//        $customer = Customer::findOrFail($validatedData['id']);
+//        $customer->update($validatedData);
+//
+//        // 🔥 Update or Create Addresses
+//        foreach ($validatedData['addresses'] as $addressData) {
+//            Address::updateOrCreate(
+//                ['id' => $addressData['id'] ?? null], // Find by ID if exists
+//                array_merge($addressData, ['customer_id' => $customer->id])
+//            );
+//        }
+
+        return response()->json(['message' => 'Customer updated successfully'], 200);
+    }
+
 
     /**
      * Store a newly created resource in storage.
@@ -447,18 +521,24 @@ class CustomerController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Customer $customer): Response
+    public function edit($addressId)
     {
+        // Find the address by ID
+        $address = Address::findOrFail($addressId);
+
+        // Find the associated customer and user
+        $customer = Customer::findOrFail($address->customer_id);
+        $customerUser = User::findOrFail($customer->user_id);
+
+        // Fetch active servicemen for dropdown
+        $servicemen = User::where('type', 'serviceman')->where('active', true)->get(['id', 'name']);
+
         return Inertia::render('Customers/Edit', [
-            'customer' => [
-                'id' => $customer->id,
-                'first_name' => $customer->first_name,
-                'middle_name' => $customer->middle_name,
-                'last_name' => $customer->last_name,
-                'type' => $customer->type,
-                'plan' => $customer->plan,
-                'service_day' => $customer->service_day,
-            ],
+            'customerUser' => $customerUser,
+            'customer' => $customer,
+            'addressId' => $addressId,
+            'addresses' => Address::where('customer_id', $customer->id)->get(),
+            'servicemen' => $servicemen,
         ]);
     }
 
