@@ -1171,8 +1171,8 @@ class TaskController extends Controller
                     $this->handleRepairTask($request);
                 }
 
-                $this->updateJobRates($request);
-                $this->updateServicemanRates($request);
+//                $this->updateJobRates($request);
+//                $this->updateServicemanRates($request);
 
                 DB::commit();
 

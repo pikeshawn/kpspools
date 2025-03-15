@@ -48,11 +48,12 @@ class AdvertisingController extends Controller
 //        self::updateStr('-1S-3E', 36, 162099);
 //        self::updateStr('-1S-4E', 31, 186866);
 //        $this->fetchTownshipParcels('26-1S-5E', 67);
-        self::updateStr('-1S-5E', 26, 223735);
-        self::updateStr('-1S-6E', 6, 118063);
-        self::updateStr('-1S-7E', 3, 130035);
-        self::updateStr('-1N-3E', 2, 134549);
-        self::updateStr('-1N-4E', 1, 136138);
+//        self::updateStr('-1S-5E', 36, 223735);
+        $startingId = 248750;
+        self::updateStr('-1S-6E', 13, $startingId);
+        self::updateStr('-1S-7E', 3, $startingId);
+        self::updateStr('-1N-3E', 2, $startingId);
+        self::updateStr('-1N-4E', 1, $startingId);
 
         foreach ($this->townships as $township) {
             for ($i = 1; $i < 37; $i++) {

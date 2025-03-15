@@ -38,3 +38,6 @@ class UpdateMailingList extends Command
         }
     }
 }
+
+//errors
+//https://mcassessor.maricopa.gov/parcel/30470705/valuations
