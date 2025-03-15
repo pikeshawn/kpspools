@@ -3,7 +3,7 @@
         :user="user"
         :address-id="addressId"
     >
-        <div class="max-w-4xl mx-auto bg-white p-6 rounded-lg shadow-md">
+        <div v-if="user.is_admin" class="max-w-4xl mx-auto bg-white p-6 rounded-lg shadow-md">
             <h1 class="text-2xl font-semibold mb-4">Edit Customer</h1>
 
             <form @submit.prevent="updateCustomer">
