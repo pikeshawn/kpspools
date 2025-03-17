@@ -193,6 +193,16 @@ const correctValues = () => {
 
 
 const updateCustomer = async () => {
+
+    for (let i = 0; i < addresses.value.length; i++) {
+        for (let j = 0; j < servicemen.value.length; j++) {
+            // debugger
+            if (addresses.value[i].serviceman_id === servicemen.value[j].id) {
+                addresses.value[i].assigned_serviceman = servicemen.value[j].name
+            }
+        }
+    }
+
     try {
         const response = await axios.post(`/customer/updateCustomer`, {
             customerUser,

@@ -380,6 +380,7 @@ class CustomerController extends Controller
             $add->city = $address['city'];
             $add->state = $address['state'];
             $add->zip = $address['zip'];
+            $add->assigned_serviceman = $address['assigned_serviceman'];
             $add->community_gate_code = $address['community_gate_code'];
             $add->plan_duration = $address['plan_duration'];
             $add->plan_price = $address['plan_price'];
