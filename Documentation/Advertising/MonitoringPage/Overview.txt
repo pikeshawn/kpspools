@@ -1,0 +1,39 @@
+Frontend
+    - Vue Page
+    - Tailwind
+    - modern design
+    - Structure
+        - summary section with this information
+            - JSON
+                {
+                    totalNumberOfHouses: 1234,
+                    totalNumberOfHousesWithPools: 1234,
+                    str: {
+                        id: "",
+                        section_township_range: ""
+                    },
+                    latestHouseWithPool: {
+                        owner: {
+                            id: "john reed",
+                            ownership: "john reed",
+                            mailing_address_1: "john reed",
+                            mailing_address_2: "john reed",
+                            mailing_city: "john reed",
+                            mailing_zip: "john reed",
+                            sale_date: "john reed"
+                        }
+                    }
+                }
+    - Backend
+        - AdvertisingController
+        - method name - list
+        - logic
+            - Total number of houses
+                - SQL -> select distinct count(*) from str;
+            - Total number of houses with pools
+                - SQL -> select distinct count(*) from owners;
+            - str
+                - select id, section_township_range from str order by id DESC limit 1
+            - Most current house pulled
+                - SQL -> select id, ownership, mailing_address_1, mailing_address_2, mailing_city, mailing_zip, sale_date from owner order by id DESC limit 1;
+        - Inertia::render('Advertising/List', $listData);

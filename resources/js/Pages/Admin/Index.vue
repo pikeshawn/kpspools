@@ -144,6 +144,10 @@ export default {
                     id: 15,
                     name: "Bulk Notification",
                     route: "customers.bulkNotify"
+                },{
+                    id: 16,
+                    name: "Name Monitoring",
+                    route: "advertising.list"
                 }
             ]
         }

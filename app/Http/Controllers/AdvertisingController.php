@@ -8,8 +8,10 @@ use App\Models\Str;
 use App\Models\ResidentialDetail;
 use App\Models\Owner;
 use App\Models\Valuation;
+use Inertia\Inertia;
 use function Psy\debug;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\DB;
 
 class AdvertisingController extends Controller
 {
@@ -67,6 +69,44 @@ class AdvertisingController extends Controller
         }
 
         return response()->json(['message' => 'Mailing list updated successfully.']);
+    }
+
+    public function list()
+    {
+
+        $totalNumberOfHouses = DB::table('str')->distinct()->count();
+        $totalNumberOfHousesWithPools = DB::table('owners')->distinct()->count();
+
+        $str = DB::table('str')
+            ->select('id', 'section_township_range')
+            ->orderByDesc('id')
+            ->limit(1)
+            ->first();
+
+        $latestHouseWithPool = DB::table('owners')
+            ->select('id', 'ownership', 'mailing_address_1', 'mailing_address_2', 'mailing_city', 'mailing_zip', 'sale_date')
+            ->orderByDesc('id')
+            ->limit(1)
+            ->first();
+
+        $listData = [
+            'totalNumberOfHouses' => $totalNumberOfHouses,
+            'totalNumberOfHousesWithPools' => $totalNumberOfHousesWithPools,
+            'str' => $str,
+            'latestHouseWithPool' => [
+                'owner' => $latestHouseWithPool
+            ]
+        ];
+
+        return Inertia::render('Advertising/List', [
+            'list' => $listData
+        ]);
+
+
+//        $list = null;
+//        return Inertia::render('Advertising/List', [
+//            'list' => $list
+//            ]);
     }
 
     private function updateStr($township, $startingSection, $startingId)

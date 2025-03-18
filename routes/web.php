@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AdvertisingController;
 use App\Http\Controllers\TaskController;
 use App\Http\Controllers\ReportsController;
 use App\Http\Controllers\TermsOfServiceController;
@@ -148,6 +149,10 @@ Route::middleware(['auth:sanctum', 'verified', 'serviceman'])->group(function ()
     Route::get('/images/{addressId}',
         [CloudinaryController::class, 'images'])
         ->name('images');
+
+    Route::get('advertising/list',
+        [AdvertisingController::class, 'list'])
+        ->name('advertising.list');
 
     Route::get('/reports',
         [ReportsController::class, 'index'])
