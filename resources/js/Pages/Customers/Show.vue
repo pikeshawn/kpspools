@@ -771,6 +771,7 @@ export default {
             }
         },
         remove(item) {
+            item.address_id = this.address.id
             Inertia.post('/task/deleteItem', item)
         },
         completed(item) {
@@ -786,13 +787,16 @@ export default {
             item.deleted = false;
         },
         doTheDeletion(item) {
+            item.address_id = this.address.id
             Inertia.post('/task/deleteItem', item)
         },
         notCompleted(item) {
+            item.address_id = this.address.id
             Inertia.post('/task/notCompleted', item)
         },
 
         emitEnabled(item) {
+            item.address_id = this.address.id
             item.completed = !item.completed
         },
 

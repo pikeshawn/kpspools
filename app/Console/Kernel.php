@@ -10,6 +10,7 @@ use App\Console\Commands\PaymentReminder;
 use App\Console\Commands\PaymentHistory;
 use App\Console\Commands\SendServiceFeeNotification;
 use App\Console\Commands\DetermineFilterCleans;
+use App\Console\Commands\GenerateMailingList;
 
 class Kernel extends ConsoleKernel
 {
@@ -26,6 +27,7 @@ class Kernel extends ConsoleKernel
         HolidayBilling::class,
         DetermineFilterCleans::class,
         SendServiceFeeNotification::class,
+        GenerateMailingList::class
     ];
 
     /**

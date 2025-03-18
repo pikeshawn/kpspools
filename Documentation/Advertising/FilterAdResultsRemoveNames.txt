@@ -83,3 +83,13 @@ Requirements:
 	4.	Run as a Laravel console command (php artisan mailing:list).
 	5.	Provide logs of removed entries and processing time.”*
 
+   - Pull the raw names from this location
+        -/Users/shawnpike/Documents/cod  e/business/kpspools/Documentation/Advertising/Names/Raw/30000_03_17_2025.csv
+   - row definition is name,mailing_address_line_1,mailing_city,mailing_state,mailing_zip,apn
+   - need to pull the addresses from the addresses table
+        - match addresses.address_line_1 to the second spot in the row or mailing_address_line_1
+        - if mailing_address_line_1 in the row from 30000_03_17_2025.csv matches addresses.address_line_1 in the addresses table then do nothing
+        - if it does not match then write that address to a new file at this location
+            - /Users/shawnpike/Documents/code/business/kpspools/Documentation/Advertising/Names/Sent/30000_03_17_2025_sent.csv
+        - header is 'Name', 'Address', 'City', 'State', 'Zip'
+        - row is the line from 30000_03_17_2025.csv

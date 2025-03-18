@@ -1093,7 +1093,7 @@ class TaskController extends Controller
 
 
         $customer = Customer::find($task->customer_id);
-        $address = Customer::find($task->address_id);
+        $address = Address::find($task->address_id);
         $assignee = Auth::user()->name;
 
         Task::sendCompletedMessage($task, $customer, '14807034902', $address, $assignee);

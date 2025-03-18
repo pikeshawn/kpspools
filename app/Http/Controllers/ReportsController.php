@@ -176,8 +176,17 @@ class ReportsController extends Controller
 
         if ($startDate == 'begin') {
             $ss = ServiceStop::where('address_id', $addressId)->first();
+
+            if (is_null($ss)) {
+                return Inertia::render('Reports/Customer', [
+                    'serviceStops' => $ss,
+                    'addressId' => $addressId
+                ]);
+            }
+
             $startDate = $ss->created_at;
             $endDate = Carbon::now();
+
         } else {
             $startDate = Carbon::parse($startDate);
             $endDate = Carbon::parse($endDate);
@@ -203,6 +212,7 @@ class ReportsController extends Controller
         // Return the data as an Inertia response
         return Inertia::render('Reports/Customer', [
             'serviceStops' => $serviceStops,
+            'addressId' => $addressId
         ]);
     }
 

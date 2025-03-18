@@ -1,7 +1,7 @@
 <template>
     <layout
         :user="user"
-        :addressId="serviceStops[0].address_id"
+        :addressId="addressId"
     >
 
         <!--
@@ -66,8 +66,8 @@
 
         <div class="min-h-screen bg-gray-100 p-6">
             <h1 class="text-2xl font-bold text-gray-800 mb-6">Service Stops</h1>
-            <h1 class="text-1xl font-bold text-gray-800 mb-2">{{ serviceStops[0].customer_name }}</h1>
-            <h1 class="text-1xl font-bold text-gray-800 mb-2">{{ serviceStops[0].address  }}</h1>
+            <h1 v-if="serviceStops" class="text-1xl font-bold text-gray-800 mb-2">{{ serviceStops[0].customer_name }}</h1>
+            <h1 v-if="serviceStops" class="text-1xl font-bold text-gray-800 mb-2">{{ serviceStops[0].address  }}</h1>
 
             <!-- Summary Section -->
             <div class="bg-white shadow-lg rounded-lg p-6 mb-6 border border-gray-200">
@@ -205,6 +205,7 @@ export default {
     },
     props: {
         serviceStops: Array,
+        addressId: Number,
         user: Object
     },
     data() {

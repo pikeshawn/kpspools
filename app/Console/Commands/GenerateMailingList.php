@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
+use League\Csv\Reader;
 use League\Csv\Writer;
 
 class GenerateMailingList extends Command
@@ -14,61 +15,54 @@ class GenerateMailingList extends Command
 
     public function handle()
     {
-        $this->info("Fetching owner addresses...");
+        // File paths
+        $rawFilePath = storage_path('app/30000_03_17_2025.csv');
+        $sentFilePath = storage_path('app/30000_03_17_2025_sent.csv');
 
-        // Fetch all customer addresses and normalize them
-        $customerAddresses = DB::table('addresses')
-            ->pluck('address_line_1')
-            ->map(fn($address) => $this->normalizeAddress($address))
-            ->flip();
+        // Ensure the file exists
+        if (!file_exists($rawFilePath)) {
+            $this->error("Raw file not found: $rawFilePath");
+            return;
+        }
 
-        // Open CSV writer
-        $filePath = storage_path('app/filtered_mailing_list.csv');
-        $csv = Writer::createFromPath($filePath, 'w+');
-        $csv->insertOne(['Name', 'Address', 'City', 'State', 'Zip']);
+        // Load the raw names CSV
+        $csv = Reader::createFromPath($rawFilePath, 'r');
+        $csv->setHeaderOffset(0); // First row is the header
 
-        // Track removed entries
-        $removedEntries = [];
+        $records = iterator_to_array($csv->getRecords());
 
-        // Process owners in chunks to handle large datasets
-        DB::table('owners')
-            ->whereNotNull('section_township_range')
-            ->orderBy('id')
-            ->chunk(1000, function ($owners) use ($csv, $customerAddresses, &$removedEntries) {
-                foreach ($owners as $owner) {
-                    $normalizedAddress = $this->normalizeAddress($owner->address_line_1);
+        if (empty($records)) {
+            $this->info("No records found in raw file.");
+            return;
+        }
 
-                    if (isset($customerAddresses[$normalizedAddress])) {
-                        $removedEntries[] = $owner->address_line_1;
-                        continue;
-                    }
+        // Fetch existing addresses from the database
+        $existingAddresses = DB::table('addresses')->pluck('address_line_1')->toArray();
 
-                    $csv->insertOne([
-                        $owner->name,
-                        $owner->address_line_1,
-                        $owner->city,
-                        $owner->state,
-                        $owner->zip
-                    ]);
-                }
-            });
+        $unmatchedRecords = [];
 
-        // Log removed entries
-        Storage::put('removed_addresses.log', implode("\n", $removedEntries));
+        foreach ($records as $row) {
+            if (!in_array($row['mailing_address_line_1'], $existingAddresses)) {
+                $unmatchedRecords[] = [
+                    $row['name'],
+                    $row['mailing_address_line_1'],
+                    $row['mailing_city'],
+                    $row['mailing_state'],
+                    $row['mailing_zip']
+                ];
+            }
+        }
 
-        $this->info("Mailing list generated successfully: storage/app/filtered_mailing_list.csv");
-        $this->info("Removed addresses logged in: storage/app/removed_addresses.log");
-    }
+        if (empty($unmatchedRecords)) {
+            $this->info("All addresses matched. No new entries found.");
+            return;
+        }
 
-    /**
-     * Normalize addresses for consistent comparison.
-     */
-    private function normalizeAddress($address)
-    {
-        return strtolower(trim(str_replace(
-            [' street', ' avenue', ' road', ' boulevard', ' drive'],
-            [' st', ' ave', ' rd', ' blvd', ' dr'],
-            $address
-        )));
+        // Write to the output file
+        $writer = Writer::createFromPath($sentFilePath, 'w+');
+        $writer->insertOne(['Name', 'Address', 'City', 'State', 'Zip']); // Header
+        $writer->insertAll($unmatchedRecords);
+
+        $this->info(count($unmatchedRecords) . " unmatched addresses written to $sentFilePath.");
     }
 }
