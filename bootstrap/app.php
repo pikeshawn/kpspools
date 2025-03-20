@@ -14,7 +14,27 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware) {
-        //
+        $middleware->redirectGuestsTo(fn () => route('login'));
+        $middleware->redirectUsersTo(RouteServiceProvider::HOME);
+
+        $middleware->validateCsrfTokens(except: [
+            //
+            'register',
+        ]);
+
+        $middleware->web([
+            \Laravel\Jetstream\Http\Middleware\AuthenticateSession::class,
+            \App\Http\Middleware\HandleInertiaRequests::class,
+        ]);
+
+        $middleware->throttleApi();
+
+        $middleware->alias([
+            'customer' => \App\Http\Middleware\CustomerMiddleware::class,
+            'prospective' => \App\Http\Middleware\Prospective::class,
+            'serviceman' => \App\Http\Middleware\Serviceman::class,
+            'subscribed' => \App\Http\Middleware\Subscribed::class,
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //
