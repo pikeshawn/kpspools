@@ -13,7 +13,7 @@ class GenerateMailingList extends Command
 
     protected $description = 'Generate a mailing list, excluding existing customers';
 
-    public function handle()
+    public function handle(): void
     {
         // File paths
         $rawFilePath = storage_path('app/30000_03_17_2025.csv');

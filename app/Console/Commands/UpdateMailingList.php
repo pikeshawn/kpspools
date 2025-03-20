@@ -24,7 +24,7 @@ class UpdateMailingList extends Command
     /**
      * Execute the console command.
      */
-    public function handle()
+    public function handle(): void
     {
         //        $this->info('Starting to update the mailing list...');
 

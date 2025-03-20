@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -11,7 +12,7 @@ class Subcontractor extends Model
 
     protected $guarded = [];
 
-    public function tasks()
+    public function tasks(): HasMany
     {
         return $this->hasMany(Task::class);
     }

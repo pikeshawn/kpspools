@@ -2,6 +2,7 @@
 
 namespace App\Traits;
 
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use App\Models\PasswordlessToken;
 use App\Models\UserToken;
 use Illuminate\Support\Facades\Log;
@@ -82,7 +83,7 @@ trait Passwordless
      *
      * @return mixed
      */
-    public function tokens()
+    public function tokens(): HasMany
     {
         return $this->hasMany(PasswordlessToken::class, 'user_id', 'id');
     }

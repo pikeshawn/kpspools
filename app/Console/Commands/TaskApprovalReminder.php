@@ -27,7 +27,7 @@ class TaskApprovalReminder extends Command
     /**
      * Execute the console command.
      */
-    public function handle()
+    public function handle(): int
     {
         //        pull all tasks from the task table that are created and have been sent
         //        status = "created" and sent = 1

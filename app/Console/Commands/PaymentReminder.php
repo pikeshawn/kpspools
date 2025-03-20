@@ -26,7 +26,7 @@ class PaymentReminder extends Command
     /**
      * Execute the console command.
      */
-    public function handle()
+    public function handle(): int
     {
         //
         // Fetch all active customers with the necessary fields

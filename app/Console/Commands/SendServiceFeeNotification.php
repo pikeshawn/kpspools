@@ -15,7 +15,7 @@ class SendServiceFeeNotification extends Command
 
     protected $description = 'Send service fee update notification to active customers';
 
-    public function handle()
+    public function handle(): void
     {
         //        dd("handle");
 
