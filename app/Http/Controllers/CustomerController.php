@@ -310,15 +310,15 @@ class CustomerController extends Controller
             ]);
 
             if ($request->initiateBid) {
-                $initiatedBid = app('App\Http\Controllers\InitiateBidController')->initiateBid($request);
+                $initiatedBid = app(\App\Http\Controllers\InitiateBidController::class)->initiateBid($request);
                 $initiatedBidJSON = json_decode($initiatedBid);
                 // Get the current date and time
                 $now = Carbon::now();
                 // Format the date as YYYY-MM-DD
                 $startDate = $now->format('Y-m-d');
-                app('App\Http\Controllers\InitiateBidController')->addTasks($request->tasks, $initiatedBidJSON->job->id, $initiatedBidJSON->job->customer_id, $startDate);
-                app('App\Http\Controllers\InitiateBidController')->submitBid($initiatedBidJSON->job->id, $initiatedBidJSON->job->customer_id);
-                app('App\Http\Controllers\InitiateBidController')->updateCustomerTable($initiatedBidJSON->job->customer_id, $customer->id);
+                app(\App\Http\Controllers\InitiateBidController::class)->addTasks($request->tasks, $initiatedBidJSON->job->id, $initiatedBidJSON->job->customer_id, $startDate);
+                app(\App\Http\Controllers\InitiateBidController::class)->submitBid($initiatedBidJSON->job->id, $initiatedBidJSON->job->customer_id);
+                app(\App\Http\Controllers\InitiateBidController::class)->updateCustomerTable($initiatedBidJSON->job->customer_id, $customer->id);
             }
 
             $user->assignRole('customer');
