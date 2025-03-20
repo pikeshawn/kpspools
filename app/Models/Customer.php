@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Carbon\Carbon;
 use Carbon\CarbonInterface;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -18,7 +20,7 @@ class Customer extends Model
 
     protected $guarded = [];
 
-    public function tasks()
+    public function tasks(): HasMany
     {
         return $this->hasMany(Task::class);
     }
@@ -28,17 +30,17 @@ class Customer extends Model
         return $this->hasManyThrough(TaskStatus::class, Task::class);
     }
 
-    public function addresses()
+    public function addresses(): HasMany
     {
         return $this->hasMany(Address::class);
     }
 
-    public function User()
+    public function User(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
 
-    public function serviceStops()
+    public function serviceStops(): HasMany
     {
         return $this->hasMany(ServiceStop::class);
     }

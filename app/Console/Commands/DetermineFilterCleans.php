@@ -26,7 +26,7 @@ class DetermineFilterCleans extends Command
     /**
      * Execute the console command.
      */
-    public function handle()
+    public function handle(): int
     {
         // 1. Capture all the filter cleans
         $customerData = DB::table('customers')

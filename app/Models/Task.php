@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use App\Notifications\TaskApprovalNotification;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -17,22 +19,22 @@ class Task extends Model
 
     public $tsStatusArray;
 
-    public function customer()
+    public function customer(): BelongsTo
     {
         return $this->belongsTo(Customer::class, 'customer_id', 'id');
     }
 
-    public function address()
+    public function address(): BelongsTo
     {
         return $this->belongsTo(Address::class, 'address_id', 'id');
     }
 
-    public function task_statuses()
+    public function task_statuses(): HasMany
     {
         return $this->hasMany(TaskStatus::class);
     }
 
-    public function subcontractor()
+    public function subcontractor(): HasMany
     {
         return $this->hasMany(Subcontractor::class);
     }

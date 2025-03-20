@@ -27,7 +27,7 @@ class HolidayBilling extends Command
     /**
      * Execute the console command.
      */
-    public function handle()
+    public function handle(): void
     {
         //
         //        self::generateFlatRateBillingReport();

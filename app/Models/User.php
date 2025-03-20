@@ -2,6 +2,9 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -22,27 +25,27 @@ class User extends Authenticatable
     use Notifiable;
     use TwoFactorAuthenticatable;
 
-    public function customer()
+    public function customer(): HasOne
     {
         return $this->hasOne(Customer::class);
     }
 
-    public function tokens()
+    public function tokens(): HasMany
     {
         return $this->hasMany(PasswordlessToken::class);
     }
 
-    public function paychecks()
+    public function paychecks(): HasMany
     {
         return $this->hasMany(Paycheck::class);
     }
 
-    public function appointment()
+    public function appointment(): HasOne
     {
         return $this->hasOne(Appointment::class);
     }
 
-    public function jobTypes()
+    public function jobTypes(): BelongsToMany
     {
         return $this->belongsToMany(JobType::class, 'user_job_rates')
             ->withTimestamps();
@@ -96,7 +99,7 @@ class User extends Authenticatable
         ];
     }
 
-    public function serviceStops()
+    public function serviceStops(): HasMany
     {
         return $this->hasMany(ServiceStop::class);
     }

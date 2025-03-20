@@ -278,7 +278,7 @@ class TaskCreationTest extends TestCase
         return $user;
     }
 
-    public function test_getting_all_tasks_to_from_all_users()
+    public function test_getting_all_tasks_to_from_all_users(): void
     {
         self::loginAsAdmin();
         //        self::makeAdmin($u);
@@ -363,7 +363,7 @@ class TaskCreationTest extends TestCase
 
     }
 
-    public function test_assigned_user_is_the_name_associated_to_the_task_when_returned_to_customer_show_page()
+    public function test_assigned_user_is_the_name_associated_to_the_task_when_returned_to_customer_show_page(): void
     {
         self::login();
 
