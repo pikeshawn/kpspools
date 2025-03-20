@@ -338,7 +338,7 @@ class TaskCreationTest extends TestCase
     {
         self::login();
 
-        $description = $this->faker->name;
+        $description = $this->faker->name();
 
         $todo = [
             'address_id' => 4,
@@ -367,7 +367,7 @@ class TaskCreationTest extends TestCase
     {
         self::login();
 
-        $description = $this->faker->name;
+        $description = $this->faker->name();
 
         $todo = [
             'address_id' => 4,
@@ -381,7 +381,7 @@ class TaskCreationTest extends TestCase
             'assigned' => 1,
         ];
 
-        $description1 = $this->faker->name;
+        $description1 = $this->faker->name();
 
         $todo1 = [
             'address_id' => 4,

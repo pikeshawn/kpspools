@@ -29,8 +29,8 @@ class UserSeeder extends Seeder
 
         for ($i = 0; $i < 10; $i++) {
 
-            $firstName = $faker->firstName;
-            $lastName = $faker->lastName;
+            $firstName = $faker->firstName();
+            $lastName = $faker->lastName();
             $fullName = $firstName.' '.$lastName;
             self::createUser(
                 $fullName,
@@ -84,14 +84,14 @@ class UserSeeder extends Seeder
             'first_name' => $firstName,
             'middle_name' => $firstName,
             'last_name' => $lastName,
-            'active' => $faker->boolean,
+            'active' => $faker->boolean(),
             'type' => null,
             'plan' => null,
             'service_day' => $serviceDay,
             'order' => $order,
             'plan_duration' => 'Monthly',
             'plan_price' => 120,
-            'chemicals_included' => $faker->boolean,
+            'chemicals_included' => $faker->boolean(),
             'assigned_serviceman' => null,
             'phone_number' => '14807034902',
             'terms' => $terms,
@@ -118,22 +118,22 @@ class UserSeeder extends Seeder
         $faker = Faker::create();
 
         DB::table('addresses')->insert([
-            'address_line_1' => $faker->streetAddress,
+            'address_line_1' => $faker->streetAddress(),
             'customer_id' => $customerId,
             'address_line_2' => '',
-            'city' => $faker->city,
+            'city' => $faker->city(),
             'state' => 'AZ',
-            'zip' => $faker->postcode,
+            'zip' => $faker->postcode(),
             'community_gate_code' => '#'.random_int(1000, 9999),
-            'house_gate_has_lock' => $faker->boolean,
-            'active' => $faker->boolean,
+            'house_gate_has_lock' => $faker->boolean(),
+            'active' => $faker->boolean(),
             'type' => null,
             'plan' => null,
             'service_day' => $serviceDay,
             'order' => $order,
             'plan_duration' => 'Monthly',
             'plan_price' => 120,
-            'chemicals_included' => $faker->boolean,
+            'chemicals_included' => $faker->boolean(),
             'assigned_serviceman' => null,
             'serviceman_id' => $servicemanId,
             'terms' => $terms,

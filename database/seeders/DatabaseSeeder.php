@@ -22,7 +22,7 @@ class DatabaseSeeder extends Seeder
 
         //        $faker = Faker::create();
         //
-        //        dd($faker->streetAddress);
+        //        dd($faker->streetAddress());
 
         self::createAdminUsers();
         //        self::createRegularUsers();
@@ -97,12 +97,12 @@ class DatabaseSeeder extends Seeder
                 $active = 0;
             }
 
-            $firstName = $faker->firstName;
-            $lastName = $faker->lastName;
+            $firstName = $faker->firstName();
+            $lastName = $faker->lastName();
 
             $user = User::create([
                 'name' => $firstName.' '.$lastName,
-                'email' => $faker->email,
+                'email' => $faker->email(),
                 'phone_number' => '14806226441',
                 'type' => $type,
                 'active' => 1,
@@ -110,7 +110,7 @@ class DatabaseSeeder extends Seeder
                 'password' => Hash::make('password'),
             ]);
 
-            $serviceDay = $faker->dayOfWeek;
+            $serviceDay = $faker->dayOfWeek();
 
             $customer = Customer::create([
                 'user_id' => $user->id,
@@ -131,12 +131,12 @@ class DatabaseSeeder extends Seeder
 
             Address::create([
                 'customer_id' => $customer->id,
-                'address_line_1' => $faker->streetAddress,
-                'city' => $faker->city,
+                'address_line_1' => $faker->streetAddress(),
+                'city' => $faker->city(),
                 'state' => 'AZ',
                 'service_day' => $serviceDay,
                 'serviceman_id' => $serviceman->id,
-                'zip' => $faker->postcode,
+                'zip' => $faker->postcode(),
             ]);
         }
     }
