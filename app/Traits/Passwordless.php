@@ -2,9 +2,9 @@
 
 namespace App\Traits;
 
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use App\Models\PasswordlessToken;
 use App\Models\UserToken;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
