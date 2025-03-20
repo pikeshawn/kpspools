@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Filter extends Model
 {
     use HasFactory;
+
     protected $guarded = [];
 
     public static function getFilter($addressId)

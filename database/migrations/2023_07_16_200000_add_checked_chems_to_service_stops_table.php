@@ -13,9 +13,9 @@ return new class extends Migration
     {
         Schema::table('service_stops', function (Blueprint $table) {
             $table->boolean('checked_chems')
-                    ->after('chlorine_level')
-                    ->nullable()
-                    ->default(true);
+                ->after('chlorine_level')
+                ->nullable()
+                ->default(true);
         });
     }
 

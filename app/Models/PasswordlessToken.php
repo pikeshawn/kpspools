@@ -9,13 +9,16 @@ class PasswordlessToken extends Model
 {
     use HasFactory;
 
-    protected $table = "user_tokens";
+    protected $table = 'user_tokens';
+
     protected $fillable = [
         'token',
         'created_at',
         'user_id',
     ];
+
     protected $dates = ['created_at', 'expires_at'];
+
     /**
      * Is not used and not expired.
      *
@@ -25,6 +28,7 @@ class PasswordlessToken extends Model
     {
         return ! $this->isExpired();
     }
+
     /**
      * Is token expired.
      *
@@ -33,19 +37,18 @@ class PasswordlessToken extends Model
     public function isExpired()
     {
         return false;
-//        return $this->created_at
-//            ->diffInMinutes(Carbon::now()) > (int)config("passwordless.expire_in");
+        //        return $this->created_at
+        //            ->diffInMinutes(Carbon::now()) > (int)config("passwordless.expire_in");
     }
+
     /**
      * Ignore the updated_at column.
      *
-     * @param mixed $value Update date
-     *
+     * @param  mixed  $value  Update date
      * @return null
      */
-    public function setUpdatedAt($value)
-    {
-    }
+    public function setUpdatedAt($value) {}
+
     /**
      * Token belongs to auth user
      *

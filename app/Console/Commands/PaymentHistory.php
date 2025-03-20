@@ -2,10 +2,9 @@
 
 namespace App\Console\Commands;
 
+use App\Models\Customer;
 use GuzzleHttp\Client;
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\Log;
-use App\Models\Customer;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
@@ -150,7 +149,7 @@ class PaymentHistory extends Command
             444,
             449,
             455,
-            364
+            364,
         ];
 
         self::generatePaymentHistoryCsv($addressIds);
@@ -159,7 +158,7 @@ class PaymentHistory extends Command
     public static function generatePaymentHistoryCsv(array $addressIds)
     {
         $fileName = 'PaymentHistory.csv';
-//        $filePath = storage_path('app/' . $fileName);
+        //        $filePath = storage_path('app/' . $fileName);
         $filePath = storage_path($fileName);
 
         // Open a file for writing
@@ -177,14 +176,14 @@ class PaymentHistory extends Command
                 ->select('customers.id as customer_id', 'customers.jemmson_id', 'customers.first_name', 'customers.last_name')
                 ->first();
 
-            if (!$customer) {
+            if (! $customer) {
                 continue; // Skip if no customer found
             }
 
-            $fullName = $customer->first_name . ' ' . $customer->last_name;
+            $fullName = $customer->first_name.' '.$customer->last_name;
 
             fputcsv($file, [
-                $fullName
+                $fullName,
             ]);
 
             // Submit an API request to jemmson
@@ -199,7 +198,7 @@ class PaymentHistory extends Command
                         $row->billedDate ?? '',
                         $row->billedAmount ?? '',
                         $row->datePaid ?? '',
-                        $row->paidAmount ?? ''
+                        $row->paidAmount ?? '',
                     ]);
                 }
             }
@@ -216,16 +215,16 @@ class PaymentHistory extends Command
 
     private static function submitToJemmson($jemmsonId)
     {
-        $client = new Client();
+        $client = new Client;
 
-        $response = $client->post(env('API_URL') . '/payment-history', [
+        $response = $client->post(env('API_URL').'/payment-history', [
             'headers' => [
-                'Authorization' => 'Bearer ' . env('BEARER_TOKEN'),
+                'Authorization' => 'Bearer '.env('BEARER_TOKEN'),
                 'Accept' => 'application/json',
             ],
             'json' => [
-                "jemmsonId" => $jemmsonId
-            ]
+                'jemmsonId' => $jemmsonId,
+            ],
         ]);
 
         return $response->getBody()->getContents();

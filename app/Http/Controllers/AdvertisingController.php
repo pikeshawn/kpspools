@@ -2,65 +2,65 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Http;
-use App\Models\Str;
-use App\Models\ResidentialDetail;
 use App\Models\Owner;
+use App\Models\ResidentialDetail;
+use App\Models\Str;
 use App\Models\Valuation;
-use Inertia\Inertia;
-use function Psy\debug;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
+use Inertia\Inertia;
+
+use function Psy\debug;
 
 class AdvertisingController extends Controller
 {
     private $authHeader = [
-        'Authorization' => '1034e75e-89c6-11e8-8a04-00155da2c015'
+        'Authorization' => '1034e75e-89c6-11e8-8a04-00155da2c015',
     ];
 
     private $townships = [
 
-//        '-2S-5E',
-//        '-2S-6E',
-//        '-2S-7E',
-//        '-2S-8E',
+        //        '-2S-5E',
+        //        '-2S-6E',
+        //        '-2S-7E',
+        //        '-2S-8E',
 
-//        '-1S-3E',
+        //        '-1S-3E',
         '-1S-4E',
         '-1S-5E',
         '-1S-6E',
         '-1S-7E',
 
-//        '-1N-3E',
-//        '-1N-4E',
-//        '-1N-5E',
-//        '-1N-6E',
-//        '-1N-7E',
-//        '-1N-8E',
-//        '-2N-4E',
-//        '-3N-4E'
+        //        '-1N-3E',
+        //        '-1N-4E',
+        //        '-1N-5E',
+        //        '-1N-6E',
+        //        '-1N-7E',
+        //        '-1N-8E',
+        //        '-2N-4E',
+        //        '-3N-4E'
     ];
 
     public function updateMailingList()
     {
-//        dd('updateMailing');
-//        self::updateStr('-2S-6E', 32, 39819);
-//        self::updateStr('-2S-7E', 32, 66108);
-//        self::updateStr('-1S-3E', 36, 162099);
-//        self::updateStr('-1S-4E', 31, 186866);
-//        $this->fetchTownshipParcels('26-1S-5E', 67);
-//        self::updateStr('-1S-5E', 36, 223735);
-//        self::updateStr('-1S-6E', 21, $startingId);
-//        self::updateStr('-1S-7E', 8, $startingId);
-//        self::updateStr('-1N-3E', 2, $startingId);
+        //        dd('updateMailing');
+        //        self::updateStr('-2S-6E', 32, 39819);
+        //        self::updateStr('-2S-7E', 32, 66108);
+        //        self::updateStr('-1S-3E', 36, 162099);
+        //        self::updateStr('-1S-4E', 31, 186866);
+        //        $this->fetchTownshipParcels('26-1S-5E', 67);
+        //        self::updateStr('-1S-5E', 36, 223735);
+        //        self::updateStr('-1S-6E', 21, $startingId);
+        //        self::updateStr('-1S-7E', 8, $startingId);
+        //        self::updateStr('-1N-3E', 2, $startingId);
 
         $startingId = 110498;
         self::updateStr('-2S-7E', 23, $startingId);
 
         foreach ($this->townships as $township) {
             for ($i = 1; $i < 37; $i++) {
-                $str = $i . $township;
+                $str = $i.$township;
                 $this->fetchTownshipParcels($str);
                 $apns = self::getApns($str);
                 self::fetchParcelDetails($apns);
@@ -94,30 +94,29 @@ class AdvertisingController extends Controller
             'totalNumberOfHousesWithPools' => $totalNumberOfHousesWithPools,
             'str' => $str,
             'latestHouseWithPool' => [
-                'owner' => $latestHouseWithPool
-            ]
+                'owner' => $latestHouseWithPool,
+            ],
         ];
 
         return Inertia::render('Advertising/List', [
-            'list' => $listData
+            'list' => $listData,
         ]);
 
-
-//        $list = null;
-//        return Inertia::render('Advertising/List', [
-//            'list' => $list
-//            ]);
+        //        $list = null;
+        //        return Inertia::render('Advertising/List', [
+        //            'list' => $list
+        //            ]);
     }
 
     private function updateStr($township, $startingSection, $startingId)
     {
 
-        $str = $startingSection . $township;
+        $str = $startingSection.$township;
         $apns = self::getApns($str, $startingId);
         self::fetchParcelDetails($apns);
         Log::debug("$str is done");
         for ($i = $startingSection + 1; $i < 37; $i++) {
-            $str = $i . $township;
+            $str = $i.$township;
             $this->fetchTownshipParcels($str);
             $apns = self::getApns($str);
             self::fetchParcelDetails($apns);
@@ -149,12 +148,12 @@ class AdvertisingController extends Controller
                         'situs_city' => $parcel['SitusCity'],
                         'situs_zip' => $parcel['SitusZip'],
                         'property_type' => $parcel['PropertyType'],
-                        'rental_id' => $parcel['RentalID']
+                        'rental_id' => $parcel['RentalID'],
                     ]
                 );
             }
             $page++;
-        } while (!empty($data));
+        } while (! empty($data));
     }
 
     private function getApns($str, $id = 0)
@@ -179,29 +178,29 @@ class AdvertisingController extends Controller
 
         $data = $response->json();
 
-//        if ($apn->apn === '31401522') {
-//            Log::info('31401522');
-//        }
+        //        if ($apn->apn === '31401522') {
+        //            Log::info('31401522');
+        //        }
 
         if (is_null($data)) {
-//            Log::debug($apn->apn . " :: is null" );
+            //            Log::debug($apn->apn . " :: is null" );
             return;
         }
 
         if (count($data) === 0) {
-//            Log::debug($apn->apn . " :: is empty" );
+            //            Log::debug($apn->apn . " :: is empty" );
             return;
         }
 
-        if (!$data['Pool']) {
+        if (! $data['Pool']) {
             return;
         }
 
-        if (!isset($data['Pool']) | $data['Pool'] <= 0) {
+        if (! isset($data['Pool']) | $data['Pool'] <= 0) {
             return;
         }
 
-        Log::debug($apn->apn . " :: " . $data['Pool']);
+        Log::debug($apn->apn.' :: '.$data['Pool']);
 
         $strRecord = Str::where('apn', $apn->apn)->first();
 
@@ -235,13 +234,13 @@ class AdvertisingController extends Controller
                 'parking_type' => $data['ParkingType'] ?? null,
                 'covered_parking' => $data['CoveredParking'] ?? null,
                 'locational_characteristics' => $data['LocationalCharacteristics'] ?? null,
-                'physical_condition' => $data['PhysicalCondition'] ?? null
+                'physical_condition' => $data['PhysicalCondition'] ?? null,
             ]
         );
 
         $this->fetchOwnerDetails($apn, $strRecord->id);
         $this->fetchPropertyValuations($apn, $strRecord->id);
-//        }
+        //        }
     }
 
     private function fetchOwnerDetails($apn, $apn_id)
@@ -267,11 +266,11 @@ class AdvertisingController extends Controller
                 'most_current_deed' => $data['MostCurrentDeed'] ?? null,
                 'deed_date' => isset($data['DeedDate']) ? date('Y-m-d', strtotime($data['DeedDate'])) : null,
                 'deed_type' => $data['DeedType'] ?? null,
-                'sale_price' => isset($data['SalePrice']) ? (float)$data['SalePrice'] : null,
+                'sale_price' => isset($data['SalePrice']) ? (float) $data['SalePrice'] : null,
                 'sale_date' => isset($data['SaleDate']) ? date('Y-m-d', strtotime($data['SaleDate'])) : null,
                 'redacted' => $data['Redacted'] ?? false,
                 'full_mailing_address' => $data['FullMailingAddress'] ?? null,
-                'deed_type_id' => $data['DeedTypeID'] ?? null
+                'deed_type_id' => $data['DeedTypeID'] ?? null,
             ]
         );
     }
@@ -287,21 +286,21 @@ class AdvertisingController extends Controller
             Valuation::updateOrCreate(
                 [
                     'apn_id' => $apn_id,
-                    'tax_year' => $valuation['TaxYear'] ?? null
+                    'tax_year' => $valuation['TaxYear'] ?? null,
                 ],
                 [
-                    'full_cash_value' => isset($valuation['FullCashValue']) ? (float)str_replace(',', '', $valuation['FullCashValue']) : null,
-                    'limited_property_value' => isset($valuation['LimitedPropertyValue']) ? (float)str_replace(',', '', $valuation['LimitedPropertyValue']) : null,
+                    'full_cash_value' => isset($valuation['FullCashValue']) ? (float) str_replace(',', '', $valuation['FullCashValue']) : null,
+                    'limited_property_value' => isset($valuation['LimitedPropertyValue']) ? (float) str_replace(',', '', $valuation['LimitedPropertyValue']) : null,
                     'legal_classification_code' => $valuation['LegalClassificationCode'] ?? null,
                     'legal_classification' => $valuation['LegalClassification'] ?? null,
-                    'assessment_ratio_percentage' => isset($valuation['AssessmentRatioPercentage']) ? (float)$valuation['AssessmentRatioPercentage'] : null,
+                    'assessment_ratio_percentage' => isset($valuation['AssessmentRatioPercentage']) ? (float) $valuation['AssessmentRatioPercentage'] : null,
                     'assessed_fcv' => $valuation['AssessedFCV'] ?? null, // Keeping as string since it might have 'na'
                     'assessed_lpv' => isset($valuation['AssessedLPV']) ? trim($valuation['AssessedLPV']) : null,
                     'valuation_source' => $valuation['ValuationSource'] ?? null,
                     'pe_prop_use_desc' => $valuation['PEPropUseDesc'] ?? null,
                     'property_use_code' => $valuation['PropertyUseCode'] ?? null,
                     'tax_area_code' => $valuation['TaxAreaCode'] ?? null,
-                    'notice_of_change_indc' => $valuation['NoticeOfChangeIndc'] ?? null
+                    'notice_of_change_indc' => $valuation['NoticeOfChangeIndc'] ?? null,
                 ]
             );
         }

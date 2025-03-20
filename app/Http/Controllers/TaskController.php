@@ -2,17 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Customer;
-use App\Models\TaskImage;
-use App\Models\EmployeePayment;
-use App\Models\UserJobRate;
-use App\Models\JobType;
 use App\Models\Address;
+use App\Models\Customer;
+use App\Models\EmployeePayment;
+use App\Models\JobType;
 use App\Models\ScpInvoiceItem;
 use App\Models\Subcontractor;
 use App\Models\Task;
-use App\Models\User;
+use App\Models\TaskImage;
 use App\Models\TaskStatus;
+use App\Models\User;
 use App\Notifications\GenericNotification;
 use App\Notifications\TaskApprovalNotification;
 use Carbon\Carbon;
@@ -20,20 +19,19 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
 use Inertia\Response;
-use Illuminate\Support\Facades\Notification;
+
 use function Laravel\Prompts\select;
-use function PHPUnit\Framework\isNull;
 
 class TaskController extends Controller
 {
-
     public function getTasksFromSelectedCriteria(Request $request)
     {
 
-        if (!Auth::user()->is_admin) {
+        if (! Auth::user()->is_admin) {
             $request->serviceman = Auth::user()->id;
         }
 
@@ -46,7 +44,7 @@ class TaskController extends Controller
             ->when($request->status !== 'all', function ($q) use ($request) {
                 return $q->where('status', $request->status);
             })
-            ->when($request->status === 'all', function ($q) use ($request) {
+            ->when($request->status === 'all', function ($q) {
                 return $q->whereIn('status', ['created',
                     'approved',
                     'pickedUp',
@@ -77,7 +75,7 @@ class TaskController extends Controller
                 'assigned',
                 'price',
                 'sent',
-                DB::raw('false as deleted')
+                DB::raw('false as deleted'),
             ]);
 
         $tasks = $query->get();
@@ -86,7 +84,7 @@ class TaskController extends Controller
 
             $jt = JobType::where('name', $task->description)->first();
 
-            if (!is_null($jt)) {
+            if (! is_null($jt)) {
                 $task->jobType = true;
             } else {
                 $task->jobType = false;
@@ -97,7 +95,7 @@ class TaskController extends Controller
             $task->first_name = $customer->first_name;
             $task->last_name = $customer->last_name;
             $task->phone_number = $customer->phone_number;
-            $task->address = $address->address_line_1 . ', ' . $address->city . ' ' . $address->zip;
+            $task->address = $address->address_line_1.', '.$address->city.' '.$address->zip;
         }
 
         return $tasks;
@@ -115,9 +113,9 @@ class TaskController extends Controller
 
         // Initialize the task array
         $taskArray = [
-            "name" => $subName,
-            "id" => $sub,
-            "tasks" => []
+            'name' => $subName,
+            'id' => $sub,
+            'tasks' => [],
         ];
 
         // Fetch tasks from the tasks table based on the filters
@@ -151,61 +149,60 @@ class TaskController extends Controller
 
                 if ($customerData) {
                     $customer = [
-                        "name" => $customerData->first_name . " " . $customerData->last_name,
-                        "address" => "{$address->address_line_1}, {$address->city} {$address->zip}",
-                        "link" => env("APP_URL") . "/customers/show/" . $address->id
+                        'name' => $customerData->first_name.' '.$customerData->last_name,
+                        'address' => "{$address->address_line_1}, {$address->city} {$address->zip}",
+                        'link' => env('APP_URL').'/customers/show/'.$address->id,
                     ];
                 }
             }
 
             // Create sub array
             $subData = [
-                "beenPaid" => $task->been_paid,
-                "rate" => $task->rate
+                'beenPaid' => $task->been_paid,
+                'rate' => $task->rate,
             ];
 
             // Add task to task array
-            $taskArray["tasks"][] = [
-                "id" => $task->id,
-                "description" => $task->description,
-                "status" => $task->status,
-                "type" => $task->type,
-                "price" => $task->price,
-                "quantity" => $task->quantity,
-                "approvalSent" => $task->sent,
-                "created_at" => $task->created_at,
-                "updated_at" => $task->updated_at,
-                "statuses" => $statuses,
-                "sub" => $subData,
-                "customer" => $customer
+            $taskArray['tasks'][] = [
+                'id' => $task->id,
+                'description' => $task->description,
+                'status' => $task->status,
+                'type' => $task->type,
+                'price' => $task->price,
+                'quantity' => $task->quantity,
+                'approvalSent' => $task->sent,
+                'created_at' => $task->created_at,
+                'updated_at' => $task->updated_at,
+                'statuses' => $statuses,
+                'sub' => $subData,
+                'customer' => $customer,
             ];
         }
 
-//        dd($taskArray);
+        //        dd($taskArray);
 
         // Return the task array as JSON
-//        return response()->json(["subTasks" => [$taskArray]]);
+        //        return response()->json(["subTasks" => [$taskArray]]);
         return $taskArray;
     }
 
     public function subTasks()
     {
 
-//        $statuses = [];
+        //        $statuses = [];
 
         $subs = User::where('type', 'serviceman')->where('active', true)->get();
 
         return Inertia::render('Task/SubTasks', [
-            'statuses' => ["created", "approved", "completed", "diy", "denied"],
-            'subs' => $subs
+            'statuses' => ['created', 'approved', 'completed', 'diy', 'denied'],
+            'subs' => $subs,
         ]);
-
 
     }
 
     public function display()
     {
-        $tasks = Task::where('status', "pickedUp")->orWhere('status', "approved")->get();
+        $tasks = Task::where('status', 'pickedUp')->orWhere('status', 'approved')->get();
 
         $servicemen = User::where('type', 'serviceman')->where('active', 1)->get();
 
@@ -221,14 +218,14 @@ class TaskController extends Controller
                         $name = $sm->name;
                     }
                 }
-                $task->customerName = $customer->first_name . " " . $customer->last_name;
+                $task->customerName = $customer->first_name.' '.$customer->last_name;
                 $task->assignedName = $name;
                 array_push($finalTaskArray, $task);
             }
         }
 
         return Inertia::render('Task/DisplayTasks', [
-            'tasks' => $finalTaskArray
+            'tasks' => $finalTaskArray,
         ]);
 
     }
@@ -261,7 +258,7 @@ class TaskController extends Controller
             $carbonDate = Carbon::now();
             $mysqlDate = $carbonDate->format('Y-m-d');
 
-            if (!$exists) {
+            if (! $exists) {
                 $ts = new TaskStatus(
                     [
                         'task_id' => $taskId,
@@ -279,7 +276,7 @@ class TaskController extends Controller
             $task->save();
 
         } else {
-//            if created exists then remove it from the database
+            //            if created exists then remove it from the database
             foreach ($taskStatuses as $status) {
                 if ($status->status === $taskStatus) {
                     $statusId = $status->id;
@@ -314,7 +311,7 @@ class TaskController extends Controller
 
         return Inertia::render('Task/ReconcilePickedUp', [
             'tasks' => $tasks,
-            'servicemen' => $servicemen
+            'servicemen' => $servicemen,
         ]);
     }
 
@@ -342,44 +339,43 @@ class TaskController extends Controller
 
         return Inertia::render('Task/ReconcileCreated', [
             'tasks' => $tasks,
-            'servicemen' => $servicemen
+            'servicemen' => $servicemen,
         ]);
     }
 
     public function reconcile()
     {
 
-//        $tasks = Task::with(['task_statuses', 'customer', 'address'])  // Eager load the task statuses
-//        ->orderBy('customer_id')  // Order by customer_id
-//        ->get();
+        //        $tasks = Task::with(['task_statuses', 'customer', 'address'])  // Eager load the task statuses
+        //        ->orderBy('customer_id')  // Order by customer_id
+        //        ->get();
 
-//        $tasks = Task::select(
-//            'id', 'customer_id', 'assigned', 'created_at',
-//            'description', 'status', 'type', 'price', 'address_id'
-//        )  // Selecting specific fields from tasks
-//        ->with([
-//            'task_statuses',  // Selecting specific fields from task statuses
-//            'customer:id,first_name,last_name',             // Selecting specific fields from customers
-//            'address:id,address_line_1',             // Selecting specific fields from customers
-//        ])
-//            ->orderBy('customer_id')
-//            ->get();
+        //        $tasks = Task::select(
+        //            'id', 'customer_id', 'assigned', 'created_at',
+        //            'description', 'status', 'type', 'price', 'address_id'
+        //        )  // Selecting specific fields from tasks
+        //        ->with([
+        //            'task_statuses',  // Selecting specific fields from task statuses
+        //            'customer:id,first_name,last_name',             // Selecting specific fields from customers
+        //            'address:id,address_line_1',             // Selecting specific fields from customers
+        //        ])
+        //            ->orderBy('customer_id')
+        //            ->get();
 
-//        $tasks = Task::select(
-//            'id', 'customer_id', 'assigned', 'created_at',
-//            'description', 'status', 'type', 'price', 'address_id'
-//        )  // Selecting specific fields from tasks
-//        ->with([
-//            'task_statuses',  // Selecting specific fields from task statuses
-//            'customer:id,first_name,last_name',             // Selecting specific fields from customers
-//            'address:id,address_line_1',             // Selecting specific fields from customers
-//        ])
-//            ->orderBy('customer_id')
-//            ->get();
+        //        $tasks = Task::select(
+        //            'id', 'customer_id', 'assigned', 'created_at',
+        //            'description', 'status', 'type', 'price', 'address_id'
+        //        )  // Selecting specific fields from tasks
+        //        ->with([
+        //            'task_statuses',  // Selecting specific fields from task statuses
+        //            'customer:id,first_name,last_name',             // Selecting specific fields from customers
+        //            'address:id,address_line_1',             // Selecting specific fields from customers
+        //        ])
+        //            ->orderBy('customer_id')
+        //            ->get();
 
-
-//        STATUS === APPROVED
-//        ==============================
+        //        STATUS === APPROVED
+        //        ==============================
         $tasks = Task::select(['id', 'customer_id', 'assigned', 'created_at', 'description', 'status', 'type', 'price', 'address_id'])
 
 //            ======= All tasks that have been created but have not been sent for approval ====
@@ -398,50 +394,47 @@ class TaskController extends Controller
 //            ->where('status', 'completed')
 //            ->where('type', '<>', 'todo')
 
-
             ->get();
 
-//        dd($tasks);
+        //        dd($tasks);
 
-//        ->where('created_at', '>', '2024-05-01 00:00:00')
+        //        ->where('created_at', '>', '2024-05-01 00:00:00')
 
-//        ALL TASKS IN THE CURRENT MONTH
-//        ==============================
-//        $tasks = Task::select(['id', 'customer_id', 'assigned', 'created_at', 'description', 'status', 'type', 'price', 'address_id'])
-//            ->where('created_at', '>', '2024-06-01 00:00:00')
-//            ->where('status', '<>', 'denied')
-//            ->get();
+        //        ALL TASKS IN THE CURRENT MONTH
+        //        ==============================
+        //        $tasks = Task::select(['id', 'customer_id', 'assigned', 'created_at', 'description', 'status', 'type', 'price', 'address_id'])
+        //            ->where('created_at', '>', '2024-06-01 00:00:00')
+        //            ->where('status', '<>', 'denied')
+        //            ->get();
 
+        //        ALL TASKS FOR A SPECIFIC CUSTOMER
+        //        ==============================
+        //        $tasks = Task::select(['id', 'customer_id', 'assigned', 'created_at', 'description', 'status', 'type', 'price', 'address_id'])
+        //            ->where('customer_id', 278)
+        //            ->get();
 
-//        ALL TASKS FOR A SPECIFIC CUSTOMER
-//        ==============================
-//        $tasks = Task::select(['id', 'customer_id', 'assigned', 'created_at', 'description', 'status', 'type', 'price', 'address_id'])
-//            ->where('customer_id', 278)
-//            ->get();
+        //        ALL PARTS AND REPAIRS THAT HAVE BEEN PICKED UP, APPROVED, OR CREATED
+        //        ==============================
+        //        $tasks = Task::select(['id', 'customer_id', 'assigned', 'created_at', 'description', 'status', 'type', 'price', 'address_id'])
+        //            ->where(function ($query) {
+        //                $query->where('status', 'approved')
+        //                    ->orWhere('status', 'pickedUp')
+        //                    ->orWhere('status', 'created')
+        //                    ->orWhere('status', 'completed');
+        //            })->where(function ($query) {
+        //                $query->where('type', 'part')
+        //                    ->orWhere('type', 'repair');
+        //            })
+        //            ->where('created_at', '>', '2024-01-01 00:00:00')
+        //            ->orderBy('customer_id')
+        //            ->get();
 
-//        ALL PARTS AND REPAIRS THAT HAVE BEEN PICKED UP, APPROVED, OR CREATED
-//        ==============================
-//        $tasks = Task::select(['id', 'customer_id', 'assigned', 'created_at', 'description', 'status', 'type', 'price', 'address_id'])
-//            ->where(function ($query) {
-//                $query->where('status', 'approved')
-//                    ->orWhere('status', 'pickedUp')
-//                    ->orWhere('status', 'created')
-//                    ->orWhere('status', 'completed');
-//            })->where(function ($query) {
-//                $query->where('type', 'part')
-//                    ->orWhere('type', 'repair');
-//            })
-//            ->where('created_at', '>', '2024-01-01 00:00:00')
-//            ->orderBy('customer_id')
-//            ->get();
-
-//        $names = [];
-//        $tasksWithAttributes = self::getTasksFromSpecificCustomersByLastName($tasks, $names);
+        //        $names = [];
+        //        $tasksWithAttributes = self::getTasksFromSpecificCustomersByLastName($tasks, $names);
 
         $tasksWithAttributes = self::getTasksAsAnArray($tasks);
 
-
-//        dd($tsks);
+        //        dd($tsks);
 
         //        dd($tsks);
 
@@ -449,9 +442,8 @@ class TaskController extends Controller
             return $a[1]['last_name'] <=> $b[1]['last_name'];
         });
 
-
         return Inertia::render('Task/Reconcile', [
-            'tasks' => $tasksWithAttributes
+            'tasks' => $tasksWithAttributes,
         ]);
 
     }
@@ -468,8 +460,7 @@ class TaskController extends Controller
 
     public function tasksNeedsApproval()
     {
-        $servicemen = User::select(["id", "name"])->where('active', 1)->where('type', 'serviceman')->get();
-
+        $servicemen = User::select(['id', 'name'])->where('active', 1)->where('type', 'serviceman')->get();
 
         if (Auth::user()->is_admin) {
             $created = Task::where('status', 'created')->count();
@@ -501,7 +492,6 @@ class TaskController extends Controller
             $todo = Task::where('type', 'todo')->where('assigned', $loggedInUserId)->count();
             $part = Task::where('type', 'part')->where('assigned', $loggedInUserId)->count();
         }
-
 
         return Inertia::render('Task/View', [
             'servicemen' => $servicemen,
@@ -551,7 +541,6 @@ class TaskController extends Controller
             $a['id'] = $address->id;
             $a['address_line_1'] = $address->address_line_1;
 
-
             $tsArray = [
                 'created' => false,
                 'approved' => false,
@@ -565,15 +554,33 @@ class TaskController extends Controller
             ];
 
             foreach ($task_statuses as $status) {
-                if ($status->status === 'created') $tsArray['created'] = true;
-                if ($status->status === 'approved') $tsArray['approved'] = true;
-                if ($status->status === 'pickedUp') $tsArray['pickedUp'] = true;
-                if ($status->status === 'completed') $tsArray['completed'] = true;
-                if ($status->status === 'remove') $tsArray['remove'] = true;
-                if ($status->status === 'diy') $tsArray['diy'] = true;
-                if ($status->status === 'denied') $tsArray['denied'] = true;
-                if ($status->status === 'invoiced') $tsArray['invoiced'] = true;
-                if ($status->status === 'paid') $tsArray['paid'] = true;
+                if ($status->status === 'created') {
+                    $tsArray['created'] = true;
+                }
+                if ($status->status === 'approved') {
+                    $tsArray['approved'] = true;
+                }
+                if ($status->status === 'pickedUp') {
+                    $tsArray['pickedUp'] = true;
+                }
+                if ($status->status === 'completed') {
+                    $tsArray['completed'] = true;
+                }
+                if ($status->status === 'remove') {
+                    $tsArray['remove'] = true;
+                }
+                if ($status->status === 'diy') {
+                    $tsArray['diy'] = true;
+                }
+                if ($status->status === 'denied') {
+                    $tsArray['denied'] = true;
+                }
+                if ($status->status === 'invoiced') {
+                    $tsArray['invoiced'] = true;
+                }
+                if ($status->status === 'paid') {
+                    $tsArray['paid'] = true;
+                }
             }
 
             array_push($t, $tsArray);
@@ -622,7 +629,6 @@ class TaskController extends Controller
                     $a['id'] = $address->id;
                     $a['address_line_1'] = $address->address_line_1;
 
-
                     $tsArray = [
                         'created' => false,
                         'approved' => false,
@@ -636,15 +642,33 @@ class TaskController extends Controller
                     ];
 
                     foreach ($task_statuses as $status) {
-                        if ($status->status === 'created') $tsArray['created'] = true;
-                        if ($status->status === 'approved') $tsArray['approved'] = true;
-                        if ($status->status === 'pickedUp') $tsArray['pickedUp'] = true;
-                        if ($status->status === 'completed') $tsArray['completed'] = true;
-                        if ($status->status === 'remove') $tsArray['remove'] = true;
-                        if ($status->status === 'diy') $tsArray['diy'] = true;
-                        if ($status->status === 'denied') $tsArray['denied'] = true;
-                        if ($status->status === 'invoiced') $tsArray['invoiced'] = true;
-                        if ($status->status === 'paid') $tsArray['paid'] = true;
+                        if ($status->status === 'created') {
+                            $tsArray['created'] = true;
+                        }
+                        if ($status->status === 'approved') {
+                            $tsArray['approved'] = true;
+                        }
+                        if ($status->status === 'pickedUp') {
+                            $tsArray['pickedUp'] = true;
+                        }
+                        if ($status->status === 'completed') {
+                            $tsArray['completed'] = true;
+                        }
+                        if ($status->status === 'remove') {
+                            $tsArray['remove'] = true;
+                        }
+                        if ($status->status === 'diy') {
+                            $tsArray['diy'] = true;
+                        }
+                        if ($status->status === 'denied') {
+                            $tsArray['denied'] = true;
+                        }
+                        if ($status->status === 'invoiced') {
+                            $tsArray['invoiced'] = true;
+                        }
+                        if ($status->status === 'paid') {
+                            $tsArray['paid'] = true;
+                        }
                     }
 
                     array_push($t, $tsArray);
@@ -674,21 +698,21 @@ class TaskController extends Controller
         return Inertia::render('Task/CustomerNeedsApproval', [
             'tasks' => $tasks,
             'servicemen' => $servicemen,
-            'addressId' => $request->addressId['id']
+            'addressId' => $request->addressId['id'],
         ]);
     }
 
     public function repairsAndPartsList()
     {
 
-//        dd(Auth::user());
+        //        dd(Auth::user());
 
-//        dd(User::isAdmin());
+        //        dd(User::isAdmin());
 
-//            dd('isAdmin');
+        //            dd('isAdmin');
         $tasks = Task::allTasksForPoolGuy();
 
-//        return $tasks;
+        //        return $tasks;
 
         return Inertia::render('Task/RepairsAndPartsList', [
             'tasks' => $tasks,
@@ -698,10 +722,10 @@ class TaskController extends Controller
     public function requestApprovalFromReconcile(Request $request)
     {
         self::getApprovalFromReconcile(
-            $request["id"],
-            $request["price"],
-            $request["description"],
-            $request["phone_number"]
+            $request['id'],
+            $request['price'],
+            $request['description'],
+            $request['phone_number']
         );
     }
 
@@ -710,7 +734,7 @@ class TaskController extends Controller
         $task = Task::find($task_id);
 
         //        send for approval if the task has not been verbally approved
-        $message = "Please Reply\n==================\n\nKPS Pools needs to inform you about a necessary repair for your pool:\n\n" . $description . " for $" . $price . "\n\nWould you like for us to complete this for you?\n\nY$task->count for Yes\nN$task->count for No\n\nYou may also reach out to Shawn at 480.703.4902 or 480.622.6441. If you have any questions";
+        $message = "Please Reply\n==================\n\nKPS Pools needs to inform you about a necessary repair for your pool:\n\n".$description.' for $'.$price."\n\nWould you like for us to complete this for you?\n\nY$task->count for Yes\nN$task->count for No\n\nYou may also reach out to Shawn at 480.703.4902 or 480.622.6441. If you have any questions";
 
         self::sendforApproval($task, $phone_number, $message);
 
@@ -723,7 +747,7 @@ class TaskController extends Controller
         $task = Task::find($request->task_id);
 
         //        send for approval if the task has not been verbally approved
-        $message = "Please Reply\n==================\n\nKPS Pools needs to inform you about a necessary repair for your pool:\n\n" . $request->description . " for $" . $request->price . "\n\nWould you like for us to complete this for you?\n\nY$task->count for Yes\nN$task->count for No\n\nYou may also reach out to Shawn at 480.703.4902 or 480.622.6441. If you have any questions";
+        $message = "Please Reply\n==================\n\nKPS Pools needs to inform you about a necessary repair for your pool:\n\n".$request->description.' for $'.$request->price."\n\nWould you like for us to complete this for you?\n\nY$task->count for Yes\nN$task->count for No\n\nYou may also reach out to Shawn at 480.703.4902 or 480.622.6441. If you have any questions";
 
         self::sendforApproval($task, $request->phone_number, $message);
 
@@ -741,7 +765,7 @@ class TaskController extends Controller
         // Validate the request parameters
         $request->validate([
             'serviceman' => 'required|integer',
-            'description' => 'required|string'
+            'description' => 'required|string',
         ]);
 
         // Find job type ID based on description
@@ -750,7 +774,7 @@ class TaskController extends Controller
             ->select('id')
             ->first();
 
-        if (!$jobType) {
+        if (! $jobType) {
             return response()->json(['message' => 'Job type not found', 'rate_paid' => 0], 404);
         }
 
@@ -763,7 +787,6 @@ class TaskController extends Controller
         return response()->json(['rate_paid' => $rate ?? 0]);
     }
 
-
     public function getTaskItems(Request $request)
     {
         // Fetch SCP Invoice Items matching the description
@@ -772,9 +795,9 @@ class TaskController extends Controller
             'description',
             'cost',
             DB::raw('MAX(created_at) as latest_created_at'),
-            'product_number'
+            'product_number',
         ])
-            ->whereRaw("LOWER(description) LIKE LOWER(?)", ["%{$request->name}%"])
+            ->whereRaw('LOWER(description) LIKE LOWER(?)', ["%{$request->name}%"])
             ->groupBy('description', 'cost', 'product_number', 'model_num')
             ->orderBy('latest_created_at', 'desc')
             ->get();
@@ -782,7 +805,7 @@ class TaskController extends Controller
         // Fetch Task Items matching the description
         $tasks = DB::table('job_types')
             ->select(['id', 'name', 'rate_charged'])
-            ->whereRaw("LOWER(name) LIKE LOWER(?)", ["%{$request->name}%"])
+            ->whereRaw('LOWER(name) LIKE LOWER(?)', ["%{$request->name}%"])
             ->orderBy('name', 'asc')
             ->get();
 
@@ -792,13 +815,13 @@ class TaskController extends Controller
         foreach ($scpItems as $item) {
             $items[] = [
                 'jobTypeId' => null,
-                'modelNum' =>  $item->model_num,
+                'modelNum' => $item->model_num,
                 'description' => $item->description,
                 'price' => $item->cost,
                 'product_number' => $item->product_number,
                 'repairmanRate' => null,
                 'jobRate' => null,
-                'type' => 'scpItem'
+                'type' => 'scpItem',
             ];
         }
 
@@ -822,7 +845,7 @@ class TaskController extends Controller
                 'product_number' => null,
                 'repairmanRate' => $repairman_rate,
                 'jobRate' => $job_rate,
-                'type' => 'taskItem'
+                'type' => 'taskItem',
             ];
         }
 
@@ -831,7 +854,7 @@ class TaskController extends Controller
 
     public function changeStatus(Request $request)
     {
-//        dd($request);
+        //        dd($request);
         $task = Task::find($request->task_id);
 
         if ($task === null) {
@@ -847,11 +870,12 @@ class TaskController extends Controller
 
         if ($request->status === 'approved') {
             Task::sendApprovalMessage($task, $customer, $user->phone_number, $address);
-        } else if ($request->status === 'completed') {
+        } elseif ($request->status === 'completed') {
             EmployeePayment::addRepairEntry($request->assigned, $task->id, $request->sub_rate);
             Task::sendCompletedMessage($task, $customer, '14807034902', $address, $user->name);
-        } else
+        } else {
             self::addTaskStatus($task, $request->status);
+        }
     }
 
     public function changeType(Request $request)
@@ -883,7 +907,7 @@ class TaskController extends Controller
 
         $ep = EmployeePayment::where('task_id', $request->task_id)->first();
 
-        if (!is_null($ep)) {
+        if (! is_null($ep)) {
             $ep->rate = $request->sub_rate;
             $ep->save();
         }
@@ -892,8 +916,8 @@ class TaskController extends Controller
 
     public function changeDescription(Request $request)
     {
-//        dd($request->task_id);
-//        dd($request->id);
+        //        dd($request->task_id);
+        //        dd($request->id);
 
         is_null($request->task_id) ? $taskId = $request->id : $taskId = $request->task_id;
 
@@ -922,14 +946,13 @@ class TaskController extends Controller
 
         $task = Task::find($request->task_id);
 
-
         if ($request->approved) {
             self::addTaskStatus($task, 'approved');
             self::addStatus($task, 'approved');
 
-//            Task::sendApprovalMessage($task, $customer, Auth::user()->phone_number, $address);
+            //            Task::sendApprovalMessage($task, $customer, Auth::user()->phone_number, $address);
 
-        } else if (!$request->approved) {
+        } elseif (! $request->approved) {
             self::addStatus($task, 'created');
         }
     }
@@ -953,7 +976,7 @@ class TaskController extends Controller
 
         if (Auth::user()->getAuthIdentifier() !== $user->id) {
             Notification::route('vonage', $user->phone_number)->notify(new GenericNotification(
-                "You were assigned a Task::\n$customer->first_name $customer->last_name\n$request->description\n" . env('APP_URL') . "/customers/show/" . $task->address_id
+                "You were assigned a Task::\n$customer->first_name $customer->last_name\n$request->description\n".env('APP_URL').'/customers/show/'.$task->address_id
             ));
         }
     }
@@ -973,20 +996,20 @@ class TaskController extends Controller
 
     public function deleteItemFromReconcile(Request $request)
     {
-        self::deleteTheTask($request->task_id["id"]);
+        self::deleteTheTask($request->task_id['id']);
     }
 
     public function deleteItem(Request $request)
     {
         if ($request->task_id) {
             $task = Task::find($request->task_id);
-        } else if ($request->id) {
+        } elseif ($request->id) {
             $task = Task::find($request->id);
         }
 
         $task->delete();
         $ep = EmployeePayment::where('task_id', $task->id)->first();
-        if (!is_null($ep)) {
+        if (! is_null($ep)) {
             $ep->delete();
         }
 
@@ -1006,31 +1029,31 @@ class TaskController extends Controller
             if (is_null($jt)) {
                 $jt = new JobType([
                     'name' => $request->item['description'],
-                    'rate_charged' => $request->item['price']
+                    'rate_charged' => $request->item['price'],
                 ]);
                 $jt->save();
             }
         } else {
             $jt = JobType::where('name', $request->item['description'])->first();
-            if (!is_null($jt)) {
+            if (! is_null($jt)) {
                 $jt->delete();
             }
         }
-
 
     }
 
     public function repairPage()
     {
         $tasks = Task::where('status', 'approved')->get();
+
         return Inertia::render('Task/RepairPage', [
-            'tasks' => $tasks
+            'tasks' => $tasks,
         ]);
     }
 
     public function updatePrice(Request $request)
     {
-//        dd($request);
+        //        dd($request);
 
         is_null($request->task_id) ? $taskId = $request->id : $taskId = $request->task_id;
         $task = Task::find($taskId);
@@ -1042,7 +1065,7 @@ class TaskController extends Controller
         if (is_null($jt)) {
             $jt = new JobType([
                 'name' => $request->description,
-                'rate_charged' => $request->price
+                'rate_charged' => $request->price,
             ]);
             $jt->save();
         }
@@ -1051,11 +1074,11 @@ class TaskController extends Controller
 
     public function pickedUp(Request $request)
     {
-//        dd($request->all());
+        //        dd($request->all());
         foreach ($request->all() as $taskItem) {
-//            dd($key);
+            //            dd($key);
             if ($taskItem['pickedUp']) {
-                $task = Task::find($taskItem["task_id"]);
+                $task = Task::find($taskItem['task_id']);
                 self::addStatus($task, 'pickedUp');
                 self::addTaskStatus($task, 'pickedUp');
             }
@@ -1065,7 +1088,7 @@ class TaskController extends Controller
 
     public function completed(Request $request)
     {
-//        dd($request->all());
+        //        dd($request->all());
         $task = Task::find($request->id);
         self::addStatus($task, 'completed');
         self::addTaskStatus($task, 'completed');
@@ -1074,7 +1097,7 @@ class TaskController extends Controller
         $user = Auth::user();
 
         // Ensure the user exists
-        if (!$user) {
+        if (! $user) {
             return response()->json(['error' => 'Unauthorized'], 403);
         }
 
@@ -1086,11 +1109,9 @@ class TaskController extends Controller
                 'paycheck_id' => null,
                 'task_id' => $task->id,
                 'rate' => $task->rate, // Fetching repair_rate from Users table
-                'status' => 'pending'
+                'status' => 'pending',
             ]);
         }
-
-
 
         $customer = Customer::find($task->customer_id);
         $address = Address::find($task->address_id);
@@ -1109,11 +1130,11 @@ class TaskController extends Controller
 
     public function remove(Request $request)
     {
-//        dd($request->all());
+        //        dd($request->all());
         foreach ($request->all() as $taskItem) {
-//            dd($key);
+            //            dd($key);
             if ($taskItem['pickedUp']) {
-                $task = Task::find($taskItem["task_id"]);
+                $task = Task::find($taskItem['task_id']);
                 self::addStatus($task, 'approved');
                 self::addTaskStatus($task, 'remove');
                 $taskStatus = TaskStatus::where('status', 'pickedUp')->where('task_id', $task->id);
@@ -1139,10 +1160,10 @@ class TaskController extends Controller
         $customer = Customer::find($address->customer_id);
         $subcontractors = Subcontractor::select(['id', 'company_name'])->get();
 
-//        $subcontractors = [null];
-//        foreach ($subs as $sub) {
-//            $subcontractors[] = $sub->company_name;
-//        }
+        //        $subcontractors = [null];
+        //        foreach ($subs as $sub) {
+        //            $subcontractors[] = $sub->company_name;
+        //        }
 
         return Inertia::render('Task/Create', [
             'addressId' => $address->id,
@@ -1158,9 +1179,9 @@ class TaskController extends Controller
     public function store(Request $request)
     {
 
-//        dd('In Store Method');
+        //        dd('In Store Method');
 
-        if (!is_null($request->description)) {
+        if (! is_null($request->description)) {
             DB::beginTransaction();
             try {
                 if ($request->subcontractor) {
@@ -1171,8 +1192,8 @@ class TaskController extends Controller
                     $this->handleRepairTask($request);
                 }
 
-//                $this->updateJobRates($request);
-//                $this->updateServicemanRates($request);
+                //                $this->updateJobRates($request);
+                //                $this->updateServicemanRates($request);
 
                 DB::commit();
 
@@ -1180,7 +1201,8 @@ class TaskController extends Controller
                     ->with('success', 'Task created and message was sent');
             } catch (\Exception $e) {
                 DB::rollBack();
-                return Redirect::back()->withErrors('An error occurred: ' . $e->getMessage());
+
+                return Redirect::back()->withErrors('An error occurred: '.$e->getMessage());
             }
         }
     }
@@ -1203,14 +1225,14 @@ class TaskController extends Controller
             'been_paid' => false,
             'quantity' => 0,
             'count' => 1,
-            'rate' => 0
+            'rate' => 0,
         ]);
 
         TaskStatus::create([
             'task_id' => $task->id,
             'status' => 'referred',
             'status_creator' => Auth::id(),
-            'status_date' => now()
+            'status_date' => now(),
         ]);
 
         $customer = Customer::findOrFail($request->customer_id);
@@ -1226,7 +1248,6 @@ class TaskController extends Controller
 
         Notification::route('vonage', $customer->phone_number)->notify(new GenericNotification("{$subcontractor->company_name} has been notified. They can be reached at:\n=====================\n{$subcontractor->contact_name}\n{$subcontractor->company_name}\n{$subcontractor->phone_number}\n=====================\nPlease reach out to Shawn for any questions at 14807034902"));
     }
-
 
     /**
      * Handle internal task marked as 'todo'.
@@ -1246,19 +1267,19 @@ class TaskController extends Controller
             'been_paid' => false,
             'quantity' => 0,
             'count' => 1,
-            'rate' => 0
+            'rate' => 0,
         ]);
 
         TaskStatus::insert([
             ['task_id' => $task->id, 'status' => 'created', 'status_creator' => Auth::id(), 'status_date' => now()],
-            ['task_id' => $task->id, 'status' => 'pickedUp', 'status_creator' => Auth::id(), 'status_date' => now()]
+            ['task_id' => $task->id, 'status' => 'pickedUp', 'status_creator' => Auth::id(), 'status_date' => now()],
         ]);
 
         $user = User::find($request->serviceman);
         $customer = Customer::find($request->customer_id);
 
         if (Auth::id() !== $user->id) {
-            Notification::route('vonage', $user->phone_number)->notify(new GenericNotification("You were assigned a Task::\n{$customer->first_name} {$customer->last_name}\n{$request->description}\n" . env('APP_URL') . "/customers/show/{$request->address_id}"));
+            Notification::route('vonage', $user->phone_number)->notify(new GenericNotification("You were assigned a Task::\n{$customer->first_name} {$customer->last_name}\n{$request->description}\n".env('APP_URL')."/customers/show/{$request->address_id}"));
         }
     }
 
@@ -1270,7 +1291,7 @@ class TaskController extends Controller
 
         //        if new
 
-//        if existing
+        //        if existing
         if (
             $request->jobRate &&
             $request->repairRate > -1
@@ -1288,10 +1309,10 @@ class TaskController extends Controller
                 'been_paid' => false,
                 'count' => 1,
                 'quantity' => $request->quantity,
-                'rate' => $request->repairRate
+                'rate' => $request->repairRate,
             ]);
 
-//            EmployeePayment::addRepairEntry($request->serviceman, $task->id, $request->repairRate);
+            //            EmployeePayment::addRepairEntry($request->serviceman, $task->id, $request->repairRate);
 
         } else {
             $task = Task::create([
@@ -1307,7 +1328,7 @@ class TaskController extends Controller
                 'been_paid' => false,
                 'count' => 1,
                 'quantity' => $request->quantity,
-                'rate' => 0
+                'rate' => 0,
             ]);
         }
         $tasks = Task::where('address_id', $request->address_id)
@@ -1316,11 +1337,11 @@ class TaskController extends Controller
         $task->count = $tasks[0]->count + 1;
         $task->save();
 
-        if (!empty($request->publicId)) {
-            foreach($request->publicId as $publicId){
+        if (! empty($request->publicId)) {
+            foreach ($request->publicId as $publicId) {
                 TaskImage::firstOrCreate([
                     'task_id' => $task->id,
-                    'public_id' => $publicId
+                    'public_id' => $publicId,
                 ]);
             }
         }
@@ -1329,19 +1350,19 @@ class TaskController extends Controller
             'task_id' => $task->id,
             'status' => 'created',
             'status_creator' => Auth::id(),
-            'status_date' => now()
+            'status_date' => now(),
         ]);
 
         $customer = Customer::find($request->customer_id);
 
         if ($request->jobRate &&
             $request->repairRate > -1) {
-            $message = "Please Reply\n==================\n\nKPS Pools needs to inform you about a necessary repair for your pool:\n\n" . $request->description . " Quantity: " . $request->quantity . " for $" . $request->jobRate . "\n\nWould you like for us to complete this for you?\n\nY$task->count for Yes\nN$task->count for No\n\nYou may also reach out to Shawn at 480.703.4902 or 480.622.6441. If you have any questions";
+            $message = "Please Reply\n==================\n\nKPS Pools needs to inform you about a necessary repair for your pool:\n\n".$request->description.' Quantity: '.$request->quantity.' for $'.$request->jobRate."\n\nWould you like for us to complete this for you?\n\nY$task->count for Yes\nN$task->count for No\n\nYou may also reach out to Shawn at 480.703.4902 or 480.622.6441. If you have any questions";
             Notification::route('vonage', $customer->phone_number)->notify(new TaskApprovalNotification($message));
             $task->sent = true;
         } else {
-            $message = "New repair type has been created\nLink:: " . env('APP_URL') . "/tasksNeedsApproval"
-                . "\nName:: $customer->first_name $customer->last_name\nDescription:: $task->description\n";
+            $message = "New repair type has been created\nLink:: ".env('APP_URL').'/tasksNeedsApproval'
+                ."\nName:: $customer->first_name $customer->last_name\nDescription:: $task->description\n";
             Notification::route('vonage', '14807034902')->notify(new GenericNotification($message));
         }
 
@@ -1387,12 +1408,12 @@ class TaskController extends Controller
 
         $subcontractor = Subcontractor::where('company_name', $request->subcontractor)->first();
 
-        if (!is_null($subcontractor)) {
+        if (! is_null($subcontractor)) {
             $customer = Customer::find($request->customer_id);
             $address = Address::find($request->address_id);
             $customerUser = User::find($customer->user_id);
             strpos($customerUser->email, '.') != false ? $email = $customerUser->email : $email = 'Email has not been recorded';
-//            Notification::route('vonage', '14806226441')->notify(new GenericNotification("KPS Pools has a job for you.
+            //            Notification::route('vonage', '14806226441')->notify(new GenericNotification("KPS Pools has a job for you.
             Notification::route('vonage', $subcontractor->phone_number)->notify(new GenericNotification("KPS Pools has a job for you.
 =====================
 $request->description
@@ -1407,8 +1428,8 @@ Please reach out to Shawn for any questions at 14807034902"));
 
             if ($subcontractor->company_name !== 'Edge Water Pools LLC') {
 
-//            Notification::route('vonage', '14807034902')->notify(new GenericNotification("Skyline has been notified. They can be reached at:
-                Notification::route('vonage', $customer->phone_number)->notify(new GenericNotification($subcontractor->company_name . " has been notified. They can be reached at:
+                //            Notification::route('vonage', '14807034902')->notify(new GenericNotification("Skyline has been notified. They can be reached at:
+                Notification::route('vonage', $customer->phone_number)->notify(new GenericNotification($subcontractor->company_name." has been notified. They can be reached at:
 =====================
 $subcontractor->contact_name
 $subcontractor->company_name
@@ -1425,37 +1446,37 @@ Please reach out to Shawn for any questions at 14807034902"));
 
             if ($request->type == 'todo') {
                 $task = self::createTask($request);
-                self::addTaskStatus($task, 'created',);
+                self::addTaskStatus($task, 'created');
                 self::addStatus($task, 'pickedUp');
-                self::addTaskStatus($task, 'pickedUp',);
+                self::addTaskStatus($task, 'pickedUp');
                 $task->assigned = $request->todoAssignee;
                 $task->save();
                 $user = User::find($request->todoAssignee);
                 $customer = Customer::find($request->customer_id);
                 if (Auth::user()->getAuthIdentifier() !== $user->id) {
                     Notification::route('vonage', $user->phone_number)->notify(new GenericNotification(
-                        "You were assigned a Task::\n$customer->first_name $customer->last_name\n$request->description\n" . env('APP_URL') . "/customers/show/" . $request->address_id
+                        "You were assigned a Task::\n$customer->first_name $customer->last_name\n$request->description\n".env('APP_URL').'/customers/show/'.$request->address_id
                     ));
                 }
             } else {
                 $task = self::createTask($request);
 
-                self::addTaskStatus($task, 'created',);
+                self::addTaskStatus($task, 'created');
 
+                //                TODO:: should reflect past price for the specific customer
+                //                TODO:: should reflect paid prices because those are prices that customers have approved
+                //                TODO:: associate the correct scp item with the task
 
-//                TODO:: should reflect past price for the specific customer
-//                TODO:: should reflect paid prices because those are prices that customers have approved
-//                TODO:: associate the correct scp item with the task
+                //                if ($taskItem->isEmpty()) {
 
-//                if ($taskItem->isEmpty()) {
-
-                if (!is_null($request->price)) {
+                if (! is_null($request->price)) {
                     $task->price = $request->price * 1.38 * $request->quantity;
                     $task->save();
                 }
             }
 
         }
+
         return Redirect::route('customers.show', $request->address_id);
 
     }
@@ -1475,7 +1496,7 @@ Please reach out to Shawn for any questions at 14807034902"));
     private function createTask(Request $request)
     {
 
-//        dd($request);
+        //        dd($request);
 
         $task = Task::firstOrCreate([
             'address_id' => $request->address_id,
@@ -1486,7 +1507,7 @@ Please reach out to Shawn for any questions at 14807034902"));
             'type' => $request->type,
             'price' => 0,
             'status' => 'created',
-            'count' => 0
+            'count' => 0,
         ]);
 
         $tasks = Task::where('customer_id', $request->customer_id)
@@ -1506,7 +1527,7 @@ Please reach out to Shawn for any questions at 14807034902"));
             $statusDate = $date->format('Y-m-d H:i:s');
         }
 
-        $taskStatus = new TaskStatus();
+        $taskStatus = new TaskStatus;
         $taskStatus->status_creator = Auth::user()->id;
         $taskStatus->task_id = $task->id;
         $taskStatus->status = $status;
@@ -1519,8 +1540,8 @@ Please reach out to Shawn for any questions at 14807034902"));
 
     public function sendforApproval($task, $phoneNumber, $message = null)
     {
-//        send notification to customer if new part or repair
-//          - create new notification
+        //        send notification to customer if new part or repair
+        //          - create new notification
         $repair = false;
         $part = false;
         $task->type == 'repair' ? $repair = true : $repair = false;
@@ -1536,7 +1557,7 @@ Please reach out to Shawn for any questions at 14807034902"));
             }
         }
 
-//        TODO:: change number to make this dynamic to the customer
+        //        TODO:: change number to make this dynamic to the customer
         if ($repair || $part) {
             Notification::route('vonage', $phoneNumber)
                 ->notify(new TaskApprovalNotification($message));

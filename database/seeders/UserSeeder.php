@@ -4,16 +4,14 @@ namespace Database\Seeders;
 
 use App\Models\Customer;
 use App\Models\User;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use Faker\Factory as Faker;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
-use Faker\Factory as Faker;
 
 class UserSeeder extends Seeder
 {
-
     /**
      * Run the database seeds.
      */
@@ -33,7 +31,7 @@ class UserSeeder extends Seeder
 
             $firstName = $faker->firstName;
             $lastName = $faker->lastName;
-            $fullName = $firstName . " " . $lastName;
+            $fullName = $firstName.' '.$lastName;
             self::createUser(
                 $fullName,
                 0,
@@ -51,7 +49,6 @@ class UserSeeder extends Seeder
             );
 
         }
-
 
     }
 
@@ -72,8 +69,7 @@ class UserSeeder extends Seeder
         $customerId,
         $firstName,
         $lastName
-    )
-    {
+    ) {
 
         $serviceDay = self::serviceDay();
         $order = self::setOrder();
@@ -113,14 +109,12 @@ class UserSeeder extends Seeder
         );
     }
 
-
     private function createAddress($customerId,
-                                   $serviceDay,
-                                   $order,
-                                   $terms,
-                                   $servicemanId
-    )
-    {
+        $serviceDay,
+        $order,
+        $terms,
+        $servicemanId
+    ) {
         $faker = Faker::create();
 
         DB::table('addresses')->insert([
@@ -130,7 +124,7 @@ class UserSeeder extends Seeder
             'city' => $faker->city,
             'state' => 'AZ',
             'zip' => $faker->postcode,
-            'community_gate_code' => '#' . random_int(1000, 9999),
+            'community_gate_code' => '#'.random_int(1000, 9999),
             'house_gate_has_lock' => $faker->boolean,
             'active' => $faker->boolean,
             'type' => null,
@@ -142,7 +136,7 @@ class UserSeeder extends Seeder
             'chemicals_included' => $faker->boolean,
             'assigned_serviceman' => null,
             'serviceman_id' => $servicemanId,
-            'terms' => $terms
+            'terms' => $terms,
         ]);
     }
 
@@ -152,27 +146,30 @@ class UserSeeder extends Seeder
         $serviceMan = $p[random_int(0, 5)];
         $user = User::where('name', $serviceMan)->first();
 
-        return $this->state(fn(array $attributes) => [
+        return $this->state(fn (array $attributes) => [
             'serviceman_id' => $user->id,
-            'assigned_serviceman' => $serviceMan
+            'assigned_serviceman' => $serviceMan,
         ]);
     }
 
     private function setOrder(): int
     {
         $customers = Customer::where('active', true)->get();
+
         return count($customers) + 1;
     }
 
     public function terms(): string
     {
         $p = ['begin', 'end'];
+
         return $p[random_int(0, 1)];
     }
 
     public function serviceDay(): string
     {
         $p = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
+
         return $p[random_int(0, 4)];
     }
 
@@ -181,16 +178,15 @@ class UserSeeder extends Seeder
         $is_admin,
         $type,
         $active
-    )
-    {
+    ) {
         DB::table('users')->insert([
             'name' => $name,
-            'email' => Str::random(10) . '@gmail.com',
+            'email' => Str::random(10).'@gmail.com',
             'is_admin' => $is_admin,
             'phone_number' => '14807034902',
             'password' => Hash::make('password'),
             'type' => $type,
-            'active' => $active
+            'active' => $active,
         ]);
 
     }

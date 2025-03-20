@@ -13,12 +13,12 @@ return new class extends Migration
     {
         Schema::create(
             'user_tokens', function (Blueprint $table) {
-            $table->increments('id');
-            $table->integer('user_id')->unsigned();
-            $table->string('token');
-            $table->timestamps();
-            $table->softDeletes();
-        }
+                $table->increments('id');
+                $table->integer('user_id')->unsigned();
+                $table->string('token');
+                $table->timestamps();
+                $table->softDeletes();
+            }
         );
     }
 

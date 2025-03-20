@@ -11,7 +11,7 @@ class RegisterController extends Controller
     //
     public function registerLink(Request $request)
     {
-//        dd($request->phoneNumber);
+        //        dd($request->phoneNumber);
         $phoneNumber = self::validatePhoneNumber($request);
 
         if ($phoneNumber !== '') {
@@ -25,10 +25,11 @@ class RegisterController extends Controller
     {
         $phone = $request->phoneNumber;
         if (strlen($phone) === 10) {
-            return '1' . $phone;
-        } else if (strlen($phone) === 11){
+            return '1'.$phone;
+        } elseif (strlen($phone) === 11) {
             return $phone;
         }
+
         return '';
     }
 }

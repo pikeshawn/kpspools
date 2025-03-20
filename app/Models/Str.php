@@ -9,6 +9,7 @@ class Str extends Model
 {
     use HasFactory;
 
-    protected $table = "str";
+    protected $table = 'str';
+
     protected $guarded = [];
 }
