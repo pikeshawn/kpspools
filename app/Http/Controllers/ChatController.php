@@ -2,11 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Http;
-use Inertia\Inertia;
-use GuzzleHttp\Client;
 use App\Models\Chat;
+use GuzzleHttp\Client;
+use Illuminate\Http\Request;
+use Inertia\Inertia;
 
 class ChatController extends Controller
 {
@@ -15,10 +14,10 @@ class ChatController extends Controller
     public function chatResponse(Request $request)
     {
 
-     $m = self::getMessage($request);
+        $m = self::getMessage($request);
 
         return Inertia::render('Chat/Response', [
-            'response' => $m
+            'response' => $m,
         ]);
     }
 
@@ -27,14 +26,14 @@ class ChatController extends Controller
         $chats = Chat::all(['id', 'question', 'user_id']);
 
         return Inertia::render('Chat/Index', [
-            'chat' => $chats
+            'chat' => $chats,
         ]);
     }
 
     public function chatQuestion(Chat $chat)
     {
         return Inertia::render('Chat/Question', [
-            'chat' => $chat
+            'chat' => $chat,
         ]);
     }
 
@@ -46,19 +45,20 @@ class ChatController extends Controller
 
         self::saveResponse($request, $m);
 
-        return str_replace("\n", "", $m);
+        return str_replace("\n", '', $m);
 
     }
 
     private function processMessage($message)
     {
         $m = $message['choices'][0]['message']['content'];
-        $startTag = strpos($m, "html");
+        $startTag = strpos($m, 'html');
 
-        if($startTag){
-            $endTag = strpos($m, "</html>");
+        if ($startTag) {
+            $endTag = strpos($m, '</html>');
             $stringLength = strlen($m);
-            return substr($m, $startTag + 4, $stringLength-$startTag-($stringLength-($endTag+7)));
+
+            return substr($m, $startTag + 4, $stringLength - $startTag - ($stringLength - ($endTag + 7)));
         }
 
         return $m;
@@ -69,36 +69,35 @@ class ChatController extends Controller
         Chat::firstOrCreate([
             'question' => $request->message,
             'answer' => $m,
-            'user_id' => $request->user
+            'user_id' => $request->user,
         ]);
     }
 
     private function getContent($request)
     {
-        $client = new Client();
+        $client = new Client;
 
         $response = $client->request('POST', 'https://api.openai.com/v1/chat/completions', [
             'headers' => [
-                'Authorization' => 'Bearer ' . env('OPEN_API_KEY'),
-                'Content-Type' => 'application/json'
+                'Authorization' => 'Bearer '.env('OPEN_API_KEY'),
+                'Content-Type' => 'application/json',
             ],
             'json' => [
                 'messages' => [
                     [
                         'role' => 'system',
-                        'content' => 'A service technician that does manual labor. Format it as HTML and style with Tailwind classes'
+                        'content' => 'A service technician that does manual labor. Format it as HTML and style with Tailwind classes',
                     ],
                     [
                         'role' => 'user',
-                        'content' => $request->message
-                    ]
+                        'content' => $request->message,
+                    ],
                 ],
                 'model' => 'gpt-4-turbo',
-                "temperature" => 0.7
-            ]
+                'temperature' => 0.7,
+            ],
         ]);
 
         return json_decode($response->getBody()->getContents(), true);
     }
-
 }

@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\OneTimePasscode;
 use Inertia\Inertia;
 
@@ -16,19 +15,15 @@ class TermsOfServiceController extends Controller
         $oneTimeCode = OneTimePasscode::where('one_time_code', $code)->first();
 
         // Check if the code exists
-        if (!$oneTimeCode) {
+        if (! $oneTimeCode) {
             return redirect()->route('error.page')->with('error', 'Invalid code or code expired.');
         }
 
         // Return Inertia render with the code
         return Inertia::render('TermsOfService/ServiceFee', [
-            'customerId' => $oneTimeCode->one_time_code
+            'customerId' => $oneTimeCode->one_time_code,
         ]);
     }
 
-    public function accept()
-    {
-
-    }
-
+    public function accept() {}
 }

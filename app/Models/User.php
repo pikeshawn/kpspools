@@ -2,27 +2,25 @@
 
 namespace App\Models;
 
-use App\Http\Controllers\PasswordlessController;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Auth;
+use Laravel\Cashier\Billable;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 use Laravel\Jetstream\HasProfilePhoto;
 use Laravel\Sanctum\HasApiTokens;
-Use Laravel\Cashier\Billable;
 use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable
 {
+    use Billable;
     use HasApiTokens;
     use HasFactory;
     use HasProfilePhoto;
+    use HasRoles;
     use Notifiable;
     use TwoFactorAuthenticatable;
-    use Billable;
-    use HasRoles;
-
 
     public function customer()
     {
@@ -62,7 +60,7 @@ class User extends Authenticatable
         'type',
         'active',
         'is_admin',
-        'phone_number'
+        'phone_number',
     ];
 
     /**
@@ -105,4 +103,3 @@ class User extends Authenticatable
         return Auth::user()->is_admin;
     }
 }
-

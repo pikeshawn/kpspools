@@ -16,7 +16,6 @@ use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
 use Inertia\Response;
 
-
 class SummaryController extends Controller
 {
     /**
@@ -56,13 +55,14 @@ class SummaryController extends Controller
     private function totalTabPrice($customerId)
     {
         $c = Customer::find($customerId);
+
         return $c->getTabs()[0]->tabs * 2.25;
     }
 
     private function totalTabs($customerId)
     {
         $query = DB::select(
-            'select sum(tabs_whole_mine) as tabs from service_stops where customer_id = ' . $customerId
+            'select sum(tabs_whole_mine) as tabs from service_stops where customer_id = '.$customerId
 
         );
 
@@ -72,7 +72,7 @@ class SummaryController extends Controller
     private function totalLiquidChlorine($customerId)
     {
         $query = DB::select(
-            'select sum(liquid_chlorine) as lq from service_stops where customer_id = ' . $customerId
+            'select sum(liquid_chlorine) as lq from service_stops where customer_id = '.$customerId
 
         );
 
@@ -82,7 +82,7 @@ class SummaryController extends Controller
     private function totalMuriaticAcid($customerId)
     {
         $query = DB::select(
-            'select sum(liquid_acid) as la from service_stops where customer_id = ' . $customerId
+            'select sum(liquid_acid) as la from service_stops where customer_id = '.$customerId
 
         );
 
@@ -222,12 +222,12 @@ class SummaryController extends Controller
             'customers' => $customers,
         ]);
 
-//        return Inertia::render('Customers/Index', [
-//            // 'filters' => \Illuminate\Support\Facades\Request::all('search', 'role', 'trashed'),
-//            'service_stops' => $serviceStops,
-//            'customer_name' => $customer->last_name,
-//            'customer_id' => $customer->id
-//        ]);
+        //        return Inertia::render('Customers/Index', [
+        //            // 'filters' => \Illuminate\Support\Facades\Request::all('search', 'role', 'trashed'),
+        //            'service_stops' => $serviceStops,
+        //            'customer_name' => $customer->last_name,
+        //            'customer_id' => $customer->id
+        //        ]);
     }
 
     /**
@@ -269,15 +269,15 @@ class SummaryController extends Controller
     {
         //
 
-//        dd($serviceStop->customer_id);
+        //        dd($serviceStop->customer_id);
 
-//        $customer = Customer::find($serviceStop->customer_id);
+        //        $customer = Customer::find($serviceStop->customer_id);
 
         $serviceStop->delete();
 
-//        return Redirect::route('service_stops', [$serviceStop->customer_id], 303);
+        //        return Redirect::route('service_stops', [$serviceStop->customer_id], 303);
 
-//        return \redirect()->route('service_stops', [$serviceStop->customer_id], );
+        //        return \redirect()->route('service_stops', [$serviceStop->customer_id], );
         return \redirect()->route('customers');
     }
 }

@@ -8,6 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 class UserToken extends Model
 {
     use HasFactory;
+
     protected $table = 'user_tokens';
+
     protected $guarded = [];
 }

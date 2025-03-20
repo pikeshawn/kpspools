@@ -34,9 +34,10 @@ class CustomerFactory extends Factory
         ];
     }
 
-    public function serviceDay(): String
+    public function serviceDay(): string
     {
         $p = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
+
         return $p[random_int(0, 4)];
     }
 
@@ -46,38 +47,38 @@ class CustomerFactory extends Factory
         $serviceMan = $p[random_int(0, 5)];
         $user = User::where('name', $serviceMan)->first();
 
-        return $this->state(fn(array $attributes) => [
+        return $this->state(fn (array $attributes) => [
             'serviceman_id' => $user->id,
-            'assigned_serviceman' => $serviceMan
+            'assigned_serviceman' => $serviceMan,
         ]);
     }
 
-    public function terms(): String
+    public function terms(): string
     {
         $p = ['begin', 'end'];
+
         return $p[random_int(0, 1)];
     }
 
     public function active(): Factory
     {
-        return $this->state(fn(array $attributes) => [
+        return $this->state(fn (array $attributes) => [
             'active' => 1,
-            'order' => self::setOrder()
+            'order' => self::setOrder(),
         ]);
     }
 
     public function inActive(): Factory
     {
-        return $this->state(fn(array $attributes) => [
-            'active' => 0
+        return $this->state(fn (array $attributes) => [
+            'active' => 0,
         ]);
     }
 
     private function setOrder(): int
     {
         $customers = Customer::where('active', true)->get();
+
         return count($customers) + 1;
     }
-
-
 }

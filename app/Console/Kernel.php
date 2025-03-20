@@ -2,15 +2,15 @@
 
 namespace App\Console;
 
-use Illuminate\Console\Scheduling\Schedule;
-use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
-use App\Console\Commands\RunOneTimeScript;
-use App\Console\Commands\HolidayBilling;
-use App\Console\Commands\PaymentReminder;
-use App\Console\Commands\PaymentHistory;
-use App\Console\Commands\SendServiceFeeNotification;
 use App\Console\Commands\DetermineFilterCleans;
 use App\Console\Commands\GenerateMailingList;
+use App\Console\Commands\HolidayBilling;
+use App\Console\Commands\PaymentHistory;
+use App\Console\Commands\PaymentReminder;
+use App\Console\Commands\RunOneTimeScript;
+use App\Console\Commands\SendServiceFeeNotification;
+use Illuminate\Console\Scheduling\Schedule;
+use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
 class Kernel extends ConsoleKernel
 {
@@ -27,7 +27,7 @@ class Kernel extends ConsoleKernel
         HolidayBilling::class,
         DetermineFilterCleans::class,
         SendServiceFeeNotification::class,
-        GenerateMailingList::class
+        GenerateMailingList::class,
     ];
 
     /**
@@ -35,7 +35,7 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule): void
     {
-//        $schedule->command('app:payment-reminder')->weekdays()->at('08:00');
+        //        $schedule->command('app:payment-reminder')->weekdays()->at('08:00');
         $schedule->command('app:task-approval-reminder')->wednesdays()->at('10:00');
     }
 

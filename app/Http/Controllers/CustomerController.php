@@ -3,26 +3,24 @@
 namespace App\Http\Controllers;
 
 use App\Models\Address;
-use App\Models\Owner;
 use App\Models\Customer;
-use App\Models\PasswordlessToken;
-use App\Models\Task;
 use App\Models\GeneralNote;
+use App\Models\Owner;
+use App\Models\Task;
 use App\Models\User;
 use App\Notifications\GenericNotification;
+use App\Traits\Passwordless;
+use Carbon\Carbon;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
 use Inertia\Response;
-use Illuminate\Support\Facades\Notification;
-use App\Traits\Passwordless;
-use Carbon\Carbon;
 
 class CustomerController extends Controller
 {
-
     use Passwordless;
 
     /**
@@ -30,16 +28,15 @@ class CustomerController extends Controller
      */
     public function index(): Response
     {
-//        dd('index');
+        //        dd('index');
 
         // Get the current date and time
         $currentDateTime = Carbon::now();
 
-// Get the day of the week (0 for Sunday, 1 for Monday, ..., 6 for Saturday)
+        // Get the day of the week (0 for Sunday, 1 for Monday, ..., 6 for Saturday)
         $dayOfWeek = $currentDateTime->dayOfWeek;
 
         $dayOfWeekText = $currentDateTime->format('l');
-
 
         if (User::isAdmin()) {
             $customers = Customer::allCustomers($dayOfWeekText);
@@ -52,7 +49,7 @@ class CustomerController extends Controller
         return Inertia::render('Customers/Index', [
             'customers' => $customers,
             'servicemen' => $servicemen,
-            'currentDay' => strtolower(Carbon::now()->timezone(config('app.timezone'))->format('l'))
+            'currentDay' => strtolower(Carbon::now()->timezone(config('app.timezone'))->format('l')),
         ]);
     }
 
@@ -62,7 +59,7 @@ class CustomerController extends Controller
             ->where('active', true)->get();
 
         return Inertia::render('Notification/BulkNotification', [
-            'servicemen' => $servicemen
+            'servicemen' => $servicemen,
         ]);
     }
 
@@ -89,8 +86,7 @@ class CustomerController extends Controller
                  CONCAT(addresses.address_line_1, ', ', addresses.city, ' ', addresses.zip) as `address`")
             ->get();
 
-
-//        return Customer::where('last_name', 'like', "%{$request->customer}%")->get();
+        //        return Customer::where('last_name', 'like', "%{$request->customer}%")->get();
     }
 
     public function notify(Request $request)
@@ -100,7 +96,7 @@ class CustomerController extends Controller
             'servicemanId' => 'required|exists:users,id',
             'sick' => 'required|boolean',
             'message' => 'nullable|string',
-            'addressIds' => 'required|array'
+            'addressIds' => 'required|array',
         ]);
 
         // Retrieve the serviceman
@@ -111,7 +107,7 @@ class CustomerController extends Controller
             $address = Address::find($addressId);
             $customer = Customer::find($address->customer_id);
 
-            if (!$customer) {
+            if (! $customer) {
                 continue; // Skip if no customer is found
             }
 
@@ -129,7 +125,7 @@ class CustomerController extends Controller
 
     public function getCustomersForDay($day)
     {
-//        dd($day);
+        //        dd($day);
 
         if (User::isAdmin()) {
             $customers = Customer::allCustomers(ucfirst($day));
@@ -137,19 +133,19 @@ class CustomerController extends Controller
             $customers = Customer::allCustomersTiedToUser(ucfirst($day));
         }
 
-//        $servicemen = User::where('type', 'serviceman')->orderBy('name', 'asc')->where('active', 1)->get();
+        //        $servicemen = User::where('type', 'serviceman')->orderBy('name', 'asc')->where('active', 1)->get();
 
-//        return $customers;
+        //        return $customers;
 
         return response()->json([
             'success' => true,
             'customers' => $customers,
         ]);
 
-//        return Inertia::render('Customers/Index', [
-//            'customers' => $customers,
-//            'servicemen' => $servicemen,
-//        ]);
+        //        return Inertia::render('Customers/Index', [
+        //            'customers' => $customers,
+        //            'servicemen' => $servicemen,
+        //        ]);
     }
 
     public function getNames(Request $request)
@@ -164,7 +160,7 @@ class CustomerController extends Controller
             ->join('addresses', 'customers.id', '=', 'addresses.customer_id');
 
         // Apply filters based on the search input
-        if ($request->has('name') && !empty($request->name)) {
+        if ($request->has('name') && ! empty($request->name)) {
             $query->where(function ($q) use ($request) {
                 $q->where('customers.first_name', 'like', "{$request->name}%")
                     ->orWhere('customers.last_name', 'like', "{$request->name}%")
@@ -172,12 +168,12 @@ class CustomerController extends Controller
             });
         }
 
-//        if ($request->has('phone') && !empty($request->phone)) {
-//            $query->orWhere('customers.phone_number', 'like', "%{$request->phone}%");
-//        }
+        //        if ($request->has('phone') && !empty($request->phone)) {
+        //            $query->orWhere('customers.phone_number', 'like', "%{$request->phone}%");
+        //        }
 
         // Admin-specific condition
-        if (!User::isAdmin()) {
+        if (! User::isAdmin()) {
             $query->where('addresses.active', 1)
                 ->where('addresses.sold', 0);
         }
@@ -190,10 +186,10 @@ class CustomerController extends Controller
     public function notes(Customer $customer): Response
     {
         $notes = DB::select('Select * from general_notes where customer_id = '
-            . $customer->id . ' Order By updated_at DESC');
+            .$customer->id.' Order By updated_at DESC');
 
         return Inertia::render('Customers/Notes', [
-            'customer_name' => $customer->first_name . ' ' . $customer->last_name,
+            'customer_name' => $customer->first_name.' '.$customer->last_name,
             'customer_id' => $customer->id,
             'notes' => $notes,
         ]);
@@ -203,7 +199,7 @@ class CustomerController extends Controller
     {
         return Inertia::render('Customers/NewNote', [
             'customer_id' => $customer->id,
-            'customer_name' => $customer->first_name . ' ' . $customer->last_name,
+            'customer_name' => $customer->first_name.' '.$customer->last_name,
         ]);
     }
 
@@ -212,18 +208,16 @@ class CustomerController extends Controller
         GeneralNote::firstOrCreate([
             'customer_id' => $request->customerId,
             'address_id' => $request->addressId,
-            'note' => $request->note
+            'note' => $request->note,
         ]);
 
         $notes = GeneralNote::where('address_id', $request->addressId)->get();
 
         return \response()->json($notes);
 
-//        $customer = Customer::find($request->customer_id);
+        //        $customer = Customer::find($request->customer_id);
 
-//        return Redirect::route('general.notes', $customer->id);
-
-
+        //        return Redirect::route('general.notes', $customer->id);
 
     }
 
@@ -239,10 +233,9 @@ class CustomerController extends Controller
 
         return Inertia::render('Customers/Create', [
             'prospective' => $customer[0],
-            'address' => $address[0]
+            'address' => $address[0],
         ]);
     }
-
 
     /**
      * Show the form for adding a new customer.
@@ -256,25 +249,25 @@ class CustomerController extends Controller
     public function addStore(Request $request)
     {
 
-//        dd($request);
+        //        dd($request);
 
         $user = User::firstOrCreate([
-            'phone_number' => $request->phoneNumber
+            'phone_number' => $request->phoneNumber,
         ], [
-            'name' => $request->firstName . ' ' . $request->lastName,
-            'email' => $request->firstName . rand(0, 1000000) . '@example.com',
+            'name' => $request->firstName.' '.$request->lastName,
+            'email' => $request->firstName.rand(0, 1000000).'@example.com',
             'password' => bcrypt('Welcome1234'),
             'phone_number' => $request->phoneNumber,
             'is_admin' => false,
             'type' => 'customer',
             'active' => true,
             'terms_and_conditions' => false,
-            'privacy_policy' => false
+            'privacy_policy' => false,
         ]);
 
         if ($user) {
             $customer = Customer::firstOrCreate([
-                'phone_number' => $request->phoneNumber
+                'phone_number' => $request->phoneNumber,
             ], [
                 'user_id' => $user->id,
                 'first_name' => $request->firstName,
@@ -290,11 +283,11 @@ class CustomerController extends Controller
                 'phone_number' => $request->phoneNumber,
                 'terms' => 'begin',
                 'autopay' => false,
-                'serviceman_id' => 2
+                'serviceman_id' => 2,
             ]);
 
             Address::firstOrCreate([
-                'address_line_1' => $request->address
+                'address_line_1' => $request->address,
             ], [
                 'customer_id' => $customer->id,
                 'address_line_1' => $request->address,
@@ -313,7 +306,7 @@ class CustomerController extends Controller
                 'chemicals_included' => $request->chemsIncluded,
                 'assigned_serviceman' => 'Shawn',
                 'terms' => 'begin',
-                'sold' => false
+                'sold' => false,
             ]);
 
             if ($request->initiateBid) {
@@ -341,9 +334,7 @@ class CustomerController extends Controller
 
         $customerUser = $request->customerUser['_value'];
         $customer = $request->customer['_value'];
-//        $addresses = $request->addresses['_value'];
-
-
+        //        $addresses = $request->addresses['_value'];
 
         $cust = Customer::findOrFail($customer['id']);
         $cust->first_name = $customer['first_name'];
@@ -364,9 +355,7 @@ class CustomerController extends Controller
         $custUser->phone_number = $customerUser['phone_number'];
         $custUser->save();
 
-
-
-        foreach($request->addresses as $address){
+        foreach ($request->addresses as $address) {
 
             if ($customer['active']) {
                 $active = $address['active'];
@@ -392,25 +381,20 @@ class CustomerController extends Controller
             $add->save();
         }
 
-
-
-
-
-//        // Update customer details
-//        $customer = Customer::findOrFail($validatedData['id']);
-//        $customer->update($validatedData);
-//
-//        // 🔥 Update or Create Addresses
-//        foreach ($validatedData['addresses'] as $addressData) {
-//            Address::updateOrCreate(
-//                ['id' => $addressData['id'] ?? null], // Find by ID if exists
-//                array_merge($addressData, ['customer_id' => $customer->id])
-//            );
-//        }
+        //        // Update customer details
+        //        $customer = Customer::findOrFail($validatedData['id']);
+        //        $customer->update($validatedData);
+        //
+        //        // 🔥 Update or Create Addresses
+        //        foreach ($validatedData['addresses'] as $addressData) {
+        //            Address::updateOrCreate(
+        //                ['id' => $addressData['id'] ?? null], // Find by ID if exists
+        //                array_merge($addressData, ['customer_id' => $customer->id])
+        //            );
+        //        }
 
         return response()->json(['message' => 'Customer updated successfully'], 200);
     }
-
 
     /**
      * Store a newly created resource in storage.
@@ -420,11 +404,10 @@ class CustomerController extends Controller
     public function store(Request $request): RedirectResponse
     {
 
-//        dd($request->notes);
-
+        //        dd($request->notes);
 
         $u = User::find($request->userId);
-        $u->name = $request->firstName . " " . $request->lastName;
+        $u->name = $request->firstName.' '.$request->lastName;
         $u->phone_number = $request->phoneNumber;
         $u->active = 1;
         $u->type = 'customer';
@@ -444,27 +427,26 @@ class CustomerController extends Controller
         $a = Address::find($request->addressId);
         $a->address_line_1 = $request->address;
         $a->city = $request->city;
-        $a->state = "AZ";
+        $a->state = 'AZ';
         $a->zip = $request->zip;
         $a->service_day = $request->serviceDay;
         $a->community_gate_code = $request->gateCode;
 
         $a->save();
 
-
         GeneralNote::firstOrCreate([
-            'customer_id' => $c->id
+            'customer_id' => $c->id,
         ],
             [
                 'customer_id' => $c->id,
-                'note' => $request->notes
+                'note' => $request->notes,
             ]);
 
         // create a one time passcode
         $token = self::generateToken($u->id);
 
         // create a url based on that token
-        $url = "https://kpspools.com/login/onboard/" . $token;
+        $url = 'https://kpspools.com/login/onboard/'.$token;
 
         $message = "Thank you for becoming a new KPS Pools customer. Please use the link here to finish the onboarding process. $url";
         Notification::route('vonage', $c->phone_number)->notify(
@@ -483,30 +465,27 @@ class CustomerController extends Controller
      */
     public function show(Address $address): Response
     {
-//        dd($address);
+        //        dd($address);
 
         $customer = Customer::find($address->customer_id);
 
-//        dd($customer);
+        //        dd($customer);
 
-
-//        if (User::isAdmin()) {
-//            $customers = Customer::allCustomers();
-//        } else {
-//            $customers = Customer::allCustomersTiedToUser();
-//        }
-
+        //        if (User::isAdmin()) {
+        //            $customers = Customer::allCustomers();
+        //        } else {
+        //            $customers = Customer::allCustomersTiedToUser();
+        //        }
 
         $notes = DB::select('Select * from general_notes where address_id = '
-            . $address->id . ' Order By updated_at DESC');
+            .$address->id.' Order By updated_at DESC');
 
         $tasks = Task::allPickedUpTasksRelatedToSpecificCustomer($address->id);
         $completedTasks = Task::allCompletedTasksRelatedToSpecificCustomer($address->id);
 
         $serviceman = User::find($address->serviceman_id);
 
-//        dd($tasks);
-
+        //        dd($tasks);
 
         return Inertia::render('Customers/Show', [
             'customer' => $customer,
@@ -515,7 +494,7 @@ class CustomerController extends Controller
             'address' => $address,
             'tasks' => $tasks,
             'completedTasks' => $completedTasks,
-            'serviceman' => $serviceman
+            'serviceman' => $serviceman,
         ]);
     }
 
@@ -548,7 +527,7 @@ class CustomerController extends Controller
         $address = Address::find($request->addressId);
         $customer = Customer::find($address->customer_id);
 
-        if ($request->active){
+        if ($request->active) {
             $address->serviceman_id = '2';
             $address->service_day = 'Saturday';
             $address->assigned_serviceman = 'Shawn';
@@ -565,16 +544,12 @@ class CustomerController extends Controller
         $address->save();
         $customer->save();
 
-
-
-
-
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param \App\Models\Customer $customer
+     * @param  \App\Models\Customer  $customer
      */
     public function update(Request $request): RedirectResponse
     {
@@ -586,7 +561,7 @@ class CustomerController extends Controller
 
         $customer = Customer::find($request->note['customer_id']);
 
-//        dd($customer->id);
+        //        dd($customer->id);
 
         return Redirect::route('general.notes', $customer->id);
     }
@@ -603,7 +578,7 @@ class CustomerController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param \App\Models\Customer $customer
+     * @param  \App\Models\Customer  $customer
      */
     public function destroy(GeneralNote $generalNote): RedirectResponse
     {

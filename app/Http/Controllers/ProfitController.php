@@ -2,12 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use Inertia\Inertia;
-use App\Models\ScpInvoiceItem;
-use App\Models\ScpInvoice;
 use App\Models\Address;
-use Illuminate\Support\Facades\DB;
+use App\Models\ScpInvoice;
+use App\Models\ScpInvoiceItem;
+use Inertia\Inertia;
 
 class ProfitController extends Controller
 {
@@ -22,13 +20,12 @@ class ProfitController extends Controller
 
         $totalAverageChemCostPerMonth = self::getTotalAverageChemCostPerMonth();
 
-
-        return Inertia::render('Profit/Index',[
-            'totalSpent' =>  $totalSCPCost,
-            'totalActiveCustomers' =>  $totalActiveCustomers,
-            'totalServiceAmount' =>  $totalServiceAmount,
-            'totalAverageChemCostPerMonth' =>  $totalAverageChemCostPerMonth,
-            'totalAverageServiceAmount' =>  $totalAverageServiceAmount
+        return Inertia::render('Profit/Index', [
+            'totalSpent' => $totalSCPCost,
+            'totalActiveCustomers' => $totalActiveCustomers,
+            'totalServiceAmount' => $totalServiceAmount,
+            'totalAverageChemCostPerMonth' => $totalAverageChemCostPerMonth,
+            'totalAverageServiceAmount' => $totalAverageServiceAmount,
         ]);
     }
 
@@ -50,7 +47,7 @@ class ProfitController extends Controller
 
         return [
             'twentyThree' => $totalChems2023 / 12,
-            'twentyFour' => $totalChems2024 / 3
+            'twentyFour' => $totalChems2024 / 3,
         ];
     }
 }

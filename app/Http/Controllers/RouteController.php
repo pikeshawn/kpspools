@@ -21,7 +21,7 @@ class RouteController extends Controller
             'customers.first_name',
             'customers.last_name',
             'addresses.order',
-            'addresses.service_day'
+            'addresses.service_day',
         ])
             ->join('addresses', 'customers.id', '=', 'addresses.customer_id')
             ->where(
@@ -31,7 +31,7 @@ class RouteController extends Controller
             ->orderBy('addresses.order')
             ->get();
 
-//        dd($customers[0]);
+        //        dd($customers[0]);
 
         return Inertia::render('Route/Index', [
             'customers' => $customers,
@@ -40,8 +40,8 @@ class RouteController extends Controller
 
     public function store(Request $request)
     {
-//        dd();
-        foreach(json_decode($request->getContent()) as $route){
+        //        dd();
+        foreach (json_decode($request->getContent()) as $route) {
             $address = Address::find($route->id);
             $address->order = $route->order;
             $address->save();
@@ -52,6 +52,7 @@ class RouteController extends Controller
         } else {
             $customers = Customer::allCustomersTiedToUser($request->service_day);
         }
+
         return Inertia::render('Customers/Index', [
             'customers' => $customers,
         ]);

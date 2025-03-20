@@ -2,8 +2,8 @@
 
 namespace App\Console\Commands;
 
-use Illuminate\Console\Command;
 use App\Http\Controllers\AdvertisingController;
+use Illuminate\Console\Command;
 
 class UpdateMailingList extends Command
 {
@@ -26,18 +26,18 @@ class UpdateMailingList extends Command
      */
     public function handle()
     {
-//        $this->info('Starting to update the mailing list...');
+        //        $this->info('Starting to update the mailing list...');
 
         try {
-            $controller = new AdvertisingController();
-//            $controller->getApnsFromArray();
+            $controller = new AdvertisingController;
+            //            $controller->getApnsFromArray();
             $controller->updateMailingList();
             $this->info('Mailing list updated successfully.');
         } catch (\Exception $e) {
-            $this->error('Error updating mailing list: ' . $e->getMessage());
+            $this->error('Error updating mailing list: '.$e->getMessage());
         }
     }
 }
 
-//errors
-//https://mcassessor.maricopa.gov/parcel/30470705/valuations
+// errors
+// https://mcassessor.maricopa.gov/parcel/30470705/valuations

@@ -2,23 +2,20 @@
 
 namespace App\Http\Controllers;
 
-
-use App\Models\User;
 use App\Models\PasswordlessToken;
+use App\Models\User;
 use App\Models\UserToken;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Auth;
-use Inertia\Inertia;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Redirect;
+use Inertia\Inertia;
 
-
-class PasswordlessController {
-
-
+class PasswordlessController
+{
     public function loginServiceman(Request $request)
     {
-//        Auth::login($request->id);
+        //        Auth::login($request->id);
 
         Auth::logout();
         $user = User::find($request->id);
@@ -33,9 +30,10 @@ class PasswordlessController {
     public function loginAs()
     {
         $users = User::where('type', 'serviceman')->where('active', true)->get();
+
         return Inertia::render('Auth/LoginAs',
             [
-                'servicemen' => $users
+                'servicemen' => $users,
             ]);
     }
 
@@ -47,11 +45,9 @@ class PasswordlessController {
         $user = User::find($t->user_id);
         Auth::login($user);
 
-
         return Inertia::render('Prospective/Onboarding', [
             'user' => $user,
         ]);
-
 
         // verify the user
         // log the user in
@@ -63,27 +59,31 @@ class PasswordlessController {
         // find token in the db
         $token = PasswordlessToken::where('token', $token)->first();
         // invalid token
-        if (!$token) {
+        if (! $token) {
             Log::warning('invalid token');
+
             return redirect('/#/')->withErrors(__('passwordless.invalid_token'));
         }
 
         // find user connected to token
         $user = User::find($token->user_id);
         // user not found or login user if they where found
-        if (!$user) {
+        if (! $user) {
             Log::warning('user not found with given token');
+
             return redirect('/#/')->withErrors(__('passwordless.no_user'));
         } else {
             if ($user->isValidToken($token->token)) {
                 Auth::login($user);
-                session(['job_id' => $job_id, 'prevDestination' => '/#/bid/' . $job_id]);
-                return redirect('/#/bid/' . $job_id);
+                session(['job_id' => $job_id, 'prevDestination' => '/#/bid/'.$job_id]);
+
+                return redirect('/#/bid/'.$job_id);
             } else {
                 return redirect('/#/')->withErrors(__('passwordless.invalid'));
             }
         }
     }
+
     /**
      * TODO: DRY with jobBid
      *
@@ -97,21 +97,22 @@ class PasswordlessController {
         // find token in the db
         $token = PasswordlessToken::where('token', $token)->first();
         // invalid token
-        if (!$token) {
+        if (! $token) {
             return redirect('/#/')->withErrors(__('passwordless.invalid_token'));
         }
 
         // find user connected to token
         $user = User::find($token->user_id);
         // user not found or login user if they where found
-        if (!$user) {
+        if (! $user) {
             return redirect('/#/')->withErrors(__('passwordless.no_user'));
         } else {
             if ($this->tokenIsValid($user, $token) && $this->jobTaskIsAssociatedToSub($user, $jobTaskId)) {
                 Auth::login($user);
-//                session(['task_id' => $task_id, 'prevDestination' => '/#/tasks?taskId=' . $task_id]);
-//                return redirect('/#/tasks?taskId=' . $task_id);
+                //                session(['task_id' => $task_id, 'prevDestination' => '/#/tasks?taskId=' . $task_id]);
+                //                return redirect('/#/tasks?taskId=' . $task_id);
                 session(['task_id' => $jobTaskId, 'prevDestination' => '/#/bids']);
+
                 return redirect('/#/bids');
 
             } else {
@@ -125,21 +126,24 @@ class PasswordlessController {
         // find token in the db
         $token = PasswordlessToken::where('token', $token)->first();
         // invalid token
-        if (!$token) {
+        if (! $token) {
             Log::warning('invalid token');
+
             return redirect('/#/')->withErrors(__('passwordless.invalid_token'));
         }
         // find user connected to token
         $user = User::find($token->user_id);
         // user not found or login user if they where found
-        if (!$user) {
+        if (! $user) {
             Log::warning('user not found with given token');
+
             return redirect('/#/')->withErrors(__('passwordless.no_user'));
         } else {
             if ($user->isValidToken($token->token)) {
                 Auth::login($user);
                 session(['job_id' => $job_id, 'prevDestination' => '/#/bids/']);
-                return redirect('/#/invoice/' . $job_id);
+
+                return redirect('/#/invoice/'.$job_id);
             } else {
                 return redirect('/#/')->withErrors(__('passwordless.invalid'));
             }
@@ -153,8 +157,7 @@ class PasswordlessController {
 
     private function jobTaskIsAssociatedToSub($user, $jobTaskId)
     {
-        return !\is_null(BidContractorJobTask::where('job_task_id', '=', $jobTaskId)
+        return ! \is_null(BidContractorJobTask::where('job_task_id', '=', $jobTaskId)
             ->where('contractor_id', '=', $user->id)->get()->first());
     }
-
 }

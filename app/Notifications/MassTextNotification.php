@@ -2,11 +2,8 @@
 
 namespace App\Notifications;
 
-use App\Models\Customer;
-use App\Models\ServiceStop;
 use Illuminate\Bus\Queueable;
-use Illuminate\Notifications\Messages\MailMessage;
-//use Illuminate\Notifications\Messages\NexmoMessage;
+// use Illuminate\Notifications\Messages\NexmoMessage;
 use Illuminate\Notifications\Messages\VonageMessage;
 use Illuminate\Notifications\Notification;
 
@@ -23,7 +20,7 @@ class MassTextNotification extends Notification
      */
     public function __construct($textMessage)
     {
-//        dd('text message constructor');
+        //        dd('text message constructor');
 
         $this->textMessage = $textMessage;
     }

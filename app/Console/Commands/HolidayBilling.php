@@ -2,14 +2,11 @@
 
 namespace App\Console\Commands;
 
-use Illuminate\Console\Command;
-use App\Models\Customer;
 use App\Models\Address;
+use App\Models\Customer;
 use App\Models\ServiceStop;
-use Carbon\Carbon;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Storage;
-use InvalidArgumentException;
 
 class HolidayBilling extends Command
 {
@@ -33,7 +30,7 @@ class HolidayBilling extends Command
     public function handle()
     {
         //
-//        self::generateFlatRateBillingReport();
+        //        self::generateFlatRateBillingReport();
         self::getFirstServiceDate();
     }
 
@@ -44,7 +41,7 @@ class HolidayBilling extends Command
         foreach ($customers as $customer) {
             $cust = Customer::where('jemmson_id', $customer)->get();
             $addresses = Address::where('customer_id', $cust[0]->id)->where('active', true)->where('sold', '<>', 1)->get();
-            foreach ($addresses as $address){
+            foreach ($addresses as $address) {
                 $firstServiceDate = ServiceStop::where('address_id', $address->id)
                     ->where('service_type', 'Service Stop')
                     ->whereYear('created_at', 2024)
@@ -55,10 +52,10 @@ class HolidayBilling extends Command
                     'First Name' => $cust[0]->first_name,
                     'Last Name' => $cust[0]->last_name,
                     'Address' => $address->address_line_1,
-//                    'Plan Price' => $planPrice,
-//                    'Free Weeks' => $freeWeeks,
-//                    'November Price' => $novemberPrice,
-//                    'December Price' => $decemberPrice,
+                    //                    'Plan Price' => $planPrice,
+                    //                    'Free Weeks' => $freeWeeks,
+                    //                    'November Price' => $novemberPrice,
+                    //                    'December Price' => $decemberPrice,
                     'First Service Date' => $firstServiceDate,
                     'Jemmson ID' => $cust[0]->jemmson_id,
                 ];
@@ -124,17 +121,17 @@ class HolidayBilling extends Command
                     $freeWeeks++;
                 }
 
-//                // Record the last service week date for reporting
-//                $lastServiceStop = ServiceStop::where('address_id', $addressId)
-//                    ->whereYear('created_at', 2024)
-//                    ->whereMonth('created_at', $month)
-//                    ->where('service_type', 'Service Stop')
-//                    ->orderBy('created_at', 'desc')
-//                    ->first();
+                //                // Record the last service week date for reporting
+                //                $lastServiceStop = ServiceStop::where('address_id', $addressId)
+                //                    ->whereYear('created_at', 2024)
+                //                    ->whereMonth('created_at', $month)
+                //                    ->where('service_type', 'Service Stop')
+                //                    ->orderBy('created_at', 'desc')
+                //                    ->first();
 
-//                if ($lastServiceStop) {
-//                    $lastServiceWeekDate = $lastServiceStop->created_at;
-//                }
+                //                if ($lastServiceStop) {
+                //                    $lastServiceWeekDate = $lastServiceStop->created_at;
+                //                }
             }
 
             // Calculate November and December prices based on freeWeeks
@@ -156,7 +153,7 @@ class HolidayBilling extends Command
             }
 
             if ($i === 244) {
-                echo "stop here";
+                echo 'stop here';
             }
 
             $firstServiceDate = ServiceStop::where('address_id', $address->id)
@@ -197,12 +194,12 @@ class HolidayBilling extends Command
         fclose($handle);
 
         // Optionally save CSV in Laravel storage (e.g., local, S3)
-//        Storage::disk('local')->put($csvFilename, file_get_contents($csvFilepath));
+        //        Storage::disk('local')->put($csvFilename, file_get_contents($csvFilepath));
 
         return true;
     }
 
-    public function activeCustomersByJemmsonId() : array
+    public function activeCustomersByJemmsonId(): array
     {
         return [
             28,
@@ -439,8 +436,7 @@ class HolidayBilling extends Command
             493,
             494,
             495,
-            495
+            495,
         ];
     }
-
 }

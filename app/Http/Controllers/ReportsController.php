@@ -2,15 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Address;
+use App\Models\Customer;
+use App\Models\EmployeePayment;
+use App\Models\ServiceStop;
+use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
-use Carbon\Carbon;
-use App\Models\ServiceStop;
-use App\Models\EmployeePayment;
-use App\Models\Customer;
-use App\Models\Address;
-use App\Models\User;
-use DateTime;
 
 class ReportsController extends Controller
 {
@@ -46,28 +45,28 @@ class ReportsController extends Controller
                     $endDate = Carbon::now()->subYear()->endOfYear();
                     break;
                 case 'q1':
-                    $startDate = Carbon::now()->year . '-01-01';
-                    $endDate = Carbon::now()->year . '-03-31';
+                    $startDate = Carbon::now()->year.'-01-01';
+                    $endDate = Carbon::now()->year.'-03-31';
                     break;
                 case 'q2':
-                    $startDate = Carbon::now()->year . '-04-01';
-                    $endDate = Carbon::now()->year . '-06-30';
+                    $startDate = Carbon::now()->year.'-04-01';
+                    $endDate = Carbon::now()->year.'-06-30';
                     break;
                 case 'q3':
-                    $startDate = Carbon::now()->year . '-07-01';
-                    $endDate = Carbon::now()->year . '-09-30';
+                    $startDate = Carbon::now()->year.'-07-01';
+                    $endDate = Carbon::now()->year.'-09-30';
                     break;
                 case 'q4':
-                    $startDate = Carbon::now()->year . '-10-01';
-                    $endDate = Carbon::now()->year . '-12-31';
+                    $startDate = Carbon::now()->year.'-10-01';
+                    $endDate = Carbon::now()->year.'-12-31';
                     break;
                 case 'winter':
-                    $startDate = Carbon::now()->year . '-11-01';
-                    $endDate = Carbon::now()->addYear()->year . '-03-31';
+                    $startDate = Carbon::now()->year.'-11-01';
+                    $endDate = Carbon::now()->addYear()->year.'-03-31';
                     break;
                 case 'summer':
-                    $startDate = Carbon::now()->year . '-04-01';
-                    $endDate = Carbon::now()->year . '-10-31';
+                    $startDate = Carbon::now()->year.'-04-01';
+                    $endDate = Carbon::now()->year.'-10-31';
                     break;
             }
         }
@@ -82,7 +81,7 @@ class ReportsController extends Controller
         foreach ($addressIds as $addressId) {
             $address = Address::find($addressId);
             $customer = Customer::find($address->customer_id);
-            $customerName = $customer->first_name . ' ' . $customer->last_name;
+            $customerName = $customer->first_name.' '.$customer->last_name;
 
             $serviceStops = ServiceStop::where('address_id', $addressId)
                 ->whereBetween('created_at', [$startDate, $endDate])
@@ -95,19 +94,18 @@ class ReportsController extends Controller
 
             $labor = self::getLaborCost($serviceStops);
 
-            $chemicals = round($serviceStops->sum(fn($ss) =>
-                ($ss->tabs_whole_mine * 1.65) +
+            $chemicals = round($serviceStops->sum(fn ($ss) => ($ss->tabs_whole_mine * 1.65) +
                 ($ss->liquid_chlorine * ((19.65 * 1.08) / 4)) +
                 ($ss->liquid_acid * ((27 * 1.08) / 4))
             ), 2);
 
             $gross = round($income - ($chemicals + $labor), 2);
-            $grossPercentage = round((1-($chemicals+$labor)/$income) * 100, 2);
+            $grossPercentage = round((1 - ($chemicals + $labor) / $income) * 100, 2);
 
             $results[] = [
                 'name' => $customerName,
                 'addressId' => $address->id,
-                'address' => $address->address_line_1 . " " . $address->city . " " . $address->zip,
+                'address' => $address->address_line_1.' '.$address->city.' '.$address->zip,
                 'planPrice' => $address->plan_price,
                 'totalStops' => $totalStops,
                 'active' => $address->active ? 'yes' : 'no',
@@ -119,10 +117,9 @@ class ReportsController extends Controller
                 'gross' => $gross,
                 'startDate' => $startDate,
                 'endDate' => $endDate,
-                'grossPercentage' => $grossPercentage
+                'grossPercentage' => $grossPercentage,
             ];
         }
-
 
         $totalStopsInTimePeriod = 0;
         $totalChemicalsInTimePeriod = 0;
@@ -136,13 +133,13 @@ class ReportsController extends Controller
     {
         $labor = 0;
         foreach ($serviceStops as $serviceStop) {
-/*
- *          if $serviceStop created date was before 3/10/2025
- *              then $labor = $labor + 20
- *          else
- *             $ep = EmployeePayments::where('service_stop_id', $serviceStop->id)->first()
- *             $labor = $labor + $ep->rate;
- * */
+            /*
+             *          if $serviceStop created date was before 3/10/2025
+             *              then $labor = $labor + 20
+             *          else
+             *             $ep = EmployeePayments::where('service_stop_id', $serviceStop->id)->first()
+             *             $labor = $labor + $ep->rate;
+             * */
             $serviceStopDate = Carbon::parse($serviceStop->created_at);
             $cutoffDate = Carbon::parse('2025-03-10');
 
@@ -159,7 +156,6 @@ class ReportsController extends Controller
         return $labor;
 
     }
-
 
     public function customerRows($addressId, $startDate, $endDate)
     {
@@ -180,7 +176,7 @@ class ReportsController extends Controller
             if (is_null($ss)) {
                 return Inertia::render('Reports/Customer', [
                     'serviceStops' => $ss,
-                    'addressId' => $addressId
+                    'addressId' => $addressId,
                 ]);
             }
 
@@ -212,8 +208,7 @@ class ReportsController extends Controller
         // Return the data as an Inertia response
         return Inertia::render('Reports/Customer', [
             'serviceStops' => $serviceStops,
-            'addressId' => $addressId
+            'addressId' => $addressId,
         ]);
     }
-
 }
