@@ -2,9 +2,9 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Seeder;
-use Illuminate\Database\Eloquent\Factories\Factory;
 use App\Models\Customer;
+use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Database\Seeder;
 
 class CustomerSeeder extends Seeder
 {
@@ -13,9 +13,9 @@ class CustomerSeeder extends Seeder
      */
     public function run(): void
     {
-//        Customer::factory()
-//            ->count(200)
-//            ->hasAddresses(1)
-//            ->create();
+        //        Customer::factory()
+        //            ->count(200)
+        //            ->hasAddresses(1)
+        //            ->create();
     }
 }

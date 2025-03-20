@@ -2,11 +2,9 @@
 
 namespace App\Notifications;
 
-use App\Models\Customer;
-use App\Models\ServiceStop;
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Messages\MailMessage;
-//use Illuminate\Notifications\Messages\NexmoMessage;
+// use Illuminate\Notifications\Messages\NexmoMessage;
 use Illuminate\Notifications\Messages\VonageMessage;
 use Illuminate\Notifications\Notification;
 
@@ -15,6 +13,7 @@ class OnMyWayNotification extends Notification
     use Queueable;
 
     protected $textMessage;
+
     protected $customerName;
 
     /**
@@ -46,9 +45,9 @@ class OnMyWayNotification extends Notification
     public function toMail($notifiable): MailMessage
     {
         return (new MailMessage)
-                    ->line('The introduction to the notification.')
-                    ->action('Notification Action', url('/'))
-                    ->line('Thank you for using our application!');
+            ->line('The introduction to the notification.')
+            ->action('Notification Action', url('/'))
+            ->line('Thank you for using our application!');
     }
 
     /**
@@ -73,13 +72,12 @@ class OnMyWayNotification extends Notification
         if ($this->customerName) {
             return (new VonageMessage)
                 ->clientReference((string) $notifiable->routes['vonage'])
-                ->content($this->textMessage . " sent to:: " . $this->customerName);
+                ->content($this->textMessage.' sent to:: '.$this->customerName);
         } else {
             return (new VonageMessage)
                 ->clientReference((string) $notifiable->routes['vonage'])
                 ->content($this->textMessage);
         }
-
 
     }
 

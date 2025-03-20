@@ -28,7 +28,7 @@ class EmployeePayment extends Model
             'service_stop_id' => $serviceStop->id,
         ])->first();
 
-        if (!$existingPayment) {
+        if (! $existingPayment) {
             // Insert record into employee_payments table
             EmployeePayment::create([
                 'serviceman_id' => $user->id,
@@ -37,7 +37,7 @@ class EmployeePayment extends Model
                 'task_id' => null,
                 'rate' => $user->service_rate, // Fetching rate from Users table
                 'bucket_rate' => $bucketRate, // Fetching rate from Users table
-                'status' => 'pending'
+                'status' => 'pending',
             ]);
         }
 

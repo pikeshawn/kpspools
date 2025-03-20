@@ -2,49 +2,50 @@
 
 namespace App\Models;
 
-use App\Http\Controllers\PasswordlessController;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Auth;
+use Laravel\Cashier\Billable;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 use Laravel\Jetstream\HasProfilePhoto;
 use Laravel\Sanctum\HasApiTokens;
-Use Laravel\Cashier\Billable;
 use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable
 {
+    use Billable;
     use HasApiTokens;
     use HasFactory;
     use HasProfilePhoto;
+    use HasRoles;
     use Notifiable;
     use TwoFactorAuthenticatable;
-    use Billable;
-    use HasRoles;
 
-
-    public function customer()
+    public function customer(): HasOne
     {
         return $this->hasOne(Customer::class);
     }
 
-    public function tokens()
+    public function tokens(): HasMany
     {
         return $this->hasMany(PasswordlessToken::class);
     }
 
-    public function paychecks()
+    public function paychecks(): HasMany
     {
         return $this->hasMany(Paycheck::class);
     }
 
-    public function appointment()
+    public function appointment(): HasOne
     {
         return $this->hasOne(Appointment::class);
     }
 
-    public function jobTypes()
+    public function jobTypes(): BelongsToMany
     {
         return $this->belongsToMany(JobType::class, 'user_job_rates')
             ->withTimestamps();
@@ -62,7 +63,7 @@ class User extends Authenticatable
         'type',
         'active',
         'is_admin',
-        'phone_number'
+        'phone_number',
     ];
 
     /**
@@ -78,15 +79,6 @@ class User extends Authenticatable
     ];
 
     /**
-     * The attributes that should be cast to native types.
-     *
-     * @var array
-     */
-    protected $casts = [
-        'email_verified_at' => 'datetime',
-    ];
-
-    /**
      * The accessors to append to the model's array form.
      *
      * @var array
@@ -95,7 +87,19 @@ class User extends Authenticatable
         'profile_photo_url',
     ];
 
-    public function serviceStops()
+    /**
+     * Get the attributes that should be cast.
+     *
+     * @return array<string, string>
+     */
+    protected function casts(): array
+    {
+        return [
+            'email_verified_at' => 'datetime',
+        ];
+    }
+
+    public function serviceStops(): HasMany
     {
         return $this->hasMany(ServiceStop::class);
     }
@@ -105,4 +109,3 @@ class User extends Authenticatable
         return Auth::user()->is_admin;
     }
 }
-

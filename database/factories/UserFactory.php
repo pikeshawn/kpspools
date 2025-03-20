@@ -40,7 +40,7 @@ class UserFactory extends Factory
     {
         return $this->state(function (array $attributes) {
             return [
-                'is_admin' => 1
+                'is_admin' => 1,
             ];
         });
     }
@@ -49,7 +49,7 @@ class UserFactory extends Factory
     {
         return $this->state(function (array $attributes) {
             return [
-                'type' => 'serviceman'
+                'type' => 'serviceman',
             ];
         });
     }

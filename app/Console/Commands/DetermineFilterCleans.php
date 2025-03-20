@@ -26,7 +26,7 @@ class DetermineFilterCleans extends Command
     /**
      * Execute the console command.
      */
-    public function handle()
+    public function handle(): int
     {
         // 1. Capture all the filter cleans
         $customerData = DB::table('customers')
@@ -59,7 +59,7 @@ class DetermineFilterCleans extends Command
                 $data = json_decode($response, true);
 
                 if (empty($data)) {
-                    $response = "none";
+                    $response = 'none';
                     $newLine = [
                         $jemmsonId,
                         $customer->first_name,
@@ -72,25 +72,25 @@ class DetermineFilterCleans extends Command
                         $jemmsonId,
                         $customer->first_name,
                         $customer->last_name,
-                        $customer->type
+                        $customer->type,
                     ];
                     foreach ($data as $item) {
-//                        $csvRows[] = "{$item['filter_clean_name']},{$item['filter_clean_date']}";
+                        //                        $csvRows[] = "{$item['filter_clean_name']},{$item['filter_clean_date']}";
 
                         array_push($newLine, "{$item['filter_clean_name']}");
                         array_push($newLine, "{$item['filter_clean_date']}");
 
                     } // Or handle the array content
-//                    $csvString = implode(",", $csvRows);
-//                    $response = $csvRows;
-//                    $csvRows = [];
+                    //                    $csvString = implode(",", $csvRows);
+                    //                    $response = $csvRows;
+                    //                    $csvRows = [];
                 }
 
                 // Write to CSV
                 fputcsv($fileHandle, $newLine);
             } catch (\Exception $e) {
                 // Handle exceptions, log errors, and continue
-                Log::error("Failed to process jemmson_id {$jemmsonId}: " . $e->getMessage());
+                Log::error("Failed to process jemmson_id {$jemmsonId}: ".$e->getMessage());
             }
         }
 
@@ -98,25 +98,25 @@ class DetermineFilterCleans extends Command
         fclose($fileHandle);
 
         // Return success
-        $this->info("Filter cleans completed and written to filters.csv.");
+        $this->info('Filter cleans completed and written to filters.csv.');
+
         return true;
     }
 
     public function submit($jemmsonId)
     {
-        $client = new Client();
+        $client = new Client;
 
-        $response = $client->post(env('API_URL') . '/filterCleans', [
+        $response = $client->post(env('API_URL').'/filterCleans', [
             'headers' => [
-                'Authorization' => 'Bearer ' . env('BEARER_TOKEN'),
+                'Authorization' => 'Bearer '.env('BEARER_TOKEN'),
                 'Accept' => 'application/json',
             ],
             'json' => [
-                "jemmsonId" => $jemmsonId
-            ]
+                'jemmsonId' => $jemmsonId,
+            ],
         ]);
 
         return $response->getBody()->getContents();
     }
-
 }

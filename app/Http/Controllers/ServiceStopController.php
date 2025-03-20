@@ -3,16 +3,16 @@
 namespace App\Http\Controllers;
 
 use App\Models\Address;
-use App\Models\Cya;
 use App\Models\Customer;
+use App\Models\Cya;
 use App\Models\EmployeePayment;
 use App\Models\Filter;
 use App\Models\ServiceStop;
 use App\Models\Task;
 use App\Models\User;
 use App\Notifications\GenericNotification;
-use App\Notifications\ServiceStopCompleted;
 use App\Notifications\OnMyWayNotification;
+use App\Notifications\ServiceStopCompleted;
 use Carbon\Carbon;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -22,7 +22,6 @@ use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
 use Inertia\Response;
-use function PHPUnit\Framework\isEmpty;
 
 class ServiceStopController extends Controller
 {
@@ -33,28 +32,28 @@ class ServiceStopController extends Controller
     {
         //
 
-//        $serviceStops = ServiceStop::where('address_id', '=', $address->id)
-//            ->select([
-//                'id',
-//                'ph_level',
-//                'chlorine_level',
-//                'tabs_whole_mine',
-//                'tabs_crushed_mine',
-//                'tabs_whole_theirs',
-//                'tabs_crushed_theirs',
-//                'liquid_chlorine',
-//                'liquid_acid',
-//                'time_in',
-//                'time_out',
-//                'service_time',
-//                'service_type',
-//                'vacuum',
-//                'brush',
-//                'empty_baskets',
-//                'backwash',
-//                'powder_chlorine',
-//                'notes',
-//            ])->orderBy('time_in', 'desc')->get();
+        //        $serviceStops = ServiceStop::where('address_id', '=', $address->id)
+        //            ->select([
+        //                'id',
+        //                'ph_level',
+        //                'chlorine_level',
+        //                'tabs_whole_mine',
+        //                'tabs_crushed_mine',
+        //                'tabs_whole_theirs',
+        //                'tabs_crushed_theirs',
+        //                'liquid_chlorine',
+        //                'liquid_acid',
+        //                'time_in',
+        //                'time_out',
+        //                'service_time',
+        //                'service_type',
+        //                'vacuum',
+        //                'brush',
+        //                'empty_baskets',
+        //                'backwash',
+        //                'powder_chlorine',
+        //                'notes',
+        //            ])->orderBy('time_in', 'desc')->get();
 
         $serviceStops = ServiceStop::where('address_id', '=', $address->id)->orderBy('created_at', 'desc')->get();
 
@@ -74,8 +73,8 @@ class ServiceStopController extends Controller
             'select ceiling(AVG(TIME_TO_SEC(TIMEDIFF(ss.time_out, ss.time_in))) / 60)
                             as averageTime
                     from service_stops ss
-                            where customer_id = ' . $customerId . '
-                    and ss.service_type = "' . $type . '"'
+                            where customer_id = '.$customerId.'
+                    and ss.service_type = "'.$type.'"'
         );
 
         return $query[0]->averageTime;
@@ -85,7 +84,7 @@ class ServiceStopController extends Controller
     {
         $query = DB::select(
             'select ceiling(AVG(TIME_TO_SEC(TIMEDIFF(time_out,time_in))) / 60) as averageTime from service_stops where customer_id = '
-            . $customerId
+            .$customerId
         );
 
         return $query[0]->averageTime;
@@ -95,7 +94,7 @@ class ServiceStopController extends Controller
     {
         $query = DB::select(
             'select count(*) as total from service_stops where customer_id = '
-            . $customerId
+            .$customerId
         );
 
         return $query[0]->total;
@@ -105,8 +104,8 @@ class ServiceStopController extends Controller
     {
         $query = DB::select(
             'select count(*) as total from service_stops ss
-                        where customer_id = ' . $customerId . '
-                        and ss.service_type = "' . $type . '"'
+                        where customer_id = '.$customerId.'
+                        and ss.service_type = "'.$type.'"'
         );
 
         return $query[0]->total;
@@ -116,7 +115,7 @@ class ServiceStopController extends Controller
     {
         $query = DB::select(
             'select ceiling(SUM(TIME_TO_SEC(TIMEDIFF(time_out,time_in))) / 60) as total from service_stops ss where customer_id = '
-            . $customerId
+            .$customerId
         );
 
         return $query[0]->total;
@@ -126,8 +125,8 @@ class ServiceStopController extends Controller
     {
         $query = DB::select(
             'select ceiling(SUM(TIME_TO_SEC(TIMEDIFF(time_out,time_in))) / 60) as total from service_stops ss
-                        where customer_id = ' . $customerId . '
-                        and ss.service_type = "' . $type . '"'
+                        where customer_id = '.$customerId.'
+                        and ss.service_type = "'.$type.'"'
         );
 
         return $query[0]->total;
@@ -138,19 +137,18 @@ class ServiceStopController extends Controller
      */
     public function create(Address $address): Response
     {
-//        $address = DB::select('Select * from addresses where customer_id = '
-//            . $customer->id);
+        //        $address = DB::select('Select * from addresses where customer_id = '
+        //            . $customer->id);
 
-//        dd($address);
-
+        //        dd($address);
 
         $customer = Customer::find($address->customer_id);
 
-//        $address = Address::where('customer_id', $customer->id)->get();
+        //        $address = Address::where('customer_id', $customer->id)->get();
 
         $tasks = Task::where('customer_id', $customer->id)->where('status', 'pickedUp')->get();
 
-//        dd($customer->id);
+        //        dd($customer->id);
         foreach ($tasks as $task) {
             $assigned = User::find($task->assigned);
             $task->assigned = $assigned->name;
@@ -169,7 +167,7 @@ class ServiceStopController extends Controller
             'equipment' => $filter,
             'address' => $address,
             'customerName' => $customer->last_name,
-            'tasks' => $tasks
+            'tasks' => $tasks,
         ]);
     }
 
@@ -182,10 +180,10 @@ class ServiceStopController extends Controller
         $customer = Customer::find($address->customer_id);
 
         $notes = DB::select('select id, updated_at,
-            notes, service_type from service_stops where customer_id = ' . $customer->id . ' order by updated_at DESC');
+            notes, service_type from service_stops where customer_id = '.$customer->id.' order by updated_at DESC');
 
         return Inertia::render('ServiceStops/Notes', [
-            'customer_name' => $customer->first_name . ' ' . $customer->last_name,
+            'customer_name' => $customer->first_name.' '.$customer->last_name,
             'notes' => $notes,
         ]);
     }
@@ -196,7 +194,7 @@ class ServiceStopController extends Controller
     public function store(Request $request): RedirectResponse
     {
 
-//        dd($request);
+        //        dd($request);
 
         $address = Address::find($request->address);
         $phLevel = $request->ph_level ?? 0;
@@ -211,7 +209,7 @@ class ServiceStopController extends Controller
         } else {
             $serviceStop = self::createServiceStop($request, $address, $phLevel, $chlorineLevel, $start, $end);
             $serviceStop->phosphateLevel = $request->phosphateLevel;
-//            dd($serviceStop);
+            //            dd($serviceStop);
             self::sendNotification($request, $cust, $serviceStop, $address);
         }
 
@@ -239,7 +237,7 @@ class ServiceStopController extends Controller
         ));
 
         Notification::route('vonage', '14806226441')->notify(new GenericNotification(
-            "A Missed Service message was sent by $user->name to " . $customer->first_name . " " . $customer->last_name . " REASON:: " . $servicestop->notes
+            "A Missed Service message was sent by $user->name to ".$customer->first_name.' '.$customer->last_name.' REASON:: '.$servicestop->notes
         ));
     }
 
@@ -248,13 +246,13 @@ class ServiceStopController extends Controller
 
         $f = Filter::where('customer_id', $request->id)->where('address_id', $address->id)->get();
 
-        if ($f->isEmpty() && !is_null($request->filter_type)) {
+        if ($f->isEmpty() && ! is_null($request->filter_type)) {
             Filter::firstOrCreate([
                 'customer_id' => $request->id,
                 'address_id' => $address->id,
-                'type' => $request->filter_type
+                'type' => $request->filter_type,
             ]);
-        } else if ($f[0]->filter_type != $request->filter_type) {
+        } elseif ($f[0]->filter_type != $request->filter_type) {
             $filter = Filter::where('address_id', $address->id)->first();
             $filter->type = $request->filter_type;
             $filter->save();
@@ -268,14 +266,14 @@ class ServiceStopController extends Controller
                 Cya::firstOrCreate([
                     'level' => $request->cya,
                     'address_id' => $address->id,
-                    'tested_date' => $testedDate
+                    'tested_date' => $testedDate,
                 ]);
             } else {
                 if ($cya->level != $request->cya) {
                     $c = new Cya([
                         'level' => $request->cya,
                         'address_id' => $address->id,
-                        'tested_date' => $testedDate
+                        'tested_date' => $testedDate,
                     ]);
                     $c->save();
                 }
@@ -283,8 +281,7 @@ class ServiceStopController extends Controller
 
         }
 
-
-//        dd($request);
+        //        dd($request);
 
         return ServiceStop::firstOrCreate([
             'customer_id' => $request->id,
@@ -314,7 +311,6 @@ class ServiceStopController extends Controller
             'user_id' => Auth::user()->id,
         ]);
 
-
     }
 
     private function missedService($request, $address, $phLevel, $chlorineLevel, $start, $end)
@@ -335,18 +331,18 @@ class ServiceStopController extends Controller
             'powder_chlorine' => 0.0,
             'notes' => $request->notes,
             'salt_level' => $request->salt_level,
-            'service_type' => $request->service_type
+            'service_type' => $request->service_type,
         ]);
     }
 
     private function sendNotification($request, $cust, $serviceStop, $address)
     {
 
-//        dd($serviceStop);
+        //        dd($serviceStop);
 
         if ($request->service_type == 'Service Stop') {
             if ($cust->phone_number) {
-//                $cust->notify(new ServiceStopCompleted($serviceStop, $cust, $address));
+                //                $cust->notify(new ServiceStopCompleted($serviceStop, $cust, $address));
                 Notification::route('vonage', $cust->phone_number)
                     ->notify(new ServiceStopCompleted($serviceStop, $cust, $address));
             }
@@ -388,7 +384,7 @@ class ServiceStopController extends Controller
         }
     }
 
-    function sendText(Request $request): RedirectResponse
+    public function sendText(Request $request): RedirectResponse
     {
         Notification::route('vonage', $request->customerPhoneNumber)
             ->notify(new OnMyWayNotification($request->textMessage));
@@ -396,7 +392,7 @@ class ServiceStopController extends Controller
         Notification::route('vonage', '14806226441')
             ->notify(new OnMyWayNotification($request->textMessage, $request->customerName));
 
-//        dd($request->userPhoneNumber);
+        //        dd($request->userPhoneNumber);
 
         Notification::route('vonage', $request->userPhoneNumber)
             ->notify(new OnMyWayNotification($request->textMessage, $request->customerName));
@@ -432,7 +428,7 @@ class ServiceStopController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param \App\Models\ServiceStop $serviceStop
+     * @param  \App\Models\ServiceStop  $serviceStop
      */
     public function update(Request $request): RedirectResponse
     {

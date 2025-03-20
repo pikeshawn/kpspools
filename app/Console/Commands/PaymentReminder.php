@@ -2,10 +2,10 @@
 
 namespace App\Console\Commands;
 
+use App\Models\Customer;
 use GuzzleHttp\Client;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Log;
-use App\Models\Customer;
 
 class PaymentReminder extends Command
 {
@@ -26,7 +26,7 @@ class PaymentReminder extends Command
     /**
      * Execute the console command.
      */
-    public function handle()
+    public function handle(): int
     {
         //
         // Fetch all active customers with the necessary fields
@@ -53,30 +53,31 @@ class PaymentReminder extends Command
                     Log::warning("Failed to submit payment reminder for customer ID: {$customer->id}");
                 }
             } catch (\Exception $e) {
-                Log::error("Error processing customer ID: {$customer->id}. Error: " . $e->getMessage());
+                Log::error("Error processing customer ID: {$customer->id}. Error: ".$e->getMessage());
             }
         }
 
         Log::info('Daily task has run successfully.');
+
         return true; // Task completed
     }
 
     public function submit($jemmsonId, $paymentType, $autopay, $dateToRunCard, $terms)
     {
-        $client = new Client();
+        $client = new Client;
 
-        $response = $client->post(env('API_URL') . '/paymentReminder', [
+        $response = $client->post(env('API_URL').'/paymentReminder', [
             'headers' => [
-                'Authorization' => 'Bearer ' . env('BEARER_TOKEN'),
+                'Authorization' => 'Bearer '.env('BEARER_TOKEN'),
                 'Accept' => 'application/json',
             ],
             'json' => [
-                "jemmsonId" => $jemmsonId,
-                "paymentType" => $paymentType,
-                "autopay" => $autopay,
-                "dateToRunCard" => $dateToRunCard,
-                "terms" => $terms
-            ]
+                'jemmsonId' => $jemmsonId,
+                'paymentType' => $paymentType,
+                'autopay' => $autopay,
+                'dateToRunCard' => $dateToRunCard,
+                'terms' => $terms,
+            ],
         ]);
 
         return $response->getBody()->getContents();

@@ -3,10 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Stripe\Stripe;
-use Stripe\Charge;
-use Stripe\Checkout\Session;
 use Illuminate\Support\Facades\Log;
+use Stripe\Checkout\Session;
+use Stripe\Stripe;
 
 class StripeController extends Controller
 {
@@ -39,18 +38,19 @@ class StripeController extends Controller
 
             return response()->json(['id' => $session->id]);
         } catch (\Exception $e) {
-            Log::error('Stripe Checkout Error: ' . $e->getMessage());
+            Log::error('Stripe Checkout Error: '.$e->getMessage());
+
             return response()->json(['error' => 'Something went wrong. Please try again.'], 500);
         }
     }
 
     public function success()
     {
-        return "Payment Successful!";
+        return 'Payment Successful!';
     }
 
     public function cancel()
     {
-        return "Payment Canceled!";
+        return 'Payment Canceled!';
     }
 }

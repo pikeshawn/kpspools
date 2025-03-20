@@ -2,48 +2,48 @@
 
 namespace App\Http\Middleware;
 
-use Carbon\Carbon;
+use App\Models\Customer;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response;
-use Illuminate\Support\Facades\Http;
-use App\Models\Customer;
 
 class CustomerMiddleware
 {
     /**
      * Handle an incoming request.
      *
-     * @param \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response) $next
+     * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
      */
     public function handle(Request $request, Closure $next): Response
     {
-//        dd($request);
+        //        dd($request);
 
         if ($request->user() !== null) {
             if ($request->user()->type === 'customer') {
-                if (!$request->user()->terms_and_conditions) {
-                    if($request->terms) {
+                if (! $request->user()->terms_and_conditions) {
+                    if ($request->terms) {
                         Customer::saveTerms(Auth::user());
+
                         return redirect('/dashboard');
                     }
+
                     return redirect('/termSigning');
                 }
-                if (!$request->user()->privacy_policy) {
+                if (! $request->user()->privacy_policy) {
 
-                    if($request->privacy) {
+                    if ($request->privacy) {
                         Customer::savePrivacyPolicy(Auth::user());
+
                         return redirect('/dashboard');
                     }
 
                     return redirect('/prospective/privacy');
                 }
 
-//                if (!$request->user()->stripe_id) {
-//                    return redirect('/billing/setup');
-//                }
-
+                //                if (!$request->user()->stripe_id) {
+                //                    return redirect('/billing/setup');
+                //                }
 
                 return $next($request);
             }

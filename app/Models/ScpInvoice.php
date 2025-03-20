@@ -8,7 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 class ScpInvoice extends Model
 {
     use HasFactory;
-    protected $table = 'scp_invoice';
-    protected $guarded = [];
 
+    protected $table = 'scp_invoice';
+
+    protected $guarded = [];
 }

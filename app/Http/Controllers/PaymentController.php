@@ -2,19 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
 use App\Models\Address;
-use App\Models\Task;
+use App\Models\Customer;
 use App\Models\EmployeePayment;
 use App\Models\ServiceStop;
+use App\Models\Task;
+use App\Models\User;
 use GuzzleHttp\Client;
-use Illuminate\Http\Request;
-use App\Models\Customer;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 use Inertia\Response;
-use Illuminate\Support\Facades\Auth;
 
 class PaymentController extends Controller
 {
@@ -31,11 +28,10 @@ class PaymentController extends Controller
         $jsonResponse = json_decode($response);
 
         return Inertia::render('Payments/Index', [
-            'customer_name' => $customer->first_name . ' ' . $customer->last_name,
-            'history' => $jsonResponse
+            'customer_name' => $customer->first_name.' '.$customer->last_name,
+            'history' => $jsonResponse,
         ]);
     }
-
 
     /**
      * Show the form for creating a new resource.
@@ -51,18 +47,17 @@ class PaymentController extends Controller
 
         $totalPayments = [];
 
-        foreach($servicemen as $serviceman) {
+        foreach ($servicemen as $serviceman) {
             array_push($totalPayments, self::currentPayments($serviceman->id, $serviceman->name));
         }
 
         return Inertia::render('Payments/Paychecks', [
-            'totalPayments' => $totalPayments
+            'totalPayments' => $totalPayments,
         ]);
     }
 
     public function currentPayments($servicemanId, $servicemanName)
     {
-
 
         $totalPendingServiceStops = EmployeePayment::where('serviceman_id', $servicemanId)
             ->where('status', 'pending')
@@ -105,7 +100,7 @@ class PaymentController extends Controller
             'totalNumberOfPoolsContributingToBucket' => $totalNumberOfPoolsContributingToBucket,
             'totalBucketAmount' => $totalBucketAmount,
             'servicemanId' => $servicemanId,
-            'servicemanName' => $servicemanName
+            'servicemanName' => $servicemanName,
         ];
     }
 
@@ -126,11 +121,11 @@ class PaymentController extends Controller
 
                 return [
                     'id' => $payment->service_stop_id,
-                    'customer_name' => $customer ? $customer->first_name . ' ' . $customer->last_name : 'Unknown',
+                    'customer_name' => $customer ? $customer->first_name.' '.$customer->last_name : 'Unknown',
                     'date_service' => $serviceStop ? $serviceStop->created_at->format('Y-m-d') : null,
                     'rate' => number_format($payment->rate, 2),
                     'status' => $payment->status,
-                    'link' => "/ss/" . $payment->service_stop_id,
+                    'link' => '/ss/'.$payment->service_stop_id,
                 ];
             });
 
@@ -168,7 +163,7 @@ class PaymentController extends Controller
 
                 return [
                     'id' => $payment->task_id,
-                    'customer_name' => $customer ? $customer->first_name . ' ' . $customer->last_name : 'Unknown',
+                    'customer_name' => $customer ? $customer->first_name.' '.$customer->last_name : 'Unknown',
                     'date_service' => $task ? $task->created_at->format('Y-m-d') : null,
                     'paid_amount' => number_format($payment->rate, 2),
                     'status' => $payment->status,
@@ -194,19 +189,18 @@ class PaymentController extends Controller
 
     private static function submitToJemmson($jemmsonId)
     {
-        $client = new Client();
+        $client = new Client;
 
-        $response = $client->post(env('API_URL') . '/payment-history', [
+        $response = $client->post(env('API_URL').'/payment-history', [
             'headers' => [
-                'Authorization' => 'Bearer ' . env('BEARER_TOKEN'),
+                'Authorization' => 'Bearer '.env('BEARER_TOKEN'),
                 'Accept' => 'application/json',
             ],
             'json' => [
-                "jemmsonId" => $jemmsonId
-            ]
+                'jemmsonId' => $jemmsonId,
+            ],
         ]);
 
         return $response->getBody()->getContents();
     }
-
 }

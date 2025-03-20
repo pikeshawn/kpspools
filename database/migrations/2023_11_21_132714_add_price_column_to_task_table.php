@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::table('tasks', function (Blueprint $table) {
             //
-            $table->integer("price")->default(0);
+            $table->integer('price')->default(0);
         });
     }
 
@@ -24,7 +24,7 @@ return new class extends Migration
     {
         Schema::table('tasks', function (Blueprint $table) {
             //
-            $table->integer("price")->default(0);
+            $table->integer('price')->default(0);
         });
     }
 };

@@ -3,15 +3,15 @@
 namespace App\Console\Commands;
 
 use App\Models\Address;
-use App\Models\ServiceStop;
 use App\Models\Customer;
 use App\Models\ScpInvoice;
 use App\Models\ScpInvoiceItem;
+use App\Models\ServiceStop;
 use App\Models\Task;
 use App\Models\User;
-use Illuminate\Console\Command;
 use Carbon\Carbon;
 use Carbon\Exceptions\InvalidFormatException;
+use Illuminate\Console\Command;
 
 class RunOneTimeScript extends Command
 {
@@ -32,57 +32,54 @@ class RunOneTimeScript extends Command
     /**
      * Execute the console command.
      */
-    public function handle()
+    public function handle(): void
     {
-//        self::syncCustomersAndAddressTable();
-//        self::associateTasksWithServiceman();
-
+        //        self::syncCustomersAndAddressTable();
+        //        self::associateTasksWithServiceman();
 
         self::importingInvoices();
-//        self::setCorrectCountForTasks();
-//        self::pullCostDataPerCustomerStoreInACSVile();
+        //        self::setCorrectCountForTasks();
+        //        self::pullCostDataPerCustomerStoreInACSVile();
     }
 
     public function pullCostDataPerCustomerStoreInACSVile()
     {
 
-//        Models
-//          Customer
-//          ServiceStop
-//          Address
+        //        Models
+        //          Customer
+        //          ServiceStop
+        //          Address
 
-//        Database
-//          customers table
-//                id, First Name, Last Name
-//          addresses table
-//                customer_id, Plan Price, active, sold, chemicals_included
-//          service_stops table
-//                customer_id, address_id, tabs_whole_mine, liquid_chlorine, liquid_acid
+        //        Database
+        //          customers table
+        //                id, First Name, Last Name
+        //          addresses table
+        //                customer_id, Plan Price, active, sold, chemicals_included
+        //          service_stops table
+        //                customer_id, address_id, tabs_whole_mine, liquid_chlorine, liquid_acid
 
-//        Database Relations
-//          Customer has many addresses
-//          Address has many service stops
-//          Customer has many service stops
+        //        Database Relations
+        //          Customer has many addresses
+        //          Address has many service stops
+        //          Customer has many service stops
 
-//        Use Carbon for calculating the dates, eloquent for database access
+        //        Use Carbon for calculating the dates, eloquent for database access
 
-//        tabs_whole_mine * 1.65 = tabsCost
-//        liquid_chlorine * (19.65 * 1.08) / 4 = bottleLiquidChlorine
-//        tabs_whole_mine liquid_acid * (27 * 1.08) / 4 = bottleAcid
+        //        tabs_whole_mine * 1.65 = tabsCost
+        //        liquid_chlorine * (19.65 * 1.08) / 4 = bottleLiquidChlorine
+        //        tabs_whole_mine liquid_acid * (27 * 1.08) / 4 = bottleAcid
 
+        //        Go through each customer that has 48 or more service stops in the past year from todays date
+        //        where the active column in the address table is true, chemicals_include is true, and the sold column is false
+        //        calculate the costs of the chemicals for liquid chlorine, acid, and tabs
+        //          for a year as a total
+        //          for May, June, and July of this year, have these three months totaled as a cost
+        //        multiplier would be the cost of the 3 months of chems over the cost of the year of chems
+        //        the CSV line would be customer name, plan price, 12 month total, 3 month cost, 12 month cost
 
-//        Go through each customer that has 48 or more service stops in the past year from todays date
-//        where the active column in the address table is true, chemicals_include is true, and the sold column is false
-//        calculate the costs of the chemicals for liquid chlorine, acid, and tabs
-//          for a year as a total
-//          for May, June, and July of this year, have these three months totaled as a cost
-//        multiplier would be the cost of the 3 months of chems over the cost of the year of chems
-//        the CSV line would be customer name, plan price, 12 month total, 3 month cost, 12 month cost
-
-//      count the number types of services there are per customer.
-//      It comes from the service_stops table and the service_type column;
-//      add the costs for chemicals for each of those service types
-
+        //      count the number types of services there are per customer.
+        //      It comes from the service_stops table and the service_type column;
+        //      add the costs for chemicals for each of those service types
 
         $today = Carbon::today();
         $oneYearAgo = $today->copy()->subYear();
@@ -143,7 +140,7 @@ class RunOneTimeScript extends Command
 
                 $planPrice = $address->plan_price;
 
-//                dd($serviceTypeCount['Service Stop']);
+                //                dd($serviceTypeCount['Service Stop']);
 
                 isset($serviceTypeCount['Service Stop']) ? $serviceStopCount = $serviceTypeCount['Service Stop'] : $serviceStopCount = 0;
                 isset($serviceTypeCount['Repair']) ? $repairCount = $serviceTypeCount['Repair'] : $repairCount = 0;
@@ -159,8 +156,8 @@ class RunOneTimeScript extends Command
                 $customer = Customer::find($address->customer_id);
 
                 $csvData[] = [
-                    'Customer Name' => $customer->first_name . ' ' . $customer->last_name,
-                    'Address' => $address->address_line_1 . ', ' . $address->city . ' ' . $address->zip,
+                    'Customer Name' => $customer->first_name.' '.$customer->last_name,
+                    'Address' => $address->address_line_1.', '.$address->city.' '.$address->zip,
                     'Plan Price' => $planPrice,
                     '12 Month Total' => $totalYearlyCost,
                     '3 Month Cost' => $totalThreeMonthsCost,
@@ -233,14 +230,14 @@ class RunOneTimeScript extends Command
     {
         $addresses = Task::select(['address_id'])->distinct()->get();
 
-//        dd($addresses[0]->address_id);
+        //        dd($addresses[0]->address_id);
 
         foreach ($addresses as $address) {
-//            dd($address->address_id);
+            //            dd($address->address_id);
             $tasks = Task::where('address_id', $address->address_id)->get();
             $count = 0;
             foreach ($tasks as $task) {
-//                dd($task->count);
+                //                dd($task->count);
                 $count++;
                 $task->count = $count;
                 $task->save();
@@ -257,8 +254,7 @@ class RunOneTimeScript extends Command
             ->where('active', true)
             ->get();
 
-//        echo $users;
-
+        //        echo $users;
 
         foreach ($users as $user) {
             $addresses = Address::where('serviceman_id', $user->id)
@@ -280,7 +276,6 @@ class RunOneTimeScript extends Command
             }
             echo "User:: $user->name\nDont Match :: $dontMatch\nMatch:: $match\n";
         }
-
 
         foreach ($users as $user) {
             $addresses = Address::where('serviceman_id', $user->id)
@@ -321,36 +316,36 @@ class RunOneTimeScript extends Command
 
     public function importingInvoices()
     {
-//        echo 'testing invoice import file';
+        //        echo 'testing invoice import file';
 
         $fileName = [
-//            'InvoiceHistory_102292_From_2023-03-24_To_2023-03-31.csv',
-//            'InvoiceHistory_102292_From_2023-04-01_To_2023-04-30.csv',
-//            'InvoiceHistory_102292_From_2023-05-01_To_2023-05-31.csv',
-//            'InvoiceHistory_102292_From_2023-06-01_To_2023-06-30.csv',
-//            'InvoiceHistory_102292_From_2023-07-01_To_2023-07-31.csv',
-//            'InvoiceHistory_102292_From_2023-08-01_To_2023-08-31.csv',
-//            'InvoiceHistory_102292_From_2023-09-02_To_2023-09-30.csv',
-//            'InvoiceHistory_102292_From_2023-10-02_To_2023-10-31.csv',
-//            'InvoiceHistory_102292_From_2023-11-02_To_2023-11-30.csv',
-//            'InvoiceHistory_102292_From_2023-12-02_To_2023-12-31.csv',
-//            'InvoiceHistory_102292_From_2024-01-01_To_2024-01-31.csv',
-//            'InvoiceHistory_102292_From_2024-02-02_To_2024-02-29.csv',
-//            'InvoiceHistory_102292_From_2024-03-02_To_2024-03-22.csv',
-//            'InvoiceHistory_102292_From_2024-03-23_To_2024-03-29.csv',
-//            'InvoiceHistory_102292_From_2024-04-01_To_2024-04-30.csv',
-//            'InvoiceHistory_102292_From_2024-05-01_To_2024-05-31.csv',
-//            'InvoiceHistory_102292_From_2024-06-01_To_2024-06-19.csv',
-//            'InvoiceHistory_102292_From_2024-06-20_To_2024-07-21.csv',
-//            'InvoiceHistory_102292_From_2024-07-21_To_2024-08-03.csv',
-//            'InvoiceHistory_102292_From_2024-08-04_To_2024-08-31.csv'.
-//            'InvoiceHistory_102292_From_2024-09-01_To_2024-09-26.csv'
-//            'InvoiceHistory_102292_From_2024-09-27_To_2024-10-28.csv',
-//            'InvoiceHistory_102292_From_2024-10-28_To_2024-10-31.csv'
-//            'InvoiceHistory_102292_From_2024-11-01_To_2024-11-10.csv'
-//            'InvoiceHistory_102292_From_2024-11-11_To_2024-11-30.csv',
-//            'InvoiceHistory_102292_From_2024-12-01_To_2024-12-31.csv',
-            'InvoiceHistory_102292_From_2025-01-01_To_2025-01-25.csv'
+            //            'InvoiceHistory_102292_From_2023-03-24_To_2023-03-31.csv',
+            //            'InvoiceHistory_102292_From_2023-04-01_To_2023-04-30.csv',
+            //            'InvoiceHistory_102292_From_2023-05-01_To_2023-05-31.csv',
+            //            'InvoiceHistory_102292_From_2023-06-01_To_2023-06-30.csv',
+            //            'InvoiceHistory_102292_From_2023-07-01_To_2023-07-31.csv',
+            //            'InvoiceHistory_102292_From_2023-08-01_To_2023-08-31.csv',
+            //            'InvoiceHistory_102292_From_2023-09-02_To_2023-09-30.csv',
+            //            'InvoiceHistory_102292_From_2023-10-02_To_2023-10-31.csv',
+            //            'InvoiceHistory_102292_From_2023-11-02_To_2023-11-30.csv',
+            //            'InvoiceHistory_102292_From_2023-12-02_To_2023-12-31.csv',
+            //            'InvoiceHistory_102292_From_2024-01-01_To_2024-01-31.csv',
+            //            'InvoiceHistory_102292_From_2024-02-02_To_2024-02-29.csv',
+            //            'InvoiceHistory_102292_From_2024-03-02_To_2024-03-22.csv',
+            //            'InvoiceHistory_102292_From_2024-03-23_To_2024-03-29.csv',
+            //            'InvoiceHistory_102292_From_2024-04-01_To_2024-04-30.csv',
+            //            'InvoiceHistory_102292_From_2024-05-01_To_2024-05-31.csv',
+            //            'InvoiceHistory_102292_From_2024-06-01_To_2024-06-19.csv',
+            //            'InvoiceHistory_102292_From_2024-06-20_To_2024-07-21.csv',
+            //            'InvoiceHistory_102292_From_2024-07-21_To_2024-08-03.csv',
+            //            'InvoiceHistory_102292_From_2024-08-04_To_2024-08-31.csv'.
+            //            'InvoiceHistory_102292_From_2024-09-01_To_2024-09-26.csv'
+            //            'InvoiceHistory_102292_From_2024-09-27_To_2024-10-28.csv',
+            //            'InvoiceHistory_102292_From_2024-10-28_To_2024-10-31.csv'
+            //            'InvoiceHistory_102292_From_2024-11-01_To_2024-11-10.csv'
+            //            'InvoiceHistory_102292_From_2024-11-11_To_2024-11-30.csv',
+            //            'InvoiceHistory_102292_From_2024-12-01_To_2024-12-31.csv',
+            'InvoiceHistory_102292_From_2025-01-01_To_2025-01-25.csv',
         ];
 
         foreach ($fileName as $file) {
@@ -368,15 +363,14 @@ class RunOneTimeScript extends Command
 
                 $invoiceNum = $csvData[1][1];
 
-//                dd($csvData[1][1]);
+                //                dd($csvData[1][1]);
 
-
-//            add to scp_invoice
+                //            add to scp_invoice
                 self::addToScpInvoice($csvData[1]);
 
                 for ($i = 1; $i < count($csvData); $i++) {
                     if ($csvData[$i][1] === $invoiceNum) {
-//                    add to scp_invoice_item
+                        //                    add to scp_invoice_item
                         self::addToScpInvoiceItem($csvData[$i], $invoiceNum);
                     } else {
                         $invoiceNum = $csvData[$i][1];
@@ -394,16 +388,14 @@ class RunOneTimeScript extends Command
             }
         }
 
-//        dd('Stop');
-
+        //        dd('Stop');
 
     }
 
     private function addToScpInvoice($scpInvoice)
     {
 
-
-        $scpInvoiceEntry = new ScpInvoice();
+        $scpInvoiceEntry = new ScpInvoice;
         $scpInvoiceEntry->invoice_number = $scpInvoice[1];
         $scpInvoiceEntry->release_number = $scpInvoice[0];
         $scpInvoiceEntry->customer_po = $scpInvoice[2];
@@ -455,6 +447,7 @@ class RunOneTimeScript extends Command
         if (strlen($date) === 10) {
             try {
                 $mysqlDate = Carbon::createFromFormat('m/d/Y', $date);
+
                 return $mysqlDate->toDateString();
             } catch (InvalidFormatException $e) {
                 echo $e->getMessage();
@@ -464,6 +457,7 @@ class RunOneTimeScript extends Command
         if ($date) {
             try {
                 $mysqlDate = Carbon::createFromFormat('m/d/y', $date);
+
                 return $mysqlDate->toDateString();
             } catch (InvalidFormatException $e) {
                 echo $e->getMessage();
@@ -476,14 +470,14 @@ class RunOneTimeScript extends Command
 
     private function addToScpInvoiceItem($scpInvoice, $invoice_id)
     {
-        $scpInvoiceItem = new ScpInvoiceItem();
+        $scpInvoiceItem = new ScpInvoiceItem;
         $scpInvoiceItem->invoice_id = $invoice_id;
         $scpInvoiceItem->units_sold = $scpInvoice[31];
         $scpInvoiceItem->product_number = $scpInvoice[32];
         $scpInvoiceItem->model_num = $scpInvoice[33];
         $scpInvoiceItem->description = $scpInvoice[34];
-//        $scpInvoiceItem->customer_id = $scpInvoice[5];
-//        $scpInvoiceItem->notes = $scpInvoice[6];
+        //        $scpInvoiceItem->customer_id = $scpInvoice[5];
+        //        $scpInvoiceItem->notes = $scpInvoice[6];
         $scpInvoiceItem->uom = $scpInvoice[35];
         $scpInvoiceItem->cost = $scpInvoice[36];
         $scpInvoiceItem->ext_cost = $scpInvoice[37];
@@ -494,7 +488,7 @@ class RunOneTimeScript extends Command
         $scpInvoiceItem->line_item_weight_ext = $scpInvoice[42];
         $scpInvoiceItem->ship_whse_num = $scpInvoice[43];
         $scpInvoiceItem->line_ship_via = $scpInvoice[44];
-//        $scpInvoiceItem->gl_code = $scpInvoice[45];
+        //        $scpInvoiceItem->gl_code = $scpInvoice[45];
         $scpInvoiceItem->serial_nums = $scpInvoice[45];
 
         $scpInvoiceItem->save();
@@ -502,6 +496,6 @@ class RunOneTimeScript extends Command
 
     private function getInvoiceFile($fileName)
     {
-        return @fopen('/home/forge/kpspools.com/storage/files/' . $fileName, 'r+');
+        return @fopen('/home/forge/kpspools.com/storage/files/'.$fileName, 'r+');
     }
 }

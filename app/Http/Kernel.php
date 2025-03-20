@@ -20,7 +20,7 @@ class Kernel extends HttpKernel
         \App\Http\Middleware\PreventRequestsDuringMaintenance::class,
         \Illuminate\Foundation\Http\Middleware\ValidatePostSize::class,
         \App\Http\Middleware\TrimStrings::class,
-//        \App\Http\Middleware\Serviceman::class,
+        //        \App\Http\Middleware\Serviceman::class,
         \Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull::class,
     ];
 
@@ -67,6 +67,6 @@ class Kernel extends HttpKernel
         'subscribed' => \App\Http\Middleware\Subscribed::class,
         'prospective' => \App\Http\Middleware\Prospective::class,
         'serviceman' => \App\Http\Middleware\Serviceman::class,
-        'customer' => \App\Http\Middleware\CustomerMiddleware::class
+        'customer' => \App\Http\Middleware\CustomerMiddleware::class,
     ];
 }
