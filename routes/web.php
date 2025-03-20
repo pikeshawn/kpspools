@@ -27,6 +27,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CloudinaryController;
 use Inertia\Inertia;
 use Illuminate\Http\Request;
+use App\Http\Controllers\StripeController;
+use App\Http\Controllers\StripeWebhookController;
 
 /*
 |--------------------------------------------------------------------------
@@ -138,6 +140,13 @@ Route::middleware(['auth:sanctum', 'verified', 'customer', 'subscribed'])->group
     Route::get('/customers/facing/serviceStop', [CustomerFacingController::class, 'serviceStop'])->name('customer.serviceStop');
 
 });
+
+Route::post('/stripe/webhook', [StripeWebhookController::class, 'handle']);
+
+Route::get('/checkout', [StripeController::class, 'checkout'])->name('stripe.checkout');
+Route::post('/create-checkout-session', [StripeController::class, 'createCheckoutSession'])->name('stripe.createSession');
+Route::get('/success', [StripeController::class, 'success'])->name('stripe.success');
+Route::get('/cancel', [StripeController::class, 'cancel'])->name('stripe.cancel');
 
 Route::middleware(['auth:sanctum', 'verified', 'serviceman'])->group(function () {
 

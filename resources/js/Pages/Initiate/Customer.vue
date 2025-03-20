@@ -3,6 +3,12 @@
         :user="user"
         :addressId="currentUrl"
     >
+
+        <div>
+            <h1>Checkout Page</h1>
+            <StripeCheckout />
+        </div>
+
         <div>
             <div class="px-4 sm:px-0">
                 <h3 class="text-base font-semibold leading-7 text-gray-900">Initiate Bid And First Tasks</h3>
@@ -108,6 +114,7 @@ import LoadingButton from "../Shared/LoadingButton";
 import {Inertia} from '@inertiajs/inertia'
 import {reactive} from 'vue'
 import {Link} from '@inertiajs/inertia-vue3'
+import StripeCheckout from "../Components/StripeCheckout.vue";
 
 
 export default {
@@ -117,6 +124,7 @@ export default {
         LoadingButton,
         Link,
         Layout,
+        StripeCheckout,
         Toggle
     },
     props: {

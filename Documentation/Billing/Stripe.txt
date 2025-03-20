@@ -1,0 +1,102 @@
+- I need stripe for different points in the billing process
+1. For when a task is complete. I should trigger an invoice or get auto approval when the job is done
+    - auto approval when a task has been completed
+        - this will happen when the customer agrees to the job once it is done
+        - to do job we will need a card on file
+        - there will have to be a place for them to sign up for the app
+2. Monthly invoice
+    - monthly charge for the pool service sent out on a certain date
+        - first of each month
+            - if the customer has the attribute of beginning of month then their bill is due net 30
+            - if the customer has the attribute of end of month then the bill is due upon receipt
+        - should have an autopay option for the customers
+            - can be opted upon sign up
+            - can be opted later
+3. features
+    - we will need a place to see past invoices
+    - we will need to see invoices that are still pending
+    - we will need to handle past due invoices
+    - we will need to institute late charges on invoices
+    - we will need to implement autopay and offer a discount to try and switch them over if they are not switched
+    - will need to have cron jobs that will auto create invoices at the beginning of the month if certain criteria is met
+        - no tasks have been created
+
+1. One-Time Job Payments (Task Completion)
+
+Flow:
+	1.	Customer Must Have a Card on File
+        •	Require customers to add a card during signup or before confirming a job.
+        •	Use Stripe’s SetupIntent API to securely store payment details.
+	2.	Auto Approval Upon Completion
+        •	When a job is completed, trigger an invoice or charge the stored card.
+        •	If the customer has “Auto Approve” enabled:
+        •	Automatically charge the card on file.
+        •	If not:
+        •	Send an invoice and require manual approval.
+	3.	Invoice Generation
+        •	If payment is not auto-approved, create a Stripe invoice.
+        •	Notify the customer via email and the app.
+        •	Allow the customer to pay manually.
+	4.	Customer Sign-Up Flow
+        •	Ensure the app has a signup flow that collects:
+        •	Customer details
+        •	Payment info
+        •	Preferences (Auto Pay, Approval Requirements, etc.)
+
+- Customer only section of routes they can go to
+- Sign Up for the application
+    - 5% discount with autopay
+- Terms of service for billing
+    - autopay
+    - repair payments
+- Implement feature where once a task is complete then an invoice is created and the card is ran.
+- I want to merge the prior invoices from Jemmson to KPS Pools
+    - could be an API that pulls from there instead of transferring completely
+    - Or until that is complete only do new customers on KPSPools site
+    - need to be able to reflect cash pay
+
+
+2. Monthly Invoicing for Pool Service
+
+Billing Logic:
+	1.	Invoice Generation on the 1st of Each Month
+        •	If a customer has the “beginning of the month” attribute:
+        •	Invoice is due in 30 days (NET 30).
+        •	If a customer has the “end of the month” attribute:
+        •	Invoice is due immediately (Due Upon Receipt).
+	2.	Autopay Option
+	•	Allow customers to opt in during signup or later.
+	•	If enabled:
+	•	Charge the card on file automatically on the due date.
+	•	If not enabled:
+	•	Send an invoice and remind the customer.
+	3.	Handling Past Due Invoices
+	•	Flag unpaid invoices as overdue.
+	•	Automatically retry payment (using Stripe’s Smart Retries).
+	•	Apply late fees after a grace period.
+	4.	Offering an Autopay Discount
+	•	Implement a discount for customers who switch to autopay.
+	•	Example: “Get 5% off your monthly bill when you enable autopay.”
+
+⸻
+
+3. Additional Features
+
+Invoice Management
+	•	View Past Invoices: Store and display historical invoices for customers.
+	•	Pending Invoices: Customers should see unpaid invoices.
+	•	Past Due Invoices: Highlight invoices that are overdue and apply penalties.
+
+Late Fees Handling
+	•	After a certain grace period, charge a late fee.
+	•	Example:
+	•	5 days late → $10 fee
+	•	10 days late → $20 fee
+
+Automation (Cron Jobs)
+	•	Auto-create invoices at the beginning of each month if:
+	•	The customer has an active service plan.
+	•	No job has been manually logged.
+	•	Late fee processing: Run a daily cron to check overdue invoices and apply penalties.
+	•	Autopay processing: Run a daily cron to check for invoices due that day and attempt charges.
+

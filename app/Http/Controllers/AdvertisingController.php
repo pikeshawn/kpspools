@@ -21,16 +21,16 @@ class AdvertisingController extends Controller
 
     private $townships = [
 
-        '-2S-5E',
-        '-2S-6E',
-        '-2S-7E',
+//        '-2S-5E',
+//        '-2S-6E',
+//        '-2S-7E',
 //        '-2S-8E',
-//        '-1S-3E',
 
-//        '-1S-4E',
-//        '-1S-5E',
-//        '-1S-6E',
-//        '-1S-7E',
+//        '-1S-3E',
+        '-1S-4E',
+        '-1S-5E',
+        '-1S-6E',
+        '-1S-7E',
 
 //        '-1N-3E',
 //        '-1N-4E',
@@ -45,18 +45,18 @@ class AdvertisingController extends Controller
     public function updateMailingList()
     {
 //        dd('updateMailing');
-
 //        self::updateStr('-2S-6E', 32, 39819);
 //        self::updateStr('-2S-7E', 32, 66108);
 //        self::updateStr('-1S-3E', 36, 162099);
 //        self::updateStr('-1S-4E', 31, 186866);
 //        $this->fetchTownshipParcels('26-1S-5E', 67);
 //        self::updateStr('-1S-5E', 36, 223735);
-//        $startingId = 287166;
 //        self::updateStr('-1S-6E', 21, $startingId);
 //        self::updateStr('-1S-7E', 8, $startingId);
 //        self::updateStr('-1N-3E', 2, $startingId);
-//        self::updateStr('-1N-4E', 1, $startingId);
+
+        $startingId = 110498;
+        self::updateStr('-2S-7E', 23, $startingId);
 
         foreach ($this->townships as $township) {
             for ($i = 1; $i < 37; $i++) {

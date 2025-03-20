@@ -21,6 +21,7 @@
         "league/csv": "^9.22",
         "myclabs/deep-copy": "^1.12",
         "spatie/laravel-permission": "^6.10",
+        "stripe/stripe-php": "^10.21",
         "symfony/string": "*",
         "tightenco/ziggy": "^1.0"
     },
