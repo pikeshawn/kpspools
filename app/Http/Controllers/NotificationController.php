@@ -4,8 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Notifications\MassTextNotification;
 use Illuminate\Http\Request;
-use Inertia\Inertia;
 use Illuminate\Support\Facades\Notification;
+use Inertia\Inertia;
 
 class NotificationController extends Controller
 {
@@ -28,19 +28,17 @@ class NotificationController extends Controller
 
             $constructedMessage = '';
             for ($i = 0; $i < count($elements) - 1; $i++) {
-                $constructedMessage = $constructedMessage . $messageArray[$i] . $elements[$i];
+                $constructedMessage = $constructedMessage.$messageArray[$i].$elements[$i];
             }
 
-            $constructedMessage = $constructedMessage . $messageArray[count($elements) - 1];
+            $constructedMessage = $constructedMessage.$messageArray[count($elements) - 1];
 
             Notification::route('vonage', $elements[count($elements) - 1])
                 ->notify(new MassTextNotification($constructedMessage));
 
         }
 
-
         $finished = 'finished';
 
     }
-
 }

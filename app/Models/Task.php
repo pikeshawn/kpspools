@@ -5,6 +5,8 @@ namespace App\Models;
 use App\Notifications\TaskApprovalNotification;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Notification;
@@ -14,31 +16,32 @@ class Task extends Model
     use HasFactory;
 
     protected $guarded = [];
+
     public $tsStatusArray;
 
-    public function customer()
+    public function customer(): BelongsTo
     {
         return $this->belongsTo(Customer::class, 'customer_id', 'id');
     }
 
-    public function address()
+    public function address(): BelongsTo
     {
         return $this->belongsTo(Address::class, 'address_id', 'id');
     }
 
-    public function task_statuses()
+    public function task_statuses(): HasMany
     {
         return $this->hasMany(TaskStatus::class);
     }
 
-    public function subcontractor()
+    public function subcontractor(): HasMany
     {
         return $this->hasMany(Subcontractor::class);
     }
 
     public static function sendApprovalMessage($task, $customer, $phoneNumber, $address)
     {
-        $message = "An approved repair has been assigned to you:: $task->description.\n$customer->first_name $customer->last_name\n" . env('APP_URL') . "/customers/show/$address->id Please text or call Shawn if you have any questions";
+        $message = "An approved repair has been assigned to you:: $task->description.\n$customer->first_name $customer->last_name\n".env('APP_URL')."/customers/show/$address->id Please text or call Shawn if you have any questions";
         Notification::route('vonage', $phoneNumber)->notify(new TaskApprovalNotification($message));
     }
 
@@ -50,15 +53,15 @@ class Task extends Model
             Notification::route('vonage', $customer->phone_number)->notify(new TaskApprovalNotification($message));
         }
 
-        $message = "A repair has been completed by $assigned, $task->description.\n$customer->first_name $customer->last_name\n" . env('APP_URL') . "/customers/show/$address->id. Please take a look";
+        $message = "A repair has been completed by $assigned, $task->description.\n$customer->first_name $customer->last_name\n".env('APP_URL')."/customers/show/$address->id. Please take a look";
         Notification::route('vonage', $phoneNumber)->notify(new TaskApprovalNotification($message));
     }
 
-    static public function allIncompleteTasks()
+    public static function allIncompleteTasks()
     {
 
-//        I want all tasks that are assigned to the authenticated user
-//        this means that the tasks come from the task table where the status is approved
+        //        I want all tasks that are assigned to the authenticated user
+        //        this means that the tasks come from the task table where the status is approved
 
         $tasks = [];
 
@@ -94,37 +97,36 @@ class Task extends Model
         return $allTasks;
     }
 
-    static public function allIncompleteTasksByNonAdminPoolGuy()
+    public static function allIncompleteTasksByNonAdminPoolGuy()
     {
         return Task::where('status', '<>', 'completed')
             ->where('assigned', '=', Auth::user()->id)->get();
     }
 
-    static public function allCompletedTasksRelatedToSpecificCustomer($addressId): Collection
+    public static function allCompletedTasksRelatedToSpecificCustomer($addressId): Collection
     {
         $allEnabledTasks = [];
         $t = Task::where('address_id', $addressId)->where('status', 'completed')->get();
 
         foreach ($t as $task) {
             $line = [];
-            $line["id"] = $task->id;
-            $line["description"] = $task->description;
-            $line["status"] = $task->status;
-            $line["completed"] = false;
+            $line['id'] = $task->id;
+            $line['description'] = $task->description;
+            $line['status'] = $task->status;
+            $line['completed'] = false;
             $allEnabledTasks[] = $line;
         }
 
         return collect($allEnabledTasks);
     }
 
-    static public function allCreatedTasks(): Collection
+    public static function allCreatedTasks(): Collection
     {
         $tasks = [];
         $customers = Customer::has('tasks')->get();
 
         foreach ($customers as $customer) {
             $custTasks = Task::where('customer_id', $customer->id)->where('sent', '<>', 1)->get();
-
 
             foreach ($custTasks as $task) {
 
@@ -138,7 +140,7 @@ class Task extends Model
                     $cust = [];
                     $cust['customer_id'] = $customer->id;
                     $cust['address_id'] = $task->address_id;
-                    $cust['address'] = $address->address_line_1 . " " . $address->city . " " . $address->zip;
+                    $cust['address'] = $address->address_line_1.' '.$address->city.' '.$address->zip;
                     $cust['phone_number'] = $customer->phone_number;
                     $cust['product_number'] = $task->scp_id;
                     $cust['task_id'] = $task->id;
@@ -170,24 +172,21 @@ class Task extends Model
         return collect($tasks);
     }
 
-    static public function allCustomerCreatedTasks($customerId, $addressId): Collection
+    public static function allCustomerCreatedTasks($customerId, $addressId): Collection
     {
         $tasks = [];
 
-//        $customerWithTasks = Customer::whereHas('tasks', function ($query) use ($customerId, $addressId) {
-//            $query->where('customer_id', $customerId)->where('address_id', $addressId);
-//        })->with('tasks')->get();
-
+        //        $customerWithTasks = Customer::whereHas('tasks', function ($query) use ($customerId, $addressId) {
+        //            $query->where('customer_id', $customerId)->where('address_id', $addressId);
+        //        })->with('tasks')->get();
 
         $allTasks = Task::where('address_id', $addressId)->get();
         $customer = Customer::find($customerId);
 
+        //        dd($allTasks);
 
-//        dd($allTasks);
-
-//        foreach ($allTasks as $specificTask) {
-//            $custTasks = Task::where('customer_id', $customer->id)->get();
-
+        //        foreach ($allTasks as $specificTask) {
+        //            $custTasks = Task::where('customer_id', $customer->id)->get();
 
         foreach ($allTasks as $task) {
             if ($task->status === 'created' ||
@@ -223,12 +222,12 @@ class Task extends Model
                 array_push($tasks, $cust);
             }
         }
-//        }
+        //        }
 
         return collect($tasks);
     }
 
-    static public function allPickedUpTasksRelatedToSpecificCustomer($addressId): Collection
+    public static function allPickedUpTasksRelatedToSpecificCustomer($addressId): Collection
     {
         $allEnabledTasks = [];
         $t = Task::where('address_id', $addressId)->get();
@@ -237,22 +236,22 @@ class Task extends Model
             foreach ($t as $task) {
                 $user = User::find($task->assigned);
                 $line = [];
-                $line["id"] = $task->id;
-                $line["description"] = $task->description;
-                $line["status"] = $task->status;
-                $line["price"] = $task->price;
-                $line["completed"] = false;
-                $line["assigned"] = $user->name;
+                $line['id'] = $task->id;
+                $line['description'] = $task->description;
+                $line['status'] = $task->status;
+                $line['price'] = $task->price;
+                $line['completed'] = false;
+                $line['assigned'] = $user->name;
                 $allEnabledTasks[] = $line;
             }
         } else {
             foreach ($t as $task) {
                 $line = [];
-                $line["id"] = $task->id;
-                $line["description"] = $task->description;
-                $line["status"] = $task->status;
-                $line["completed"] = false;
-                $line["assigned"] = '';
+                $line['id'] = $task->id;
+                $line['description'] = $task->description;
+                $line['status'] = $task->status;
+                $line['completed'] = false;
+                $line['assigned'] = '';
                 $allEnabledTasks[] = $line;
             }
         }
@@ -260,7 +259,7 @@ class Task extends Model
         return collect($allEnabledTasks);
     }
 
-    static public function allTasksForPoolGuy()
+    public static function allTasksForPoolGuy()
     {
         $allEnabledTasks = [];
         if (Auth::user()->is_admin == 1) {
@@ -273,10 +272,10 @@ class Task extends Model
             $t = Task::where('assigned', Auth::user()->id)->get();
         }
 
-//        $t = Task::where('status', 'pickedUp')
-//            ->get();
+        //        $t = Task::where('status', 'pickedUp')
+        //            ->get();
 
-//        dd($t);
+        //        dd($t);
 
         foreach ($t as $task) {
             $c = Customer::find($task->customer_id);
@@ -295,17 +294,16 @@ class Task extends Model
                 Log::debug("POOLGUY IS NULL\n\ntask :: $task\ncustomer :: $c\naddress :: $a\npoolguy :: $poolGuy\n");
             }
 
-
             $line = [];
-            $line["id"] = $task->id;
-            $line["customerName"] = "$c->first_name $c->last_name";
-            $line["poolGuy"] = "$poolGuy->name";
-            $line["customerPhoneNumber"] = $c->phone_number;
-            $line["address"] = "$a->address_line_1, $c->city $c->state $c->zip";
-            $line["description"] = $task->description;
-            $line["status"] = $task->status;
+            $line['id'] = $task->id;
+            $line['customerName'] = "$c->first_name $c->last_name";
+            $line['poolGuy'] = "$poolGuy->name";
+            $line['customerPhoneNumber'] = $c->phone_number;
+            $line['address'] = "$a->address_line_1, $c->city $c->state $c->zip";
+            $line['description'] = $task->description;
+            $line['status'] = $task->status;
             $line['deleted'] = false;
-            $line["completed"] = false;
+            $line['completed'] = false;
             $allEnabledTasks[] = $line;
         }
 

@@ -6,13 +6,12 @@ use Carbon\Carbon;
 use Carbon\CarbonInterface;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Database\Eloquent\Relations\HasManyThrough;
-use Stripe\Collection;
-use function Sodium\add;
-use Illuminate\Support\Facades\Log;
 
 class Customer extends Model
 {
@@ -21,7 +20,7 @@ class Customer extends Model
 
     protected $guarded = [];
 
-    public function tasks()
+    public function tasks(): HasMany
     {
         return $this->hasMany(Task::class);
     }
@@ -31,17 +30,17 @@ class Customer extends Model
         return $this->hasManyThrough(TaskStatus::class, Task::class);
     }
 
-    public function addresses()
+    public function addresses(): HasMany
     {
         return $this->hasMany(Address::class);
     }
 
-    public function User()
+    public function User(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
 
-    public function serviceStops()
+    public function serviceStops(): HasMany
     {
         return $this->hasMany(ServiceStop::class);
     }
@@ -53,23 +52,21 @@ class Customer extends Model
 
     public function getTabs()
     {
-        return DB::select('select sum(tabs_whole_mine) as tabs from service_stops where customer_id = ' . $this->id);
+        return DB::select('select sum(tabs_whole_mine) as tabs from service_stops where customer_id = '.$this->id);
     }
 
     public static function allCustomers($dayOfWeek)
     {
 
-//        dd('allCustomersTiedToUser');
-
+        //        dd('allCustomersTiedToUser');
 
         $servicemanId = Auth::user()->id;
 
-//        dd($servicemanId);
+        //        dd($servicemanId);
 
-
-//        $customers = Customer::select(['assigned_serviceman', 'phone_number', 'id', 'first_name', 'last_name', 'order', 'service_day'])
-//            ->where('serviceman_id', Auth::user()
-//                ->getAuthIdentifier())->orderBy('service_day')->orderBy('order')->get();
+        //        $customers = Customer::select(['assigned_serviceman', 'phone_number', 'id', 'first_name', 'last_name', 'order', 'service_day'])
+        //            ->where('serviceman_id', Auth::user()
+        //                ->getAuthIdentifier())->orderBy('service_day')->orderBy('order')->get();
 
         if ($dayOfWeek === 'All') {
             $addresses = Address::where('active', 1)->where('sold', 0)->get();
@@ -77,8 +74,7 @@ class Customer extends Model
             $addresses = Address::where('active', 1)->where('sold', 0)->where('service_day', $dayOfWeek)->get();
         }
 
-
-//                    dd($addresses);
+        //                    dd($addresses);
 
         $customerCollection = [];
 
@@ -105,7 +101,6 @@ class Customer extends Model
             $customerArray['needsBackwash'] = self::needsBackwash($address->id, Filter::getFilter($address->id));
 
             $customerCollection[] = $customerArray;
-
 
         }
 
@@ -121,17 +116,15 @@ class Customer extends Model
     public static function allCustomersTiedToUser($dayOfWeek)
     {
 
-//        dd('allCustomersTiedToUser');
-
+        //        dd('allCustomersTiedToUser');
 
         $servicemanId = Auth::user()->id;
 
-//        dd($servicemanId);
+        //        dd($servicemanId);
 
-
-//        $customers = Customer::select(['assigned_serviceman', 'phone_number', 'id', 'first_name', 'last_name', 'order', 'service_day'])
-//            ->where('serviceman_id', Auth::user()
-//                ->getAuthIdentifier())->orderBy('service_day')->orderBy('order')->get();
+        //        $customers = Customer::select(['assigned_serviceman', 'phone_number', 'id', 'first_name', 'last_name', 'order', 'service_day'])
+        //            ->where('serviceman_id', Auth::user()
+        //                ->getAuthIdentifier())->orderBy('service_day')->orderBy('order')->get();
 
         if ($dayOfWeek === 'All') {
             $addresses = Address::where('serviceman_id', Auth::user()->id)->get();
@@ -139,8 +132,7 @@ class Customer extends Model
             $addresses = Address::where('serviceman_id', Auth::user()->id)->where('service_day', $dayOfWeek)->get();
         }
 
-
-//                    dd($addresses);
+        //                    dd($addresses);
 
         $customerCollection = [];
 
@@ -168,7 +160,6 @@ class Customer extends Model
 
             $customerCollection[] = $customerArray;
 
-
         }
 
         $sortKey = 'order';
@@ -183,9 +174,9 @@ class Customer extends Model
     /**
      * Determines if a filter needs backwashing based on the last maintenance date and filter type.
      *
-     * @param string $lastMaintenanceDate MySQL date string (e.g., '2020-01-01')
-     * @param Carbon $currentDate Carbon instance of the current date
-     * @param string $filterType Type of filter ('sand' or 'DE')
+     * @param  string  $lastMaintenanceDate  MySQL date string (e.g., '2020-01-01')
+     * @param  Carbon  $currentDate  Carbon instance of the current date
+     * @param  string  $filterType  Type of filter ('sand' or 'DE')
      * @return bool True if the filter needs backwashing, false otherwise
      */
     public static function needsBackwash($addressId, $equipment)
@@ -195,7 +186,7 @@ class Customer extends Model
 
         if (is_null($equipment)) {
             return true;
-        } else if ($equipment->type === 'cartridge') {
+        } elseif ($equipment->type === 'cartridge') {
             return false;
         } else {
             if (is_null($lastBackwash)) {
@@ -217,6 +208,7 @@ class Customer extends Model
                 } elseif ($filterType == 'DE' && $diffInMonths > 1) {
                     return true;  // DE filters need backwashing if it's been more than a month
                 }
+
                 return false;  // Default to no backwashing needed
             }
         }
@@ -239,7 +231,7 @@ class Customer extends Model
 
             foreach ($addresses as $address) {
 
-//                dd($address);
+                //                dd($address);
 
                 $stops = ServiceStop::where('address_id', $address->id)
                     ->where('time_in', '>', $dayBeforeStartOfWeek)
@@ -247,12 +239,11 @@ class Customer extends Model
                     ->orderBy('time_in')
                     ->get();
 
-//                dd();
+                //                dd();
 
                 if ($address->id === 63) {
-//                    dd($stops);
+                    //                    dd($stops);
                 }
-
 
                 if ($stops->isEmpty()) {
                     $customer->completed = false;
@@ -260,7 +251,6 @@ class Customer extends Model
                     $customer->completed = true;
                 }
             }
-
 
         }
 
@@ -294,8 +284,8 @@ class Customer extends Model
 
         $query = 'select count(ss.time_in) as stops
 from service_stops ss
-where ss.address_id = ' . $id . ' and ss.time_in > "' .
-            $dayBeforeStartOfWeek . '" and ss.service_type = "Service Stop" order by ss.time_in DESC Limit 1';
+where ss.address_id = '.$id.' and ss.time_in > "'.
+            $dayBeforeStartOfWeek.'" and ss.service_type = "Service Stop" order by ss.time_in DESC Limit 1';
 
         $stops = DB::select($query);
 

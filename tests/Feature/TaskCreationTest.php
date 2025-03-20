@@ -4,15 +4,14 @@ namespace Tests\Feature;
 
 use App\Models\Address;
 use App\Models\Customer;
+use App\Models\Task;
 use App\Models\TaskStatus;
 use App\Models\User;
-use App\Models\Task;
-use App\Providers\RouteServiceProvider;
 use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
-use Tests\TestCase;
 use Inertia\Testing\AssertableInertia as Assert;
+use Tests\TestCase;
 
 //  vendor/bin/phpunit /Users/shawnpike/Documents/code/business/kpspools/tests/Feature/TaskCreationTest.php
 //  vendor/bin/phpunit /Users/shawnpike/Documents/code/business/kpspools/tests/Feature/TaskCreationTest.php testTaskIsAddedToDBWithApprovalNotNullStatusDate
@@ -21,17 +20,17 @@ class TaskCreationTest extends TestCase
 {
     use WithFaker;
 
-//    use RefreshDatabase;
+    //    use RefreshDatabase;
     /**
      * A basic feature test example.
      */
 
-//    public function __construct()
-//    {
-//        $this->setUpFaker();
-//    }
+    //    public function __construct()
+    //    {
+    //        $this->setUpFaker();
+    //    }
 
-    public function testTaskIsAddedToDB(): void
+    public function test_task_is_added_to_db(): void
     {
         self::login();
 
@@ -42,7 +41,7 @@ class TaskCreationTest extends TestCase
             'address_id' => $int,
             'description' => 'chlorine floaty',
             'type' => 'part',
-            'status' => 'created'
+            'status' => 'created',
         ];
 
         $this->post('/task/store', $taskData);
@@ -58,7 +57,7 @@ class TaskCreationTest extends TestCase
         $this->assertDatabaseHas('task_statuses', $taskStatusData);
     }
 
-    public function testTaskIsAddedToDBWithApprovalNotNullStatusDate(): void
+    public function test_task_is_added_to_db_with_approval_not_null_status_date(): void
     {
 
         self::login();
@@ -67,70 +66,22 @@ class TaskCreationTest extends TestCase
 
         $taskData = [
             'customer_id' => $customerId,
-            "description" => "filter",
-            "address_id" => 1,
-            "type" => "repair",
-            "assigned" => 2,
-            "approval" => true,
-            "approvedDate" => "2021-09-09T11:11",
-            "status" => "created"
-        ];
-
-        $this->post('/task/store', $taskData);
-        $this->assertDatabaseHas('tasks', [
-            "customer_id" => $customerId,
-            "assigned" => 2,
-            "description" => "filter",
-            "type" => "repair",
-            "status" => "created"
-        ]);
-
-        $task = Task::where('customer_id', '=', $taskData['customer_id'])->first();
-
-        $taskStatusDataCreated = [
-            'task_id' => $task->id,
+            'description' => 'filter',
+            'address_id' => 1,
+            'type' => 'repair',
+            'assigned' => 2,
+            'approval' => true,
+            'approvedDate' => '2021-09-09T11:11',
             'status' => 'created',
         ];
 
-        $taskStatusDataApproved = [
-            "task_id" => $task->id,
-            "status" => "approved"
-        ];
-
-
-        $this->post('/task/changeStatus', $taskStatusDataApproved);
-
-        $this->assertDatabaseHas('task_statuses', $taskStatusDataCreated);
-        $this->assertDatabaseHas('task_statuses', $taskStatusDataApproved);
-
-    }
-
-    public function testTaskIsAddedToDBWithApprovalNullStatusDate(): void
-    {
-
-        self::login();
-
-        $customerId = random_int(1, 30);
-
-        $taskData = [
-            'customer_id' => $customerId,
-            "description" => "filter",
-            "address_id" => 1,
-            "type" => "repair",
-            "assigned" => 2,
-            "approval" => true,
-            "approvedDate" => null,
-            "status" => "created"
-        ];
-
         $this->post('/task/store', $taskData);
-
         $this->assertDatabaseHas('tasks', [
-            "customer_id" => $customerId,
-            "assigned" => 2,
-            "description" => "filter",
-            "type" => "repair",
-            "status" => "created"
+            'customer_id' => $customerId,
+            'assigned' => 2,
+            'description' => 'filter',
+            'type' => 'repair',
+            'status' => 'created',
         ]);
 
         $task = Task::where('customer_id', '=', $taskData['customer_id'])->first();
@@ -152,7 +103,7 @@ class TaskCreationTest extends TestCase
 
     }
 
-    public function testTaskIsAddedToDBWithNotApprovedStatusDateNotNull(): void
+    public function test_task_is_added_to_db_with_approval_null_status_date(): void
     {
 
         self::login();
@@ -161,29 +112,76 @@ class TaskCreationTest extends TestCase
 
         $taskData = [
             'customer_id' => $customerId,
-            "description" => "filter",
-            "address_id" => 1,
-            "type" => "repair",
-            "approval" => false,
-            "assigned" => 2,
-            "approvedDate" => "2021-09-09T11:11",
-            "status" => "created"
+            'description' => 'filter',
+            'address_id' => 1,
+            'type' => 'repair',
+            'assigned' => 2,
+            'approval' => true,
+            'approvedDate' => null,
+            'status' => 'created',
+        ];
+
+        $this->post('/task/store', $taskData);
+
+        $this->assertDatabaseHas('tasks', [
+            'customer_id' => $customerId,
+            'assigned' => 2,
+            'description' => 'filter',
+            'type' => 'repair',
+            'status' => 'created',
+        ]);
+
+        $task = Task::where('customer_id', '=', $taskData['customer_id'])->first();
+
+        $taskStatusDataCreated = [
+            'task_id' => $task->id,
+            'status' => 'created',
+        ];
+
+        $taskStatusDataApproved = [
+            'task_id' => $task->id,
+            'status' => 'approved',
+        ];
+
+        $this->post('/task/changeStatus', $taskStatusDataApproved);
+
+        $this->assertDatabaseHas('task_statuses', $taskStatusDataCreated);
+        $this->assertDatabaseHas('task_statuses', $taskStatusDataApproved);
+
+    }
+
+    public function test_task_is_added_to_db_with_not_approved_status_date_not_null(): void
+    {
+
+        self::login();
+
+        $customerId = random_int(1, 30);
+
+        $taskData = [
+            'customer_id' => $customerId,
+            'description' => 'filter',
+            'address_id' => 1,
+            'type' => 'repair',
+            'approval' => false,
+            'assigned' => 2,
+            'approvedDate' => '2021-09-09T11:11',
+            'status' => 'created',
         ];
 
         $this->post('/task/store', $taskData);
         $this->assertDatabaseHas('tasks', [
-            "customer_id" => $customerId,
-            "description" => "filter",
-            "type" => "repair",
-            "assigned" => 2,
-            "status" => "created"
+            'customer_id' => $customerId,
+            'description' => 'filter',
+            'type' => 'repair',
+            'assigned' => 2,
+            'status' => 'created',
         ]);
 
         $this->assertDatabaseMissing('tasks', [
-            "customer_id" => $customerId,
-            "description" => "filter",
-            "type" => "repair",
-            "status" => "approved"
+            'customer_id' => $customerId,
+            'description' => 'filter',
+            'type' => 'repair',
+            'status' => 'approved',
         ]);
 
         $task = Task::where('customer_id', '=', $taskData['customer_id'])->first();
@@ -203,7 +201,7 @@ class TaskCreationTest extends TestCase
 
     }
 
-    public function testSendingAPartShouldReceiveANotification(): void
+    public function test_sending_a_part_should_receive_a_notification(): void
     {
         self::login();
 
@@ -211,16 +209,16 @@ class TaskCreationTest extends TestCase
 
         $taskData = [
             'customer_id' => $int,
-            "address_id" => 1,
+            'address_id' => 1,
             'description' => 'chlorine floaty',
             'type' => 'part',
-            'status' => 'created'
+            'status' => 'created',
         ];
 
         $this->post('/task/store', $taskData);
     }
 
-    public function testSendingARepairShouldReceiveANotification(): void
+    public function test_sending_a_repair_should_receive_a_notification(): void
     {
         self::login();
 
@@ -228,16 +226,16 @@ class TaskCreationTest extends TestCase
 
         $taskData = [
             'customer_id' => $int,
-            "address_id" => 1,
+            'address_id' => 1,
             'description' => 'replumb ins and outs',
             'type' => 'repair',
-            'status' => 'created'
+            'status' => 'created',
         ];
 
         $this->post('/task/store', $taskData);
     }
 
-    public function testSendingATodoShouldNotReceiveANotification(): void
+    public function test_sending_a_todo_should_not_receive_a_notification(): void
     {
         self::login();
 
@@ -245,10 +243,10 @@ class TaskCreationTest extends TestCase
 
         $taskData = [
             'customer_id' => $int,
-            "address_id" => 1,
+            'address_id' => 1,
             'description' => 'backwash every week',
             'type' => 'todo',
-            'status' => 'created'
+            'status' => 'created',
         ];
 
         $this->post('/task/store', $taskData);
@@ -257,7 +255,7 @@ class TaskCreationTest extends TestCase
     private function login()
     {
         $user = User::factory()->create([
-            'type' => 'serviceman'
+            'type' => 'serviceman',
         ]);
 
         $this->post('/login', [
@@ -280,12 +278,12 @@ class TaskCreationTest extends TestCase
         return $user;
     }
 
-    public function testGettingAllTasksToFromAllUsers()
+    public function test_getting_all_tasks_to_from_all_users(): void
     {
         self::loginAsAdmin();
-//        self::makeAdmin($u);
+        //        self::makeAdmin($u);
 
-//        dd($u);
+        //        dd($u);
 
         $customerId = random_int(1, 10);
 
@@ -295,34 +293,34 @@ class TaskCreationTest extends TestCase
         $taskDataAdmin = [
             'customer_id' => $customerId,
             'address_id' => $address->id,
-            "description" => "filter",
-            "type" => "repair",
-            "assigned" => 2,
-            "approval" => true,
-            "approvedDate" => null,
-            "status" => "created"
+            'description' => 'filter',
+            'type' => 'repair',
+            'assigned' => 2,
+            'approval' => true,
+            'approvedDate' => null,
+            'status' => 'created',
         ];
 
         $taskDataGuy1 = [
             'customer_id' => $customerId,
             'address_id' => $address->id,
-            "description" => "filter",
-            "type" => "repair",
-            "assigned" => 3,
-            "approval" => true,
-            "approvedDate" => null,
-            "status" => "created"
+            'description' => 'filter',
+            'type' => 'repair',
+            'assigned' => 3,
+            'approval' => true,
+            'approvedDate' => null,
+            'status' => 'created',
         ];
 
         $taskDataGuy2 = [
             'customer_id' => $customerId,
             'address_id' => $address->id,
-            "description" => "filter",
-            "type" => "repair",
-            "assigned" => 4,
-            "approval" => true,
-            "approvedDate" => null,
-            "status" => "created"
+            'description' => 'filter',
+            'type' => 'repair',
+            'assigned' => 4,
+            'approval' => true,
+            'approvedDate' => null,
+            'status' => 'created',
         ];
 
         $this->post('/task/store', $taskDataAdmin);
@@ -331,8 +329,8 @@ class TaskCreationTest extends TestCase
 
         $response = $this->get('tasks');
 
-        $response->assertInertia(fn(Assert $page) => $page->component('Task/Index')->has('tasks'));
-//        $response->assertInertia(fn (Assert $page) => $page->component('Task/ViewPartRepairTasks')->has('Tuesday'));
+        $response->assertInertia(fn (Assert $page) => $page->component('Task/Index')->has('tasks'));
+        //        $response->assertInertia(fn (Assert $page) => $page->component('Task/ViewPartRepairTasks')->has('Tuesday'));
 
     }
 
@@ -340,61 +338,61 @@ class TaskCreationTest extends TestCase
     {
         self::login();
 
-        $description = $this->faker->name;
+        $description = $this->faker->name();
 
         $todo = [
-            "address_id" => 4,
-            "customer_id" => 4,
-            "description" => $description,
-            "type" => "todo",
-            "todoAssignee" => 2,
-            "approval" => false,
-            "approvedDate" => null,
-            "status" => "created",
-            "assigned" => 1
+            'address_id' => 4,
+            'customer_id' => 4,
+            'description' => $description,
+            'type' => 'todo',
+            'todoAssignee' => 2,
+            'approval' => false,
+            'approvedDate' => null,
+            'status' => 'created',
+            'assigned' => 1,
         ];
 
         $this->post('/task/store', $todo);
 
         $this->assertDatabaseHas('tasks', [
-                "description" => $description,
-                "type" => 'todo',
-                "assigned" => 2,
-                'status' => 'pickedUp']
+            'description' => $description,
+            'type' => 'todo',
+            'assigned' => 2,
+            'status' => 'pickedUp']
         );
 
     }
 
-    public function testAssignedUserIsTheNameAssociatedToTheTaskWhenReturnedToCustomerShowPage()
+    public function test_assigned_user_is_the_name_associated_to_the_task_when_returned_to_customer_show_page(): void
     {
         self::login();
 
-        $description = $this->faker->name;
+        $description = $this->faker->name();
 
         $todo = [
-            "address_id" => 4,
-            "customer_id" => 4,
-            "description" => $description,
-            "type" => "todo",
-            "todoAssignee" => 2,
-            "approval" => false,
-            "approvedDate" => null,
-            "status" => "created",
-            "assigned" => 1
+            'address_id' => 4,
+            'customer_id' => 4,
+            'description' => $description,
+            'type' => 'todo',
+            'todoAssignee' => 2,
+            'approval' => false,
+            'approvedDate' => null,
+            'status' => 'created',
+            'assigned' => 1,
         ];
 
-        $description1 = $this->faker->name;
+        $description1 = $this->faker->name();
 
         $todo1 = [
-            "address_id" => 4,
-            "customer_id" => 4,
-            "description" => $description1,
-            "type" => "todo",
-            "todoAssignee" => 1,
-            "approval" => false,
-            "approvedDate" => null,
-            "status" => "created",
-            "assigned" => 1
+            'address_id' => 4,
+            'customer_id' => 4,
+            'description' => $description1,
+            'type' => 'todo',
+            'todoAssignee' => 1,
+            'approval' => false,
+            'approvedDate' => null,
+            'status' => 'created',
+            'assigned' => 1,
         ];
 
         $this->post('/task/store', $todo);
@@ -402,37 +400,37 @@ class TaskCreationTest extends TestCase
 
         $response = $this->get('/customers/show/4');
 
-        $response->assertInertia(fn(Assert $page) => $page->component('Customers/Show')->has('tasks'));
+        $response->assertInertia(fn (Assert $page) => $page->component('Customers/Show')->has('tasks'));
 
-//        $response->assertStatus(200)
-//            ->assertJsonFragment(
-//                ['tasks' =>
-//                    [
-//                        'description' => $description,
-//                        'status' => "pickedUp",
-//                        'completed' => false,
-//                        'assigned' => "Jeremiah"
-//                    ],
-//                    [
-//                        'description' => $description1,
-//                        'status' => "pickedUp",
-//                        'completed' => false,
-//                        'assigned' => "Shawn"
-//                    ]
-//                ]
-//            );
+        //        $response->assertStatus(200)
+        //            ->assertJsonFragment(
+        //                ['tasks' =>
+        //                    [
+        //                        'description' => $description,
+        //                        'status' => "pickedUp",
+        //                        'completed' => false,
+        //                        'assigned' => "Jeremiah"
+        //                    ],
+        //                    [
+        //                        'description' => $description1,
+        //                        'status' => "pickedUp",
+        //                        'completed' => false,
+        //                        'assigned' => "Shawn"
+        //                    ]
+        //                ]
+        //            );
 
     }
 
-    public function testMarkingTaskToBePickedUp(): void
+    public function test_marking_task_to_be_picked_up(): void
     {
         self::login();
 
         $task = Task::find(3);
-        $task->status = "approved";
+        $task->status = 'approved';
         $task->save();
 
-        $this->assertDatabaseHas('tasks', ["id" => 3, 'status' => 'approved']);
+        $this->assertDatabaseHas('tasks', ['id' => 3, 'status' => 'approved']);
 
         $taskStatuses = TaskStatus::where('task_id', 3)->get();
         $exists = false;
@@ -449,7 +447,7 @@ class TaskCreationTest extends TestCase
         } else {
             $date = Carbon::now();
             $statusDate = $date->format('Y-m-d H:i:s');
-            $taskStatus = new TaskStatus();
+            $taskStatus = new TaskStatus;
             $taskStatus->status = 'approved';
             $taskStatus->task_id = $task->id;
             $taskStatus->status_date = $statusDate;
@@ -458,21 +456,20 @@ class TaskCreationTest extends TestCase
 
         $taskData = [
             [
-                "customer_id" => 2,
-                "task_id" => 3,
-                "address_id" => 1,
-                "first_name" => "Kaitlyn",
-                "last_name" => "Muller",
-                "description" => "filter",
-                "type" => "repair",
-                "status" => "approved",
-                "pickedUp" => true
-            ]
+                'customer_id' => 2,
+                'task_id' => 3,
+                'address_id' => 1,
+                'first_name' => 'Kaitlyn',
+                'last_name' => 'Muller',
+                'description' => 'filter',
+                'type' => 'repair',
+                'status' => 'approved',
+                'pickedUp' => true,
+            ],
         ];
 
         $this->post('/task/pickedUp', $taskData);
 
-        $this->assertDatabaseHas('tasks', ["id" => 3, 'status' => 'pickedUp']);
+        $this->assertDatabaseHas('tasks', ['id' => 3, 'status' => 'pickedUp']);
     }
-
 }

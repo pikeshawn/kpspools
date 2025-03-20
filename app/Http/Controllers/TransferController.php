@@ -4,11 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Models\Address;
 use App\Models\Customer;
+use App\Models\ServiceStop;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
-use App\Models\ServiceStop;
-use Carbon\Carbon;
 
 class TransferController extends Controller
 {
@@ -19,36 +19,35 @@ class TransferController extends Controller
         $addresses = Address::where('active', 1)->get();
         $servicemen = User::where('type', 'serviceman')->orderBy('name', 'asc')->where('active', 1)->get();
 
-        foreach ($addresses as $address){
+        foreach ($addresses as $address) {
             $address->transfer = false;
             $address->newServiceman = 'current';
             $customer = Customer::find($address->customer_id);
-            $address->name = $customer->first_name . " " . $customer->last_name;
+            $address->name = $customer->first_name.' '.$customer->last_name;
             $address->newServicemanId = null;
         }
 
         return Inertia::render('Transfer/Index', [
             'addresses' => $addresses,
-            'servicemen' => $servicemen
+            'servicemen' => $servicemen,
         ]);
     }
 
     public function transfer(Request $request)
     {
-//        dd($request->address);
+        //        dd($request->address);
 
         $customer = Customer::find($request->address['customer_id']);
         $address = Address::find($request->address['id']);
 
-        $customer->assigned_serviceman = explode(" ", $request->address['newServicemanId'])[0];
-        $customer->serviceman_id = explode(" ", $request->address['newServicemanId'])[1];;
+        $customer->assigned_serviceman = explode(' ', $request->address['newServicemanId'])[0];
+        $customer->serviceman_id = explode(' ', $request->address['newServicemanId'])[1];
 
-        $address->assigned_serviceman = explode(" ", $request->address['newServicemanId'])[0];
-        $address->serviceman_id = explode(" ", $request->address['newServicemanId'])[1];;
+        $address->assigned_serviceman = explode(' ', $request->address['newServicemanId'])[0];
+        $address->serviceman_id = explode(' ', $request->address['newServicemanId'])[1];
 
         $customer->save();
         $address->save();
-
 
     }
 
@@ -60,15 +59,13 @@ class TransferController extends Controller
         $customer = Customer::find($address->customer_id);
 
         $customer->assigned_serviceman = $serviceman->name;
-        $customer->serviceman_id = $serviceman->id;;
+        $customer->serviceman_id = $serviceman->id;
 
         $address->assigned_serviceman = $serviceman->name;
         $address->serviceman_id = $serviceman->id;
 
         $customer->save();
         $address->save();
-
-
 
     }
 
@@ -78,7 +75,7 @@ class TransferController extends Controller
             ->where('active', true)->get();
 
         return Inertia::render('Transfer/BulkTransfer', [
-            'servicemen' => $servicemen
+            'servicemen' => $servicemen,
         ]);
     }
 
@@ -97,10 +94,10 @@ class TransferController extends Controller
             ->get()
             ->map(function ($pool) {
                 return [
-                    'customerName' => $pool->first_name . ' ' . $pool->last_name,
+                    'customerName' => $pool->first_name.' '.$pool->last_name,
                     'addressId' => $pool->id,
                     'servicemanName' => $pool->assigned_serviceman,
-                    'service_day' => $pool->service_day
+                    'service_day' => $pool->service_day,
                 ];
             });
 
@@ -112,7 +109,7 @@ class TransferController extends Controller
             })->values();
         }
 
-            if ($option === 'uncompleted') {
+        if ($option === 'uncompleted') {
             $pools = $pools->reject(function ($pool) {
                 return ServiceStop::where('address_id', $pool['addressId'])
                     ->where('created_at', '>=', Carbon::now()->startOfWeek())
@@ -146,5 +143,4 @@ class TransferController extends Controller
 
         return response()->json(['message' => 'Transfer successful']);
     }
-
 }

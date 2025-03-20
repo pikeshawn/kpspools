@@ -1,34 +1,34 @@
 <?php
 
 use App\Http\Controllers\AdvertisingController;
-use App\Http\Controllers\TaskController;
-use App\Http\Controllers\ReportsController;
-use App\Http\Controllers\TermsOfServiceController;
-use App\Http\Controllers\InitiateBidController;
-use App\Http\Controllers\ProfitController;
-use App\Http\Controllers\TestingController;
-use App\Http\Controllers\TransferController;
-use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\BillingController;
-use App\Http\Controllers\CustomerFacingController;
-use App\Http\Controllers\RegisterController;
-use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\ChatController;
-use App\Http\Controllers\CustomerController;
-use App\Http\Controllers\ServiceStopController;
-use App\Http\Controllers\SummaryController;
-use App\Http\Controllers\VonageWebhookController;
-use App\Http\Controllers\RouteController;
-use App\Http\Controllers\ProspectiveController;
-use App\Http\Controllers\PaymentController;
-use App\Http\Controllers\PasswordlessController;
-use Illuminate\Foundation\Application;
-use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CloudinaryController;
-use Inertia\Inertia;
-use Illuminate\Http\Request;
+use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\CustomerFacingController;
+use App\Http\Controllers\InitiateBidController;
+use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\PasswordlessController;
+use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\ProfitController;
+use App\Http\Controllers\ProspectiveController;
+use App\Http\Controllers\RegisterController;
+use App\Http\Controllers\ReportsController;
+use App\Http\Controllers\RouteController;
+use App\Http\Controllers\ServiceStopController;
+use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\StripeController;
 use App\Http\Controllers\StripeWebhookController;
+use App\Http\Controllers\SummaryController;
+use App\Http\Controllers\TaskController;
+use App\Http\Controllers\TermsOfServiceController;
+use App\Http\Controllers\TestingController;
+use App\Http\Controllers\TransferController;
+use App\Http\Controllers\VonageWebhookController;
+use Illuminate\Foundation\Application;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
+use Inertia\Inertia;
 
 /*
 |--------------------------------------------------------------------------
@@ -56,8 +56,6 @@ Route::get('/terms_of_service/service_fee/{code}',
 Route::get('/terms_of_service/accept/{customerId}',
     [TermsOfServiceController::class, 'accept'])->name('accept');
 
-
-
 Route::get('/checkout', function (Request $request) {
     $stripePriceId = 'price_1OXQCUIX4qnobbHhnwwNN3HA';
 
@@ -72,7 +70,6 @@ Route::get('/checkout', function (Request $request) {
 Route::view('checkout.success', '')->name('checkout-success');
 Route::view('checkout.cancel', '')->name('checkout-cancel');
 
-
 Route::get('/subscription-checkout', function (Request $request) {
     return $request->user()
         ->newSubscription('Monthly Plan', 'plan_H2RFj9S6eeEeq3')
@@ -84,9 +81,8 @@ Route::get('/subscription-checkout', function (Request $request) {
         ]);
 });
 
-//Route::view('checkout.success', '')->name('checkout-success');
-//Route::view('checkout.cancel', '')->name('checkout-cancel');
-
+// Route::view('checkout.success', '')->name('checkout-success');
+// Route::view('checkout.cancel', '')->name('checkout-cancel');
 
 Route::middleware(['auth:sanctum', 'verified', 'serviceman'])->get('/dashboard', function () {
     return Inertia::render('Dashboard');
@@ -131,7 +127,6 @@ Route::middleware(['auth:sanctum', 'verified', 'customer', 'subscribed'])->group
 
     Route::post('/customer/privacy',
         [CustomerFacingController::class, 'privacyPolicy'])->name('customer.privacy');
-
 
     Route::get('/privacy',
         [CustomerFacingController::class, 'privacy'])->name('privacy');
@@ -204,13 +199,13 @@ Route::middleware(['auth:sanctum', 'verified', 'serviceman'])->group(function ()
     })->name('admin.links');
 
     Route::get('/initiate',
-        [InitiateBidController::class, 'index'])->name('initiate.index');;
+        [InitiateBidController::class, 'index'])->name('initiate.index');
 
     Route::get('/initiate/{Address}',
         [InitiateBidController::class, 'customer'])->name('initiate.customer');
 
     Route::post('sendBid',
-        [InitiateBidController::class, 'sendBid'])->name('initiate.sendBid');;
+        [InitiateBidController::class, 'sendBid'])->name('initiate.sendBid');
 
     Route::get('/profit',
         [ProfitController::class, 'index'])->name('profit.index');
@@ -224,10 +219,10 @@ Route::middleware(['auth:sanctum', 'verified', 'serviceman'])->group(function ()
     Route::get('/transfer/bulk',
         [TransferController::class, 'bulk'])->name('transfer.bulk');
 
-     Route::get('/transfer/getList',
+    Route::get('/transfer/getList',
         [TransferController::class, 'getList'])->name('transfer.getList');
 
-     Route::post('/transfer/doTransfer',
+    Route::post('/transfer/doTransfer',
         [TransferController::class, 'doTransfer'])->name('transfer.doTransfer');
 
     Route::post('/transfer/storeFromCustomers',
@@ -362,12 +357,12 @@ Route::middleware(['auth:sanctum', 'verified', 'serviceman'])->group(function ()
         [CustomerController::class, 'update'])
         ->name('general.update');
 
-//    Route::middleware(['auth:sanctum', 'verified'])
-//        ->get('customers/{customer}/edit',
-//            [CustomerController::class, 'edit'])
-//        ->name('customers.edit');
+    //    Route::middleware(['auth:sanctum', 'verified'])
+    //        ->get('customers/{customer}/edit',
+    //            [CustomerController::class, 'edit'])
+    //        ->name('customers.edit');
 
-// Tasks
+    // Tasks
     Route::get('/task/create/{address}',
         [TaskController::class, 'create'])
         ->name('task.create');
@@ -392,9 +387,9 @@ Route::middleware(['auth:sanctum', 'verified', 'serviceman'])->group(function ()
         [TaskController::class, 'getUserRate'])
         ->name('tasks.getUserRate');
 
-//    Route::get('/tasks/reconcile',
-//        [TaskController::class, 'reconcileCreatedTasks'])
-//        ->name('reconcile.created');
+    //    Route::get('/tasks/reconcile',
+    //        [TaskController::class, 'reconcileCreatedTasks'])
+    //        ->name('reconcile.created');
 
     Route::get('/tasks/pickedUp',
         [TaskController::class, 'reconcilePickedUpTasks'])

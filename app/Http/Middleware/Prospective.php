@@ -19,6 +19,7 @@ class Prospective
         if ($request->user() !== null && $request->user()->type === 'prospective') {
             return $next($request);
         }
+
         return redirect('/');
     }
 }

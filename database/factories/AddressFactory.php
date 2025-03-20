@@ -18,13 +18,13 @@ class AddressFactory extends Factory
     {
         return [
             //
-            'address_line_1' => $this->faker->streetAddress,
+            'address_line_1' => $this->faker->streetAddress(),
             'address_line_2' => '',
-            'city' => $this->faker->city,
+            'city' => $this->faker->city(),
             'state' => 'AZ',
-            'zip' => $this->faker->postcode,
+            'zip' => $this->faker->postcode(),
             'community_gate_code' => '#'.random_int(1000, 9999),
-            'house_gate_has_lock' => $this->faker->boolean,
+            'house_gate_has_lock' => $this->faker->boolean(),
         ];
     }
 }

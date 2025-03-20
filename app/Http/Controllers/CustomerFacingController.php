@@ -2,12 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use Inertia\Inertia;
-use Illuminate\Support\Facades\Auth;
-use Carbon\Carbon;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
+use Inertia\Inertia;
 
 class CustomerFacingController extends Controller
 {
@@ -43,7 +41,7 @@ class CustomerFacingController extends Controller
     public function termSigning()
     {
 
-//        dd('termSigning');
+        //        dd('termSigning');
 
         return Inertia::render('Prospective/Onboarding');
     }
@@ -78,7 +76,7 @@ class CustomerFacingController extends Controller
                     $contact = $poolGuy->id;
 
                     // Add the pool guy to the array if not already present
-                    if (!array_key_exists($poolGuy->id, $poolGuys)) {
+                    if (! array_key_exists($poolGuy->id, $poolGuys)) {
                         $poolGuys[$poolGuy->id] = [
                             'id' => $poolGuy->id,
                             'name' => $poolGuy->name,
@@ -118,17 +116,16 @@ class CustomerFacingController extends Controller
             'poolGuys' => array_values($poolGuys), // Convert to indexed array
         ]);
 
-
-//        // Fetch data to pass to the Inertia view (e.g., from a database or API)
-//        $serviceStops = [
-//            ['id' => 1, 'name' => 'Stop 1', 'description' => 'Service stop description 1'],
-//            ['id' => 2, 'name' => 'Stop 2', 'description' => 'Service stop description 2'],
-//        ];
-//
-//        // Return the Inertia Vue component with data
-//        return Inertia::render('Customers/Facing/ServiceStops', [
-//            'serviceStops' => $serviceStops,
-//        ]);
+        //        // Fetch data to pass to the Inertia view (e.g., from a database or API)
+        //        $serviceStops = [
+        //            ['id' => 1, 'name' => 'Stop 1', 'description' => 'Service stop description 1'],
+        //            ['id' => 2, 'name' => 'Stop 2', 'description' => 'Service stop description 2'],
+        //        ];
+        //
+        //        // Return the Inertia Vue component with data
+        //        return Inertia::render('Customers/Facing/ServiceStops', [
+        //            'serviceStops' => $serviceStops,
+        //        ]);
     }
 
     /**
@@ -150,5 +147,4 @@ class CustomerFacingController extends Controller
             'serviceStop' => $serviceStop,
         ]);
     }
-
 }

@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use Inertia\Inertia;
 
 class TestingController extends Controller
@@ -18,5 +17,4 @@ class TestingController extends Controller
     {
         return Inertia::render('Testing/Cloudinary');
     }
-
 }

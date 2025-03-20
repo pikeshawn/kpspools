@@ -13,10 +13,10 @@ class Subscribed
      */
     public function handle(Request $request, Closure $next): Response
     {
-//        if (! $request->user()?->subscribed()) {
-            // Redirect user to billing page and ask them to subscribe...
-//            return redirect('/billing/setup');
-//        }
+        //        if (! $request->user()?->subscribed()) {
+        // Redirect user to billing page and ask them to subscribe...
+        //            return redirect('/billing/setup');
+        //        }
 
         return $next($request);
     }

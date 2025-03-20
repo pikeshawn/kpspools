@@ -2,13 +2,12 @@
 
 namespace App\Actions\Fortify;
 
-use App\Models\User;
-use App\Models\Customer;
 use App\Models\Address;
+use App\Models\Customer;
+use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Laravel\Fortify\Contracts\CreatesNewUsers;
-use Laravel\Jetstream\Jetstream;
 
 class CreateNewUser implements CreatesNewUsers
 {
@@ -19,20 +18,20 @@ class CreateNewUser implements CreatesNewUsers
      */
     public function create(array $input): User
     {
-//        dd($input);
+        //        dd($input);
 
         Validator::make($input, [
             'first_name' => ['required', 'string', 'max:255'],
             'last_name' => ['required', 'string', 'max:255'],
             'phoneNumber' => ['required', 'string', 'min_digits:10', 'max_digits:11'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'password' => $this->passwordRules()
+            'password' => $this->passwordRules(),
         ])->validate();
 
         $phone = self::validatePhoneNumber($input['phoneNumber']);
 
         $user = User::create([
-            'name' => $input['first_name'] . " " . $input['last_name'],
+            'name' => $input['first_name'].' '.$input['last_name'],
             'email' => $input['email'],
             'type' => 'prospective',
             'active' => 1,
@@ -54,7 +53,7 @@ class CreateNewUser implements CreatesNewUsers
             'chemicals_included' => 1,
             'assigned_serviceman' => null,
             'phone_number' => $phone,
-            'terms' => 'begin'
+            'terms' => 'begin',
         ]);
 
         Address::create([
@@ -62,7 +61,7 @@ class CreateNewUser implements CreatesNewUsers
             'address_line_1' => $input['addressLine1'],
             'city' => $input['city'],
             'state' => 'AZ',
-            'zip' => $input['zip']
+            'zip' => $input['zip'],
         ]);
 
         return $user;
@@ -71,11 +70,11 @@ class CreateNewUser implements CreatesNewUsers
     private function validatePhoneNumber($phone): string
     {
         if (strlen($phone) === 10) {
-            return '1' . $phone;
-        } else if (strlen($phone) === 11){
+            return '1'.$phone;
+        } elseif (strlen($phone) === 11) {
             return $phone;
         }
+
         return '';
     }
 }
-
