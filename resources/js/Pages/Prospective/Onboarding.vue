@@ -248,10 +248,10 @@
   </layout>
 </template>
 <script>
-import SimpleTable from "../Shared/SimpleTable";
-import JetLabel from '@/Jetstream/Label';
-import JetCheckbox from '@/Jetstream/Checkbox';
-import Layout from "../Shared/Layout";
+import SimpleTable from "../Shared/SimpleTable.vue";
+import JetLabel from '@/Jetstream/Label.vue';
+import JetCheckbox from '@/Jetstream/Checkbox.vue';
+import Layout from "../Shared/Layout.vue";
 import {Inertia} from "@inertiajs/inertia";
 
 export default {

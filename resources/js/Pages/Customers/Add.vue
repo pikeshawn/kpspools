@@ -306,7 +306,7 @@ const selectCustomer = (customer) => {
 </script>
 
 <script>
-import Layout from "../Shared/Layout";
+import Layout from "../Shared/Layout.vue";
 import {Link} from '@inertiajs/inertia-vue3'
 import {ref} from 'vue'
 // import { ChevronDownIcon } from '@heroicons/vue/20/solid'

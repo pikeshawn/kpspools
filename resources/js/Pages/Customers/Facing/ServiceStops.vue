@@ -21,7 +21,7 @@
 
 <script>
 
-import Layout from "../../Shared/Layout";
+import Layout from "../../Shared/Layout.vue";
 
 export default {
     name: 'Customers_Service_Stops',

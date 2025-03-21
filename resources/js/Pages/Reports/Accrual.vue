@@ -61,7 +61,7 @@
 </template>
 
 <script>
-import Layout from "../Shared/Layout";
+import Layout from "../Shared/Layout.vue";
 import { Inertia } from '@inertiajs/inertia';
 
 
