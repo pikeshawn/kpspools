@@ -27,7 +27,7 @@
 </template>
 
 <script>
-import Layout from "../Shared/Layout";
+import Layout from "../Shared/Layout.vue";
 import {Dialog, DialogOverlay, TransitionChild, TransitionRoot} from '@headlessui/vue'
 import {Link} from '@inertiajs/inertia-vue3'
 

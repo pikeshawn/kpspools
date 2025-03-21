@@ -98,9 +98,9 @@
 </template>
 
 <script>
-// import AppLayout from '@/Layouts/AppLayout'
-// import Welcome from '@/Jetstream/Welcome'
-import Layout from "./Shared/Layout";
+// import AppLayout from '@/Layouts/AppLayout.vue'
+// import Welcome from '@/Jetstream/Welcome.vue'
+import Layout from "./Shared/Layout.vue";
 import {Popover, PopoverButton, PopoverGroup, PopoverPanel} from '@headlessui/vue'
 
 export default {

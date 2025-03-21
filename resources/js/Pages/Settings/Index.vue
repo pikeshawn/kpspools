@@ -339,9 +339,9 @@ const sidebarOpen = ref(false)
 </script>
 
 <script>
-import JetInput from '@/Jetstream/Input'
-import SimpleTable from "../Shared/SimpleTable";
-import Layout from "../Shared/Layout";
+import JetInput from '@/Jetstream/Input.vue'
+import SimpleTable from "../Shared/SimpleTable.vue";
+import Layout from "../Shared/Layout.vue";
 import {Link} from '@inertiajs/inertia-vue3';
 import {Inertia} from '@inertiajs/inertia';
 

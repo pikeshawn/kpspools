@@ -107,10 +107,10 @@ import {PaperClipIcon} from '@heroicons/vue/20/solid'
 import {RadioGroup, RadioGroupLabel, RadioGroupOption} from "@headlessui/vue";
 </script>
 <script>
-import Layout from "../Shared/Layout";
-import DropDown from "../Shared/DropDown";
-import Toggle from "../Shared/Toggle";
-import LoadingButton from "../Shared/LoadingButton";
+import Layout from "../Shared/Layout.vue";
+import DropDown from "../Shared/DropDown.vue";
+import Toggle from "../Shared/Toggle.vue";
+import LoadingButton from "../Shared/LoadingButton.vue";
 import {Inertia} from '@inertiajs/inertia'
 import {reactive} from 'vue'
 import {Link} from '@inertiajs/inertia-vue3'

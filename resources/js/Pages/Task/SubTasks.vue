@@ -142,7 +142,7 @@
 </template>
 
 <script>
-import Layout from "../Shared/Layout";
+import Layout from "../Shared/Layout.vue";
 import {ref, computed, onMounted} from "vue";
 import {usePage, router} from '@inertiajs/inertia-vue3';
 import {Inertia} from '@inertiajs/inertia';

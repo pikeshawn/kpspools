@@ -62,8 +62,8 @@ const people = [
 </script>
 
 <script>
-import SimpleTable from "../Shared/SimpleTable";
-import Layout from "../Shared/Layout";
+import SimpleTable from "../Shared/SimpleTable.vue";
+import Layout from "../Shared/Layout.vue";
 import {Inertia} from "@inertiajs/inertia";
 
 export default {
